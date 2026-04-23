@@ -1,4 +1,4 @@
-name: setup-universe
+name: health-check-ansible
 
 on:
   pull_request:
@@ -13,23 +13,40 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  changed-files:
+    runs-on: ubuntu-latest
+    outputs:
+      should-run: ${{ steps.check.outputs.any_changed }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - id: check
+        uses: step-security/changed-files@v47
+        with:
+          files: |
+            ansible/**
+            ansible-galaxy-requirements.yaml
+            .github/workflows/health-check-ansible.yaml
+
   require-label:
+    needs: changed-files
+    if: needs.changed-files.outputs.should-run == 'true'
     uses: autowarefoundation/autoware-github-actions/.github/workflows/require-label.yaml@v1
     with:
       label: run:health-check
 
-  setup-universe:
+  install-dev-env:
     needs: require-label
     if: ${{ needs.require-label.outputs.result == 'true' }}
     runs-on: [self-hosted, Linux, X64]
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - image: ubuntu:22.04
-            ros_distro: humble
-          - image: ubuntu:24.04
-            ros_distro: jazzy
+        image:
+          - ubuntu:22.04
+          - ubuntu:24.04
     container:
       image: ${{ matrix.image }}
     steps:
@@ -67,6 +84,9 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run setup script
+      - name: Install dev environment via ansible
         run: |
-          ./setup-dev-env.sh --ros-distro ${{ matrix.ros_distro }} -y -v universe
+          bash ansible/scripts/install-ansible.sh
+          export PATH="$HOME/.local/bin:$PATH"
+          ansible-galaxy collection install -f -r ansible-galaxy-requirements.yaml
+          ansible-playbook autoware.dev_env.install_dev_env -v
