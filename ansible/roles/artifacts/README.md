@@ -1,6 +1,6 @@
 # Autoware artifacts
 
-The Autoware perception stack uses models for inference. These models are automatically downloaded as part of the `setup-dev-env.sh` script.
+The Autoware perception stack uses models for inference. These models are downloaded by running `ansible-playbook autoware.dev_env.install_dev_env --tags artifacts`.
 
 The models are hosted by Web.Auto.
 
@@ -65,7 +65,7 @@ This step should be repeated when a new playbook is added.
 #### Run the playbook
 
 ```bash
-ansible-playbook autoware.dev_env.download_artifacts -e "data_dir=$HOME/autoware_data" --ask-become-pass
+ansible-playbook autoware.dev_env.install_dev_env --tags artifacts -e "data_dir=$HOME/autoware_data" --ask-become-pass
 ```
 
 This will download and extract the artifacts to the specified directory and validate the checksums.
