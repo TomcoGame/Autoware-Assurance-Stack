@@ -1,0 +1,64 @@
+name: assurance
+
+# Checks of the assurance tree (assurance/): the decision register, the safety case records, the work-product
+# headers, links and tables, and every generated figure, page and block, each run with --check so a stale output
+# fails. Read-only: the job never writes to the repository. Contributors run the generators and commit the result.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - assurance/**
+      - CLAUDE.md
+      - .github/workflows/assurance.yaml
+  pull_request:
+    paths:
+      - assurance/**
+      - CLAUDE.md
+      - .github/workflows/assurance.yaml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'push' && github.run_id || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: assurance checks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Install the checker dependency (PyYAML)
+        run: python3 -m pip install --quiet --user --break-system-packages -r assurance/requirements.txt
+
+      - name: Decision register follows its lifecycle; the inbox page builds
+        run: |
+          python3 assurance/01-management/decisions/check_decisions.py
+          python3 assurance/01-management/decisions/build_inbox.py --out "$RUNNER_TEMP/inbox.html"
+
+      - name: Safety case records follow their rules
+        run: python3 assurance/case/tools/validate.py
+
+      - name: Work-product headers agree with the register; links and tables are sound
+        run: |
+          python3 assurance/trace/tools/check_headers.py
+          python3 assurance/trace/tools/check_links.py
+          python3 assurance/trace/tools/check_tables.py
+
+      - name: Every generated output is current
+        run: |
+          python3 assurance/01-management/figures/fig_m00_register.py --check
+          python3 assurance/01-management/figures/folder_index.py --check
+          python3 assurance/01-management/decisions/fig_lifecycle.py --check
+          python3 assurance/01-management/decisions/fig_questions.py --check
+          python3 assurance/case/tools/dashboard.py --check
+
+      - name: Unit tests of the tools
+        run: python3 -m unittest discover -s assurance/tests -p 'test_*.py' -v

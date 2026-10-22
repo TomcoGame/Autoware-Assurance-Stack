@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="464" viewBox="0 0 640 464" role="img" aria-labelledby="t d">
+<title id="t">DQ-001: reach of each ODD option</title>
+<desc id="d">Each ODD option of DQ-001 as a region from zero to its top speed and up to the road users it shares the road with. A (Low-speed shuttle on a fixed, mapped route): up to 20 km/h, pedestrians, cyclists, slow traffic. B (Geofenced urban robotaxi): up to 50 km/h, all public road users. C (Private-site logistics with no public traffic): up to 15 km/h, staff only, private site.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg .qm { fill:var(--card); stroke:var(--ink3); stroke-width:1.2; }
+svg .safe { fill:var(--accsoft); stroke:var(--acc); stroke-width:1.8; }
+svg .plat { fill:none; stroke:var(--ink3); stroke-width:1.2; stroke-dasharray:5 4; }
+svg .arrow { stroke:var(--ink3); stroke-width:1.4; fill:none; }
+svg .head { fill:var(--ink3); }
+svg .reach-a { fill:var(--accsoft); stroke:var(--acc); stroke-width:1.8; }
+svg .reach-b { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.6; }
+svg .reach-c { fill:var(--card); stroke:var(--ink3); stroke-width:1.4; }
+svg .ka { font:700 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--acc); }
+</style>
+<rect class="bg" width="640" height="464"/>
+<text x="24" y="32" class="h">How far each ODD option reaches</text>
+<text x="24" y="54" class="t">Further right and higher means more hazards and more to validate</text>
+<text x="24" y="272" class="t">Staff only, private site</text>
+<line x1="196" y1="234" x2="612" y2="234" class="hair"/>
+<text x="24" y="192" class="t">Pedestrians, cyclists,</text>
+<text x="24" y="207" class="t">slow traffic</text>
+<line x1="196" y1="154" x2="612" y2="154" class="hair"/>
+<text x="24" y="112" class="t">All public road users</text>
+<line x1="196" y1="74" x2="612" y2="74" class="hair"/>
+<line x1="196" y1="74" x2="196" y2="314" class="hair"/>
+<text x="196" y="332" class="s" text-anchor="middle">0</text>
+<line x1="265.3" y1="74" x2="265.3" y2="314" class="hair"/>
+<text x="265.3" y="332" class="s" text-anchor="middle">10</text>
+<line x1="334.7" y1="74" x2="334.7" y2="314" class="hair"/>
+<text x="334.7" y="332" class="s" text-anchor="middle">20</text>
+<line x1="404" y1="74" x2="404" y2="314" class="hair"/>
+<text x="404" y="332" class="s" text-anchor="middle">30</text>
+<line x1="473.3" y1="74" x2="473.3" y2="314" class="hair"/>
+<text x="473.3" y="332" class="s" text-anchor="middle">40</text>
+<line x1="542.7" y1="74" x2="542.7" y2="314" class="hair"/>
+<text x="542.7" y="332" class="s" text-anchor="middle">50</text>
+<line x1="612" y1="74" x2="612" y2="314" class="hair"/>
+<text x="612" y="332" class="s" text-anchor="middle">60</text>
+<text x="404" y="352" class="t" text-anchor="middle">Top speed, km/h</text>
+<rect x="196" y="84" width="346.7" height="230" rx="6" class="reach-b"/>
+<text x="534.7" y="102" class="tb" text-anchor="end">B</text>
+<rect x="196" y="164" width="138.7" height="150" rx="6" class="reach-a"/>
+<text x="326.7" y="182" class="ka" text-anchor="end">A</text>
+<rect x="196" y="244" width="104" height="70" rx="6" class="reach-c"/>
+<text x="292" y="262" class="tb" text-anchor="end">C</text>
+<text x="24" y="378" class="tb">A Low-speed shuttle on a fixed, mapped route: up to 20 km/h; pedestrians, cyclists, slow</text>
+<text x="24" y="395" class="t">traffic</text>
+<text x="24" y="416" class="tb">B Geofenced urban robotaxi: up to 50 km/h; all public road users</text>
+<text x="24" y="437" class="tb">C Private-site logistics with no public traffic: up to 15 km/h; staff only, private site</text>
+</svg>

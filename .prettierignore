@@ -5,3 +5,7 @@
 *.param.yaml
 *.rviz
 .cspell.json
+
+# Generated assurance figures and pages are checked byte for byte by the assurance workflow.
+assurance/
+CLAUDE.md

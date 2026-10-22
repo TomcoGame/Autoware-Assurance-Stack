@@ -1,0 +1,163 @@
+# Decision register: questions that wait on the project lead (the safety authority until DQ-004 names one).
+# Format and lifecycle: README.md in this folder. Checked by check_decisions.py.
+# The inbox page is built from this file (build_inbox.py). Answers saved on the page are copied back
+# here, applied, and then recorded where the project keeps that decision (WP-M-01 §8 for strategic
+# decisions, the owning work product otherwise).
+
+- id: DQ-001
+  question: Which item and operational design domain should the first safety case cover?
+  context: >-
+    Every work product after the strategy depends on this: the hazards, their severity and exposure,
+    the validation targets and the miles or scenarios needed. With no driver, the ODD is the main lever
+    on how much has to be proven. **A narrow first ODD can be widened later through impact analysis;
+    starting wide cannot be narrowed without redoing the hazard analysis.**
+  reversibility: hard
+  blocks: Item definition, ODD, HARA, the whole concept phase
+  gate: G0
+  asked: 2026-10-22
+  batch: 1
+  figure: figures/dq-001.svg
+  caption: How far each option reaches in speed and in who shares the road with the vehicle. Further right and higher means more to prove.
+  options:
+    - key: A
+      recommended: true
+      title: Low-speed shuttle on a fixed, mapped route
+      detail: "For example a campus or business-park loop at up to 20 km/h, daytime, dry weather, mixed with pedestrians and slow traffic. Matches Autoware's HD-map approach and keeps impact energy low. Cost: a limited product; every new route needs a map and an impact analysis."
+    - key: B
+      title: Geofenced urban robotaxi
+      detail: "Public urban roads up to 50 km/h, day and night, light rain. The most useful product. Cost: far larger hazard space and validation effort; intersections, unprotected turns and vulnerable road users at higher speed."
+    - key: C
+      title: Private-site logistics with no public traffic
+      detail: "Factory yard or port, up to 15 km/h, trained staff only. Cheapest to argue. Cost: little of the result carries over to public roads, and machinery standards (for example ISO 3691-4) may govern instead."
+  sources: ["WP-M-01 §3.1, OI-1", WP-C-01, WP-C-02, UL 4600 §8 (ODD)]
+  status: open
+
+- id: DQ-002
+  question: "What should stop an unsafe command from reaching the actuators: a separate safety monitor, or vehicle_cmd_gate rated for safety?"
+  context: >-
+    In Autoware every command passes through `vehicle_cmd_gate`, which limits it and watches heartbeats,
+    and `mrm_handler` brings the vehicle to a stop on failures. **Both run on the same computer, operating
+    system and middleware as the planning and control they guard,** so one fault in that platform can disable
+    the stack and its protection together. With no driver, whatever bounds the commands must also stop the
+    vehicle on its own. This choice sets the ASIL allocation, the hardware and the fallback.
+  reversibility: hard
+  blocks: Functional safety concept, fallback concept, hardware design, FTTI budget
+  gate: G0
+  asked: 2026-10-22
+  batch: 1
+  figure: figures/dq-002.svg
+  caption: Where the command is bounded in each option. Blue is rated for safety; grey is not. In A and C the bound sits outside the Autoware computer.
+  options:
+    - key: A
+      recommended: true
+      title: Separate safety monitor on independent hardware
+      detail: "A small controller between Autoware and drive-by-wire checks each command against a safety envelope and stops the vehicle by itself if Autoware fails or goes quiet. Autoware stays QM; the ASIL work is confined to the monitor. Cost: hardware and a new component developed to ASIL, likely C or D; the envelope must be simple enough to verify."
+    - key: B
+      title: Rate vehicle_cmd_gate and mrm_handler for safety on the main computer
+      detail: "Develop or qualify the existing gate and MRM path to an ASIL. No new hardware. Cost: needs freedom from interference on Linux and ROS 2 and an operating system and middleware argued to that ASIL; a platform fault still takes out both the stack and its guard, so a high ASIL is unlikely to be reachable."
+    - key: C
+      title: Rely on the drive-by-wire platform's own limits
+      detail: "The vehicle's by-wire controllers clamp commands and brake to a stop if commands stop arriving. Least work for this project. Cost: the case rests on supplier evidence, which aftermarket kits rarely provide for driverless use; their limits do not know about the planned path, so they can only bound, not judge, a command."
+  sources: ["WP-M-01 §2, §6, OI-2", "autoware_universe 0.52.1: control/autoware_vehicle_cmd_gate, system/autoware_mrm_handler", "ISO 26262-9 §5, §7"]
+  status: open
+
+- id: DQ-003
+  question: Which vehicle and drive-by-wire platform should the reference configuration use?
+  context: >-
+    The hazard ratings, the hardware-software interface and the fallback all depend on the actuators: whether
+    braking and steering are redundant, and whether the supplier gives safety evidence and a development
+    interface agreement. **With no driver, a single brake or steering channel is a single point of failure for
+    the minimal risk manoeuvre.**
+  reversibility: hard
+  blocks: Item definition, HSI, hardware design, supplier agreements
+  gate: G0
+  asked: 2026-10-22
+  batch: 1
+  after: [DQ-001]
+  options:
+    - key: A
+      recommended: true
+      title: Purpose-built low-speed vehicle with native, redundant by-wire
+      detail: "A shuttle platform designed for driverless use, whose supplier provides a safety manual and will sign a development interface agreement. Fits option A of the ODD question. Cost: purchase price and dependence on one supplier; Autoware needs a vehicle interface for it if none exists."
+    - key: B
+      title: Passenger car with an aftermarket drive-by-wire kit
+      detail: "For example the long-standing Autoware sample vehicle, a Lexus RX 450h with an AutonomouStuff PACMod kit, already supported by an Autoware vehicle interface. Cost: no redundant actuation and little supplier safety evidence for driverless use, which makes the fallback argument much harder."
+    - key: C
+      title: Decide at G2; work in simulation until then
+      detail: "Run the concept phase against Autoware's planning simulator and AWSIM with a generic vehicle model. Cost: hazard ratings, the HSI and the timing budget stay provisional, and the HARA is likely to be redone when the vehicle is chosen."
+  sources: [WP-M-01 §3.1, WP-C-01, WP-S-05, WP-M-11]
+  status: open
+
+- id: DQ-004
+  question: Who is the safety authority, and who will assess the safety case?
+  context: >-
+    Someone has to approve work products, accept residual risk and sign the release; someone independent has
+    to assess. UL 4600 conformance needs an independent assessment, and ISO 26262 needs an I3 confirmation
+    review of the HARA before gate G1. **Until a human approver is named, nothing here can leave Draft:**
+    work drafted by Claude is I0 and never approves itself.
+  reversibility: revisit
+  blocks: Approval of every work product; HARA confirmation review at G1
+  gate: G0
+  asked: 2026-10-22
+  batch: 1
+  options:
+    - key: A
+      recommended: true
+      title: You are safety authority now; engage an external assessor before G1
+      detail: "You approve and accept risk; an accredited assessor (for example a body that offers UL 4600 and ISO 26262 assessment) is contracted before the HARA review. Cost: assessor fees from G1; self-approval of your own decisions is recorded as an interim limitation until a second person takes the safety manager role."
+    - key: B
+      title: You are safety authority; choose the assessor at G4
+      detail: "Defers the cost. Cost: the HARA confirmation review at G1 has no one to do it, and findings arrive late, when they are most expensive to fix."
+    - key: C
+      title: Appoint a separate safety manager now, plus an external assessor
+      detail: "You stay project lead; another person approves safety work products. Removes self-approval. Cost: a second qualified person from the start."
+  sources: ["WP-M-01 §8, §9", WP-M-02, WP-M-06, UL 4600 §17]
+  status: open
+
+- id: DQ-005
+  question: May Claude start the hazard analysis once the item, the command bound and the vehicle are decided?
+  context: >-
+    The hazard analysis (WP-C-03), STPA (WP-A-05) and SOTIF hazard identification (WP-C-05) are the next
+    work. They are drafted by Claude at I0 for your review. **Nothing starts until you say so.**
+  reversibility: easy
+  blocks: WP-C-03, WP-C-05, WP-A-05
+  gate: G1
+  asked: 2026-10-22
+  batch: 1
+  after: [DQ-001, DQ-002, DQ-003]
+  options:
+    - key: A
+      recommended: true
+      title: Start as soon as the three answers are in
+      detail: "Claude drafts the item definition and ODD from your answers, then the HARA, STPA and SOTIF hazards, and opens a pull request for review. Cost: none beyond your review time."
+    - key: B
+      title: Wait until the assessor is engaged too
+      detail: "The method of rating hazards is agreed with the assessor first. Cost: the concept phase waits on the contract."
+    - key: C
+      title: Start now on provisional assumptions
+      detail: "Claude assumes the recommended options above and marks the results provisional. Cost: likely rework if any answer differs."
+  sources: [WP-C-03, WP-C-05, WP-A-05]
+  status: open
+
+- id: DQ-006
+  question: Should the upstream spell-check workflow stay off until the assurance tree has its own word list?
+  context: >-
+    Autoware's differential spell check uses the Autoware dictionaries, which do not know assurance terms such as
+    FMEDA, SOTIF or STPA, so it would fail on most assurance pull requests.
+  reversibility: easy
+  blocks: Nothing
+  decider: claude
+  gate: G0
+  asked: 2026-10-22
+  proceed_after: 2026-10-22
+  options:
+    - key: A
+      recommended: true
+      title: Keep it off; re-enable it with a project word list later
+      detail: The workflow file is kept under .github/workflows-disabled/ and can be moved back.
+    - key: B
+      title: Re-enable it now and ignore its failures
+      detail: A permanently red check teaches everyone to ignore checks.
+  sources: [.github/workflows-disabled/README.md]
+  status: assumed
+  answer: {choice: A, via: assumed, at: 2026-10-22}
