@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="458" viewBox="0 0 640 458" role="img" aria-labelledby="t d">
+<title id="t">DQ-002: where the command is bounded</title>
+<desc id="d">The command path of each option of DQ-002, from planning and control down to the drive-by-wire system. A (Separate safety monitor on independent hardware): Planning, control on the Autoware computer then vehicle_cmd_gate on the Autoware computer then Safety monitor (rated for safety) then Drive-by-wire. B (Rate vehicle_cmd_gate and mrm_handler for safety on the main computer): Planning, control on the Autoware computer then vehicle_cmd_gate (rated for safety) on the Autoware computer then Drive-by-wire. C (Rely on the drive-by-wire platform's own limits): Planning, control on the Autoware computer then vehicle_cmd_gate on the Autoware computer then Drive-by-wire (rated for safety).</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg .qm { fill:var(--card); stroke:var(--ink3); stroke-width:1.2; }
+svg .safe { fill:var(--accsoft); stroke:var(--acc); stroke-width:1.8; }
+svg .plat { fill:none; stroke:var(--ink3); stroke-width:1.2; stroke-dasharray:5 4; }
+svg .arrow { stroke:var(--ink3); stroke-width:1.4; fill:none; }
+svg .head { fill:var(--ink3); }
+svg .reach-a { fill:var(--accsoft); stroke:var(--acc); stroke-width:1.8; }
+svg .reach-b { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.6; }
+svg .reach-c { fill:var(--card); stroke:var(--ink3); stroke-width:1.4; }
+svg .ka { font:700 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--acc); }
+</style>
+<rect class="bg" width="640" height="458"/>
+<text x="24" y="32" class="h">Where the command is bounded</text>
+<text x="24" y="54" class="t">Blue: rated for safety. Dashed: runs on the Autoware computer</text>
+<text x="24" y="72" class="t">(Linux, ROS 2), where one platform fault hits everything inside.</text>
+<text x="116" y="100" class="ka" text-anchor="middle">A</text>
+<rect x="22" y="104" width="188" height="138" rx="10" class="plat"/>
+<rect x="32" y="112" width="168" height="50" rx="7" class="qm"/>
+<text x="116" y="132" class="tb" text-anchor="middle">Planning, control</text>
+<text x="116" y="149" class="s" text-anchor="middle">Autoware</text>
+<line x1="116" y1="164" x2="116" y2="177" class="arrow"/>
+<path d="M112 176 L120 176 L116 182 Z" class="head"/>
+<rect x="32" y="184" width="168" height="50" rx="7" class="qm"/>
+<text x="116" y="204" class="tb" text-anchor="middle">vehicle_cmd_gate</text>
+<text x="116" y="221" class="s" text-anchor="middle">limits, mode select</text>
+<line x1="116" y1="236" x2="116" y2="249" class="arrow"/>
+<path d="M112 248 L120 248 L116 254 Z" class="head"/>
+<rect x="32" y="256" width="168" height="50" rx="7" class="safe"/>
+<text x="116" y="276" class="tb" text-anchor="middle">Safety monitor</text>
+<text x="116" y="293" class="s" text-anchor="middle">own hardware, can stop alo…</text>
+<line x1="116" y1="308" x2="116" y2="321" class="arrow"/>
+<path d="M112 320 L120 320 L116 326 Z" class="head"/>
+<rect x="32" y="328" width="168" height="50" rx="7" class="qm"/>
+<text x="116" y="358" class="tb" text-anchor="middle">Drive-by-wire</text>
+<text x="116" y="402" class="t" text-anchor="middle">Separate safety monitor on</text>
+<text x="116" y="418" class="t" text-anchor="middle">independent hardware</text>
+<text x="310" y="100" class="tb" text-anchor="middle">B</text>
+<rect x="216" y="104" width="188" height="138" rx="10" class="plat"/>
+<rect x="226" y="112" width="168" height="50" rx="7" class="qm"/>
+<text x="310" y="132" class="tb" text-anchor="middle">Planning, control</text>
+<text x="310" y="149" class="s" text-anchor="middle">Autoware</text>
+<line x1="310" y1="164" x2="310" y2="177" class="arrow"/>
+<path d="M306 176 L314 176 L310 182 Z" class="head"/>
+<rect x="226" y="184" width="168" height="50" rx="7" class="safe"/>
+<text x="310" y="204" class="tb" text-anchor="middle">vehicle_cmd_gate</text>
+<text x="310" y="221" class="s" text-anchor="middle">+ mrm_handler, rated</text>
+<line x1="310" y1="236" x2="310" y2="249" class="arrow"/>
+<path d="M306 248 L314 248 L310 254 Z" class="head"/>
+<rect x="226" y="256" width="168" height="50" rx="7" class="qm"/>
+<text x="310" y="286" class="tb" text-anchor="middle">Drive-by-wire</text>
+<text x="310" y="402" class="t" text-anchor="middle">Rate vehicle_cmd_gate and</text>
+<text x="310" y="418" class="t" text-anchor="middle">mrm_handler for safety on</text>
+<text x="310" y="434" class="t" text-anchor="middle">the main computer</text>
+<text x="504" y="100" class="tb" text-anchor="middle">C</text>
+<rect x="410" y="104" width="188" height="138" rx="10" class="plat"/>
+<rect x="420" y="112" width="168" height="50" rx="7" class="qm"/>
+<text x="504" y="132" class="tb" text-anchor="middle">Planning, control</text>
+<text x="504" y="149" class="s" text-anchor="middle">Autoware</text>
+<line x1="504" y1="164" x2="504" y2="177" class="arrow"/>
+<path d="M500 176 L508 176 L504 182 Z" class="head"/>
+<rect x="420" y="184" width="168" height="50" rx="7" class="qm"/>
+<text x="504" y="204" class="tb" text-anchor="middle">vehicle_cmd_gate</text>
+<text x="504" y="221" class="s" text-anchor="middle">limits, mode select</text>
+<line x1="504" y1="236" x2="504" y2="249" class="arrow"/>
+<path d="M500 248 L508 248 L504 254 Z" class="head"/>
+<rect x="420" y="256" width="168" height="50" rx="7" class="safe"/>
+<text x="504" y="276" class="tb" text-anchor="middle">Drive-by-wire</text>
+<text x="504" y="293" class="s" text-anchor="middle">own limits, watchdog stop</text>
+<text x="504" y="402" class="t" text-anchor="middle">Rely on the drive-by-wire</text>
+<text x="504" y="418" class="t" text-anchor="middle">platform's own limits</text>
+</svg>

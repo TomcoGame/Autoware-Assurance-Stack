@@ -1,0 +1,171 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="658" viewBox="0 0 640 658" role="img" aria-labelledby="t d">
+<title id="t">Work products by gate and status (WP-M-00 Figure 3-1)</title>
+<desc id="d">91 work products in 11 register sections. G0: 20 work products (2 draft, 18 skeleton). G1: 15 work products (15 skeleton). G2: 17 work products (17 skeleton). G3: 21 work products (21 skeleton). G4: 9 work products (9 skeleton). G5: 15 work products (15 skeleton). G6: 3 work products (3 skeleton). By section: 3.1 Management: WP-M-00 draft at G0, WP-M-01 draft at G0, WP-M-02 skeleton at G0, WP-M-03 skeleton at G0, WP-M-04 skeleton at G0, WP-M-05 skeleton at G0, WP-M-06 skeleton at G0, WP-M-07 skeleton at G0, WP-M-08 skeleton at G0, WP-M-09 skeleton at G0, WP-M-10 skeleton at G0, WP-M-11 skeleton at G0, WP-M-12 skeleton at G0, WP-M-13 skeleton at G0; 3.2 Concept phase: WP-C-01 skeleton at G1, WP-C-02 skeleton at G1, WP-C-03 skeleton at G1, WP-C-04 skeleton at G1, WP-C-05 skeleton at G1, WP-C-06 skeleton at G1, WP-C-07 skeleton at G1, WP-C-08 skeleton at G1, WP-C-09 skeleton at G1, WP-C-10 skeleton at G1, WP-C-11 skeleton at G1, WP-C-12 skeleton at G1; 3.3 System level: WP-S-01 skeleton at G2, WP-S-02 skeleton at G2, WP-S-03 skeleton at G2, WP-S-04 skeleton at G2, WP-S-05 skeleton at G2, WP-S-06 skeleton at G2, WP-S-07 skeleton at G2, WP-S-08 skeleton at G4, WP-S-09 skeleton at G4; 3.4 Hardware level: WP-H-01 skeleton at G3, WP-H-02 skeleton at G3, WP-H-03 skeleton at G3, WP-H-04 skeleton at G3, WP-H-05 skeleton at G3, WP-H-06 skeleton at G4, WP-H-07 skeleton at G3; 3.5 Software level: WP-W-01 skeleton at G3, WP-W-02 skeleton at G3, WP-W-03 skeleton at G3, WP-W-04 skeleton at G3, WP-W-05 skeleton at G3, WP-W-06 skeleton at G3, WP-W-07 skeleton at G4, WP-W-08 skeleton at G4, WP-W-09 skeleton at G3, WP-W-10 skeleton at G3, WP-W-11 skeleton at G3, WP-W-12 skeleton at G3; 3.6 Validation: WP-V-01 skeleton at G5, WP-V-02 skeleton at G2, WP-V-03 skeleton at G4, WP-V-04 skeleton at G5, WP-V-05 skeleton at G4, WP-V-06 skeleton at G5, WP-V-07 skeleton at G1, WP-V-08 skeleton at G2; 3.7 Supporting processes: WP-P-01 skeleton at G0, WP-P-02 skeleton at G0, WP-P-03 skeleton at G0, WP-P-04 skeleton at G0, WP-P-05 skeleton at G0, WP-P-06 skeleton at G0, WP-P-07 skeleton at G3, WP-P-08 skeleton at G3, WP-P-09 skeleton at G3, WP-P-10 skeleton at G5; 3.8 Safety analyses: WP-A-01 skeleton at G2, WP-A-02 skeleton at G2, WP-A-03 skeleton at G2, WP-A-04 skeleton at G2, WP-A-05 skeleton at G2; 3.9 Production, operation and decommissioning: WP-O-01 skeleton at G5, WP-O-02 skeleton at G5, WP-O-03 skeleton at G5, WP-O-04 skeleton at G6, WP-O-05 skeleton at G6, WP-O-06 skeleton at G2 (definition), G6 (monitoring); 3.10 Assurance cases and release: WP-K-01 skeleton at G1→G5 (living), WP-K-02 skeleton at G5, WP-K-03 skeleton at G5, WP-K-04 skeleton at G5, WP-K-05 skeleton at G5, WP-K-06 skeleton at G5, WP-K-07 skeleton at G5; 3.11 Traceability: WP-T-01 skeleton at G1→G5.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+.st-s.dot { stroke-dasharray:none; fill:none; stroke-width:1.2; }</style>
+<rect class="bg" width="640" height="658"/>
+<text x="24" y="32" class="h">Work products by gate and status</text>
+<text x="24" y="54" class="t">WP-M-00 §3: one dot per work product at each gate that needs it</text>
+<line x1="24" y1="68" x2="616" y2="68" class="hair"/>
+<text x="242.7" y="92" class="tb" text-anchor="middle">G0</text>
+<text x="300.1" y="92" class="tb" text-anchor="middle">G1</text>
+<text x="357.6" y="92" class="tb" text-anchor="middle">G2</text>
+<text x="415" y="92" class="tb" text-anchor="middle">G3</text>
+<text x="472.4" y="92" class="tb" text-anchor="middle">G4</text>
+<text x="529.9" y="92" class="tb" text-anchor="middle">G5</text>
+<text x="587.3" y="92" class="tb" text-anchor="middle">G6</text>
+<rect x="16" y="102" width="608" height="54" rx="4" class="card"/>
+<text x="24" y="119" class="tb">3.1 Management</text>
+<text x="24" y="133" class="s">01-management/ · 14</text>
+<rect x="218.7" y="113" width="8" height="8" rx="1.5" class="st-d dot"/>
+<rect x="228.7" y="113" width="8" height="8" rx="1.5" class="st-d dot"/>
+<rect x="238.7" y="113" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="248.7" y="113" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="258.7" y="113" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="218.7" y="123" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="228.7" y="123" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="238.7" y="123" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="248.7" y="123" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="258.7" y="123" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="218.7" y="133" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="228.7" y="133" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="238.7" y="133" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="248.7" y="133" width="8" height="8" rx="1.5" class="st-s dot"/>
+<text x="24" y="173" class="tb">3.2 Concept phase</text>
+<text x="24" y="187" class="s">02-concept/ · 12</text>
+<rect x="276.1" y="167" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="286.1" y="167" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="296.1" y="167" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="306.1" y="167" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="316.1" y="167" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="276.1" y="177" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="286.1" y="177" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="296.1" y="177" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="306.1" y="177" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="316.1" y="177" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="276.1" y="187" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="286.1" y="187" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="16" y="210" width="608" height="44" rx="4" class="card"/>
+<text x="24" y="227" class="tb">3.3 System level</text>
+<text x="24" y="241" class="s">03-system/ · 9</text>
+<rect x="333.6" y="221" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="343.6" y="221" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="353.6" y="221" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="363.6" y="221" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="373.6" y="221" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="333.6" y="231" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="343.6" y="231" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="463.4" y="221" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="473.4" y="221" width="8" height="8" rx="1.5" class="st-s dot"/>
+<text x="24" y="271" class="tb">3.4 Hardware level</text>
+<text x="24" y="285" class="s">04-hardware/ · 7</text>
+<rect x="391" y="265" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="401" y="265" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="411" y="265" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="421" y="265" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="431" y="265" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="391" y="275" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="468.4" y="265" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="16" y="298" width="608" height="44" rx="4" class="card"/>
+<text x="24" y="315" class="tb">3.5 Software level</text>
+<text x="24" y="329" class="s">05-software/ · 12</text>
+<rect x="391" y="309" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="401" y="309" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="411" y="309" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="421" y="309" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="431" y="309" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="391" y="319" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="401" y="319" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="411" y="319" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="421" y="319" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="431" y="319" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="463.4" y="309" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="473.4" y="309" width="8" height="8" rx="1.5" class="st-s dot"/>
+<text x="24" y="359" class="tb">3.6 Validation</text>
+<text x="24" y="373" class="s">06-validation/ · 8</text>
+<rect x="296.1" y="353" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="348.6" y="353" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="358.6" y="353" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="463.4" y="353" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="473.4" y="353" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="515.9" y="353" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="525.9" y="353" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="535.9" y="353" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="16" y="380" width="608" height="44" rx="4" class="card"/>
+<text x="24" y="397" class="tb">3.7 Supporting process…</text>
+<text x="24" y="411" class="s">07-supporting/ · 10</text>
+<rect x="218.7" y="391" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="228.7" y="391" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="238.7" y="391" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="248.7" y="391" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="258.7" y="391" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="218.7" y="401" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="401" y="391" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="411" y="391" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="421" y="391" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="525.9" y="391" width="8" height="8" rx="1.5" class="st-s dot"/>
+<text x="24" y="441" class="tb">3.8 Safety analyses</text>
+<text x="24" y="455" class="s">08-analyses/ · 5</text>
+<rect x="333.6" y="435" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="343.6" y="435" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="353.6" y="435" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="363.6" y="435" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="373.6" y="435" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="16" y="462" width="608" height="38" rx="4" class="card"/>
+<text x="24" y="479" class="tb">3.9 Production</text>
+<text x="24" y="493" class="s">09-production-operation/ · 6</text>
+<rect x="353.6" y="473" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="515.9" y="473" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="525.9" y="473" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="535.9" y="473" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="573.3" y="473" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="583.3" y="473" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="593.3" y="473" width="8" height="8" rx="1.5" class="st-s dot"/>
+<text x="24" y="517" class="tb">3.10 Assurance cases</text>
+<text x="24" y="531" class="s">10-safety-case/ · 7</text>
+<rect x="296.1" y="511" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="353.6" y="511" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="411" y="511" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="468.4" y="511" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="505.9" y="511" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="515.9" y="511" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="525.9" y="511" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="535.9" y="511" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="545.9" y="511" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="505.9" y="521" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="515.9" y="521" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="16" y="544" width="608" height="38" rx="4" class="card"/>
+<text x="24" y="561" class="tb">3.11 Traceability</text>
+<text x="24" y="575" class="s">trace/ · 1</text>
+<rect x="296.1" y="555" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="353.6" y="555" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="411" y="555" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="468.4" y="555" width="8" height="8" rx="1.5" class="st-s dot"/>
+<rect x="525.9" y="555" width="8" height="8" rx="1.5" class="st-s dot"/>
+<line x1="24" y1="588" x2="616" y2="588" class="hair"/>
+<text x="24" y="608" class="tb">Needed at gate</text>
+<text x="242.7" y="608" class="tb" text-anchor="middle">20</text>
+<text x="300.1" y="608" class="tb" text-anchor="middle">15</text>
+<text x="357.6" y="608" class="tb" text-anchor="middle">17</text>
+<text x="415" y="608" class="tb" text-anchor="middle">21</text>
+<text x="472.4" y="608" class="tb" text-anchor="middle">9</text>
+<text x="529.9" y="608" class="tb" text-anchor="middle">15</text>
+<text x="587.3" y="608" class="tb" text-anchor="middle">3</text>
+<rect x="24" y="629" width="10" height="10" rx="1.5" class="st-s dot"/>
+<text x="40" y="638" class="t">Skeleton (89)</text>
+<rect x="142.5" y="629" width="10" height="10" rx="1.5" class="st-d dot"/>
+<text x="158.5" y="638" class="t">Draft (2)</text>
+</svg>
