@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="622" viewBox="0 0 640 622" role="img" aria-labelledby="t d">
+<title id="t">02-concept: work products by gate and status</title>
+<desc id="d">Work products of 02-concept from WP-M-00 §3, with the gates they are needed for and their status: WP-C-01 Item definition: G1, Skeleton; WP-C-02 ODD and intended functionality (DDT, OEDR, manoeuvres): G1, Skeleton; WP-C-03 Hazard analysis and risk assessment, safety goals: G1, Skeleton; WP-C-04 Functional safety concept (FSRs, allocation, assumptions): G1, Skeleton; WP-C-05 SOTIF hazard identification, risk evaluation and acceptance criteria: G1, Skeleton; WP-C-06 Functional insufficiencies and triggering conditions: G1, Skeleton; WP-C-07 Functional modifications addressing SOTIF risk: G1, Skeleton; WP-C-08 Interaction with passengers, road users and remote operators; foreseeable misuse: G1, Skeleton; WP-C-09 Threat analysis and risk assessment (TARA): G1, Skeleton; WP-C-10 Cybersecurity goals, claims and concept: G1, Skeleton; WP-C-11 AI system definition and AI safety requirements: G1, Skeleton; WP-C-12 Fallback, minimal risk manoeuvres and minimal risk conditions: G1, Skeleton.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+</style>
+<rect class="bg" width="640" height="622"/>
+<text x="24" y="32" class="h">02-concept: work products by gate</text>
+<text x="24" y="54" class="t">WP-M-00 §3 (Concept phase): a chip at each gate the work product is needed for</text>
+<line x1="24" y1="68" x2="616" y2="68" class="hair"/>
+<text x="378.3" y="92" class="tb" text-anchor="middle">G0</text>
+<text x="414.9" y="92" class="tb" text-anchor="middle">G1</text>
+<text x="451.4" y="92" class="tb" text-anchor="middle">G2</text>
+<text x="488" y="92" class="tb" text-anchor="middle">G3</text>
+<text x="524.6" y="92" class="tb" text-anchor="middle">G4</text>
+<text x="561.1" y="92" class="tb" text-anchor="middle">G5</text>
+<text x="597.7" y="92" class="tb" text-anchor="middle">G6</text>
+<rect x="16" y="100" width="608" height="40" rx="4" class="card"/>
+<text x="24" y="117" class="tb">WP-C-01</text>
+<text x="24" y="132" class="s">Item definition</text>
+<rect x="401.6" y="113" width="26.6" height="14" rx="7" class="st-s"/>
+<text x="24" y="157" class="tb">WP-C-02</text>
+<text x="24" y="172" class="s">ODD and intended functionality (DDT, OEDR, manoeuvres)</text>
+<rect x="401.6" y="153" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="16" y="180" width="608" height="40" rx="4" class="card"/>
+<text x="24" y="197" class="tb">WP-C-03</text>
+<text x="24" y="212" class="s">Hazard analysis and risk assessment, safety goals</text>
+<rect x="401.6" y="193" width="26.6" height="14" rx="7" class="st-s"/>
+<text x="24" y="237" class="tb">WP-C-04</text>
+<text x="24" y="252" class="s">Functional safety concept (FSRs, allocation, assumption…</text>
+<rect x="401.6" y="233" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="16" y="260" width="608" height="40" rx="4" class="card"/>
+<text x="24" y="277" class="tb">WP-C-05</text>
+<text x="24" y="292" class="s">SOTIF hazard identification, risk evaluation and accept…</text>
+<rect x="401.6" y="273" width="26.6" height="14" rx="7" class="st-s"/>
+<text x="24" y="317" class="tb">WP-C-06</text>
+<text x="24" y="332" class="s">Functional insufficiencies and triggering conditions</text>
+<rect x="401.6" y="313" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="16" y="340" width="608" height="40" rx="4" class="card"/>
+<text x="24" y="357" class="tb">WP-C-07</text>
+<text x="24" y="372" class="s">Functional modifications addressing SOTIF risk</text>
+<rect x="401.6" y="353" width="26.6" height="14" rx="7" class="st-s"/>
+<text x="24" y="397" class="tb">WP-C-08</text>
+<text x="24" y="412" class="s">Interaction with passengers, road users and remote oper…</text>
+<rect x="401.6" y="393" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="16" y="420" width="608" height="40" rx="4" class="card"/>
+<text x="24" y="437" class="tb">WP-C-09</text>
+<text x="24" y="452" class="s">Threat analysis and risk assessment (TARA)</text>
+<rect x="401.6" y="433" width="26.6" height="14" rx="7" class="st-s"/>
+<text x="24" y="477" class="tb">WP-C-10</text>
+<text x="24" y="492" class="s">Cybersecurity goals, claims and concept</text>
+<rect x="401.6" y="473" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="16" y="500" width="608" height="40" rx="4" class="card"/>
+<text x="24" y="517" class="tb">WP-C-11</text>
+<text x="24" y="532" class="s">AI system definition and AI safety requirements</text>
+<rect x="401.6" y="513" width="26.6" height="14" rx="7" class="st-s"/>
+<text x="24" y="557" class="tb">WP-C-12</text>
+<text x="24" y="572" class="s">Fallback, minimal risk manoeuvres and minimal risk cond…</text>
+<rect x="401.6" y="553" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="24" y="593" width="26" height="14" rx="7" class="st-s"/>
+<text x="56" y="604" class="t">Skeleton (12)</text>
+</svg>

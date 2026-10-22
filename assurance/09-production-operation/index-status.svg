@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="399" viewBox="0 0 640 399" role="img" aria-labelledby="t d">
+<title id="t">09-production-operation: work products by gate and status</title>
+<desc id="d">Work products of 09-production-operation from WP-M-00 §3, with the gates they are needed for and their status: WP-O-01 Production, installation and provisioning control: G5, Skeleton; WP-O-02 Fleet operation, service, sensor calibration and decommissioning: G5, Skeleton; WP-O-03 Information for passengers, fleet operators and first responders: G5, Skeleton; WP-O-04 Field monitoring and incident reporting: G6, Skeleton; WP-O-05 Cybersecurity incident response, vulnerability management and updates: G6, Skeleton; WP-O-06 Safety performance indicators (definition and monitoring): G2 (definition), G6 (monitoring), Skeleton.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+</style>
+<rect class="bg" width="640" height="399"/>
+<text x="24" y="32" class="h">09-production-operation: work products by gate</text>
+<text x="24" y="54" class="t">WP-M-00 §3 (Production, operation and decommissioning): a chip at each gate the work</text>
+<text x="24" y="71" class="t">product is needed for</text>
+<line x1="24" y1="85" x2="616" y2="85" class="hair"/>
+<text x="378.3" y="109" class="tb" text-anchor="middle">G0</text>
+<text x="414.9" y="109" class="tb" text-anchor="middle">G1</text>
+<text x="451.4" y="109" class="tb" text-anchor="middle">G2</text>
+<text x="488" y="109" class="tb" text-anchor="middle">G3</text>
+<text x="524.6" y="109" class="tb" text-anchor="middle">G4</text>
+<text x="561.1" y="109" class="tb" text-anchor="middle">G5</text>
+<text x="597.7" y="109" class="tb" text-anchor="middle">G6</text>
+<rect x="16" y="117" width="608" height="40" rx="4" class="card"/>
+<text x="24" y="134" class="tb">WP-O-01</text>
+<text x="24" y="149" class="s">Production, installation and provisioning control</text>
+<rect x="547.9" y="130" width="26.6" height="14" rx="7" class="st-s"/>
+<text x="24" y="174" class="tb">WP-O-02</text>
+<text x="24" y="189" class="s">Fleet operation, service, sensor calibration and decomm…</text>
+<rect x="547.9" y="170" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="16" y="197" width="608" height="40" rx="4" class="card"/>
+<text x="24" y="214" class="tb">WP-O-03</text>
+<text x="24" y="229" class="s">Information for passengers, fleet operators and first r…</text>
+<rect x="547.9" y="210" width="26.6" height="14" rx="7" class="st-s"/>
+<text x="24" y="254" class="tb">WP-O-04</text>
+<text x="24" y="269" class="s">Field monitoring and incident reporting</text>
+<rect x="584.4" y="250" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="16" y="277" width="608" height="40" rx="4" class="card"/>
+<text x="24" y="294" class="tb">WP-O-05</text>
+<text x="24" y="309" class="s">Cybersecurity incident response, vulnerability manageme…</text>
+<rect x="584.4" y="290" width="26.6" height="14" rx="7" class="st-s"/>
+<text x="24" y="334" class="tb">WP-O-06</text>
+<text x="24" y="349" class="s">Safety performance indicators (definition and monitorin…</text>
+<rect x="438.1" y="330" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="584.4" y="330" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="24" y="370" width="26" height="14" rx="7" class="st-s"/>
+<text x="56" y="381" class="t">Skeleton (6)</text>
+</svg>
