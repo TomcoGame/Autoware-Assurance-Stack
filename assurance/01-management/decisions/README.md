@@ -53,7 +53,7 @@ the lead has worked through it, the next batch is written from the queue to the 
 
 ## The inbox page
 
-Published privately to the lead at <https://claude.ai/code/artifact/PENDING> and republished to the same link after
+Published privately to the lead at <https://claude.ai/artifact/R8TuZ77QVwDQBvKxof3dSc> and republished to the same link after
 every change to the register.
 
 The page shows open questions first (hard, then revisit, then easy), then answers waiting to be applied, then what
