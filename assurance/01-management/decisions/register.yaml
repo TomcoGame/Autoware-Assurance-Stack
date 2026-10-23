@@ -626,4 +626,6 @@
       detail: >-
         Gives margin for the uncertainty in both rates. Cost: the most validation driving of the three.
   sources: [WP-C-05 §6, AC-01, WP-M-01 §3.2, ISO 21448 §6, UL 4600 §5]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#12", record: "WP-C-05 v0.3 §6, AC-01; WP-M-01 v0.7 §3.2, §8", at: 2026-10-23}
