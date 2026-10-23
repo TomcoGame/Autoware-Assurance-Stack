@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="656" viewBox="0 0 640 656" role="img" aria-labelledby="t d">
+<title id="t">WP-C-12 Figure 3-1: fallback chain</title>
+<desc id="d">Fallback chain: MRM-1 Pull over to a mapped safe stopping place (QM), started by TR-02, TR-08, TR-10, TR-11, TR-13, TR-16, TR-17, reaches MRC-1, then MRM-2; MRM-2 Comfortable stop in lane (QM), started by TR-03, TR-05, TR-09, TR-14, reaches MRC-2, then MRM-3; MRM-3 Emergency stop in lane (QM), started by TR-04, TR-15, TR-18, reaches MRC-2, then MRM-4; MRM-4 Safety monitor stop in lane (D), started by TR-01, TR-06, TR-12, reaches MRC-2, then MRM-5; MRM-5 Vehicle's own stop on loss of the monitor (D), started by TR-07, reaches MRC-2, then nothing further.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg .rated { fill:var(--accsoft); stroke:var(--acc); stroke-width:1.6; }
+svg .qm { fill:var(--card); stroke:var(--ink3); stroke-width:1; }
+svg .wire { stroke:var(--ink2); stroke-width:1.4; fill:none; }
+svg .fb { stroke:var(--ink2); stroke-width:1.4; fill:none; stroke-dasharray:5 3; }
+svg .head { fill:var(--ink2); }
+svg .col { font:600 11px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); letter-spacing:.06em; }
+</style>
+<rect class="bg" width="640" height="656"/>
+<text x="24" y="32" class="h">Fallback chain</text>
+<text x="24" y="54" class="t">WP-C-12 §3: what starts each minimal risk manoeuvre, what takes</text>
+<text x="24" y="71" class="t">over when it cannot complete, and the condition it reaches</text>
+<text x="24" y="106" class="col">TRIGGERS</text>
+<text x="190" y="106" class="col">MANOEUVRES</text>
+<text x="468" y="106" class="col">CONDITIONS</text>
+<text x="24" y="145" class="s">TR-02, TR-08, TR-10,</text>
+<text x="24" y="160" class="s">TR-11, TR-13, TR-16,</text>
+<text x="24" y="175" class="s">TR-17</text>
+<path d="M164 156 L189 156" class="wire"/>
+<path d="M189 156 L182 152 L182 160 Z" class="head"/>
+<rect x="190" y="120" width="250" height="72" rx="7" class="qm"/>
+<text x="202" y="141" class="s">MRM-1 · Autoware computer · not rated</text>
+<text x="202" y="162" class="tb">Pull over to a mapped safe</text>
+<text x="202" y="179" class="tb">stopping place</text>
+<path d="M226 192 L226 219" class="fb"/>
+<path d="M226 219 L230 212 L222 212 Z" class="head"/>
+<text x="236" y="211" class="s">cannot complete</text>
+<text x="24" y="252.5" class="s">TR-03, TR-05, TR-09,</text>
+<text x="24" y="267.5" class="s">TR-14</text>
+<path d="M164 256 L189 256" class="wire"/>
+<path d="M189 256 L182 252 L182 260 Z" class="head"/>
+<rect x="190" y="220" width="250" height="72" rx="7" class="qm"/>
+<text x="202" y="241" class="s">MRM-2 · Autoware computer · not rated</text>
+<text x="202" y="262" class="tb">Comfortable stop in lane</text>
+<path d="M226 292 L226 319" class="fb"/>
+<path d="M226 319 L230 312 L222 312 Z" class="head"/>
+<text x="236" y="311" class="s">cannot complete</text>
+<text x="24" y="360" class="s">TR-04, TR-15, TR-18</text>
+<path d="M164 356 L189 356" class="wire"/>
+<path d="M189 356 L182 352 L182 360 Z" class="head"/>
+<rect x="190" y="320" width="250" height="72" rx="7" class="qm"/>
+<text x="202" y="341" class="s">MRM-3 · Autoware computer · not rated</text>
+<text x="202" y="362" class="tb">Emergency stop in lane</text>
+<path d="M226 392 L226 419" class="fb"/>
+<path d="M226 419 L230 412 L222 412 Z" class="head"/>
+<text x="236" y="411" class="s">cannot complete</text>
+<text x="24" y="460" class="s">TR-01, TR-06, TR-12</text>
+<path d="M164 456 L189 456" class="wire"/>
+<path d="M189 456 L182 452 L182 460 Z" class="head"/>
+<rect x="190" y="420" width="250" height="72" rx="7" class="rated"/>
+<text x="202" y="441" class="s">MRM-4 · Safety monitor · ASIL D</text>
+<text x="202" y="462" class="tb">Safety monitor stop in lane</text>
+<path d="M226 492 L226 519" class="fb"/>
+<path d="M226 519 L230 512 L222 512 Z" class="head"/>
+<text x="236" y="511" class="s">cannot complete</text>
+<text x="24" y="560" class="s">TR-07</text>
+<path d="M164 556 L189 556" class="wire"/>
+<path d="M189 556 L182 552 L182 560 Z" class="head"/>
+<rect x="190" y="520" width="250" height="72" rx="7" class="rated"/>
+<text x="202" y="541" class="s">MRM-5 · Vehicle drive-by-wire · ASIL D</text>
+<text x="202" y="562" class="tb">Vehicle's own stop on loss of</text>
+<text x="202" y="579" class="tb">the monitor</text>
+<rect x="468" y="120" width="148" height="72" rx="7" class="qm"/>
+<text x="480" y="141" class="s">MRC-1 · not rated</text>
+<text x="480" y="162" class="tb">Stopped at the</text>
+<text x="480" y="179" class="tb">kerb</text>
+<path d="M440 156 L467 156" class="wire"/>
+<path d="M467 156 L460 152 L460 160 Z" class="head"/>
+<rect x="468" y="220" width="148" height="372" rx="7" class="rated"/>
+<text x="480" y="241" class="s">MRC-2 · ASIL D</text>
+<text x="480" y="262" class="tb">Stopped in lane</text>
+<text x="480" y="289" class="s">Stopped in its lane,</text>
+<text x="480" y="305" class="s">hazard lights on,</text>
+<text x="480" y="321" class="s">park brake applied</text>
+<text x="480" y="337" class="s">and held by the</text>
+<text x="480" y="353" class="s">safety monitor</text>
+<path d="M440 256 L467 256" class="wire"/>
+<path d="M467 256 L460 252 L460 260 Z" class="head"/>
+<path d="M440 356 L467 356" class="wire"/>
+<path d="M467 356 L460 352 L460 360 Z" class="head"/>
+<path d="M440 456 L467 456" class="wire"/>
+<path d="M467 456 L460 452 L460 460 Z" class="head"/>
+<path d="M440 556 L467 556" class="wire"/>
+<path d="M467 556 L460 552 L460 560 Z" class="head"/>
+<rect x="24" y="620" width="22" height="14" rx="3" class="rated"/>
+<text x="54" y="632" class="t">Rated at SG-07's ASIL D</text>
+<rect x="244" y="620" width="22" height="14" rx="3" class="qm"/>
+<text x="274" y="632" class="t">Not rated (QM)</text>
+<path d="M404 627 L436 627" class="fb"/>
+<path d="M440 627 L433 623 L433 631 Z" class="head"/>
+<text x="450" y="632" class="t">Next if it cannot complete</text>
+</svg>
