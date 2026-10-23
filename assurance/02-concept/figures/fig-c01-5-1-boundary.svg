@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="622" viewBox="0 0 640 622" role="img" aria-labelledby="t d">
 <title id="t">WP-C-01 Figure 5-1: item boundary and interfaces</title>
-<desc id="d">Inside the item: Sensors, Autoware computer, Safety monitor. Outside: Vehicle platform, Power supply, HD map data, Update backend, Remote operations centre, Passengers, Other road users. Interfaces: I-01 from Other road users to Sensors; I-02 from Sensors to Autoware computer; I-03 from Autoware computer to Safety monitor; I-04 from Safety monitor to Vehicle platform; I-05 from Vehicle platform to Safety monitor; I-06 from Vehicle platform to Autoware computer; I-07 from HD map data to Autoware computer; I-08 from Remote operations centre to Autoware computer; I-09 from Passengers to Autoware computer; I-10 from Update backend to Autoware computer; I-11 from Vehicle platform to Other road users; I-12 from Power supply to Safety monitor.</desc>
+<desc id="d">Inside the item: Sensors, Autoware computer, Safety monitor. Outside: Vehicle platform, Power supply, HD map data, Update backend, Remote operations centre, Passengers, Other road users. Interfaces: I-01 from Other road users to Sensors; I-02 from Sensors to Autoware computer; I-03 from Autoware computer to Safety monitor; I-04 from Safety monitor to Vehicle platform; I-05 from Vehicle platform to Safety monitor; I-06 from Vehicle platform to Autoware computer; I-07 from HD map data to Autoware computer; I-08 from Remote operations centre to Autoware computer; I-09 from Passengers to Autoware computer; I-10 from Update backend to Autoware computer; I-11 from Vehicle platform to Other road users; I-12 from Power supply to Safety monitor; I-13 from Sensors to Safety monitor.</desc>
 <style>
 svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
 @media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
@@ -68,6 +68,9 @@ svg .iid { font:500 11px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:v
 <path d="M474 550 L320 550 L320 492" class="wire"/>
 <path d="M320 492 L316 499 L324 499 Z" class="head"/>
 <text x="328" y="540" class="iid">I-12</text>
+<path d="M424 134 L431 134 L431 432 L408 432 L408 446" class="wire"/>
+<path d="M408 446 L412 439 L404 439 Z" class="head"/>
+<text x="456" y="384" class="iid" text-anchor="middle">I-13</text>
 <rect x="216" y="96" width="208" height="46" rx="7" class="in"/>
 <text x="320" y="123" class="tb" text-anchor="middle">Sensors</text>
 <rect x="216" y="196" width="208" height="196" rx="7" class="in"/>

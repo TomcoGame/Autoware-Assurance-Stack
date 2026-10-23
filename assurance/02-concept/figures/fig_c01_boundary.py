@@ -104,6 +104,19 @@ ROUTE = {
         (RX + RW / 2 + 8, 200),
         "",
     ),
+    "I-13": (  # down the inside of the boundary, right of the Autoware computer
+        "Sensors",
+        "Safety monitor",
+        [
+            (CX + CW, 134),
+            (CX + CW + 7, 134),
+            (CX + CW + 7, 432),
+            (CX + CW - 16, 432),
+            (CX + CW - 16, 446),
+        ],
+        (GR, 384),
+        "middle",
+    ),
     "I-12": (
         "Power supply",
         "Safety monitor",
