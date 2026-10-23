@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-M-01 Assurance strategy and lifecycle tailoring |
 | Standard reference | UL 4600 §5, §17; ISO 26262-2:2018 §6 (tailoring, safety plan inputs); ISO 21448:2022 §4; ISO/SAE 21434:2021 §6; ISO/PAS 8800:2024 (AI safety management); ASPICE 4.0 MAN.3 |
-| Version | 0.1 (first issue: starting point, how the standards fit, the open strategic decisions; 2026-10-22) |
+| Version | 0.2 (decisions of the lead, 2026-10-23: urban robotaxi ODD (DQ-001 B), independent safety monitor (DQ-002 A), vehicle chosen at G2 (DQ-003 C), safety authority and assessor deferred (DQ-004), hazard analysis may start (DQ-005 A); 2026-10-23). 0.1 (first issue; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All (FuSa, SOTIF, CS, AI, process) |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -28,16 +28,16 @@ This is the assurance path for a driverless system built on Autoware. It says wh
 
 ### 3.1 Reference configuration
 
-Claims apply to one reference configuration only. Every row below waits on a decision of the safety authority.
+Claims apply to one reference configuration only. The rows below record the lead's decisions of 2026-10-23 (§8).
 
 | Element | Reference configuration | Decided by |
 |---|---|---|
-| Item and function | TBD | Decision register DQ-001 |
-| ODD | TBD, specified in [WP-C-02](../02-concept/WP-C-02-odd-and-intended-functionality.md) | DQ-001 |
-| Command-bounding element | TBD | DQ-002 |
-| Vehicle and drive-by-wire | TBD, recorded in [WP-C-01](../02-concept/WP-C-01-item-definition.md) | DQ-003 |
+| Item and function | Geofenced urban robotaxi: driverless passenger transport on public urban roads inside a mapped geofence | Decision register DQ-001 (B) |
+| ODD | Public urban roads up to 50 km/h, day and night, dry weather and light rain, mixed traffic including pedestrians and cyclists; detailed in [WP-C-02](../02-concept/WP-C-02-odd-and-intended-functionality.md) | DQ-001 (B) |
+| Command-bounding element | Independent safety monitor on its own hardware between Autoware and the drive-by-wire system (§6, pattern 1) | DQ-002 (A) |
+| Vehicle and drive-by-wire | Chosen at G2. Until then the concept phase works against a generic vehicle model in Autoware's planning simulator and AWSIM, and every result that depends on the vehicle is marked provisional ([WP-C-01](../02-concept/WP-C-01-item-definition.md)) | DQ-003 (C) |
 | Software | A tagged release of this repository that pins every source repository, map and model weight by commit or digest | [WP-P-01](../07-supporting/WP-P-01-configuration-management-plan.md) |
-| Operation | Driverless in the ODD, with a remote operations centre; during development, trained safety drivers ([WP-V-07](../06-validation/WP-V-07-test-operations.md)) | DQ-001 |
+| Operation | Driverless in the ODD, with a remote operations centre; during development, trained safety drivers ([WP-V-07](../06-validation/WP-V-07-test-operations.md)) | DQ-001 (B) |
 
 ### 3.2 Top-level claim (proposed)
 
@@ -78,33 +78,37 @@ The argument depends on where the commands to the vehicle are bounded, and by wh
 2. **`vehicle_cmd_gate` rated for safety.** The existing gate is developed or qualified to an ASIL. It shares compute, operating system and middleware with the functions it bounds, so the dependent-failure argument (ISO 26262-9 §7) and freedom from interference on Linux and ROS 2 carry the case.
 3. **The drive-by-wire platform as the bound.** The vehicle's own by-wire controllers enforce limits and a watchdog stop; Autoware and the gate stay QM. The case then rests on the supplier's safety evidence.
 
-The recommendation, and its costs, are in the decision register entry. The choice shapes the HARA allocation, the hardware (WP-H-02), the FTTI budget (WP-S-04) and the fallback concept (WP-C-12), so the hazard analysis does not start before it.
+**Decided (DQ-002 A, 2026-10-23): pattern 1, an independent safety monitor.** The ASIL work is confined to the monitor and its interface to the drive-by-wire system; Autoware, including `vehicle_cmd_gate` and `mrm_handler`, stays QM for malfunctions and is argued under ISO 21448 and UL 4600 for its nominal performance. The monitor must be able to bring the vehicle to a minimal risk condition on its own when Autoware fails or goes silent ([WP-C-12](../02-concept/WP-C-12-fallback-and-minimal-risk-concept.md)), and its safety envelope must be simple enough to verify. This shapes the HARA allocation, the hardware (WP-H-02), the FTTI budget (WP-S-04) and the decomposition rationale (WP-A-01).
 
 ## 7. Phases and gates
 
 The gates G0 to G6 and their exit criteria are in [WP-M-00 §2](WP-M-00-work-product-register.md#2-gates). G0 needs the decisions in §8 and the plans; G1 closes the concept, including the HARA confirmation review by the assessor.
 
-## 8. Strategic decisions required
+## 8. Strategic decisions
 
-The open questions live in the [decision register](decisions/README.md). Those this strategy waits on:
+Questions are asked and answered in the [decision register](decisions/README.md); the decisions are recorded here.
 
-| Question | Register |
-|---|---|
-| Which item and ODD to assure | DQ-001 |
-| What bounds the commands: a separate safety monitor, or `vehicle_cmd_gate` rated for safety | DQ-002 |
-| Which vehicle and drive-by-wire platform | DQ-003 |
-| Who is the safety authority, and who assesses | DQ-004 |
+| Question | Decision (by the project lead, 2026-10-23) | Register |
+|---|---|---|
+| Which item and ODD to assure | B: geofenced urban robotaxi, public urban roads up to 50 km/h, day and night, light rain (§3.1) | DQ-001 |
+| What bounds the commands | A: an independent safety monitor on its own hardware (§6) | DQ-002 |
+| Which vehicle and drive-by-wire platform | C: decide at G2; work against a generic vehicle model in simulation until then (§3.1) | DQ-003 |
+| Who is the safety authority, and who assesses | Deferred by the lead. Asked again before the HARA confirmation review (DQ-007); consequences in §9 | DQ-004 |
+| May the hazard analysis start | A: start once DQ-001 to DQ-003 are answered, which they now are | DQ-005 |
 
-Once applied, each decision is recorded here and in the work product that owns it.
+**What the combination means.** An urban ODD at 50 km/h with pedestrians and cyclists gives the largest hazard space of the options, and the vehicle is not yet chosen. So the severity and exposure ratings can be drafted now, but the ratings that depend on the vehicle (mass, braking and steering capability, actuator redundancy) and everything downstream of them stay provisional until G2. The vehicle question returns at G2 (DQ-008).
 
 ## 9. AI-authored work
 
 Much of the drafting is done by an AI assistant. Its output is a draft at independence level I0: it is never marked Approved by its author, it never accepts its own evidence, and a human reviewer at the level WP-M-06 requires verifies it before it counts.
 
+**While DQ-004 is deferred** no approver is named, so no work product can move past Draft, and G0 cannot close. Drafting continues. The HARA confirmation review at G1 needs an independent assessor (I3), so DQ-007 must be answered before that review is scheduled.
+
 ## 10. Open items
 
 | ID | Open item | Closes at |
 |---|---|---|
-| OI-1 | Fill §3.1 and §3.2 from DQ-001 to DQ-003 and the acceptance criterion | G0 |
-| OI-2 | Choose the safety architecture pattern of §6 (DQ-002) and record its rationale | G0 |
+| OI-1 | Set the acceptance criterion of §3.2 with the SOTIF acceptance criteria | G1 |
+| OI-2 | Name the safety authority and the assessor (DQ-007, deferred from DQ-004) | G1 |
 | OI-3 | Decide the tailoring candidates of §5 | G1 |
+| OI-4 | Choose the vehicle and drive-by-wire platform, then confirm or redo the provisional ratings (DQ-008) | G2 |

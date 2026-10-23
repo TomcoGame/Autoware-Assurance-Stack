@@ -31,7 +31,7 @@ across the whole operational design domain. The other standards supply the metho
 | Assurance state | Scaffold: no hazard analysis yet |
 | Work products in the register | 91 (2 draft, 89 skeleton) |
 | Work products approved or baselined | 0 |
-| Decisions waiting on the safety authority | 5 open |
+| Decisions waiting on the safety authority | 0 open |
 | Decisions applied | 0 |
 | Safety case claims | 0 |
 | Evidence items | 0 |
