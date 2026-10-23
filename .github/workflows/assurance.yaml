@@ -69,6 +69,7 @@ jobs:
           python3 assurance/02-concept/tara/tara.py --check
           python3 assurance/02-concept/cybersecurity/cybersecurity.py --check
           python3 assurance/02-concept/ai/ai.py --check
+          python3 assurance/02-concept/misuse/misuse.py --check
           python3 assurance/case/tools/dashboard.py --check
 
       - name: Unit tests of the tools
