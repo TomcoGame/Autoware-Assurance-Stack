@@ -61,3 +61,13 @@ Identifiers are never reused; a withdrawn item keeps its identifier and is marke
 | TARA | Threat analysis and risk assessment (ISO/SAE 21434) ([WP-C-09](../assurance/02-concept/WP-C-09-tara.md)) |
 | Triggering condition | A situation that makes a functional insufficiency lead to hazardous behaviour (SOTIF) |
 | Work product | A document or record the assurance path needs. All of them are listed in the [register](../assurance/01-management/WP-M-00-work-product-register.md) |
+
+## In pictures
+
+![The item: a white robotaxi seen from the front left, with the Autoware computer, the safety monitor, Autoware's roof sensor and the monitor's own sensors drawn inside it at illustrative positions, and a list of the elements inside and outside the item with their ratings from WP-C-04.](../tools/readme/figures/item.svg)
+
+*Illustration: positions are not decided. Labels read from the work products by [`figures.py`](../tools/readme/figures.py); vehicle model CC BY 4.0, see [credits](../tools/readme/models/CREDITS.md).*
+
+![When it can no longer drive on safely: left, the robotaxi pulled over to the kerb, Autoware's own manoeuvre; right, the robotaxi stopped in its lane with hazard lights on, the rated minimal risk condition of SG-07. Below, the safe state as WP-C-03 states it.](../tools/readme/figures/minimal-risk-condition.svg)
+
+*Illustration. Labels read from the work products by [`figures.py`](../tools/readme/figures.py); vehicle models CC BY 4.0, see [credits](../tools/readme/models/CREDITS.md).*
