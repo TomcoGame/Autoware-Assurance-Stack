@@ -157,7 +157,8 @@ def tables(m: dict, k: dict) -> dict[str, str]:
         f"{len(fms)} functional modifications address the {len(k['fis'])} insufficiencies of WP-C-06: "
         f"{n['concept']} already required by the concept (a requirement, ODD monitor or assumption) though not "
         f"yet built, {n['new']} new work, "
-        f"{n['pending']} waiting on {', '.join(pend) or 'no decision'}. Every insufficiency is addressed; "
+        + (f"{n['pending']} waiting on {', '.join(pend)}" if pend else "none waiting on a decision")
+        + ". Every insufficiency is addressed; "
         f"none is shown to be enough yet (WP-V-03)."
     )
     return t
