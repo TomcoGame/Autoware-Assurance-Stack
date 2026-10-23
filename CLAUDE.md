@@ -45,7 +45,7 @@ for g in assurance/01-management/figures/fig_m00_register.py assurance/01-manage
          assurance/02-concept/fsc/fsc.py assurance/02-concept/sotif/sotif.py \
          assurance/02-concept/fallback/fallback.py assurance/02-concept/triggering/triggering.py \
          assurance/02-concept/modifications/modifications.py assurance/08-analyses/stpa/stpa.py \
-         assurance/02-concept/tara/tara.py \
+         assurance/02-concept/tara/tara.py assurance/02-concept/cybersecurity/cybersecurity.py \
          assurance/case/tools/dashboard.py; do python3 "$g" --check; done
 python3 -m unittest discover -s assurance/tests -p 'test_*.py'
 python3 tools/readme/figures.py --check   # the README figures read WP-C-02, WP-C-03, WP-C-04, WP-M-00, WP-M-01, the register

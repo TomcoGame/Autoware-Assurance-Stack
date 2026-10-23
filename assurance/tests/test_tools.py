@@ -26,6 +26,7 @@ for sub in (
     "02-concept/modifications",
     "08-analyses/stpa",
     "02-concept/tara",
+    "02-concept/cybersecurity",
     "case/tools",
     "trace/tools",
 ):
@@ -37,6 +38,7 @@ import check_decisions  # noqa: E402
 import check_headers  # noqa: E402
 import check_links  # noqa: E402
 import check_tables  # noqa: E402
+import cybersecurity  # noqa: E402
 import dashboard  # noqa: E402
 import fallback  # noqa: E402
 import fig_c01_boundary  # noqa: E402
@@ -542,6 +544,38 @@ class Tara(unittest.TestCase):
             self.assertTrue(any(needle in x for x in tara.check(model, k)), needle)
 
 
+class Cybersecurity(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(cybersecurity.check(cybersecurity.load(), cybersecurity.known()), [])
+
+    def test_cal_is_the_highest_over_the_threats(self):
+        m, k = cybersecurity.load(), cybersecurity.known()
+        self.assertEqual(cybersecurity.cal(m, k, {"threats": ["TS-15"]}), "CAL1")
+        self.assertEqual(cybersecurity.cal(m, k, {"threats": ["TS-15", "TS-01"]}), "CAL4")
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = cybersecurity.load(), cybersecurity.known()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["goals"][0]["threats"] = ["TS-01"]
+        cases.append((bad, "TS-03: its risk is reduced but no goal covers it"))
+        bad = copy.deepcopy(m)
+        bad["claims"] = bad["claims"][1:]
+        cases.append((bad, "TS-05: its risk is retained but no claim"))
+        bad = copy.deepcopy(m)
+        bad["requirements"] = [r for r in bad["requirements"] if "CG-07" not in r["goals"]]
+        cases.append((bad, "CG-07: no requirement meets it"))
+        bad = copy.deepcopy(m)
+        for r in bad["requirements"]:
+            r["from"] = [x for x in r["from"] if x != "CR-11"]
+        cases.append((bad, "CR-11: the TARA proposed it"))
+        bad = copy.deepcopy(m)
+        bad["vectors"]["TS-01"] = "telepathy"
+        cases.append((bad, "TS-01: attack vector must be"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in cybersecurity.check(model, k)), needle)
+
+
 class TreeChecks(unittest.TestCase):
     def test_table_cell_count(self):
         md = "| A | B |\n|---|---|\n| 1 | 2 |\n| 1 |\n"
@@ -607,6 +641,7 @@ class Generators(unittest.TestCase):
             modifications,
             stpa,
             tara,
+            cybersecurity,
         ):
             first, second = mod.build(), mod.build()
             self.assertEqual(first, second, mod.__name__)
