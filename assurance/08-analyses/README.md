@@ -6,7 +6,7 @@ ASIL decomposition, freedom from interference, DFA, system FTA and FMEA, STPA.
 
 Standard clauses: UL 4600 §6, §10; 26262-9.
 
-![The 5 work products of this folder, one row each, with a chip at each gate it is needed for, coloured by its status in the WP-M-00 register: 5 at G2; 5 skeleton](index-status.svg)
+![The 5 work products of this folder, one row each, with a chip at each gate it is needed for, coloured by its status in the WP-M-00 register: 5 at G2; 4 skeleton, 1 draft](index-status.svg)
 
 *Drawn from [WP-M-00](../01-management/WP-M-00-work-product-register.md#3-register) §3.8, which also has the clauses of each work product.*
 
@@ -18,4 +18,10 @@ Standard clauses: UL 4600 §6, §10; 26262-9.
 | [WP-A-02](WP-A-02-coexistence-freedom-from-interference.md) | Coexistence of elements and freedom from interference | G2 | Skeleton |
 | [WP-A-03](WP-A-03-dependent-failure-analysis.md) | Dependent failure analysis | G2 | Skeleton |
 | [WP-A-04](WP-A-04-system-fta-fmea.md) | System-level safety analyses (FTA, FMEA) | G2 | Skeleton |
-| [WP-A-05](WP-A-05-stpa.md) | System-theoretic process analysis (STPA) | G2 | Skeleton |
+| [WP-A-05](WP-A-05-stpa.md) | System-theoretic process analysis (STPA) | G2 | Draft |
+
+## Subfolders
+
+| Folder | What it holds |
+|---|---|
+| [`stpa/`](stpa/) | — |
