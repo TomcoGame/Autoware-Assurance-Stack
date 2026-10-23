@@ -234,7 +234,7 @@ def tables(m: dict) -> dict[str, str]:
         f"{len(m['assets'])} assets, {len(m['damage'])} damage scenarios and {len(m['threats'])} threat scenarios. "
         f"Risk values before any cybersecurity control: "
         + ", ".join(f"{n} at {v}" for v, n in hist.items() if n)
-        + f". {reduce} must be reduced at the proposed threshold of {meth['reduce_at']}"
+        + f". {reduce} must be reduced at the {'proposed ' if meth.get('pending') else ''}threshold of {meth['reduce_at']}"
         + (f" ({meth['pending']})" if meth.get("pending") else "")
         + f"; {len(m['controls'])} cybersecurity controls are proposed for WP-C-10."
     )
@@ -312,7 +312,8 @@ def figure(m: dict) -> str:
         fk.text(
             24,
             y,
-            f"Cell number: risk value 1 to 5. Reduce at {meth['reduce_at']} or more (proposed).",
+            f"Cell number: risk value 1 to 5. Reduce at {meth['reduce_at']} or more"
+            + (" (proposed)." if meth.get("pending") else "."),
             "t",
         )
     )
