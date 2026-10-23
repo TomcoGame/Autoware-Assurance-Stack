@@ -30,7 +30,9 @@
       title: Private-site logistics with no public traffic
       detail: "Factory yard or port, up to 15 km/h, trained staff only. Cheapest to argue. Cost: little of the result carries over to public roads, and machinery standards (for example ISO 3691-4) may govern instead."
   sources: ["WP-M-01 §3.1, OI-1", WP-C-01, WP-C-02, UL 4600 §8 (ODD)]
-  status: open
+  status: applied
+  answer: {choice: B, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#2", record: "WP-M-01 v0.2 §3.1, §8", at: 2026-10-23}
 
 - id: DQ-002
   question: "What should stop an unsafe command from reaching the actuators: a separate safety monitor, or vehicle_cmd_gate rated for safety?"
@@ -59,7 +61,9 @@
       title: Rely on the drive-by-wire platform's own limits
       detail: "The vehicle's by-wire controllers clamp commands and brake to a stop if commands stop arriving. Least work for this project. Cost: the case rests on supplier evidence, which aftermarket kits rarely provide for driverless use; their limits do not know about the planned path, so they can only bound, not judge, a command."
   sources: ["WP-M-01 §2, §6, OI-2", "autoware_universe 0.52.1: control/autoware_vehicle_cmd_gate, system/autoware_mrm_handler", "ISO 26262-9 §5, §7"]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#2", record: "WP-M-01 v0.2 §3.1, §6, §8", at: 2026-10-23}
 
 - id: DQ-003
   question: Which vehicle and drive-by-wire platform should the reference configuration use?
@@ -86,7 +90,9 @@
       title: Decide at G2; work in simulation until then
       detail: "Run the concept phase against Autoware's planning simulator and AWSIM with a generic vehicle model. Cost: hazard ratings, the HSI and the timing budget stay provisional, and the HARA is likely to be redone when the vehicle is chosen."
   sources: [WP-M-01 §3.1, WP-C-01, WP-S-05, WP-M-11]
-  status: open
+  status: applied
+  answer: {choice: C, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#2", record: "WP-M-01 v0.2 §3.1, §8; WP-M-00 v0.2 §2 (G2)", at: 2026-10-23}
 
 - id: DQ-004
   question: Who is the safety authority, and who will assess the safety case?
@@ -112,7 +118,9 @@
       title: Appoint a separate safety manager now, plus an external assessor
       detail: "You stay project lead; another person approves safety work products. Removes self-approval. Cost: a second qualified person from the start."
   sources: ["WP-M-01 §8, §9", WP-M-02, WP-M-06, UL 4600 §17]
-  status: open
+  status: applied
+  answer: {choice: other, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg, note: not sure; lets defer until later}
+  applied: {ref: "#2", record: "WP-M-01 v0.2 §8, §9, OI-2; asked again as DQ-007", at: 2026-10-23}
 
 - id: DQ-005
   question: May Claude start the hazard analysis once the item, the command bound and the vehicle are decided?
@@ -137,7 +145,9 @@
       title: Start now on provisional assumptions
       detail: "Claude assumes the recommended options above and marks the results provisional. Cost: likely rework if any answer differs."
   sources: [WP-C-03, WP-C-05, WP-A-05]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#2", record: WP-M-01 v0.2 §8, at: 2026-10-23}
 
 - id: DQ-006
   question: Should the upstream spell-check workflow stay off until the assurance tree has its own word list?
@@ -161,3 +171,53 @@
   sources: [.github/workflows-disabled/README.md]
   status: assumed
   answer: {choice: A, via: assumed, at: 2026-10-22}
+
+- id: DQ-007
+  question: Who is the safety authority, and who will assess the safety case?
+  context: >-
+    You deferred this on 2026-10-23 (DQ-004). Drafting can go on without it, but **no work product can be approved
+    and G0 cannot close until someone is named,** and the HARA confirmation review at G1 needs an independent
+    assessor (I3) to be booked before it can happen.
+  reversibility: revisit
+  blocks: Approval of every work product; G0; the HARA confirmation review at G1
+  gate: G1
+  options:
+    - key: A
+      recommended: true
+      title: You are safety authority; engage an external assessor before the HARA review
+      detail: >-
+        You approve and accept risk; an accredited assessor is contracted before the HARA confirmation review. Cost:
+        assessor fees from G1; your approval of your own decisions is recorded as an interim limitation.
+    - key: B
+      title: Appoint a separate safety manager, plus an external assessor
+      detail: "You stay project lead; another person approves safety work. Cost: a second qualified person."
+    - key: C
+      title: You are safety authority; choose the assessor at G4
+      detail: "Defers the cost. Cost: the HARA confirmation review at G1 cannot happen, and findings arrive late."
+  sources: [DQ-004, WP-M-01 §8, §9, OI-2, WP-M-06, UL 4600 §17]
+  status: queued
+
+- id: DQ-008
+  question: Which vehicle and drive-by-wire platform should the urban robotaxi use?
+  context: >-
+    You chose to decide this at G2 (DQ-003 C). Until then the hazard ratings that depend on the vehicle (mass,
+    braking and steering capability, actuator redundancy) are provisional. **With no driver, a single brake or
+    steering channel is a single point of failure for the minimal risk manoeuvre**, so the safety monitor needs a
+    redundant actuation path to stop the vehicle on its own.
+  reversibility: hard
+  blocks: Item definition (vehicle part), HSI, hardware design, supplier agreements, G2
+  gate: G2
+  options:
+    - key: A
+      recommended: true
+      title: A vehicle with redundant by-wire braking and steering and a supplier safety manual
+      detail: >-
+        A platform built for driverless use whose supplier signs a development interface agreement. Cost: price and
+        dependence on one supplier; Autoware may need a new vehicle interface.
+    - key: B
+      title: Passenger car with an aftermarket drive-by-wire kit
+      detail: >-
+        For example the Autoware sample vehicle with an AutonomouStuff PACMod kit, already supported by an Autoware
+        vehicle interface. Cost: no redundant actuation and little supplier evidence for driverless use.
+  sources: [DQ-003, WP-M-01 §3.1, OI-4, WP-C-01, WP-S-05, WP-M-11]
+  status: queued
