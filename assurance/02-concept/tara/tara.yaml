@@ -1,0 +1,233 @@
+# TARA model for WP-C-09, following the steps of ISO/SAE 21434 §15: assets, damage scenarios with impact ratings,
+# threat scenarios with attack paths and attack feasibility, risk values and treatment. tara.py computes the
+# feasibility rating from the attack potential factors and the risk value from the matrix below, checks the model
+# against the HARA, the STPA and the functional safety concept, and writes the WP-C-09 tables and Figure 5-1.
+# The ratings are drafts by Claude (I0), made against the concept before any cybersecurity control is designed:
+# they say how exposed the concept is, not how secure the product will be.
+
+method:
+  # Attack potential-based approach (ISO/SAE 21434 Annex G, after ISO/IEC 18045). Values to be checked against the
+  # standard's text by the reviewer (WP-C-09 OI-1).
+  factors:
+    time: {≤1 day: 0, "≤1 week": 1, "≤1 month": 4, "≤6 months": 17, ">6 months": 19}
+    expertise: {layman: 0, proficient: 3, expert: 6, multiple experts: 8}
+    knowledge: {public: 0, restricted: 3, confidential: 7, strictly confidential: 11}
+    window: {unlimited: 0, easy: 1, moderate: 4, difficult: 10}
+    equipment: {standard: 0, specialized: 4, bespoke: 7, multiple bespoke: 9}
+  # Feasibility from the sum of the factors: the lowest bound the sum reaches.
+  feasibility: [[0, High], [10, Medium], [14, Low], [20, Very low]]
+  impacts: [Negligible, Moderate, Major, Severe]
+  # Risk value by impact (rows, as `impacts`) and feasibility (columns: Very low, Low, Medium, High); the example
+  # matrix of ISO/SAE 21434 Annex H.
+  matrix:
+    - [1, 1, 1, 1]
+    - [1, 2, 2, 3]
+    - [1, 2, 3, 4]
+    - [2, 3, 4, 5]
+  # Risks at or above this value are reduced; below it they are retained with a rationale (pending DQ-027).
+  reduce_at: 3
+  pending: DQ-027
+
+assets:
+  - {id: A-01, name: Remote driving commands, properties: [I, A]}
+  - {id: A-02, name: Remote assistance and release messages, properties: [I, A]}
+  - {id: A-03, name: Remote operator accounts and the operations station, properties: [C, I]}
+  - {id: A-04, name: Trip and route commands from the fleet backend, properties: [I]}
+  - {id: A-05, name: Safety monitor firmware and envelope parameters, properties: [I]}
+  - {id: A-06, name: "Autoware software, parameters and ML models", properties: [I]}
+  - {id: A-07, name: HD map data, properties: [I]}
+  - {id: A-08, name: Update packages and the update channel, properties: [I, A]}
+  - {id: A-09, name: "Sensor inputs (LiDAR, cameras, radar, GNSS, microphones)", properties: [I, A]}
+  - {id: A-10, name: "Command path to the drive-by-wire (I-03, I-04)", properties: [I, A]}
+  - {id: A-11, name: Passenger trip data and cabin video, properties: [C]}
+  - {id: A-12, name: Fleet telemetry and vehicle positions, properties: [C, A]}
+  - {id: A-13, name: "Passenger interface (stop request, doors)", properties: [I]}
+
+damage:
+  - id: DS-01
+    text: The vehicle is driven into a road user by commands the operator did not give
+    impact: {safety: Severe, financial: Major, operational: Major, privacy: Negligible}
+    hara: [H-08]
+  - id: DS-02
+    text: The vehicle moves off from a minimal risk condition while a passenger is getting out
+    impact: {safety: Severe, financial: Moderate, operational: Moderate, privacy: Negligible}
+    hara: [H-05]
+  - id: DS-03
+    text: Vehicles across the fleet stop in lane at once and cannot be released
+    impact: {safety: Major, financial: Major, operational: Severe, privacy: Negligible}
+    hara: [H-03]
+  - id: DS-04
+    text: The safety envelope is disabled or widened, so the monitor no longer stops unsafe commands
+    impact: {safety: Severe, financial: Major, operational: Major, privacy: Negligible}
+    hara: [H-01, H-02, H-04]
+  - id: DS-05
+    text: Autoware drives unsafely because its software, models or map were altered
+    impact: {safety: Severe, financial: Major, operational: Major, privacy: Negligible}
+    hara: [H-02, H-04, H-06]
+  - id: DS-06
+    text: Perception or localisation is deceived by false sensor input, and the vehicle acts on a false world
+    impact: {safety: Severe, financial: Moderate, operational: Moderate, privacy: Negligible}
+    hara: [H-02, H-03, H-04]
+  - id: DS-07
+    text: A fake siren or emergency light makes vehicles pull over or stop without need
+    impact: {safety: Moderate, financial: Negligible, operational: Moderate, privacy: Negligible}
+    hara: [H-03]
+  - id: DS-08
+    text: Passengers' trips or cabin video are disclosed
+    impact: {safety: Negligible, financial: Major, operational: Moderate, privacy: Major}
+    hara: []
+  - id: DS-09
+    text: The positions of the fleet are tracked by an outsider
+    impact: {safety: Negligible, financial: Moderate, operational: Moderate, privacy: Moderate}
+    hara: []
+  - id: DS-10
+    text: A vehicle with a passenger aboard is sent somewhere the passenger did not ask to go
+    impact: {safety: Major, financial: Major, operational: Major, privacy: Severe}
+    hara: []
+  - id: DS-11
+    text: A false stop request or door command stops the vehicle where it should not, or opens a door
+    impact: {safety: Moderate, financial: Negligible, operational: Moderate, privacy: Negligible}
+    hara: [H-03]
+
+threats:
+  - id: TS-01
+    text: Inject or alter remote driving commands on the wireless link
+    stride: Tampering
+    assets: [A-01]
+    damage: [DS-01]
+    path: Reach the vehicle's cellular link or the backend; forge or alter command messages; the monitor accepts them as the operator's
+    factors: {time: ≤1 month, expertise: expert, knowledge: restricted, window: unlimited, equipment: specialized}
+    controls: [SR-02, FSR-08.01, FSR-08.02, FSR-08.03]
+  - id: TS-02
+    text: Replay or forge a release from a minimal risk condition
+    stride: Spoofing
+    assets: [A-02]
+    damage: [DS-02]
+    path: Record a release message; replay it to a vehicle stopped in lane while passengers get out
+    factors: {time: ≤1 week, expertise: expert, knowledge: restricted, window: moderate, equipment: standard}
+    controls: [SR-02, FSR-05.01, FSR-07.04]
+  - id: TS-03
+    text: Take over a remote operator's account
+    stride: Spoofing
+    assets: [A-03]
+    damage: [DS-01, DS-02, DS-10]
+    path: Phish an operator or reuse a leaked password; log in to the operations station; drive, release or reroute vehicles
+    factors: {time: ≤1 week, expertise: proficient, knowledge: public, window: unlimited, equipment: standard}
+    controls: [CR-01, FSR-08.02]
+  - id: TS-04
+    text: Jam the vehicles' radio links, or flood the backend, so remote operations is lost
+    stride: Denial of service
+    assets: [A-01, A-02, A-12]
+    damage: [DS-03]
+    path: Use a jammer near a group of vehicles, or a flood of traffic at the backend; vehicles lose the link and stop (TR-11), and cannot be released
+    factors: {time: ≤1 day, expertise: proficient, knowledge: public, window: easy, equipment: specialized}
+    controls: [CR-02, AOU-09]
+  - id: TS-05
+    text: Alter the safety monitor's firmware or envelope parameters through a service or debug port
+    stride: Tampering
+    assets: [A-05]
+    damage: [DS-04]
+    path: Ride as a passenger or reach a parked vehicle; open a panel; connect to the monitor's port; write new limits
+    factors: {time: ≤1 month, expertise: expert, knowledge: confidential, window: moderate, equipment: specialized}
+    controls: [CR-03]
+  - id: TS-06
+    text: Deliver malicious software, models or maps through the update channel
+    stride: Tampering
+    assets: [A-06, A-07, A-08]
+    damage: [DS-05]
+    path: Compromise the update backend or its signing; push an altered package to the fleet
+    factors: {time: ≤6 months, expertise: multiple experts, knowledge: confidential, window: unlimited, equipment: bespoke}
+    controls: [CR-04, SR-03]
+  - id: TS-07
+    text: An insider alters a map or model before it is released
+    stride: Tampering
+    assets: [A-06, A-07]
+    damage: [DS-05]
+    path: Change map data or training data in the development pipeline; the change passes review and is released
+    factors: {time: ≤1 week, expertise: expert, knowledge: restricted, window: unlimited, equipment: standard}
+    controls: [CR-05, SR-03]
+  - id: TS-08
+    text: Spoof LiDAR or camera inputs (laser spoofing, adversarial patches on signs or road)
+    stride: Spoofing
+    assets: [A-09]
+    damage: [DS-06]
+    path: Use published attack methods against the perception models from the roadside
+    factors: {time: ≤1 month, expertise: expert, knowledge: public, window: moderate, equipment: specialized}
+    controls: [FM-02, FSR-02.01, CR-06]
+  - id: TS-09
+    text: Spoof GNSS where it is used to initialise the vehicle's pose (`autoware_pose_initializer`)
+    stride: Spoofing
+    assets: [A-09]
+    damage: [DS-06]
+    path: Broadcast false GNSS signals near a depot or a stopped vehicle; the pose is initialised wrongly and scan matching converges on it
+    factors: {time: ≤1 day, expertise: proficient, knowledge: public, window: easy, equipment: specialized}
+    controls: [FM-09, CR-07]
+  - id: TS-10
+    text: Play a siren or show emergency lights to make vehicles pull over
+    stride: Spoofing
+    assets: [A-09]
+    damage: [DS-07]
+    path: Use a loudspeaker or a light bar near vehicles; the emergency vehicle response (FM-15) yields
+    factors: {time: ≤1 day, expertise: layman, knowledge: public, window: easy, equipment: standard}
+    controls: [CR-08]
+  - id: TS-11
+    text: Reach the drive-by-wire bus past the safety monitor
+    stride: Elevation of privilege
+    assets: [A-10]
+    damage: [DS-04]
+    path: Compromise the vehicle's telematics or infotainment unit, or tap the bus, and send commands that bypass the monitor
+    factors: {time: ≤6 months, expertise: expert, knowledge: confidential, window: moderate, equipment: specialized}
+    controls: [CR-09]
+  - id: TS-12
+    text: Read passengers' trip data or cabin video from the backend
+    stride: Information disclosure
+    assets: [A-11]
+    damage: [DS-08]
+    path: Exploit a backend weakness or misconfigured storage; download trip records and video
+    factors: {time: ≤1 month, expertise: proficient, knowledge: restricted, window: unlimited, equipment: standard}
+    controls: [CR-10]
+  - id: TS-13
+    text: Track the fleet from its telemetry
+    stride: Information disclosure
+    assets: [A-12]
+    damage: [DS-09]
+    path: Intercept or query telemetry; follow vehicle positions over time
+    factors: {time: ≤1 month, expertise: proficient, knowledge: restricted, window: unlimited, equipment: standard}
+    controls: [CR-10]
+  - id: TS-14
+    text: Send a vehicle with a passenger aboard to another destination
+    stride: Tampering
+    assets: [A-04]
+    damage: [DS-10]
+    path: Forge or alter trip commands to the AD API through the backend; the vehicle drives the new route
+    factors: {time: ≤1 month, expertise: expert, knowledge: restricted, window: unlimited, equipment: standard}
+    controls: [CR-01, CR-11]
+  - id: TS-15
+    text: Fake a stop request or door command through the passenger interface or app
+    stride: Spoofing
+    assets: [A-13]
+    damage: [DS-11]
+    path: Use a passenger app or the cabin interface to send stop or door commands outside their intended use
+    factors: {time: ≤1 week, expertise: proficient, knowledge: restricted, window: easy, equipment: standard}
+    controls: [FSR-05.05, AOU-06, TR-16]
+  - id: TS-16
+    text: Tamper with the command path between Autoware and the safety monitor inside the vehicle
+    stride: Tampering
+    assets: [A-10]
+    damage: [DS-01]
+    path: Gain access to the in-vehicle network; inject commands toward the monitor
+    factors: {time: ≤1 month, expertise: expert, knowledge: confidential, window: moderate, equipment: specialized}
+    controls: [FSR-01.01, FSR-04.01, FSR-07.01]
+
+controls:
+  - {id: CR-01, text: "Remote operator accounts use phishing-resistant multi-factor authentication, least privilege and per-action logging; vehicle-level actions need a second confirmation"}
+  - {id: CR-02, text: "Vehicles keep a second, independent link to remote operations, and a release can be given locally by a field technician when both are lost"}
+  - {id: CR-03, text: "The safety monitor accepts only signed firmware and parameters, its debug ports are closed in production, and its housing is sealed and checked"}
+  - {id: CR-04, text: "Updates are signed with keys held in hardware, verified by the vehicle before install, and released only through the change process (WP-P-02)"}
+  - {id: CR-05, text: "Maps and training data are changed only through reviewed, logged changes with separation of duties"}
+  - {id: CR-06, text: Perception is tested against known physical attacks on sensors and models (WP-C-11)}
+  - {id: CR-07, text: "The initial pose is cross-checked against the map and the last known pose before use, and GNSS is never trusted alone"}
+  - {id: CR-08, text: "An emergency vehicle detection is confirmed by sound and light together, and a yield in a place where no emergency vehicle is plausible is reported"}
+  - {id: CR-09, text: "The drive-by-wire accepts commands only from the safety monitor, and the vehicle's other units cannot reach that bus (WP-H-07)"}
+  - {id: CR-10, text: "Trip data, video and telemetry are encrypted in transit and at rest, kept only as long as needed, and accessed by role"}
+  - {id: CR-11, text: A route change with a passenger aboard is shown to the passenger and confirmed by them or by an operator}
