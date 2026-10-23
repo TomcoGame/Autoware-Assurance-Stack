@@ -29,7 +29,7 @@ across the whole operational design domain. The other standards supply the metho
 | Indicator | Value |
 |---|---|
 | Assurance state | Before G0: hazard analysis draft |
-| Work products in the register | 91 (8 draft, 83 skeleton) |
+| Work products in the register | 91 (9 draft, 82 skeleton) |
 | Work products approved or baselined | 0 |
 | Decisions waiting on the safety authority | 0 open |
 | Decisions applied | 19 |
@@ -140,6 +140,7 @@ and commit the result.
 | `python3 assurance/02-concept/fsc/fsc.py` | WP-C-04 §1 summary, §3 to §5 tables and Figure 4-1 (element ASILs derived) | `02-concept/fsc/fsc.yaml`, `hara/hara.yaml`, WP-C-01 §8, the decision register |
 | `python3 assurance/02-concept/sotif/sotif.py` | WP-C-05 §1 summary, §4 to §6 tables and Figure 4-1 | `02-concept/sotif/sotif.yaml`, WP-C-01 §3, `hara/hara.yaml` |
 | `python3 assurance/02-concept/fallback/fallback.py` | WP-C-12 §1 summary, §2 to §4 and §6 tables, Figure 3-1 | `02-concept/fallback/fallback.yaml`, `fsc/fsc.yaml`, `hara/hara.yaml`, `sotif/sotif.yaml`, WP-C-01 §8, WP-C-02 §3 and §4, decision register |
+| `python3 assurance/02-concept/triggering/triggering.py` | WP-C-06 §1 summary, §3 to §6 tables and Figure 5-1 | `02-concept/triggering/triggering.yaml`, `sotif/sotif.yaml`, WP-C-01 §3, WP-C-02 §3 and §4 |
 | `python3 assurance/case/tools/dashboard.py` | `case/figures/dashboard.svg`, the summary block above | WP-M-00, `register.yaml`, `case/records/` |
 
 The decision inbox page is built by `decisions/build_inbox.py` and published outside the repository; CI builds it
