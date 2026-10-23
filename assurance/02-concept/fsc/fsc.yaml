@@ -16,7 +16,7 @@ elements:
   - id: EL-03
     name: Safety perception channel
     in_item: true
-    role: Sensing and processing for the safety monitor, independent of Autoware's perception; detects road users and obstacles without relying on learned classification
+    role: Own sensors and processing for the safety monitor, independent of Autoware's (DQ-018 A); detects road users and obstacles without relying on learned classification
   - id: EL-04
     name: Vehicle drive-by-wire
     in_item: false
@@ -122,9 +122,8 @@ fsrs:
     goal: SG-03
     asil: C
     element: EL-02
-    text: Limit decelerations from Autoware above the comfortable level that EL-03 does not confirm with a road user or obstacle to a firm, non-emergency level (Proposed; DQ-019)
+    text: Limit decelerations from Autoware above the comfortable level that EL-03 does not confirm with a road user or obstacle to a firm, non-emergency level set in WP-S-04 (DQ-019 A)
     verify: Fault injection of spurious braking commands; scenario tests
-    pending: DQ-019
   - id: FSR-03.03
     goal: SG-03
     asil: C
@@ -204,23 +203,20 @@ fsrs:
     goal: SG-06
     asil: D
     element: EL-02
-    text: Do not permit motion whose swept path crosses the predicted path of a road user detected by EL-03 before the vehicle could stop or clear it, using stated bounds on other road users' acceleration and speed (Proposed; DQ-017)
+    text: Do not permit motion whose swept path crosses the predicted path of a road user detected by EL-03 before the vehicle could stop or clear it, using stated bounds on other road users' acceleration and speed (DQ-017 A)
     verify: Scenario tests at intersections, unprotected turns, roundabouts and crosswalks; formal check of the rule
-    pending: DQ-017
   - id: FSR-06.02
     goal: SG-06
     asil: D
     element: EL-02
-    text: Limit speed where EL-03's view is occluded so that the vehicle can stop for a road user emerging at the assumed maximum speed (Proposed; DQ-017)
+    text: Limit speed where EL-03's view is occluded so that the vehicle can stop for a road user emerging at the assumed maximum speed (DQ-017 A)
     verify: Scenario tests with occlusions
-    pending: DQ-017
   - id: FSR-06.03
     goal: SG-06
     asil: QM
     element: EL-01
-    text: Obey traffic lights, signs and right of way, treating an unknown or unrecognised signal as red (OEDR-05 to OEDR-07); argued under SOTIF (Proposed; DQ-017)
+    text: Obey traffic lights, signs and right of way, treating an unknown or unrecognised signal as red (OEDR-05 to OEDR-07); argued under SOTIF (DQ-017 A)
     verify: Simulation, scenario and vehicle tests; SOTIF evaluation (WP-V-03)
-    pending: DQ-017
   # SG-07 Reach a minimal risk condition
   - id: FSR-07.01
     goal: SG-07
