@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-M-00 Work product register |
 | Standard reference | UL 4600 §5 (safety case work products); ISO 26262-2:2018 §6 (safety plan, work product list); ISO/SAE 21434:2021 §6; ASPICE 4.0 MAN.3 (define work products), SUP.8 (configuration items) |
-| Version | 0.13 (WP-C-10 drafted; 2026-10-23). 0.12 (WP-C-09 drafted; 2026-10-23). 0.11 (WP-A-05 drafted; 2026-10-23). 0.10 (WP-C-07 drafted; 2026-10-23). 0.9 (WP-C-06 drafted; 2026-10-23). 0.8 (WP-C-12 drafted; 2026-10-23). 0.7 (WP-C-05 drafted; 2026-10-23). 0.6 (WP-C-04 drafted; 2026-10-23). 0.5 (WP-C-03 drafted; 2026-10-23). 0.4 (WP-C-02 drafted; 2026-10-23). 0.3 (WP-C-01 drafted; 2026-10-23). 0.2 (G2 exit criterion adds the vehicle choice, deferred to G2 by DQ-003 C; 2026-10-23). 0.1 (first issue: every work product of the assurance path, its clauses, gate and status; 2026-10-22) |
+| Version | 0.14 (WP-C-11 drafted; 2026-10-23). 0.13 (WP-C-10 drafted; 2026-10-23). 0.12 (WP-C-09 drafted; 2026-10-23). 0.11 (WP-A-05 drafted; 2026-10-23). 0.10 (WP-C-07 drafted; 2026-10-23). 0.9 (WP-C-06 drafted; 2026-10-23). 0.8 (WP-C-12 drafted; 2026-10-23). 0.7 (WP-C-05 drafted; 2026-10-23). 0.6 (WP-C-04 drafted; 2026-10-23). 0.5 (WP-C-03 drafted; 2026-10-23). 0.4 (WP-C-02 drafted; 2026-10-23). 0.3 (WP-C-01 drafted; 2026-10-23). 0.2 (G2 exit criterion adds the vehicle choice, deferred to G2 by DQ-003 C; 2026-10-23). 0.1 (first issue: every work product of the assurance path, its clauses, gate and status; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -74,7 +74,7 @@ Clause columns cite the editions in [assurance/README.md](../README.md#standards
 | [WP-C-08](../02-concept/WP-C-08-human-interaction-misuse-analysis.md) | Interaction with passengers, road users and remote operators; foreseeable misuse | §7 | 3 §6 | §6 | | | | G1 | S |
 | [WP-C-09](../02-concept/WP-C-09-tara.md) | Threat analysis and risk assessment (TARA) | §11 | | | §9.4, §15 | | SEC.1 | G1 | D |
 | [WP-C-10](../02-concept/WP-C-10-cybersecurity-goals-and-concept.md) | Cybersecurity goals, claims and concept | §11 | | | §9.4, §9.5 | | SEC.1 | G1 | D |
-| [WP-C-11](../02-concept/WP-C-11-ai-system-definition-and-safety-requirements.md) | AI system definition and AI safety requirements | §8 | | §7 | | AI safety requirements | MLE.1 | G1 | S |
+| [WP-C-11](../02-concept/WP-C-11-ai-system-definition-and-safety-requirements.md) | AI system definition and AI safety requirements | §8 | | §7 | | AI safety requirements | MLE.1 | G1 | D |
 | [WP-C-12](../02-concept/WP-C-12-fallback-and-minimal-risk-concept.md) | Fallback, minimal risk manoeuvres and minimal risk conditions | §8, §10 | 3 §7 | §5, §8 | | | SYS.2 | G1 | D |
 
 ### 3.3 System level (`03-system/`)
