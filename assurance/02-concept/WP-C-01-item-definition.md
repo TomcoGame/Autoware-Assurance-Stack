@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-01 Item definition |
 | Standard reference | UL 4600 §5; ISO 26262-3 §5; ISO 21448 §5; ISO/SAE 21434 §9.3; ASPICE 4.0 SYS.1 |
-| Version | 0.6 (the safety monitor has its own sensors: Sensors element, new I-13 (DQ-018 A); 2026-10-23). 0.5 (minimal risk condition decided (DQ-016 A); 2026-10-23). 0.4 (state deferred to DQ-014; 2026-10-23). 0.3 (first market one US state (DQ-009 A); remote driving allowed (DQ-010 C): §4, I-08, §7, new AOU-10, hazard added; 2026-10-23). 0.2 (first content: item, functions, modes, boundary and interfaces, vehicle placeholders, legal context, assumptions, preliminary hazards, from DQ-001 B, DQ-002 A, DQ-003 C; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.7 (assumptions AOU-11 and AOU-12 from the fallback concept, WP-C-12; 2026-10-23). 0.6 (the safety monitor has its own sensors: Sensors element, new I-13 (DQ-018 A); 2026-10-23). 0.5 (minimal risk condition decided (DQ-016 A); 2026-10-23). 0.4 (state deferred to DQ-014; 2026-10-23). 0.3 (first market one US state (DQ-009 A); remote driving allowed (DQ-010 C): §4, I-08, §7, new AOU-10, hazard added; 2026-10-23). 0.2 (first content: item, functions, modes, boundary and interfaces, vehicle placeholders, legal context, assumptions, preliminary hazards, from DQ-001 B, DQ-002 A, DQ-003 C; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All (ASILs follow from WP-C-03) |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -148,6 +148,8 @@ Assumptions are what the item relies on from outside its boundary. Each is check
 | AOU-08 | Sensors are cleaned, calibrated and inspected at the intervals WP-O-02 sets | Operation | WP-O-02 |
 | AOU-09 | The remote operations centre is staffed whenever a vehicle is in service, and its link loss is detected by the item | Operation | WP-O-02, WP-C-12 |
 | AOU-10 | A remote operator who drives a vehicle is trained and qualified for it, drives one vehicle at a time, and has video and vehicle state with a delay inside the bound WP-S-04 sets | Operation | WP-O-02, WP-S-04 |
+| AOU-11 | The vehicle's drive-by-wire brakes to a standstill and holds it when commands from the safety monitor stop for longer than the time WP-S-04 sets ([WP-C-12](WP-C-12-fallback-and-minimal-risk-concept.md) MRM-5) | Vehicle | WP-H-07, DIA (WP-M-11) at G2 |
+| AOU-12 | The vehicle tells the safety monitor when it has had a collision, for example from its airbag control unit, through a path that does not pass through the Autoware computer | Vehicle | WP-S-05 at G2 |
 
 ## 9. Preliminary hazards
 
