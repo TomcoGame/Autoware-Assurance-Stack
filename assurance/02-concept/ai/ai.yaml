@@ -126,7 +126,7 @@ requirements:
   - id: AISR-11
     kind: data
     systems: [AIS-01, AIS-02, AIS-03, AIS-04, AIS-05]
-    text: Train and test on data covering every dimension of the input space in WP-C-02 §6, collected or verified in the geofence, with the coverage of each dimension measured and reported
+    text: Fine-tune the published models, and train the new ones, on data collected and labelled in the geofence that covers every dimension of the input space in WP-C-02 §6, with the coverage of each dimension measured and reported (DQ-028 A)
     target: WP-W-10
     allocated: data
   - id: AISR-12

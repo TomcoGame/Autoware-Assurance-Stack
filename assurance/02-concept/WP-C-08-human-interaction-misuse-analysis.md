@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-08 Interaction with passengers, road users and remote operators; foreseeable misuse |
 | Standard reference | UL 4600 §7; ISO 26262-3 §6; ISO 21448 §6 |
-| Version | 0.2 (first content: human roles, interactions, errors and foreseeable misuse with the measures that meet them, external communication of intent, remote assistance and operation, resulting requirements, generated from `misuse/misuse.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.3 (seat belts: no start until belted, warnings only while driving (DQ-029 B); 2026-10-23). 0.2 (first content: human roles, interactions, errors and foreseeable misuse with the measures that meet them, external communication of intent, remote assistance and operation, resulting requirements, generated from `misuse/misuse.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -20,7 +20,7 @@ Needed at gate G1 ([WP-M-00](../01-management/WP-M-00-work-product-register.md))
 
 <!-- BEGIN GENERATED: misuse-summary (assurance/02-concept/misuse/misuse.py) -->
 
-8 human roles and 23 entries: 11 foreseeable misuse, 5 errors by trained people, 7 interactions the item must support. 13 are met by measures already in the concept; 10 need one of the 10 new requirements, and entries marked proposed wait on DQ-029.
+8 human roles and 23 entries: 11 foreseeable misuse, 5 errors by trained people, 7 interactions the item must support. 13 are met by measures already in the concept; 10 need one of the 10 new requirements.
 
 <!-- END GENERATED: misuse-summary -->
 
@@ -80,7 +80,7 @@ The remote operator is the only person who can act on the vehicle in service, so
 | MU-04 | Passenger | Misuse | Covers or damages a sensor or camera in the cabin or on the body | Perception degraded; the monitor's channel blinded | TC-24, FI-08 | FM-10, FSR-07.08 | — |
 | MU-05 | Passenger | Misuse | Tries to take control of the vehicle | None if no control is reachable from the cabin | HZ-5 | AOU-07 | — |
 | MU-06 | Passenger | Interaction | Has a medical emergency, or is threatened by another passenger | Harm made worse by delay | HZ-7 | — | HR-02 |
-| MU-07 | Passenger | Misuse | Unbuckles or never buckles the seat belt during a trip | Injured in a hard stop or a collision | HZ-3 | — | HR-03 (proposed, DQ-029) |
+| MU-07 | Passenger | Misuse | Unbuckles or never buckles the seat belt during a trip | Injured in a hard stop or a collision | HZ-3 | — | HR-03 |
 | MU-08 | Child, elderly or less mobile passenger | Interaction | Needs more time or help to get in and out, or cannot reach the controls | Trapped by a door, or left in an unsafe place | HZ-7 | FSR-05.01, FSR-05.05 | HR-04 |
 | MU-09 | Child, elderly or less mobile passenger | Misuse | A child rides alone, or is left in the vehicle at the end of a trip | An unsupervised child in a driverless vehicle | HZ-7 | — | HR-05 |
 | MU-10 | Pedestrian | Misuse | Steps in front of the vehicle to test it, knowing it will stop | Hard braking; the vehicle blocks traffic | HZ-3, HZ-8 | FSR-02.02, FM-17, TR-14 | — |
@@ -96,7 +96,7 @@ The remote operator is the only person who can act on the vehicle in service, so
 
 <!-- END GENERATED: misuse-people -->
 
-**Two patterns stand out.** People will test a vehicle that always yields (MU-10, MU-12, MU-14): stepping in front of it, trapping it with cones, cutting in. Each is safe, because the vehicle stops, but each strands it and blocks traffic, so they feed STPA HZ-8 and the staffing of SR-01. And passengers with nobody to supervise them create most of the new requirements: a medical emergency, an unbelted rider, a child alone (MU-06, MU-07, MU-09).
+**Two patterns stand out.** People will test a vehicle that always yields (MU-10, MU-12, MU-14): stepping in front of it, trapping it with cones, cutting in. Each is safe, because the vehicle stops, but each strands it and blocks traffic, so they feed STPA HZ-8 and the staffing of SR-01. And passengers with nobody to supervise them create most of the new requirements: a medical emergency, an unbelted rider, a child alone (MU-06, MU-07, MU-09). For seat belts the lead decided that the vehicle does not start until every occupied seat is belted, and only warns if a belt is unfastened during the trip (DQ-029 B, 2026-10-23); a passenger who unbuckles anyway rides unbelted to the end of the trip, and that residual risk is carried to the SOTIF acceptance criteria (OI-1).
 
 ## 6. Resulting requirements
 
@@ -108,7 +108,7 @@ New requirements the entries need. They are proposals, each carried into the wor
 |---|---|---|---|
 | HR-01 | Act on the stop request by pulling over (MRM-1), connect the passenger to a remote operator, and after repeated requests let the operator decide | Autoware (TR-16); remote operations (WP-O-02) | MU-03 |
 | HR-02 | Give every seat an emergency call to a remote operator, who can divert the vehicle to a safe stop or a meeting point with emergency services | Vehicle interface; remote operations (WP-O-02, WP-O-03) | MU-06 |
-| HR-03 | Detect unfastened seat belts and respond as the decision on unbuckled passengers sets | Vehicle; Autoware; passenger information (WP-O-03) | MU-07 |
+| HR-03 | Detect occupied seats and unfastened belts; do not start a trip until every occupied seat is belted, and warn by voice and on screen whenever a belt is unfastened during the trip (DQ-029 B) | Vehicle; Autoware; passenger information (WP-O-03) | MU-07 |
 | HR-04 | Give passengers who need it more time and help to board and alight, with doors that never close on a person and controls reachable from a wheelchair | Vehicle (an assumption to add to WP-C-01 §8); WP-O-03 | MU-08 |
 | HR-05 | Check the cabin before a trip ends and before the next begins, and do not end a trip with a person still inside without a remote operator's decision | Vehicle interface; remote operations (WP-O-02) | MU-09 |
 | HR-06 | Show other road users, by lamps or an external display, when the vehicle is yielding and when it is about to move | Vehicle; Autoware (F-12) | MU-11 |
@@ -123,7 +123,7 @@ New requirements the entries need. They are proposals, each carried into the wor
 
 | ID | Open item | Closes at |
 |---|---|---|
-| OI-1 | Decide the response to unbelted passengers (DQ-029) | G1 |
+| OI-1 | Count the residual risk of passengers who unbuckle during a trip against AC-02 (DQ-029 B leaves them unbelted) | G2 |
 | OI-2 | Specify the in-vehicle stop request and the emergency call (TR-16, HR-01, HR-02) with the vehicle | G2 |
 | OI-3 | Add HR-04 and HR-09 as assumptions on the vehicle in WP-C-01 §8 | G1 |
 | OI-4 | Set the fleet's rules for unaccompanied minors and for passengers who need assistance, in WP-O-03 | G2 |

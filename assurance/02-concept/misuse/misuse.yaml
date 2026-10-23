@@ -69,7 +69,6 @@ entries:
     refs: [HZ-3]
     measures: []
     new: [HR-03]
-    pending: DQ-029
   - id: MU-08
     role: R-02
     kind: interaction
@@ -198,7 +197,7 @@ requirements:
     text: Give every seat an emergency call to a remote operator, who can divert the vehicle to a safe stop or a meeting point with emergency services
     to: Vehicle interface; remote operations (WP-O-02, WP-O-03)
   - id: HR-03
-    text: Detect unfastened seat belts and respond as the decision on unbuckled passengers sets
+    text: Detect occupied seats and unfastened belts; do not start a trip until every occupied seat is belted, and warn by voice and on screen whenever a belt is unfastened during the trip (DQ-029 B)
     to: Vehicle; Autoware; passenger information (WP-O-03)
   - id: HR-04
     text: Give passengers who need it more time and help to board and alight, with doors that never close on a person and controls reachable from a wheelchair
