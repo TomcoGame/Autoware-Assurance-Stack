@@ -221,3 +221,68 @@
         vehicle interface. Cost: no redundant actuation and little supplier evidence for driverless use.
   sources: [DQ-003, WP-M-01 §3.1, OI-4, WP-C-01, WP-S-05, WP-M-11]
   status: queued
+
+- id: DQ-009
+  question: Where should the robotaxi first operate?
+  context: >-
+    The market sets the traffic rules the vehicle must follow, the permits it needs, what must be reported after a
+    crash, and parts of the vehicle choice. The hazard analysis rates situations under one set of traffic rules,
+    so **it needs one jurisdiction to rate against.** A second market later is an impact analysis.
+  reversibility: hard
+  blocks: Item definition §7, ODD (traffic rules), HARA operational situations
+  gate: G1
+  asked: 2026-10-23
+  batch: 2
+  options:
+    - key: A
+      recommended: true
+      title: One US state
+      detail: >-
+        The chosen state's driverless testing and deployment permits, FMVSS for the vehicle and NHTSA crash reporting.
+        Several states already have permit routes for driverless robotaxis. Cost: rules differ by state, so the state
+        must be named; a vehicle without manual controls needs a federal exemption.
+    - key: B
+      title: The European Union
+      detail: >-
+        Type approval of the automated driving system under Regulation (EU) 2022/1426, plus UN R155 and R156 and a
+        member state's national rules. Cost: approval covers small series only and asks for evidence close to this
+        project's assurance case, which is a good fit but a long path.
+    - key: C
+      title: Japan
+      detail: >-
+        A Level 4 operating permit under the amended Road Traffic Act, issued for a defined route and operator.
+        Cost: permits so far are for narrow routes and low speeds, which fits a 50 km/h urban ODD poorly.
+  sources: [WP-C-01 §7, OI-2]
+  status: open
+
+- id: DQ-010
+  question: May remote operators drive the vehicle, or only assist it?
+  context: >-
+    Autoware has a `REMOTE` operation mode in which a remote operator commands the vehicle. Remote driving makes the
+    wireless link and the operator part of the control loop, so **link delay or loss while a person is driving
+    becomes a hazard to rate and protect against.** Remote assistance (approve a route, release a stop, request an
+    MRM) keeps the vehicle in control of its own motion.
+  reversibility: revisit
+  blocks: Item definition §4 and I-08, HARA, STPA control structure, TARA
+  gate: G1
+  asked: 2026-10-23
+  batch: 2
+  options:
+    - key: A
+      recommended: true
+      title: Assistance only; no remote driving
+      detail: >-
+        Operators dispatch trips, approve routes, release a stopped vehicle and request a stop; the vehicle always
+        plans and controls its own motion. Cost: a vehicle stuck where it cannot plan a way out needs a person on site.
+    - key: B
+      title: Remote driving at walking pace for recovery only
+      detail: >-
+        REMOTE mode allowed below a low speed limit enforced by the safety monitor, to move a stuck vehicle. Cost: the
+        link and the operator station enter the safety case; the speed limit must be rated for safety.
+    - key: C
+      title: Remote driving in general
+      detail: >-
+        Operators may take over driving. Cost: link latency and loss, operator attention and the operator station
+        become safety-critical; the largest addition to the hazard analysis and the TARA.
+  sources: [WP-C-01 §4, OI-4, I-08, autoware_adapi_msgs 1.9.2 OperationModeState]
+  status: open

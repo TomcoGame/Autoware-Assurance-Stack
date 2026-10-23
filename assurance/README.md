@@ -29,9 +29,9 @@ across the whole operational design domain. The other standards supply the metho
 | Indicator | Value |
 |---|---|
 | Assurance state | Scaffold: no hazard analysis yet |
-| Work products in the register | 91 (2 draft, 89 skeleton) |
+| Work products in the register | 91 (3 draft, 88 skeleton) |
 | Work products approved or baselined | 0 |
-| Decisions waiting on the safety authority | 0 open |
+| Decisions waiting on the safety authority | 2 open |
 | Decisions applied | 5 |
 | Safety case claims | 0 |
 | Evidence items | 0 |
@@ -135,6 +135,7 @@ and commit the result.
 | `python3 assurance/01-management/figures/folder_index.py` | `README.md` and `index-status.svg` of each numbered folder | This page's Layout table, WP-M-00 §3 |
 | `python3 assurance/01-management/decisions/fig_lifecycle.py` | Decision register Figure 1 | The status table of `decisions/README.md` |
 | `python3 assurance/01-management/decisions/fig_questions.py` | The figures of decision register entries | Its own option data, checked against `register.yaml` |
+| `python3 assurance/02-concept/figures/fig_c01_boundary.py` | WP-C-01 Figure 5-1 | WP-C-01 §3, §5.1, §5.2 |
 | `python3 assurance/case/tools/dashboard.py` | `case/figures/dashboard.svg`, the summary block above | WP-M-00, `register.yaml`, `case/records/` |
 
 The decision inbox page is built by `decisions/build_inbox.py` and published outside the repository; CI builds it
