@@ -855,4 +855,6 @@
         Least work before service. Cost: accepts forged remote commands and releases, sensor spoofing and fake
         sirens, which an assessor is unlikely to accept for a vehicle with no driver.
   sources: [WP-C-09 §5, ISO/SAE 21434 §15.9, UL 4600 §11]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#21", record: WP-C-09 v0.3 §5, at: 2026-10-23}
