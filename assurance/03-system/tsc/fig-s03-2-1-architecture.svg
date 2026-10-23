@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="516" viewBox="0 0 640 516" role="img" aria-labelledby="t d">
+<title id="t">WP-S-03 Figure 2-1: system architecture</title>
+<desc id="d">Components: Autoware computer (QM) hosting no mechanism; Safety monitor controller (D) hosting SM-01, SM-02, SM-03, SM-04, SM-05, SM-06, SM-07, SM-08; Safety channel processor (D) hosting SM-09, SM-10; Safety LiDAR (D) hosting no mechanism; Safety radar (D) hosting no mechanism; Drive-by-wire (D) hosting SM-11, SM-12, SM-13, SM-14; Vehicle state sensing (D) hosting SM-15; Park brake (D) hosting SM-16; Door system (D) hosting SM-17; Monitor power supply (D) hosting SM-18; Remote operations station (C) hosting SM-19. Links: Remote operations station to Safety monitor controller; Autoware computer to Safety monitor controller; Safety LiDAR to Safety channel processor; Safety radar to Safety channel processor; Safety channel processor to Safety monitor controller; Safety monitor controller to Drive-by-wire; Vehicle state sensing to Safety monitor controller; Safety monitor controller to Park brake; Door system to Safety monitor controller.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg .aD { fill:var(--accsoft); stroke:var(--acc); stroke-width:2; }
+svg .aC { fill:var(--accsoft); stroke:var(--acc); stroke-width:1.2; stroke-dasharray:5 3; }
+svg .aQM { fill:var(--card); stroke:var(--ink3); stroke-width:1; }
+svg .out { stroke-dasharray:2 2; }
+svg .wire { stroke:var(--ink2); stroke-width:1.4; fill:none; }
+svg .hd { fill:var(--ink2); }
+svg .lab { font:500 10.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .sm { font:600 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--acc); }
+</style>
+<rect class="bg" width="640" height="516"/>
+<text x="24" y="32" class="h">System architecture and safety mechanisms</text>
+<text x="24" y="54" class="t">WP-S-03 §2: components with their derived ASIL and the safety</text>
+<text x="24" y="71" class="t">mechanisms (SM) they host; arrows show the command and data paths</text>
+<path d="M87 156 L87 200" class="wire"/>
+<path d="M87 206 L83 199 L91 199 Z" class="hd"/>
+<text x="93" y="185" class="lab">signed commands, release</text>
+<path d="M300 156 L300 200" class="wire"/>
+<path d="M300 206 L296 199 L304 199 Z" class="hd"/>
+<text x="306" y="185" class="lab">commands, heartbeat</text>
+<path d="M508 156 L508 200" class="wire"/>
+<path d="M508 206 L504 199 L512 199 Z" class="hd"/>
+<path d="M582 156 L582 200" class="wire"/>
+<path d="M582 206 L578 199 L586 199 Z" class="hd"/>
+<path d="M490 238 L480 238" class="wire"/>
+<path d="M474 238 L481 242 L481 234 Z" class="hd"/>
+<path d="M107 270 L107 312" class="wire"/>
+<path d="M107 318 L103 311 L111 311 Z" class="hd"/>
+<text x="113" y="298" class="lab">bounded commands</text>
+<path d="M276 318 L276 276" class="wire"/>
+<path d="M276 270 L280 277 L272 277 Z" class="hd"/>
+<path d="M383 270 L383 312" class="wire"/>
+<path d="M383 318 L379 311 L387 311 Z" class="hd"/>
+<path d="M457 318 L457 276" class="wire"/>
+<path d="M457 270 L461 277 L453 277 Z" class="hd"/>
+<rect x="190" y="96" width="264" height="60" rx="7" class="aQM"/>
+<text x="198" y="114" class="tb">Autoware computer</text>
+<text x="198" y="147" class="sm">QM</text>
+<rect x="24" y="206" width="450" height="64" rx="7" class="aD"/>
+<text x="32" y="224" class="tb">Safety monitor controller</text>
+<text x="32" y="261" class="sm">D · SM-01–08</text>
+<rect x="490" y="206" width="126" height="64" rx="7" class="aD"/>
+<text x="498" y="224" class="tb">Safety channel</text>
+<text x="498" y="239" class="tb">processor</text>
+<text x="498" y="261" class="sm">D · SM-09, SM-10</text>
+<rect x="474" y="96" width="68" height="60" rx="7" class="aD"/>
+<text x="482" y="114" class="tb">Safety</text>
+<text x="482" y="129" class="tb">LiDAR</text>
+<text x="482" y="147" class="sm">D</text>
+<rect x="548" y="96" width="68" height="60" rx="7" class="aD"/>
+<text x="556" y="114" class="tb">Safety</text>
+<text x="556" y="129" class="tb">radar</text>
+<text x="556" y="147" class="sm">D</text>
+<rect x="24" y="318" width="190" height="60" rx="7" class="aD out"/>
+<text x="32" y="336" class="tb">Drive-by-wire</text>
+<text x="32" y="369" class="sm">D · SM-11–14</text>
+<rect x="226" y="318" width="100" height="60" rx="7" class="aD out"/>
+<text x="234" y="336" class="tb">Vehicle</text>
+<text x="234" y="351" class="tb">state</text>
+<text x="234" y="369" class="sm">D · SM-15</text>
+<rect x="338" y="318" width="90" height="60" rx="7" class="aD out"/>
+<text x="346" y="336" class="tb">Park brake</text>
+<text x="346" y="369" class="sm">D · SM-16</text>
+<rect x="440" y="318" width="100" height="60" rx="7" class="aD out"/>
+<text x="448" y="336" class="tb">Door system</text>
+<text x="448" y="369" class="sm">D · SM-17</text>
+<rect x="24" y="422" width="300" height="44" rx="7" class="aD out"/>
+<text x="32" y="440" class="tb">Monitor power supply</text>
+<text x="32" y="457" class="sm">D · SM-18</text>
+<rect x="24" y="96" width="150" height="60" rx="7" class="aC out"/>
+<text x="32" y="114" class="tb">Remote operations</text>
+<text x="32" y="129" class="tb">station</text>
+<text x="32" y="147" class="sm">C · SM-19</text>
+<rect x="24" y="483" width="26" height="18" rx="4" class="aD"/>
+<text x="58" y="496" class="t">ASIL D</text>
+<rect x="123.0" y="483" width="26" height="18" rx="4" class="aC"/>
+<text x="157" y="496" class="t">ASIL C</text>
+<rect x="222.0" y="483" width="26" height="18" rx="4" class="aQM"/>
+<text x="256" y="496" class="t">QM</text>
+<rect x="295.0" y="483" width="26" height="18" rx="4" class="aD out"/>
+<text x="329" y="496" class="t">Outside the item (dotted)</text>
+</svg>
