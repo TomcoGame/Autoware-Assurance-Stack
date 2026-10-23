@@ -6,7 +6,7 @@ Item definition, ODD, HARA, FSC, fallback and minimal risk concept, SOTIF hazard
 
 Standard clauses: UL 4600 §6–8; 26262-3; 21448 §5–8; 21434 §9, §15; PAS 8800.
 
-![The 12 work products of this folder, one row each, with a chip at each gate it is needed for, coloured by its status in the WP-M-00 register: 12 at G1; 12 skeleton](index-status.svg)
+![The 12 work products of this folder, one row each, with a chip at each gate it is needed for, coloured by its status in the WP-M-00 register: 12 at G1; 11 skeleton, 1 draft](index-status.svg)
 
 *Drawn from [WP-M-00](../01-management/WP-M-00-work-product-register.md#3-register) §3.2, which also has the clauses of each work product.*
 
@@ -14,7 +14,7 @@ Standard clauses: UL 4600 §6–8; 26262-3; 21448 §5–8; 21434 §9, §15; PAS 
 
 | ID | Work product | Gate | Status |
 |---|---|---|---|
-| [WP-C-01](WP-C-01-item-definition.md) | Item definition | G1 | Skeleton |
+| [WP-C-01](WP-C-01-item-definition.md) | Item definition | G1 | Draft |
 | [WP-C-02](WP-C-02-odd-and-intended-functionality.md) | ODD and intended functionality (DDT, OEDR, manoeuvres) | G1 | Skeleton |
 | [WP-C-03](WP-C-03-hara.md) | Hazard analysis and risk assessment, safety goals | G1 | Skeleton |
 | [WP-C-04](WP-C-04-functional-safety-concept.md) | Functional safety concept (FSRs, allocation, assumptions) | G1 | Skeleton |
@@ -26,3 +26,9 @@ Standard clauses: UL 4600 §6–8; 26262-3; 21448 §5–8; 21434 §9, §15; PAS 
 | [WP-C-10](WP-C-10-cybersecurity-goals-and-concept.md) | Cybersecurity goals, claims and concept | G1 | Skeleton |
 | [WP-C-11](WP-C-11-ai-system-definition-and-safety-requirements.md) | AI system definition and AI safety requirements | G1 | Skeleton |
 | [WP-C-12](WP-C-12-fallback-and-minimal-risk-concept.md) | Fallback, minimal risk manoeuvres and minimal risk conditions | G1 | Skeleton |
+
+## Subfolders
+
+| Folder | What it holds |
+|---|---|
+| [`figures/`](figures/) | — |
