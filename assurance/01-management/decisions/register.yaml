@@ -595,3 +595,35 @@
   status: applied
   answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
   applied: {ref: "#10", record: "WP-C-04 v0.3 §2.4, FSR-03.02; WP-M-01 v0.6 §8", at: 2026-10-23}
+
+- id: DQ-020
+  question: What residual risk will the project accept from the driverless robotaxi?
+  context: >-
+    The SOTIF analysis found sixteen ways the vehicle can cause harm with nothing broken, and all need further work.
+    They are reduced, never removed, so the project must say how much risk is acceptable. **This sets how many
+    miles and scenarios validation needs, which is the largest cost of the project.** With no driver, the usual
+    yardstick is the risk of the same trips driven by people.
+  reversibility: hard
+  blocks: AC-01, validation targets (WP-V-02), the safety case's top claim (WP-M-01 §3.2)
+  gate: G1
+  asked: 2026-10-23
+  batch: 5
+  options:
+    - key: A
+      recommended: true
+      title: At least as safe as a careful, competent human driver on the same roads
+      detail: >-
+        The injury-crash rate the vehicle causes must not exceed that of careful, competent drivers in the same ODD,
+        from published US crash data chosen in WP-V-02. Cost: needs a credible benchmark for urban streets at up to
+        30 mph, and enough driving to show the rate with statistical confidence.
+    - key: B
+      title: At least as safe as the average human driver
+      detail: >-
+        The benchmark is all drivers, including impaired and distracted ones. Cost: easier to show, but the public
+        and an assessor are likely to call it too weak for a vehicle with no driver.
+    - key: C
+      title: A set factor safer than the average human driver (for example twice as safe)
+      detail: >-
+        Gives margin for the uncertainty in both rates. Cost: the most validation driving of the three.
+  sources: [WP-C-05 §6, AC-01, WP-M-01 §3.2, ISO 21448 §6, UL 4600 §5]
+  status: open

@@ -6,7 +6,7 @@ Item definition, ODD, HARA, FSC, fallback and minimal risk concept, SOTIF hazard
 
 Standard clauses: UL 4600 §6–8; 26262-3; 21448 §5–8; 21434 §9, §15; PAS 8800.
 
-![The 12 work products of this folder, one row each, with a chip at each gate it is needed for, coloured by its status in the WP-M-00 register: 12 at G1; 8 skeleton, 4 draft](index-status.svg)
+![The 12 work products of this folder, one row each, with a chip at each gate it is needed for, coloured by its status in the WP-M-00 register: 12 at G1; 7 skeleton, 5 draft](index-status.svg)
 
 *Drawn from [WP-M-00](../01-management/WP-M-00-work-product-register.md#3-register) §3.2, which also has the clauses of each work product.*
 
@@ -18,7 +18,7 @@ Standard clauses: UL 4600 §6–8; 26262-3; 21448 §5–8; 21434 §9, §15; PAS 
 | [WP-C-02](WP-C-02-odd-and-intended-functionality.md) | ODD and intended functionality (DDT, OEDR, manoeuvres) | G1 | Draft |
 | [WP-C-03](WP-C-03-hara.md) | Hazard analysis and risk assessment, safety goals | G1 | Draft |
 | [WP-C-04](WP-C-04-functional-safety-concept.md) | Functional safety concept (FSRs, allocation, assumptions) | G1 | Draft |
-| [WP-C-05](WP-C-05-sotif-hazard-identification.md) | SOTIF hazard identification, risk evaluation and acceptance criteria | G1 | Skeleton |
+| [WP-C-05](WP-C-05-sotif-hazard-identification.md) | SOTIF hazard identification, risk evaluation and acceptance criteria | G1 | Draft |
 | [WP-C-06](WP-C-06-sotif-insufficiencies-triggering-conditions.md) | Functional insufficiencies and triggering conditions | G1 | Skeleton |
 | [WP-C-07](WP-C-07-sotif-functional-modifications.md) | Functional modifications addressing SOTIF risk | G1 | Skeleton |
 | [WP-C-08](WP-C-08-human-interaction-misuse-analysis.md) | Interaction with passengers, road users and remote operators; foreseeable misuse | G1 | Skeleton |
@@ -34,3 +34,4 @@ Standard clauses: UL 4600 §6–8; 26262-3; 21448 §5–8; 21434 §9, §15; PAS 
 | [`figures/`](figures/) | — |
 | [`fsc/`](fsc/) | — |
 | [`hara/`](hara/) | — |
+| [`sotif/`](sotif/) | — |
