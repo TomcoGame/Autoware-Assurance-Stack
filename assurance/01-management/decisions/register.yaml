@@ -858,3 +858,36 @@
   status: applied
   answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
   applied: {ref: "#21", record: WP-C-09 v0.3 §5, at: 2026-10-23}
+
+- id: DQ-028
+  question: Should the project train its own versions of Autoware's perception models, or use the published ones?
+  context: >-
+    The item uses three machine-learning models from the pinned Autoware (LiDAR object detection and two for traffic
+    lights) and adds two of its own (sirens and emergency lights, DQ-025 A). ISO/PAS 8800 asks for evidence that the
+    data each model learned from covers its input space (WP-C-02 §6). For the published models, that evidence is
+    whatever their publishers released. **This sets whether the project runs its own data collection, labelling and
+    training programme, which is one of its largest costs and lead times.**
+  reversibility: hard
+  blocks: WP-C-11 AISR-11 and AISR-12, ML engineering plan (WP-W-10), validation data (WP-V-02)
+  gate: G1
+  asked: 2026-10-23
+  batch: 9
+  options:
+    - key: A
+      recommended: true
+      title: Fine-tune the published models on data collected and labelled in the geofence
+      detail: >-
+        Keeps Autoware's model architectures; adds data from the ODD so coverage can be measured and shown. Cost: a
+        data collection and labelling programme before the first validation, and a model release process.
+    - key: B
+      title: Use the published models as they are, and validate them on data from the geofence
+      detail: >-
+        No training programme; only test data is collected. Cost: what the models learned cannot be shown to cover the
+        ODD, only tested against it; gaps found in test cannot be fixed without moving to A.
+    - key: C
+      title: Replace them with a commercial perception stack
+      detail: >-
+        A supplier provides models and their evidence. Cost: licence, integration into Autoware, and dependence on the
+        supplier's evidence meeting ISO/PAS 8800 for this ODD.
+  sources: [WP-C-11 §5, ISO/PAS 8800, WP-C-02 §6, WP-C-06 §6]
+  status: open

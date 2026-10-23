@@ -27,11 +27,13 @@ for sub in (
     "08-analyses/stpa",
     "02-concept/tara",
     "02-concept/cybersecurity",
+    "02-concept/ai",
     "case/tools",
     "trace/tools",
 ):
     sys.path.insert(0, str(ASSURANCE / sub))
 
+import ai  # noqa: E402
 import build_inbox  # noqa: E402
 import caselib  # noqa: E402
 import check_decisions  # noqa: E402
@@ -576,6 +578,29 @@ class Cybersecurity(unittest.TestCase):
             self.assertTrue(any(needle in x for x in cybersecurity.check(model, k)), needle)
 
 
+class Ai(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(ai.check(ai.load(), ai.known()), [])
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = ai.load(), ai.known()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["systems"][0]["element"] = "EL-02"
+        cases.append((bad, "no AI system may be on a rated element"))
+        bad = copy.deepcopy(m)
+        bad["systems"] = [s for s in bad["systems"] if s["function"] != "F-03"]
+        cases.append((bad, "F-03: an ML function"))
+        bad = copy.deepcopy(m)
+        bad["requirements"] = [r for r in bad["requirements"] if r["kind"] != "uncertainty"]
+        cases.append((bad, "no uncertainty requirement"))
+        bad = copy.deepcopy(m)
+        bad["systems"][0]["input"] = ["Smell"]
+        cases.append((bad, "is not in WP-C-02"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in ai.check(model, k)), needle)
+
+
 class TreeChecks(unittest.TestCase):
     def test_table_cell_count(self):
         md = "| A | B |\n|---|---|\n| 1 | 2 |\n| 1 |\n"
@@ -642,6 +667,7 @@ class Generators(unittest.TestCase):
             stpa,
             tara,
             cybersecurity,
+            ai,
         ):
             first, second = mod.build(), mod.build()
             self.assertEqual(first, second, mod.__name__)

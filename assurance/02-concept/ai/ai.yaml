@@ -1,0 +1,149 @@
+# AI system definition for WP-C-11 (ISO/PAS 8800): the AI systems of the item, their input space, and the AI safety
+# requirements allocated to them. ai.py checks the model against WP-C-01 §3 (functions), WP-C-02 §6 (input space),
+# the functional safety concept (no AI system may sit on a rated element), the SOTIF analysis and the functional
+# modifications, and writes the WP-C-11 tables and Figure 4-1.
+# No target value is set here: each requirement names where its target is derived (WP-V-02, WP-W-10).
+# Every entry is a draft by Claude (I0).
+
+systems:
+  - id: AIS-01
+    name: LiDAR object detection
+    component: "`autoware_lidar_centerpoint` (pinned)"
+    function: F-02
+    element: EL-01
+    task: Detect and classify vehicles, pedestrians and cyclists in the LiDAR point cloud, with position, size and heading
+    consumers: Tracking (`autoware_multi_object_tracker`), then prediction and planning
+    hazards: [SH-01, SH-02, SH-04]
+    insufficiencies: [FI-01]
+    bounded_by: [FSR-02.01, FSR-02.02, FSR-06.01]
+    input: [Object classes, Lighting, Weather, Visibility, Scenery]
+  - id: AIS-02
+    name: Traffic light detection
+    component: "`autoware_traffic_light_fine_detector` (pinned)"
+    function: F-03
+    element: EL-01
+    task: Find the signal heads in the camera image, in the regions the map predicts
+    consumers: Traffic light classification (AIS-03)
+    hazards: [SH-03]
+    insufficiencies: [FI-04]
+    bounded_by: [FSR-06.01, FSR-06.03]
+    input: [Lighting, Weather, Visibility, Traffic lights]
+  - id: AIS-03
+    name: Traffic light classification
+    component: "`autoware_traffic_light_classifier` (pinned)"
+    function: F-03
+    element: EL-01
+    task: Read the colour and arrow of each signal head found by AIS-02
+    consumers: Traffic light arbiter, then the traffic light module of planning
+    hazards: [SH-03]
+    insufficiencies: [FI-04]
+    bounded_by: [FSR-06.01, FSR-06.03]
+    input: [Lighting, Weather, Visibility, Traffic lights]
+  - id: AIS-04
+    name: Siren detection
+    component: New (FM-15, DQ-025 A)
+    function: F-02
+    element: EL-01
+    task: Detect an emergency siren in the microphone signals, with its rough direction
+    consumers: Emergency vehicle response (FM-15), together with AIS-05
+    hazards: [SH-09]
+    insufficiencies: [FI-13]
+    bounded_by: [FSR-02.02, FSR-06.01]
+    input: [Weather, Scenery]
+  - id: AIS-05
+    name: Emergency light detection
+    component: New (FM-15, DQ-025 A)
+    function: F-02
+    element: EL-01
+    task: Detect the flashing lights of an emergency vehicle in the camera images
+    consumers: Emergency vehicle response (FM-15), together with AIS-04
+    hazards: [SH-09]
+    insufficiencies: [FI-13]
+    bounded_by: [FSR-02.02, FSR-06.01]
+    input: [Lighting, Weather, Visibility, Object classes]
+
+requirements:
+  - id: AISR-01
+    kind: performance
+    systems: [AIS-01]
+    text: Detect every class of WP-C-02 ODD-16 within the range and with the miss and false-detection rates that the allotment of AC-02 gives to SH-01 and SH-02
+    target: WP-V-02 (allotment of AC-02)
+    allocated: model
+  - id: AISR-02
+    kind: performance
+    systems: [AIS-02, AIS-03]
+    text: Read signal states with the error rate the allotment of AC-02 gives to SH-03, reporting unknown rather than guessing
+    target: WP-V-02 (allotment of AC-02)
+    allocated: model
+  - id: AISR-03
+    kind: performance
+    systems: [AIS-04, AIS-05]
+    text: Detect an approaching emergency vehicle early enough for the yielding manoeuvre to complete, with a false-detection rate low enough that unneeded yields stay rare
+    target: WP-V-02; timing from WP-S-04
+    allocated: model
+  - id: AISR-04
+    kind: robustness
+    systems: [AIS-01]
+    text: Keep the performance of AISR-01 under the triggering conditions of WP-C-06 that reach it (TC-02 to TC-05, TC-15, TC-16, TC-24)
+    target: WP-V-03
+    allocated: model
+  - id: AISR-05
+    kind: robustness
+    systems: [AIS-02, AIS-03]
+    text: Keep the performance of AISR-02 under glare, LED flicker and occluded or damaged heads (TC-01, TC-06, TC-07)
+    target: WP-V-03
+    allocated: model
+  - id: AISR-06
+    kind: robustness
+    systems: [AIS-04, AIS-05]
+    text: Tell real sirens and emergency lights from other loud or flashing sources, and from deliberate fakes (TS-10)
+    target: WP-V-03; CSR-09
+    allocated: model
+  - id: AISR-07
+    kind: robustness
+    systems: [AIS-01, AIS-02, AIS-03, AIS-05]
+    text: Keep performance against the physical attacks on sensors and models known for the ODD (TS-08)
+    target: CSR-07
+    allocated: model
+  - id: AISR-08
+    kind: uncertainty
+    systems: [AIS-01]
+    text: Report a confidence for each detection that matches how often detections at that confidence are right, so that tracking and planning can weigh them
+    target: WP-W-10 (calibration measure)
+    allocated: model
+  - id: AISR-09
+    kind: uncertainty
+    systems: [AIS-02, AIS-03]
+    text: Report a state as unknown when its confidence is below the level that keeps AISR-02, so that it is treated as red (FSR-06.03)
+    target: WP-W-10
+    allocated: model
+  - id: AISR-10
+    kind: uncertainty
+    systems: [AIS-04, AIS-05]
+    text: Report confidence for each detection, and yield only when sound and light agree (CSR-09)
+    target: WP-W-10
+    allocated: architecture
+  - id: AISR-11
+    kind: data
+    systems: [AIS-01, AIS-02, AIS-03, AIS-04, AIS-05]
+    text: Train and test on data covering every dimension of the input space in WP-C-02 §6, collected or verified in the geofence, with the coverage of each dimension measured and reported
+    target: WP-W-10
+    allocated: data
+  - id: AISR-12
+    kind: data
+    systems: [AIS-01, AIS-02, AIS-03, AIS-04, AIS-05]
+    text: Keep training, validation and test sets apart, label them to a written guide with measured label quality, and record each set's version with the model it produced
+    target: WP-W-10
+    allocated: data
+  - id: AISR-13
+    kind: monitoring
+    systems: [AIS-01]
+    text: Rely on the safety channel's own detection, without learned classification, to bound the effect of any detection error (DQ-002 A, DQ-018 A)
+    target: FSR-02.01, FSR-02.02
+    allocated: architecture
+  - id: AISR-14
+    kind: monitoring
+    systems: [AIS-01, AIS-02, AIS-03, AIS-04, AIS-05]
+    text: Monitor in operation for inputs unlike the training data and for drops in performance, report them, and feed them into retraining and the search for unknown scenarios (WP-V-04)
+    target: WP-O-06 (safety performance indicators)
+    allocated: operation
