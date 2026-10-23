@@ -1,6 +1,6 @@
 # 3D models
 
-The vehicles in the README figures are rendered from two models published on Sketchfab under the
+The vehicles in the README and wiki figures are rendered from two models published on Sketchfab under the
 [Creative Commons Attribution 4.0 International licence (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
 Both were downloaded on 2026-10-23. The FBX files here are the `source/` files of those downloads, renamed and
 otherwise unchanged; the textures of the downloads are not used and not kept.
