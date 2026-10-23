@@ -13,7 +13,13 @@ import tempfile
 import unittest
 
 ASSURANCE = Path(__file__).resolve().parents[1]
-for sub in ("01-management/figures", "01-management/decisions", "case/tools", "trace/tools"):
+for sub in (
+    "01-management/figures",
+    "01-management/decisions",
+    "02-concept/figures",
+    "case/tools",
+    "trace/tools",
+):
     sys.path.insert(0, str(ASSURANCE / sub))
 
 import build_inbox  # noqa: E402
@@ -23,6 +29,7 @@ import check_headers  # noqa: E402
 import check_links  # noqa: E402
 import check_tables  # noqa: E402
 import dashboard  # noqa: E402
+import fig_c01_boundary  # noqa: E402
 import fig_lifecycle  # noqa: E402
 import fig_m00_register  # noqa: E402
 import fig_questions  # noqa: E402
@@ -258,7 +265,14 @@ class Generators(unittest.TestCase):
     def test_deterministic_and_accessible(self):
         import xml.dom.minidom
 
-        for mod in (fig_m00_register, folder_index, fig_lifecycle, fig_questions, dashboard):
+        for mod in (
+            fig_m00_register,
+            folder_index,
+            fig_lifecycle,
+            fig_questions,
+            dashboard,
+            fig_c01_boundary,
+        ):
             first, second = mod.build(), mod.build()
             self.assertEqual(first, second, mod.__name__)
             for path, content in first.items():
@@ -290,6 +304,30 @@ class Generators(unittest.TestCase):
                 fig_questions.dq002,
                 list(orig),
             )
+
+    def test_boundary_figure_refuses_a_table_it_cannot_draw(self):
+        orig = fig_c01_boundary.DOC
+        text = orig.read_text(encoding="utf-8")
+        cases = [
+            text.replace(
+                "| Passengers | No |", "| Passengers | Yes |"
+            ),  # wrong side of the boundary
+            text.replace(
+                "| I-09 | Passengers |", "| I-09 | Update backend |"
+            ),  # ends differ from the route
+            text.replace("| I-12 |", "| I-13 |"),  # an interface with no route
+        ]
+        with tempfile.TemporaryDirectory() as t:
+            for i, changed in enumerate(cases):
+                self.assertNotEqual(changed, text, i)
+                p = Path(t, f"c01-{i}.md")
+                p.write_text(changed, encoding="utf-8")
+                fig_c01_boundary.DOC = p
+                try:
+                    with self.assertRaises(figkit.FigureError, msg=str(i)):
+                        fig_c01_boundary.build()
+                finally:
+                    fig_c01_boundary.DOC = orig
 
     def test_emit_check_reports_stale(self):
         with tempfile.TemporaryDirectory(dir=figkit.REPO) as t:
