@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-01 Item definition |
 | Standard reference | UL 4600 §5; ISO 26262-3 §5; ISO 21448 §5; ISO/SAE 21434 §9.3; ASPICE 4.0 SYS.1 |
-| Version | 0.3 (first market one US state (DQ-009 A); remote driving allowed (DQ-010 C): §4, I-08, §7, new AOU-10, hazard added; 2026-10-23). 0.2 (first content: item, functions, modes, boundary and interfaces, vehicle placeholders, legal context, assumptions, preliminary hazards, from DQ-001 B, DQ-002 A, DQ-003 C; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.4 (state deferred to DQ-014; 2026-10-23). 0.3 (first market one US state (DQ-009 A); remote driving allowed (DQ-010 C): §4, I-08, §7, new AOU-10, hazard added; 2026-10-23). 0.2 (first content: item, functions, modes, boundary and interfaces, vehicle placeholders, legal context, assumptions, preliminary hazards, from DQ-001 B, DQ-002 A, DQ-003 C; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All (ASILs follow from WP-C-03) |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -120,7 +120,7 @@ The vehicle is chosen at G2 (DQ-008). Until then the concept phase uses a generi
 
 ## 7. Legal and regulatory context
 
-The robotaxi first operates in one US state (DQ-009 A, 2026-10-23); which state is still open (DQ-013). The instruments below apply in any state; the state's own law adds its permits, its vehicle code (the traffic rules of WP-C-02) and any rules on remote driving.
+The robotaxi first operates in one US state (DQ-009 A, 2026-10-23); the state is deferred (DQ-013): the lead leans to the state where testing is easiest, and it is asked again before the HARA confirmation review (DQ-014). The instruments below apply in any state; the state's own law adds its permits, its vehicle code (the traffic rules of WP-C-02) and any rules on remote driving.
 
 | Level | Instrument (informative; to be confirmed for the chosen state) | Bears on |
 |---|---|---|
@@ -169,7 +169,7 @@ ISO 26262-3 §5 asks the item definition to name the hazards already known. This
 | ID | Open item | Closes at |
 |---|---|---|
 | OI-1 | Replace the provisional vehicle values of §6 from the chosen platform, and re-check AOU-01 to AOU-03 and AOU-06 (DQ-008) | G2 |
-| OI-2 | Choose the state (DQ-013) and fill §7 for it | G1 |
+| OI-2 | Choose the state (DQ-014) and fill §7 for it | G1 |
 | OI-3 | Decide in the HARA whether a stop in lane is an acceptable minimal risk condition in the urban ODD, or whether a pull-over operator must be added and assured | G1 |
 | OI-4 | Bound the remote driving loop: maximum link delay, the speed allowed under remote driving, and the response to link loss (WP-S-04, WP-C-12) | G2 |
 | OI-5 | Specify the passenger interface (I-09) with the vehicle | G2 |
