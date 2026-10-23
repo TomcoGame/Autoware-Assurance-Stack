@@ -1,0 +1,280 @@
+# Functional safety concept model for WP-C-04: the elements requirements are allocated to, and the functional
+# safety requirements (FSRs) derived from the safety goals of WP-C-03.
+# Safety goal ASILs are not repeated here: fsc.py reads them from ../hara/hara.yaml. Element ASILs are not typed
+# either: each element takes the highest ASIL of the FSRs allocated to it.
+# Every requirement is a draft by Claude (I0). "Proposed" marks content that waits on a decision (see `pending`).
+
+elements:
+  - id: EL-01
+    name: Autoware computer
+    in_item: true
+    role: Plans and controls nominal driving, carries out its own MRMs and ODD monitors; QM by decision DQ-002 A
+  - id: EL-02
+    name: Safety monitor
+    in_item: true
+    role: Independent controller between Autoware and drive-by-wire; enforces the safety envelope and can stop the vehicle alone
+  - id: EL-03
+    name: Safety perception channel
+    in_item: true
+    role: Sensing and processing for the safety monitor, independent of Autoware's perception; detects road users and obstacles without relying on learned classification
+  - id: EL-04
+    name: Vehicle drive-by-wire
+    in_item: false
+    role: Braking, steering, propulsion and gear by wire, with the redundancy AOU-01 requires
+    aou: AOU-01
+  - id: EL-05
+    name: Park brake
+    in_item: false
+    role: Holds the vehicle at standstill on the monitor's command
+    aou: AOU-02
+  - id: EL-06
+    name: Vehicle state sensing
+    in_item: false
+    role: Speed, steering angle, gear and by-wire faults delivered to the monitor without passing through Autoware
+    aou: AOU-03
+  - id: EL-07
+    name: Monitor power supply
+    in_item: false
+    role: Keeps the monitor, its channel and the actuation path powered when the Autoware computer's supply fails
+    aou: AOU-05
+  - id: EL-08
+    name: Door system
+    in_item: false
+    role: Reports door state and keeps the vehicle from moving with a door open
+    aou: AOU-06
+  - id: EL-09
+    name: Remote operations station
+    in_item: false
+    role: Sends remote driving commands with time stamp, sequence number and integrity protection
+    aou: AOU-10
+
+fsrs:
+  # SG-01 Avoid unintended acceleration
+  - id: FSR-01.01
+    goal: SG-01
+    asil: D
+    element: EL-02
+    text: Limit commanded acceleration to the envelope for the current speed, and to zero or braking whenever the distance to a road user or obstacle ahead detected by EL-03 is below the safe longitudinal distance
+    verify: Fault injection of excessive acceleration commands in HIL; scenario tests
+  - id: FSR-01.02
+    goal: SG-01
+    asil: D
+    element: EL-02
+    text: Detect actual acceleration above the bounded command from the vehicle state (EL-06), then cut propulsion and brake to standstill within the fault tolerant time interval
+    verify: Fault injection on the vehicle side; FTTI measurement (WP-S-04)
+  - id: FSR-01.03
+    goal: SG-01
+    asil: D
+    element: EL-04
+    text: Cut propulsion on the safety monitor's command, whatever Autoware commands
+    verify: Supplier evidence under the DIA; vehicle test
+  - id: FSR-01.05
+    goal: SG-01
+    asil: D
+    element: EL-06
+    text: Deliver measured speed and longitudinal acceleration to the safety monitor without passing through Autoware, and flag their own faults
+    verify: Supplier evidence under the DIA; fault injection on the signal path
+  - id: FSR-01.04
+    goal: SG-01
+    asil: QM
+    element: EL-01
+    text: Plan and command acceleration within the vehicle's comfort and legal limits
+    verify: Simulation and vehicle test
+  # SG-02 Decelerate at least as much as needed
+  - id: FSR-02.01
+    goal: SG-02
+    asil: D
+    element: EL-03
+    text: Detect road users and obstacles in and beside the vehicle's swept path out to the stopping distance at the maximum ODD speed, by day and night and in the weather of ODD-10 and ODD-11, and report their position and velocity to the monitor
+    verify: Detection performance tests across the ODD; fault injection of sensor faults
+  - id: FSR-02.02
+    goal: SG-02
+    asil: D
+    element: EL-02
+    text: When a detected road user or obstacle is closer than the safe longitudinal distance and the commanded deceleration does not restore it, command the deceleration that does
+    verify: Scenario tests (cut-in, sudden stop, pedestrian entering); HIL
+  - id: FSR-02.03
+    goal: SG-02
+    asil: D
+    element: EL-02
+    text: Compare achieved with commanded deceleration (EL-06) and switch to the secondary braking path on a shortfall
+    verify: Fault injection on the primary brake path
+  - id: FSR-02.04
+    goal: SG-02
+    asil: D
+    element: EL-04
+    text: Provide a secondary braking path that can still stop the vehicle after any single fault in the primary one
+    verify: Supplier evidence under the DIA
+  - id: FSR-02.05
+    goal: SG-02
+    asil: QM
+    element: EL-01
+    text: Plan and control to keep a safe distance and stop for road users and obstacles (nominal function)
+    verify: Simulation and vehicle test
+  # SG-03 Avoid unintended hard deceleration
+  - id: FSR-03.01
+    goal: SG-03
+    asil: C
+    element: EL-03
+    text: Keep false detections in the swept path below the rate the SOTIF acceptance criteria allow, so that monitor interventions are rarely unjustified
+    verify: Field and replay data over the ODD; false-positive rate estimation
+  - id: FSR-03.02
+    goal: SG-03
+    asil: C
+    element: EL-02
+    text: Limit decelerations from Autoware above the comfortable level that EL-03 does not confirm with a road user or obstacle to a firm, non-emergency level (Proposed; DQ-019)
+    verify: Fault injection of spurious braking commands; scenario tests
+    pending: DQ-019
+  - id: FSR-03.03
+    goal: SG-03
+    asil: C
+    element: EL-02
+    text: Apply emergency-level deceleration on the monitor's own initiative only when FSR-02.02 requires it
+    verify: Review of the intervention logic; replay tests
+  # SG-04 Avoid unintended lateral motion out of the planned path
+  - id: FSR-04.01
+    goal: SG-04
+    asil: D
+    element: EL-02
+    text: Reject steering commands whose predicted swept path, over the stopping time, comes within the safe lateral distance of a road user, obstacle or kerb detected by EL-03, and stop in lane instead
+    verify: Fault injection of steering commands; scenario tests with oncoming traffic and cyclists
+  - id: FSR-04.02
+    goal: SG-04
+    asil: D
+    element: EL-02
+    text: Limit commanded steering angle and rate to the envelope for the current speed
+    verify: Fault injection; HIL
+  - id: FSR-04.03
+    goal: SG-04
+    asil: D
+    element: EL-02
+    text: Compare achieved with commanded steering (EL-06) and stop in lane on a deviation beyond the tolerance
+    verify: Fault injection on the steering path
+  - id: FSR-04.04
+    goal: SG-04
+    asil: D
+    element: EL-04
+    text: Keep steering controllable by wire after any single fault long enough to complete a stop in lane
+    verify: Supplier evidence under the DIA
+  - id: FSR-04.06
+    goal: SG-04
+    asil: D
+    element: EL-06
+    text: Deliver measured steering angle to the safety monitor without passing through Autoware, and flag its own faults
+    verify: Supplier evidence under the DIA; fault injection on the signal path
+  - id: FSR-04.05
+    goal: SG-04
+    asil: QM
+    element: EL-01
+    text: Plan and follow a path inside the lane and the drivable area (nominal function)
+    verify: Simulation and vehicle test
+  # SG-05 Avoid unintended motion from standstill
+  - id: FSR-05.01
+    goal: SG-05
+    asil: D
+    element: EL-02
+    text: "At standstill, hold the service brake and park brake until all release conditions hold: doors closed (EL-08), no road user or obstacle detected by EL-03 in the near field in the direction of travel, and a motion request in the selected gear"
+    verify: Fault injection; scenario tests at stops with passengers and pedestrians
+  - id: FSR-05.02
+    goal: SG-05
+    asil: D
+    element: EL-02
+    text: Detect motion while holding (EL-06) and apply the park brake
+    verify: Fault injection on the brake hold
+  - id: FSR-05.03
+    goal: SG-05
+    asil: D
+    element: EL-02
+    text: Allow reverse only at standstill, on request, and with the rear near field clear as detected by EL-03
+    verify: Fault injection of gear commands; scenario tests
+  - id: FSR-05.04
+    goal: SG-05
+    asil: D
+    element: EL-05
+    text: Apply and hold the park brake on the safety monitor's command
+    verify: Supplier evidence under the DIA
+  - id: FSR-05.05
+    goal: SG-05
+    asil: D
+    element: EL-08
+    text: Report door state to the safety monitor and inhibit motion with any door open
+    verify: Supplier evidence; vehicle test
+  # SG-06 Do not enter a conflict area against right of way
+  - id: FSR-06.01
+    goal: SG-06
+    asil: D
+    element: EL-02
+    text: Do not permit motion whose swept path crosses the predicted path of a road user detected by EL-03 before the vehicle could stop or clear it, using stated bounds on other road users' acceleration and speed (Proposed; DQ-017)
+    verify: Scenario tests at intersections, unprotected turns, roundabouts and crosswalks; formal check of the rule
+    pending: DQ-017
+  - id: FSR-06.02
+    goal: SG-06
+    asil: D
+    element: EL-02
+    text: Limit speed where EL-03's view is occluded so that the vehicle can stop for a road user emerging at the assumed maximum speed (Proposed; DQ-017)
+    verify: Scenario tests with occlusions
+    pending: DQ-017
+  - id: FSR-06.03
+    goal: SG-06
+    asil: QM
+    element: EL-01
+    text: Obey traffic lights, signs and right of way, treating an unknown or unrecognised signal as red (OEDR-05 to OEDR-07); argued under SOTIF (Proposed; DQ-017)
+    verify: Simulation, scenario and vehicle tests; SOTIF evaluation (WP-V-03)
+    pending: DQ-017
+  # SG-07 Reach a minimal risk condition
+  - id: FSR-07.01
+    goal: SG-07
+    asil: D
+    element: EL-02
+    text: Detect loss, delay or implausibility of Autoware's commands within the detection time WP-S-04 allots
+    verify: Fault injection (computer, network, process faults); timing measurement
+  - id: FSR-07.02
+    goal: SG-07
+    asil: D
+    element: EL-02
+    text: On detection, bring the vehicle to a stop in lane with hazard lights on and hold it, without Autoware
+    verify: Fault injection; vehicle test
+  - id: FSR-07.03
+    goal: SG-07
+    asil: D
+    element: EL-07
+    text: Keep the safety monitor, EL-03 and the actuation path powered after any single fault of the Autoware computer's supply
+    verify: Supplier evidence; power fault injection
+  - id: FSR-07.04
+    goal: SG-07
+    asil: D
+    element: EL-02
+    text: After a minimal risk condition, resume motion only on an explicit release from the remote operations centre with the release conditions of FSR-05.01 met
+    verify: Review; scenario test
+  - id: FSR-07.05
+    goal: SG-07
+    asil: QM
+    element: EL-01
+    text: Carry out an MRM when its diagnostics or ODD monitors (MON-01 to MON-04) require it, pulling over when it can and stopping in lane otherwise (DQ-016 A)
+    verify: Simulation and vehicle test
+  # SG-08 Do not act on stale, corrupted or foreign remote commands
+  - id: FSR-08.01
+    goal: SG-08
+    asil: C
+    element: EL-02
+    text: In REMOTE mode, reject commands older than the age bound WP-S-04 sets, out of sequence or failing their integrity check, and stop
+    verify: Fault injection of delayed, repeated and corrupted commands
+  - id: FSR-08.02
+    goal: SG-08
+    asil: C
+    element: EL-02
+    text: Apply the same envelope checks to remote commands as to Autoware's (FSR-01.01, FSR-02.02, FSR-04.01, FSR-06.01)
+    verify: Scenario tests in REMOTE mode
+  - id: FSR-08.03
+    goal: SG-08
+    asil: C
+    element: EL-09
+    text: Send every remote driving command with a time stamp, sequence number and integrity protection
+    verify: Interface test; cybersecurity verification (WP-C-10)
+  # SG-09 Avoid signalling a manoeuvre other than the one performed
+  - id: FSR-09.01
+    goal: SG-09
+    asil: C
+    element: EL-02
+    text: Compare the commanded turn indicator with the commanded and achieved steering direction, and switch to hazard lights on a mismatch
+    verify: Fault injection of indicator commands

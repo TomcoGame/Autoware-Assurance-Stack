@@ -19,6 +19,7 @@ for sub in (
     "01-management/decisions",
     "02-concept/figures",
     "02-concept/hara",
+    "02-concept/fsc",
     "case/tools",
     "trace/tools",
 ):
@@ -37,6 +38,7 @@ import fig_m00_register  # noqa: E402
 import fig_questions  # noqa: E402
 import figkit  # noqa: E402
 import folder_index  # noqa: E402
+import fsc  # noqa: E402
 import hara  # noqa: E402
 import wpregister  # noqa: E402
 
@@ -273,6 +275,47 @@ class Hara(unittest.TestCase):
             self.assertTrue(any(needle in x for x in hara.check(model)), needle)
 
 
+class Fsc(unittest.TestCase):
+    def setUp(self):
+        self.m, self.sg = fsc.load(), fsc.goals()
+        self.aou, self.dq = fsc.aous(), check_decisions.load()
+
+    def errs(self, m):
+        return fsc.check(m, self.sg, self.aou, self.dq)
+
+    def test_real_model_passes_and_every_goal_has_a_requirement_at_its_asil(self):
+        self.assertEqual(self.errs(self.m), [])
+        for g, d in self.sg.items():
+            self.assertTrue(
+                any(f["goal"] == g and f["asil"] == d["asil"] for f in self.m["fsrs"]), g
+            )
+
+    def test_element_asil_is_the_highest_of_its_requirements(self):
+        ea = fsc.element_asil(self.m)
+        self.assertEqual(ea["EL-01"], "QM")
+        self.assertEqual(ea["EL-02"], "D")
+
+    def test_model_breaking_a_rule_is_refused(self):
+        cases = []
+        bad = copy.deepcopy(self.m)
+        next(f for f in bad["fsrs"] if f["goal"] == "SG-04" and f["asil"] == "D")["asil"] = "B"
+        cases.append((bad, "neither QM nor"))
+        bad = copy.deepcopy(self.m)
+        bad["fsrs"] = [f for f in bad["fsrs"] if not (f["goal"] == "SG-09" and f["asil"] != "QM")]
+        cases.append((bad, "no FSR at its ASIL"))
+        bad = copy.deepcopy(self.m)
+        bad["elements"][3]["aou"] = "AOU-99"
+        cases.append((bad, "is not in WP-C-01"))
+        bad = copy.deepcopy(self.m)
+        bad["fsrs"][0]["pending"] = "DQ-001"  # an applied decision
+        cases.append((bad, "apply the decision"))
+        bad = copy.deepcopy(self.m)
+        bad["fsrs"][0]["id"] = "FSR-07.99"
+        cases.append((bad, "must start with"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in self.errs(model)), needle)
+
+
 class TreeChecks(unittest.TestCase):
     def test_table_cell_count(self):
         md = "| A | B |\n|---|---|\n| 1 | 2 |\n| 1 |\n"
@@ -331,6 +374,7 @@ class Generators(unittest.TestCase):
             dashboard,
             fig_c01_boundary,
             hara,
+            fsc,
         ):
             first, second = mod.build(), mod.build()
             self.assertEqual(first, second, mod.__name__)
