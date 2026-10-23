@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-M-01 Assurance strategy and lifecycle tailoring |
 | Standard reference | UL 4600 §5, §17; ISO 26262-2:2018 §6 (tailoring, safety plan inputs); ISO 21448:2022 §4; ISO/SAE 21434:2021 §6; ISO/PAS 8800:2024 (AI safety management); ASPICE 4.0 MAN.3 |
-| Version | 0.4 (DQ-011 C, DQ-012 A, DQ-013 deferred; 2026-10-23). 0.3 (one US state (DQ-009 A), remote driving allowed (DQ-010 C); 2026-10-23). 0.2 (decisions of the lead, 2026-10-23: urban robotaxi ODD (DQ-001 B), independent safety monitor (DQ-002 A), vehicle chosen at G2 (DQ-003 C), safety authority and assessor deferred (DQ-004), hazard analysis may start (DQ-005 A); 2026-10-23). 0.1 (first issue; 2026-10-22) |
+| Version | 0.5 (DQ-015 B, DQ-016 A; 2026-10-23). 0.4 (DQ-011 C, DQ-012 A, DQ-013 deferred; 2026-10-23). 0.3 (one US state (DQ-009 A), remote driving allowed (DQ-010 C); 2026-10-23). 0.2 (decisions of the lead, 2026-10-23: urban robotaxi ODD (DQ-001 B), independent safety monitor (DQ-002 A), vehicle chosen at G2 (DQ-003 C), safety authority and assessor deferred (DQ-004), hazard analysis may start (DQ-005 A); 2026-10-23). 0.1 (first issue; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All (FuSa, SOTIF, CS, AI, process) |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -99,6 +99,8 @@ Questions are asked and answered in the [decision register](decisions/README.md)
 | May remote operators drive the vehicle | C: yes, remote driving in general, as well as assistance | DQ-010 |
 | Unprotected turns and roundabouts | C: both inside the first ODD | DQ-011 |
 | Weather and visibility limits | A: rain up to 2.5 mm/h, visibility of 200 m or more | DQ-012 |
+| How much controllability the HARA may credit | B: none; C3 for every hazardous event | DQ-015 |
+| Where the vehicle stops on its own | A: Autoware pulls over when it can; the rated minimal risk condition is a stop in lane | DQ-016 |
 | Which US state | Deferred by the lead, leaning to the state where testing is easiest; analyses use common US rules until then; asked again before the HARA review (DQ-014) | DQ-013 |
 
 **What the combination means.** An urban ODD at 50 km/h with pedestrians and cyclists gives the largest hazard space of the options, and the vehicle is not yet chosen. So the severity and exposure ratings can be drafted now, but the ratings that depend on the vehicle (mass, braking and steering capability, actuator redundancy) and everything downstream of them stay provisional until G2. The vehicle question returns at G2 (DQ-008).

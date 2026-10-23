@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-02 ODD and intended functionality (DDT, OEDR, manoeuvres) |
 | Standard reference | UL 4600 §8; ISO 26262-3 §5; ISO 21448 §5; ISO/PAS 8800:2024 (Input space definition); ASPICE 4.0 SYS.1; ISO 34503:2023 and SAE J3016 (informative, taxonomy and terms) |
-| Version | 0.4 (unprotected turns and roundabouts inside the ODD (DQ-011 C); rain and visibility limits decided (DQ-012 A); state still open, so traffic rules are rated against common US rules until it is chosen (DQ-013); 2026-10-23). 0.3 (one US state, so US vehicle code and mph (DQ-009 A); remote driving allowed, so MON-04 bounds the remote loop (DQ-010 C); 2026-10-23). 0.2 (first content: ODD attributes with proposed limits, ODD monitoring, intended functionality, AI input space; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.5 (pull-over manoeuvre added, stop in lane as the rated fallback (DQ-016 A); 2026-10-23). 0.4 (unprotected turns and roundabouts inside the ODD (DQ-011 C); rain and visibility limits decided (DQ-012 A); state still open, so traffic rules are rated against common US rules until it is chosen (DQ-013); 2026-10-23). 0.3 (one US state, so US vehicle code and mph (DQ-009 A); remote driving allowed, so MON-04 bounds the remote loop (DQ-010 C); 2026-10-23). 0.2 (first content: ODD attributes with proposed limits, ODD monitoring, intended functionality, AI input space; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -115,7 +115,8 @@ Inside the ODD the item performs the whole dynamic driving task: steering, accel
 | MAN-04 | Unprotected turns across oncoming traffic, including left turns on a permissive green | Yes (DQ-011 C) | `autoware_behavior_velocity_intersection_module` |
 | MAN-05 | Roundabouts, single-lane and multi-lane | Yes (DQ-011 C) | `autoware_behavior_velocity_roundabout_module` |
 | MAN-06 | Pull in to a kerbside stop and pull out again | Yes, at stops marked in the map (ODD-09) | `autoware_behavior_path_goal_planner_module`, `start_planner_module` |
-| MAN-07 | Stop in lane as a minimal risk manoeuvre | Yes, as a fallback only | `autoware_mrm_comfortable_stop_operator`, `mrm_emergency_stop_operator` |
+| MAN-07 | Stop in lane as a minimal risk manoeuvre, with hazard lights on | Yes, as the rated fallback (DQ-016 A) | `autoware_mrm_comfortable_stop_operator`, `mrm_emergency_stop_operator`; the safety monitor's own stop |
+| MAN-10 | Pull over to the kerb as a minimal risk manoeuvre | Yes, when Autoware still can (DQ-016 A); not rated | **None in the pinned Autoware**: `mrm_handler` can select a pull-over MRM, but no operator exists; to be built |
 | MAN-08 | Reversing, U-turns, three-point turns | No | Excluded by route planning |
 | MAN-09 | Crossing a centre line to pass an obstacle | Proposed: only when the map allows it and oncoming traffic is clear | `autoware_behavior_path_static_obstacle_avoidance_module` |
 

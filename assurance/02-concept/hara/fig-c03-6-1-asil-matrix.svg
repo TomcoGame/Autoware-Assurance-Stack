@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="458" viewBox="0 0 640 458" role="img" aria-labelledby="t d">
 <title id="t">WP-C-03 Figure 6-1: ASIL of each hazardous event</title>
-<desc id="d">Hazardous events of WP-C-03 with their ASIL: HE-01.1 (H-01 in OS-06 Stopped in a queue or at a red light, pedestrians crossing in front): D; HE-01.2 (H-01 in OS-01 Driving in lane on an urban street): C; HE-02.1 (H-02 in OS-09 Approaching a crosswalk with pedestrians crossing): D; HE-02.2 (H-02 in OS-08 Following another vehicle in congested traffic): C; HE-03.1 (H-03 in OS-01 Driving in lane on an urban street): B; HE-03.2 (H-03 in OS-01 Driving in lane on an urban street): B; HE-04.1 (H-04 in OS-01 Driving in lane on an urban street): D; HE-04.2 (H-04 in OS-01 Driving in lane on an urban street): D; HE-04.3 (H-04 in OS-02 Driving slowly where pedestrians are dense): A; HE-05.1 (H-05 in OS-07 Stopped at a kerbside stop while passengers board or alight): D; HE-05.2 (H-05 in OS-06 Stopped in a queue or at a red light, pedestrians crossing in front): B; HE-06.1 (H-06 in OS-03 At a signalised intersection with cross traffic): D; HE-06.2 (H-06 in OS-04 Turning left across oncoming traffic without a protected phase): C; HE-06.3 (H-06 in OS-05 Entering or circulating in a roundabout): A; HE-06.4 (H-06 in OS-09 Approaching a crosswalk with pedestrians crossing): D; HE-07.1 (H-07 in OS-01 Driving in lane on an urban street): D; HE-08.1 (H-08 in OS-10 Driven by a remote operator): C; HE-09.1 (H-09 in OS-01 Driving in lane on an urban street): A; HE-10.1 (H-10 in OS-07 Stopped at a kerbside stop while passengers board or alight): C.</desc>
+<desc id="d">Hazardous events of WP-C-03 with their ASIL: HE-01.1 (H-01 in OS-06 Stopped in a queue or at a red light, pedestrians crossing in front): D; HE-01.2 (H-01 in OS-01 Driving in lane on an urban street): C; HE-02.1 (H-02 in OS-09 Approaching a crosswalk with pedestrians crossing): D; HE-02.2 (H-02 in OS-08 Following another vehicle in congested traffic): C; HE-03.1 (H-03 in OS-01 Driving in lane on an urban street): C; HE-03.2 (H-03 in OS-01 Driving in lane on an urban street): B; HE-04.1 (H-04 in OS-01 Driving in lane on an urban street): D; HE-04.2 (H-04 in OS-01 Driving in lane on an urban street): D; HE-04.3 (H-04 in OS-02 Driving slowly where pedestrians are dense): B; HE-05.1 (H-05 in OS-07 Stopped at a kerbside stop while passengers board or alight): D; HE-05.2 (H-05 in OS-06 Stopped in a queue or at a red light, pedestrians crossing in front): C; HE-06.1 (H-06 in OS-03 At a signalised intersection with cross traffic): D; HE-06.2 (H-06 in OS-04 Turning left across oncoming traffic without a protected phase): C; HE-06.3 (H-06 in OS-05 Entering or circulating in a roundabout): B; HE-06.4 (H-06 in OS-09 Approaching a crosswalk with pedestrians crossing): D; HE-07.1 (H-07 in OS-01 Driving in lane on an urban street): D; HE-08.1 (H-08 in OS-10 Driven by a remote operator): C; HE-09.1 (H-09 in OS-01 Driving in lane on an urban street): C; HE-10.1 (H-10 in OS-07 Stopped at a kerbside stop while passengers board or alight): C.</desc>
 <style>
 svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
 @media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
@@ -55,19 +55,19 @@ svg .col { font:500 11px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:v
 <rect x="16" y="172" width="608" height="30" rx="4" class="card"/>
 <text x="24" y="191" class="tb">H-03</text>
 <text x="70" y="191" class="s">Unintended hard deceleration</text>
-<rect x="254" y="176" width="32.4" height="22" rx="4" class="ab"/>
-<text x="270.2" y="192" class="t1" text-anchor="middle">B·2</text>
+<rect x="254" y="176" width="32.4" height="22" rx="4" class="ac"/>
+<text x="270.2" y="192" class="t4" text-anchor="middle">C·2</text>
 <text x="24" y="221" class="tb">H-04</text>
 <text x="70" y="221" class="s">Unintended lateral motion</text>
 <rect x="254" y="206" width="32.4" height="22" rx="4" class="ad"/>
 <text x="270.2" y="222" class="t4" text-anchor="middle">D·2</text>
-<rect x="290.4" y="206" width="32.4" height="22" rx="4" class="aa"/>
-<text x="306.6" y="222" class="t1" text-anchor="middle">A</text>
+<rect x="290.4" y="206" width="32.4" height="22" rx="4" class="ab"/>
+<text x="306.6" y="222" class="t1" text-anchor="middle">B</text>
 <rect x="16" y="232" width="608" height="30" rx="4" class="card"/>
 <text x="24" y="251" class="tb">H-05</text>
 <text x="70" y="251" class="s">Unintended motion from stands…</text>
-<rect x="436" y="236" width="32.4" height="22" rx="4" class="ab"/>
-<text x="452.2" y="252" class="t1" text-anchor="middle">B</text>
+<rect x="436" y="236" width="32.4" height="22" rx="4" class="ac"/>
+<text x="452.2" y="252" class="t4" text-anchor="middle">C</text>
 <rect x="472.4" y="236" width="32.4" height="22" rx="4" class="ad"/>
 <text x="488.6" y="252" class="t4" text-anchor="middle">D</text>
 <text x="24" y="281" class="tb">H-06</text>
@@ -76,8 +76,8 @@ svg .col { font:500 11px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:v
 <text x="343" y="282" class="t4" text-anchor="middle">D</text>
 <rect x="363.2" y="266" width="32.4" height="22" rx="4" class="ac"/>
 <text x="379.4" y="282" class="t4" text-anchor="middle">C</text>
-<rect x="399.6" y="266" width="32.4" height="22" rx="4" class="aa"/>
-<text x="415.8" y="282" class="t1" text-anchor="middle">A</text>
+<rect x="399.6" y="266" width="32.4" height="22" rx="4" class="ab"/>
+<text x="415.8" y="282" class="t1" text-anchor="middle">B</text>
 <rect x="545.2" y="266" width="32.4" height="22" rx="4" class="ad"/>
 <text x="561.4" y="282" class="t4" text-anchor="middle">D</text>
 <rect x="16" y="292" width="608" height="30" rx="4" class="card"/>
@@ -92,22 +92,19 @@ svg .col { font:500 11px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:v
 <rect x="16" y="352" width="608" height="30" rx="4" class="card"/>
 <text x="24" y="371" class="tb">H-09</text>
 <text x="70" y="371" class="s">Wrong signalling</text>
-<rect x="254" y="356" width="32.4" height="22" rx="4" class="aa"/>
-<text x="270.2" y="372" class="t1" text-anchor="middle">A</text>
+<rect x="254" y="356" width="32.4" height="22" rx="4" class="ac"/>
+<text x="270.2" y="372" class="t4" text-anchor="middle">C</text>
 <text x="24" y="401" class="tb">H-10</text>
 <text x="70" y="401" class="s">Unintended reverse motion</text>
 <rect x="472.4" y="386" width="32.4" height="22" rx="4" class="ac"/>
 <text x="488.6" y="402" class="t4" text-anchor="middle">C</text>
-<rect x="24" y="425" width="26" height="18" rx="4" class="aa"/>
-<text x="37" y="439" class="t1" text-anchor="middle">A</text>
-<text x="56" y="438" class="t">ASIL A (3)</text>
-<rect x="139.0" y="425" width="26" height="18" rx="4" class="ab"/>
-<text x="152" y="439" class="t1" text-anchor="middle">B</text>
-<text x="171" y="438" class="t">ASIL B (3)</text>
-<rect x="254.0" y="425" width="26" height="18" rx="4" class="ac"/>
-<text x="267" y="439" class="t4" text-anchor="middle">C</text>
-<text x="286" y="438" class="t">ASIL C (5)</text>
-<rect x="369.0" y="425" width="26" height="18" rx="4" class="ad"/>
-<text x="382" y="439" class="t4" text-anchor="middle">D</text>
-<text x="401" y="438" class="t">ASIL D (8)</text>
+<rect x="24" y="425" width="26" height="18" rx="4" class="ab"/>
+<text x="37" y="439" class="t1" text-anchor="middle">B</text>
+<text x="56" y="438" class="t">ASIL B (3)</text>
+<rect x="139.0" y="425" width="26" height="18" rx="4" class="ac"/>
+<text x="152" y="439" class="t4" text-anchor="middle">C</text>
+<text x="171" y="438" class="t">ASIL C (8)</text>
+<rect x="254.0" y="425" width="26" height="18" rx="4" class="ad"/>
+<text x="267" y="439" class="t4" text-anchor="middle">D</text>
+<text x="286" y="438" class="t">ASIL D (8)</text>
 </svg>

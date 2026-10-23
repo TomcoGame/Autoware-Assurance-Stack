@@ -130,8 +130,8 @@ events:
     description: Brakes hard for no reason with a vehicle or motorcycle following
     severity: S2
     s_rationale: Rear-end impact at an urban speed difference; S2 rather than S1 because the follower may be a motorcycle
-    controllability: C2
-    c_rationale: Most following drivers keeping a legal gap can stop or swerve
+    controllability: C3
+    c_rationale: No credit for the following driver's reaction (DQ-015 B); most following drivers keeping a legal gap could stop or swerve
     at_risk: The following road user
   - id: HE-03.2
     hazard: H-03
@@ -166,8 +166,8 @@ events:
     description: Steers onto the sidewalk at low speed
     severity: S2
     s_rationale: Pedestrian struck at up to 24 km/h
-    controllability: C2
-    c_rationale: At low speed most pedestrians can step away
+    controllability: C3
+    c_rationale: No credit for pedestrians stepping away (DQ-015 B), though at low speed most could
     at_risk: Pedestrians
   - id: HE-05.1
     hazard: H-05
@@ -184,8 +184,8 @@ events:
     description: Creeps or rolls into the crosswalk while stopped at a red light
     severity: S2
     s_rationale: Pedestrian knocked down at walking pace; run-over possible
-    controllability: C2
-    c_rationale: Slow movement; most pedestrians notice and step back
+    controllability: C3
+    c_rationale: No credit for pedestrians noticing the slow movement (DQ-015 B)
     at_risk: Pedestrians
   - id: HE-06.1
     hazard: H-06
@@ -211,8 +211,8 @@ events:
     description: Enters the roundabout without yielding to circulating traffic
     severity: S2
     s_rationale: Angled impact at roundabout speeds up to 32 km/h
-    controllability: C2
-    c_rationale: Circulating drivers are slow and usually able to brake
+    controllability: C3
+    c_rationale: No credit for circulating drivers braking (DQ-015 B), though at roundabout speeds most could
     at_risk: Occupants of both vehicles
   - id: HE-06.4
     hazard: H-06
@@ -247,8 +247,8 @@ events:
     description: Indicates the wrong direction before a turn or lane change
     severity: S2
     s_rationale: A cyclist or driver moves into the path the vehicle then takes
-    controllability: C1
-    c_rationale: Other road users react to the vehicle's actual motion, not only its indicators
+    controllability: C3
+    c_rationale: No credit for other road users reacting to the vehicle's actual motion (DQ-015 B)
     at_risk: Cyclists and drivers nearby
   - id: HE-10.1
     hazard: H-10
@@ -288,7 +288,7 @@ goals:
   - id: SG-07
     statement: Reach a minimal risk condition whenever the item can no longer drive safely
     hazards: [H-07]
-    safe_state: Vehicle stopped and held (where to stop is DQ-016)
+    safe_state: Vehicle stopped and held in its lane with hazard lights on; Autoware pulls over to the kerb first when it still can, but the rated condition is the stop in lane (DQ-016 A)
   - id: SG-08
     statement: Do not act on remote driving commands that are stale, corrupted or not the operator's
     hazards: [H-08]
