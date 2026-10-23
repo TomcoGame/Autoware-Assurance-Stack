@@ -1,0 +1,269 @@
+# Functional insufficiencies and triggering conditions for WP-C-06. triggering.py checks them against the functions
+# of WP-C-01 §3, the SOTIF hazards of ../sotif/sotif.yaml and the ODD of WP-C-02, works out which hazards each
+# triggering condition can lead to (through the insufficiencies it exposes), and writes the WP-C-06 tables and
+# Figure 5-1.
+# An insufficiency of an ML function (WP-C-01 §3) lists the AI error causes of §6 behind it (`ai`).
+# A triggering condition at the ODD boundary names the monitor that must catch it (`monitor`).
+# Every entry is a draft by Claude (I0); none is evaluated yet (WP-V-03).
+
+insufficiencies:
+  - id: FI-01
+    kind: performance
+    functions: [F-02]
+    element: LiDAR object detection (`autoware_lidar_centerpoint`)
+    description: Misses, mislocates or misclassifies objects unlike those it was trained on, and reports objects that are not there
+    hazards: [SH-01, SH-02]
+    ai: [coverage, labels, shift, robustness, calibration]
+  - id: FI-02
+    kind: performance
+    functions: [F-02]
+    element: Ground segmentation (`autoware_ground_segmentation`)
+    description: Removes low objects as ground, or keeps returns from the road, spray or debris as obstacles
+    hazards: [SH-01, SH-02]
+  - id: FI-03
+    kind: performance
+    functions: [F-02]
+    element: Tracking and merging (`autoware_multi_object_tracker`, `autoware_object_merger`)
+    description: Loses, splits or swaps tracks of objects that are partly hidden or close together, and estimates their velocity late
+    hazards: [SH-01, SH-04, SH-12]
+  - id: FI-04
+    kind: performance
+    functions: [F-03]
+    element: Traffic light recognition (`autoware_traffic_light_fine_detector`, `autoware_traffic_light_classifier`)
+    description: Reads the wrong colour or arrow, or matches a signal head to the wrong lane
+    hazards: [SH-03]
+    ai: [coverage, labels, shift, robustness, ood]
+  - id: FI-05
+    kind: performance
+    functions: [F-04]
+    element: Motion prediction (`autoware_map_based_prediction`)
+    description: Assumes road users follow the map's lanes and rules, so mispredicts people who do not
+    hazards: [SH-04, SH-05, SH-12]
+  - id: FI-06
+    kind: performance
+    functions: [F-02, F-04]
+    element: Speed estimation of vehicles at range
+    description: Estimates the speed of oncoming or circulating vehicles too low, or too late, for a gap decision
+    hazards: [SH-05]
+  - id: FI-07
+    kind: performance
+    functions: [F-01]
+    element: Localisation (`autoware_ndt_scan_matcher`, `autoware_ekf_localizer`)
+    description: Converges to a wrong pose, or degrades without noticing, where the scene differs from the point cloud map
+    hazards: [SH-06]
+  - id: FI-08
+    kind: performance
+    functions: [F-10]
+    element: Safety perception channel (EL-03)
+    description: Misses low, thin or dark objects, or detects spray and steam as obstacles, so the monitor fails to act or acts without reason
+    hazards: [SH-14]
+  - id: FI-09
+    kind: performance
+    functions: [F-11]
+    element: Remote driving loop (video, link and operator)
+    description: Gives the remote operator too late, too narrow or too poor a picture of the scene to drive safely
+    hazards: [SH-13]
+  - id: FI-10
+    kind: performance
+    functions: [F-07]
+    element: Longitudinal and lateral control (`autoware_trajectory_follower_node`)
+    description: Achieves less deceleration or more tracking error than planned on a wet road
+    hazards: [SH-01, SH-06]
+  - id: FI-11
+    kind: specification
+    functions: [F-05, F-06]
+    element: HD map currency
+    description: Plans on a map that no longer matches the road, with no check that it still does
+    hazards: [SH-07]
+  - id: FI-12
+    kind: specification
+    functions: [F-09]
+    element: ODD monitoring
+    description: No function compares the conditions with the ODD (WP-C-02 §4), so leaving it goes unnoticed
+    hazards: [SH-08]
+  - id: FI-13
+    kind: specification
+    functions: [F-02, F-06]
+    element: Emergency vehicle response
+    description: No detection of sirens or emergency lights and no yielding manoeuvre (WP-C-02 OEDR-09)
+    hazards: [SH-09]
+  - id: FI-14
+    kind: specification
+    functions: [F-02, F-06]
+    element: Response to people directing traffic
+    description: No recognition of a police officer's or flagger's signals (WP-C-02 OEDR-10)
+    hazards: [SH-10]
+  - id: FI-15
+    kind: specification
+    functions: [F-06]
+    element: Driving style
+    description: Behaviour tuned for caution rather than for what other road users expect (long hesitations, stops without visible reason)
+    hazards: [SH-11]
+  - id: FI-16
+    kind: specification
+    functions: [F-06]
+    element: Speed at occlusions
+    description: Speed near occlusions is not tied to the stopping distance for a road user emerging from them
+    hazards: [SH-12]
+  - id: FI-17
+    kind: specification
+    functions: [F-09]
+    element: Choice of a place to pull over
+    description: No rule for which kerbside places are safe to stop in during an MRM; the operator does not exist yet
+    hazards: [SH-15]
+  - id: FI-18
+    kind: specification
+    functions: [F-09]
+    element: Passenger guidance at a stop in lane
+    description: Doors unlock at standstill (DQ-023 C) with no specified warning of traffic on the passenger's side
+    hazards: [SH-16]
+
+triggers:
+  - id: TC-01
+    category: environment
+    condition: Low sun or oncoming headlights in a camera's view
+    odd: [ODD-12]
+    exposes: [FI-04]
+  - id: TC-02
+    category: environment
+    condition: Night or unlit streets, with road users in dark clothing
+    odd: [ODD-12, ODD-16]
+    exposes: [FI-01, FI-08]
+  - id: TC-03
+    category: environment
+    condition: Light rain, spray thrown up by other vehicles, reflections from the wet road
+    odd: [ODD-10, ODD-13]
+    exposes: [FI-01, FI-02, FI-08]
+  - id: TC-04
+    category: environment
+    condition: Steam from vents, exhaust plumes, blowing dust or leaves
+    odd: [ODD-11]
+    exposes: [FI-01, FI-02, FI-08]
+  - id: TC-05
+    category: environment
+    condition: Mist with visibility near the 200 m floor
+    odd: [ODD-11]
+    exposes: [FI-01, FI-06, FI-08]
+  - id: TC-06
+    category: environment
+    condition: LED signal heads that flicker against the camera's exposure
+    odd: [ODD-04]
+    exposes: [FI-04]
+  - id: TC-07
+    category: road
+    condition: Signal heads that are hidden, damaged, temporary, dark in a power outage, or meant for another lane
+    odd: [ODD-04]
+    exposes: [FI-04]
+  - id: TC-08
+    category: road
+    condition: Streets with few features, or with many objects moved since the point cloud map was made
+    odd: [ODD-01, ODD-02]
+    exposes: [FI-07]
+  - id: TC-09
+    category: road
+    condition: Construction, re-marked lanes or closures not yet in the map
+    odd: [ODD-07, ODD-08]
+    monitor: MON-02
+    exposes: [FI-11]
+  - id: TC-10
+    category: road
+    condition: Parked vans, buses, hedges or walls hiding a crossing or a corner
+    odd: [ODD-05, ODD-16]
+    exposes: [FI-03, FI-16]
+  - id: TC-11
+    category: road
+    condition: Large vehicles alongside, blocking the LiDAR's view of the surroundings
+    odd: [ODD-17]
+    exposes: [FI-03, FI-07]
+  - id: TC-12
+    category: road
+    condition: Unprotected left turn with a turning vehicle hiding an oncoming lane
+    odd: [ODD-04]
+    exposes: [FI-05, FI-06]
+  - id: TC-13
+    category: road
+    condition: Entry to a multi-lane roundabout with traffic circulating
+    odd: [ODD-04]
+    exposes: [FI-05, FI-06]
+  - id: TC-14
+    category: road
+    condition: Bike lanes, driveways, bus stops or crosswalks along the kerb where a pull-over is tried
+    odd: [ODD-05, ODD-09]
+    exposes: [FI-17]
+  - id: TC-15
+    category: road_users
+    condition: People of unusual shape or posture (wheelchairs, children, people carrying large objects or pushing strollers)
+    odd: [ODD-16]
+    exposes: [FI-01, FI-08]
+  - id: TC-16
+    category: road_users
+    condition: Rare objects (animals, e-scooters, fallen loads, debris low on the road)
+    odd: [ODD-16]
+    exposes: [FI-01, FI-02]
+  - id: TC-17
+    category: road_users
+    condition: People crossing away from crossings, or at the kerb looking at a phone
+    odd: [ODD-05, ODD-16]
+    exposes: [FI-05]
+  - id: TC-18
+    category: road_users
+    condition: Cyclists riding between lanes or swerving round obstacles
+    odd: [ODD-16]
+    exposes: [FI-03, FI-05]
+  - id: TC-19
+    category: road_users
+    condition: A vehicle running a red light or not stopping at its stop line
+    odd: [ODD-04, ODD-17]
+    exposes: [FI-05]
+  - id: TC-20
+    category: road_users
+    condition: Motorcycles, and vehicles accelerating hard, approaching from far away
+    odd: [ODD-16]
+    exposes: [FI-06]
+  - id: TC-21
+    category: road_users
+    condition: An emergency vehicle approaching with siren and lights
+    odd: [ODD-18]
+    exposes: [FI-13]
+  - id: TC-22
+    category: road_users
+    condition: A police officer or flagger directing traffic
+    odd: [ODD-19]
+    monitor: MON-02
+    exposes: [FI-14]
+  - id: TC-23
+    category: road_users
+    condition: Drivers who expect give and take (four-way stops, merging, letting someone out)
+    odd: [ODD-04, ODD-17]
+    exposes: [FI-15]
+  - id: TC-24
+    category: vehicle
+    condition: Sensors soiled or blocked by dirt, insects or water drops
+    odd: [ODD-10]
+    exposes: [FI-01, FI-08]
+  - id: TC-25
+    category: vehicle
+    condition: Wet road reducing grip during braking or turning
+    odd: [ODD-13]
+    exposes: [FI-10]
+  - id: TC-26
+    category: operations
+    condition: Video to the remote operator delayed, compressed or with a narrow field of view
+    odd: [ODD-15]
+    exposes: [FI-09]
+  - id: TC-27
+    category: operations
+    condition: A remote operator dealing with more than one vehicle, or tired
+    odd: [ODD-15]
+    exposes: [FI-09]
+  - id: TC-28
+    category: environment
+    condition: Weather changing during a trip toward the limits of the ODD
+    odd: [ODD-10, ODD-11]
+    monitor: MON-03
+    exposes: [FI-12]
+  - id: TC-29
+    category: operations
+    condition: Passengers getting out at a stop in lane beside moving traffic
+    odd: []
+    exposes: [FI-18]

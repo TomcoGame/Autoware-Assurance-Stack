@@ -63,6 +63,7 @@ jobs:
           python3 assurance/02-concept/fsc/fsc.py --check
           python3 assurance/02-concept/sotif/sotif.py --check
           python3 assurance/02-concept/fallback/fallback.py --check
+          python3 assurance/02-concept/triggering/triggering.py --check
           python3 assurance/case/tools/dashboard.py --check
 
       - name: Unit tests of the tools
