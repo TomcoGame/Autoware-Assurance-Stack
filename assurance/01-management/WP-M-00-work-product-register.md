@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-M-00 Work product register |
 | Standard reference | UL 4600 §5 (safety case work products); ISO 26262-2:2018 §6 (safety plan, work product list); ISO/SAE 21434:2021 §6; ASPICE 4.0 MAN.3 (define work products), SUP.8 (configuration items) |
-| Version | 0.1 (first issue: every work product of the assurance path, its clauses, gate and status; 2026-10-22) |
+| Version | 0.2 (G2 exit criterion adds the vehicle choice, deferred to G2 by DQ-003 C; 2026-10-23). 0.1 (first issue: every work product of the assurance path, its clauses, gate and status; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -26,7 +26,7 @@ A work product tailored out stays in the register with status `N/A` and a refere
 |---|---|---|
 | G0 | Governance | Plans approved; safety authority, assessor and roles named; CM and change control running |
 | G1 | Concept | Item and ODD fixed; HARA, FSC, fallback concept, SOTIF hazards and insufficiencies, TARA and CS concept approved; HARA confirmation review (I3) passed; test operations with safety drivers approved |
-| G2 | System design | TSC, system architecture, HSI, timing, simulation credibility plan, SPIs and system-level safety analyses approved |
+| G2 | System design | Vehicle and drive-by-wire platform chosen and the provisional concept ratings confirmed (DQ-008); TSC, system architecture, HSI, timing, simulation credibility plan, SPIs and system-level safety analyses approved |
 | G3 | HW/SW development | HW and SW safety requirements, architecture, units and unit verification approved for every safety-relevant element; elements not developed to ISO 26262 qualified or argued |
 | G4 | Integration and verification | SW, HW and system integration and verification complete; fault injection campaign closed; known scenarios evaluated |
 | G5 | Validation and release | Safety validation, SOTIF residual risk acceptance, CS validation, safety case, FSA, CS assessment and UL 4600 assessment complete; release for driverless operation in the ODD signed |
