@@ -5,14 +5,15 @@
 # the WP-S-03 tables and Figure 2-1.
 # `host` is the component a mechanism runs on, `uses` those it depends on.
 # `box` places a component in Figure 2-1; `x` places a link's arrow (`y` for a horizontal one).
-# Every entry is a draft by Claude (I0). `pending` names a decision an entry waits on.
+# Every entry is a draft by Claude (I0). `pending` names a decision an entry waits on; `decomposed` records an ASIL
+# decomposition the lead has decided, with its partner component and the redundancy that must show their independence.
 
 components:
   - {id: CMP-01, name: Autoware computer, element: EL-01, box: [190, 96, 264, 60]}
-  - {id: CMP-02, name: Safety monitor controller, element: EL-02, box: [24, 206, 450, 64], pending: DQ-030}
-  - {id: CMP-03, name: Safety channel processor, element: EL-03, box: [490, 206, 126, 64], pending: DQ-030}
-  - {id: CMP-04, name: Safety LiDAR, element: EL-03, box: [474, 96, 68, 60], pending: DQ-031}
-  - {id: CMP-05, name: Safety radar, element: EL-03, box: [548, 96, 68, 60], pending: DQ-031}
+  - {id: CMP-02, name: Safety monitor controller, element: EL-02, box: [24, 206, 450, 64]}
+  - {id: CMP-03, name: Safety channel processor, element: EL-03, box: [490, 206, 126, 64]}
+  - {id: CMP-04, name: Safety LiDAR, element: EL-03, box: [474, 96, 68, 60], decomposed: {asil: B(D), with: CMP-05, decision: DQ-031}}
+  - {id: CMP-05, name: Safety radar, element: EL-03, box: [548, 96, 68, 60], decomposed: {asil: B(D), with: CMP-04, decision: DQ-031}}
   - {id: CMP-06, name: Drive-by-wire, element: EL-04, box: [24, 318, 190, 60]}
   - {id: CMP-07, name: Vehicle state sensing, element: EL-06, box: [226, 318, 100, 60]}
   - {id: CMP-08, name: Park brake, element: EL-05, box: [338, 318, 90, 60]}
@@ -100,7 +101,7 @@ mechanisms:
     name: Geometric obstacle detection
     host: CMP-03
     uses: [CMP-04, CMP-05]
-    does: Finds road users and obstacles in and beside the swept path from LiDAR and radar returns by geometry and motion, without learned classification, and confirms detections across both sensor types to keep false detections rare
+    does: Finds road users and obstacles in and beside the swept path from LiDAR and radar returns by geometry and motion, without learned classification, and counts a road user seen by either sensor type (DQ-031 A), each sensor's chain meeting its share of the requirement at ASIL B(D)
     implements: [FSR-02.01, FSR-03.01]
     reaction: []
     verify: Detection tests across the ODD; false-positive rate from field and replay data
@@ -196,7 +197,7 @@ redundancy:
     what: LiDAR and radar inside the safety channel
     diversity: Different physics (light against radio), different failure modes in rain, spray and darkness
     common: [TC-03, TC-24]
-    pending: DQ-031
+    decision: DQ-031
   - id: RD-03
     between: [CMP-02, CMP-06]
     what: The monitor's stop and the vehicle's own stop when the monitor falls silent

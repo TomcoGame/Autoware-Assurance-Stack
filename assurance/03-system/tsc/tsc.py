@@ -71,6 +71,12 @@ def rank(a: str) -> int:
     return fsc.hara.ASILS.index(a)
 
 
+def label(m: dict, k: dict, cid: str) -> str:
+    """The ASIL shown for a component: its decomposed ASIL where the lead decided one, else the derived one."""
+    c = next(x for x in m["components"] if x["id"] == cid)
+    return c["decomposed"]["asil"] if c.get("decomposed") else component_asil(m, k)[cid]
+
+
 def component_asil(m: dict, k: dict) -> dict[str, str]:
     out = {c["id"]: "QM" for c in m["components"]}
     for s in m["mechanisms"]:
@@ -146,6 +152,25 @@ def check(m: dict, k: dict) -> list[str]:
             if t not in k["tcs"]:
                 errs.append(f"{r['id']}: triggering condition {t} does not exist")
         pending(r["id"], r)
+    for c in m.get("components", []):
+        dec = c.get("decomposed")
+        if not dec:
+            continue
+        p = comps.get(dec.get("with"))
+        if k["decisions"].get(dec.get("decision")) not in ("answered", "applied"):
+            errs.append(
+                f"{c['id']}: decomposition needs an answered decision, not {dec.get('decision')}"
+            )
+        if not p or (p.get("decomposed") or {}).get("with") != c["id"]:
+            errs.append(
+                f"{c['id']}: decomposed with {dec.get('with')}, which is not decomposed with it"
+            )
+        if not any(
+            set(r.get("between", [])) == {c["id"], dec.get("with")} for r in m.get("redundancy", [])
+        ):
+            errs.append(
+                f"{c['id']}: no redundancy entry between it and {dec.get('with')} to show their independence"
+            )
     if errs:
         return errs
     ca = component_asil(m, k)
@@ -189,7 +214,7 @@ def tables(m: dict, k: dict) -> dict[str, str]:
     comps = {c["id"]: c for c in m["components"]}
     t = {}
     rows = [
-        "| ID | Component | Element | In the item | Derived ASIL | Mechanisms hosted | Serves | Waits on |",
+        "| ID | Component | Element | In the item | ASIL | Mechanisms hosted | Serves | Waits on |",
         "|---|---|---|---|---|---|---|---|",
     ]
     for c in m["components"]:
@@ -197,7 +222,7 @@ def tables(m: dict, k: dict) -> dict[str, str]:
         hosted = [s["id"] for s in m["mechanisms"] if s["host"] == c["id"]]
         serves = [s["id"] for s in m["mechanisms"] if c["id"] in s.get("uses", [])]
         rows.append(
-            f"| {c['id']} | {cell(c['name'])} | {c['element']} | {'Yes' if el['in_item'] else 'No'} | **{ca[c['id']]}** "
+            f"| {c['id']} | {cell(c['name'])} | {c['element']} | {'Yes' if el['in_item'] else 'No'} | **{label(m, k, c['id'])}** "
             f"| {', '.join(hosted) or '—'} | {', '.join(serves) or '—'} | {c.get('pending', '—')} |"
         )
     t["tsc-components"] = "\n".join(rows)
@@ -219,7 +244,7 @@ def tables(m: dict, k: dict) -> dict[str, str]:
     for r in m["redundancy"]:
         rows.append(
             f"| {r['id']} | {', '.join(dict.fromkeys(r['between']))} | {cell(r['what'])} | {cell(r['diversity'])} "
-            f"| {', '.join(r['common']) or '—'} | {r.get('pending', '—')} |"
+            f"| {', '.join(r['common']) or '—'} | {r.get('pending') or r.get('decision') or '—'} |"
         )
     t["tsc-redundancy"] = "\n".join(rows)
     rows = ["| Mechanism | Verified by |", "|---|---|"]
@@ -227,7 +252,7 @@ def tables(m: dict, k: dict) -> dict[str, str]:
     t["tsc-verification"] = "\n".join(rows)
     rated = sum(1 for f in k["fsrs"].values() if f["asil"] != "QM")
     pend = sorted({x["pending"] for x in m["components"] + m["redundancy"] if x.get("pending")})
-    d_comps = [c for c in m["components"] if ca[c["id"]] == "D"]
+    d_comps = [c for c in m["components"] if label(m, k, c["id"]) == "D"]
     t["tsc-summary"] = (
         f"{len(m['components'])} system components, {len(d_comps)} of them at ASIL D, carry {len(m['mechanisms'])} "
         f"safety mechanisms that implement all {rated} rated functional safety requirements, each on a component of "
@@ -311,13 +336,16 @@ def figure(m: dict, k: dict) -> str:
             body.append(fk.text(ln["x"] + 6, (y1 + y2) / 2 + 4, ln["label"], "lab"))
     for c in m["components"]:
         x, y, w, h = c["box"]
-        cls = f"a{ca[c['id']]}" + ("" if k["elements"][c["element"]]["in_item"] else " out")
+        lab = label(m, k, c["id"])
+        cls = f"a{'D' if lab.endswith('(D)') else lab}" + (
+            "" if k["elements"][c["element"]]["in_item"] else " out"
+        )
         body.append(fk.el("rect", None, x=x, y=y, width=w, height=h, rx=7, class_=cls))
         lines = fk.wrap(c["name"], w - 14, "tb")[:2]
         for n, s in enumerate(lines):
             body.append(fk.text(x + 8, y + 18 + 15 * n, s, "tb"))
         sms = [s["id"] for s in m["mechanisms"] if s["host"] == c["id"]]
-        tag = f"{ca[c['id']]}" + (f" · {span(sms)}" if sms else "")
+        tag = label(m, k, c["id"]) + (f" · {span(sms)}" if sms else "")
         body.append(fk.text(x + 8, y + h - 9, fk.fit(tag, w - 14, "s"), "sm"))
     y = max(c["box"][1] + c["box"][3] for c in m["components"]) + 30
     legend = [
@@ -327,15 +355,15 @@ def figure(m: dict, k: dict) -> str:
         ("aD out", "Outside the item (dotted)"),
     ]
     lx = 24
-    for cls, label in legend:
+    for cls, name in legend:
         body.append(fk.el("rect", None, x=lx, y=y - 13, width=26, height=18, rx=4, class_=cls))
-        body.append(fk.text(lx + 34, y, label, "t"))
-        lx += 34 + fk.width(label, "t") + 26
+        body.append(fk.text(lx + 34, y, name, "t"))
+        lx += 34 + fk.width(name, "t") + 26
     y += 20
     desc = (
         "Components: "
         + "; ".join(
-            f"{c['name']} ({ca[c['id']]}) hosting {', '.join(s['id'] for s in m['mechanisms'] if s['host'] == c['id']) or 'no mechanism'}"
+            f"{c['name']} ({label(m, k, c['id'])}) hosting {', '.join(s['id'] for s in m['mechanisms'] if s['host'] == c['id']) or 'no mechanism'}"
             for c in m["components"]
         )
         + ". Links: "

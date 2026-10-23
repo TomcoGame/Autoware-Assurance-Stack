@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="516" viewBox="0 0 640 516" role="img" aria-labelledby="t d">
 <title id="t">WP-S-03 Figure 2-1: system architecture</title>
-<desc id="d">Components: Autoware computer (QM) hosting no mechanism; Safety monitor controller (D) hosting SM-01, SM-02, SM-03, SM-04, SM-05, SM-06, SM-07, SM-08; Safety channel processor (D) hosting SM-09, SM-10; Safety LiDAR (D) hosting no mechanism; Safety radar (D) hosting no mechanism; Drive-by-wire (D) hosting SM-11, SM-12, SM-13, SM-14; Vehicle state sensing (D) hosting SM-15; Park brake (D) hosting SM-16; Door system (D) hosting SM-17; Monitor power supply (D) hosting SM-18; Remote operations station (C) hosting SM-19. Links: Remote operations station to Safety monitor controller; Autoware computer to Safety monitor controller; Safety LiDAR to Safety channel processor; Safety radar to Safety channel processor; Safety channel processor to Safety monitor controller; Safety monitor controller to Drive-by-wire; Vehicle state sensing to Safety monitor controller; Safety monitor controller to Park brake; Door system to Safety monitor controller.</desc>
+<desc id="d">Components: Autoware computer (QM) hosting no mechanism; Safety monitor controller (D) hosting SM-01, SM-02, SM-03, SM-04, SM-05, SM-06, SM-07, SM-08; Safety channel processor (D) hosting SM-09, SM-10; Safety LiDAR (B(D)) hosting no mechanism; Safety radar (B(D)) hosting no mechanism; Drive-by-wire (D) hosting SM-11, SM-12, SM-13, SM-14; Vehicle state sensing (D) hosting SM-15; Park brake (D) hosting SM-16; Door system (D) hosting SM-17; Monitor power supply (D) hosting SM-18; Remote operations station (C) hosting SM-19. Links: Remote operations station to Safety monitor controller; Autoware computer to Safety monitor controller; Safety LiDAR to Safety channel processor; Safety radar to Safety channel processor; Safety channel processor to Safety monitor controller; Safety monitor controller to Drive-by-wire; Vehicle state sensing to Safety monitor controller; Safety monitor controller to Park brake; Door system to Safety monitor controller.</desc>
 <style>
 svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
 @media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
@@ -62,11 +62,11 @@ svg .sm { font:600 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:
 <rect x="474" y="96" width="68" height="60" rx="7" class="aD"/>
 <text x="482" y="114" class="tb">Safety</text>
 <text x="482" y="129" class="tb">LiDAR</text>
-<text x="482" y="147" class="sm">D</text>
+<text x="482" y="147" class="sm">B(D)</text>
 <rect x="548" y="96" width="68" height="60" rx="7" class="aD"/>
 <text x="556" y="114" class="tb">Safety</text>
 <text x="556" y="129" class="tb">radar</text>
-<text x="556" y="147" class="sm">D</text>
+<text x="556" y="147" class="sm">B(D)</text>
 <rect x="24" y="318" width="190" height="60" rx="7" class="aD out"/>
 <text x="32" y="336" class="tb">Drive-by-wire</text>
 <text x="32" y="369" class="sm">D · SM-11–14</text>
