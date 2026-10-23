@@ -22,6 +22,7 @@ for sub in (
     "02-concept/fsc",
     "02-concept/sotif",
     "02-concept/fallback",
+    "02-concept/triggering",
     "case/tools",
     "trace/tools",
 ):
@@ -44,6 +45,7 @@ import folder_index  # noqa: E402
 import fsc  # noqa: E402
 import hara  # noqa: E402
 import sotif  # noqa: E402
+import triggering  # noqa: E402
 import wpregister  # noqa: E402
 
 GOOD = {
@@ -393,6 +395,48 @@ class Fallback(unittest.TestCase):
             self.assertTrue(any(needle in x for x in fallback.check(model, k)), needle)
 
 
+class Triggering(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(triggering.check(triggering.load(), triggering.known()), [])
+
+    def test_hazards_follow_from_insufficiencies(self):
+        m = triggering.load()
+        tc = {"exposes": ["FI-01", "FI-04"]}
+        fis = {f["id"]: f for f in m["insufficiencies"]}
+        self.assertEqual(
+            triggering.leads_to(m, tc),
+            sorted(set(fis["FI-01"]["hazards"] + fis["FI-04"]["hazards"])),
+        )
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = triggering.load(), triggering.known()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["insufficiencies"] = [f for f in bad["insufficiencies"] if "SH-07" not in f["hazards"]]
+        cases.append((bad, "SH-07: needs further evaluation"))
+        bad = copy.deepcopy(m)
+        bad["insufficiencies"].append(dict(bad["insufficiencies"][1], id="FI-99"))
+        cases.append((bad, "FI-99: no triggering condition exposes it"))
+        bad = copy.deepcopy(m)
+        fi = next(f for f in bad["insufficiencies"] if f["id"] == "FI-05")
+        fi["ai"] = ["coverage"]
+        cases.append((bad, "none of its functions is an ML function"))
+        bad = copy.deepcopy(m)
+        for f in bad["insufficiencies"]:
+            if "F-03" in f["functions"]:
+                f.pop("ai", None)
+        cases.append((bad, "F-03: an ML function"))
+        bad = copy.deepcopy(m)
+        tc = next(t for t in bad["triggers"] if t["id"] == "TC-22")
+        tc.pop("monitor")
+        cases.append((bad, "needs the monitor"))
+        bad = copy.deepcopy(m)
+        bad["triggers"][0]["odd"] = ["ODD-99"]
+        cases.append((bad, "is not in WP-C-02"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in triggering.check(model, k)), needle)
+
+
 class TreeChecks(unittest.TestCase):
     def test_table_cell_count(self):
         md = "| A | B |\n|---|---|\n| 1 | 2 |\n| 1 |\n"
@@ -454,6 +498,7 @@ class Generators(unittest.TestCase):
             fsc,
             sotif,
             fallback,
+            triggering,
         ):
             first, second = mod.build(), mod.build()
             self.assertEqual(first, second, mod.__name__)
