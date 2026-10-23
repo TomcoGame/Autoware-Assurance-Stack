@@ -1,0 +1,209 @@
+# Technical safety concept model for WP-S-03: the system components, the safety mechanisms placed on them, the
+# redundancies and their independence, and the AI architecture measures. tsc.py checks it against the functional
+# safety concept (every rated FSR is implemented by a mechanism on a component of its element), the fallback concept
+# and the triggering conditions, derives each component's ASIL from the mechanisms it carries or serves, and writes
+# the WP-S-03 tables and Figure 2-1.
+# `host` is the component a mechanism runs on, `uses` those it depends on.
+# `box` places a component in Figure 2-1; `x` places a link's arrow (`y` for a horizontal one).
+# Every entry is a draft by Claude (I0). `pending` names a decision an entry waits on.
+
+components:
+  - {id: CMP-01, name: Autoware computer, element: EL-01, box: [190, 96, 264, 60]}
+  - {id: CMP-02, name: Safety monitor controller, element: EL-02, box: [24, 206, 450, 64], pending: DQ-030}
+  - {id: CMP-03, name: Safety channel processor, element: EL-03, box: [490, 206, 126, 64], pending: DQ-030}
+  - {id: CMP-04, name: Safety LiDAR, element: EL-03, box: [474, 96, 68, 60], pending: DQ-031}
+  - {id: CMP-05, name: Safety radar, element: EL-03, box: [548, 96, 68, 60], pending: DQ-031}
+  - {id: CMP-06, name: Drive-by-wire, element: EL-04, box: [24, 318, 190, 60]}
+  - {id: CMP-07, name: Vehicle state sensing, element: EL-06, box: [226, 318, 100, 60]}
+  - {id: CMP-08, name: Park brake, element: EL-05, box: [338, 318, 90, 60]}
+  - {id: CMP-09, name: Door system, element: EL-08, box: [440, 318, 100, 60]}
+  - {id: CMP-10, name: Monitor power supply, element: EL-07, box: [24, 422, 300, 44]}
+  - {id: CMP-11, name: Remote operations station, element: EL-09, box: [24, 96, 150, 60]}
+
+links:
+  - {from: CMP-11, to: CMP-02, x: 87, label: "signed commands, release"}
+  - {from: CMP-01, to: CMP-02, x: 300, label: "commands, heartbeat"}
+  - {from: CMP-04, to: CMP-03, x: 508}
+  - {from: CMP-05, to: CMP-03, x: 582}
+  - {from: CMP-03, to: CMP-02, y: 238}
+  - {from: CMP-02, to: CMP-06, x: 107, label: bounded commands}
+  - {from: CMP-07, to: CMP-02, x: 276}
+  - {from: CMP-02, to: CMP-08, x: 383}
+  - {from: CMP-09, to: CMP-02, x: 457}
+
+mechanisms:
+  - id: SM-01
+    name: Longitudinal envelope
+    host: CMP-02
+    uses: [CMP-03, CMP-07]
+    does: Bounds acceleration to the envelope for the current speed, and commands the braking that keeps the safe longitudinal distance to every road user and obstacle the safety channel reports, including across conflict areas and at occlusions; applies the same to remote commands
+    implements: [FSR-01.01, FSR-02.02, FSR-03.03, FSR-06.01, FSR-06.02, FSR-08.02]
+    reaction: [MRM-4]
+    verify: Fault injection of unsafe commands in HIL; scenario tests; formal check of the envelope rules
+  - id: SM-02
+    name: Lateral envelope
+    host: CMP-02
+    uses: [CMP-03, CMP-07]
+    does: Bounds steering angle and rate to the envelope for the current speed and rejects steering whose swept path comes within the safe lateral distance of a detected road user, obstacle or kerb
+    implements: [FSR-04.01, FSR-04.02]
+    reaction: [MRM-4]
+    verify: Fault injection of steering commands; scenario tests with oncoming traffic and cyclists
+  - id: SM-03
+    name: Achieved-against-commanded monitor
+    host: CMP-02
+    uses: [CMP-07, CMP-06]
+    does: Compares achieved acceleration, deceleration and steering with what was commanded, switches to the secondary brake path on a braking shortfall, and checks Autoware's stop when the safety channel has failed
+    implements: [FSR-01.02, FSR-02.03, FSR-04.03, FSR-07.08]
+    reaction: [MRM-4]
+    verify: Fault injection on the vehicle side and on the safety channel; timing measurement
+  - id: SM-04
+    name: Unconfirmed-braking limiter
+    host: CMP-02
+    uses: [CMP-03]
+    does: Holds decelerations above the comfortable level that the safety channel does not confirm to the firm level
+    implements: [FSR-03.02]
+    reaction: []
+    verify: Fault injection of spurious braking commands; replay of false-positive scenes
+  - id: SM-05
+    name: Command stream watchdog
+    host: CMP-02
+    uses: []
+    does: Checks every command from Autoware and from remote operations for loss, delay, sequence, age, signature (CSR-01) and plausibility
+    implements: [FSR-07.01, FSR-08.01]
+    reaction: [MRM-4]
+    verify: Fault injection of lost, late, repeated, corrupted and unsigned commands; timing measurement
+  - id: SM-06
+    name: Stop, hold and release
+    host: CMP-02
+    uses: [CMP-06, CMP-07, CMP-08, CMP-09]
+    does: Brings the vehicle to a stop in lane with hazard lights and holds it, detects motion while holding, gates reverse, and releases only on a verified release with every release condition met
+    implements: [FSR-07.02, FSR-07.04, FSR-05.01, FSR-05.02, FSR-05.03]
+    reaction: [MRM-4]
+    verify: Vehicle tests of stop and hold on the geofence's gradients; fault injection of release messages and door states
+  - id: SM-07
+    name: Indicator cross-check
+    host: CMP-02
+    uses: [CMP-07]
+    does: Compares the commanded indicator with commanded and achieved steering, and switches to hazard lights on a mismatch
+    implements: [FSR-09.01]
+    reaction: []
+    verify: Fault injection of indicator commands
+  - id: SM-08
+    name: Monitor self-diagnostics and fail-silent output
+    host: CMP-02
+    uses: []
+    does: Detects faults of the monitor's own processor, memory, clock and software (lockstep, memory protection, independent watchdog) and stops its output so the vehicle's own stop takes over
+    implements: [FSR-07.07]
+    reaction: [MRM-5]
+    verify: Hardware fault injection; diagnostic coverage analysis (WP-H-04)
+  - id: SM-09
+    name: Geometric obstacle detection
+    host: CMP-03
+    uses: [CMP-04, CMP-05]
+    does: Finds road users and obstacles in and beside the swept path from LiDAR and radar returns by geometry and motion, without learned classification, and confirms detections across both sensor types to keep false detections rare
+    implements: [FSR-02.01, FSR-03.01]
+    reaction: []
+    verify: Detection tests across the ODD; false-positive rate from field and replay data
+  - id: SM-10
+    name: Safety channel sensor diagnostics
+    host: CMP-03
+    uses: [CMP-04, CMP-05]
+    does: Detects blockage, misalignment, loss and degradation of the safety channel's sensors and reports it to the monitor
+    implements: [FSR-02.01]
+    reaction: [TR-05]
+    verify: Fault injection of sensor faults; blockage tests with dirt, water and snow
+  - id: SM-11
+    name: Propulsion cut
+    host: CMP-06
+    uses: []
+    does: Cuts propulsion on the monitor's command, whatever else is commanded
+    implements: [FSR-01.03]
+    reaction: []
+    verify: Supplier evidence under the DIA; vehicle test
+  - id: SM-12
+    name: Secondary brake path
+    host: CMP-06
+    uses: []
+    does: Keeps a braking path that can stop the vehicle after any single fault in the primary one
+    implements: [FSR-02.04]
+    reaction: []
+    verify: Supplier evidence under the DIA
+  - id: SM-13
+    name: Fault-tolerant steering for the stop
+    host: CMP-06
+    uses: []
+    does: Keeps steering controllable after any single fault long enough to complete a stop in lane
+    implements: [FSR-04.04]
+    reaction: []
+    verify: Supplier evidence under the DIA
+  - id: SM-14
+    name: Stop on loss of the monitor
+    host: CMP-06
+    uses: []
+    does: Brakes to a standstill and holds it when the monitor's commands stop for longer than WP-S-04 allows
+    implements: [FSR-07.06]
+    reaction: [MRM-5]
+    verify: Vehicle test with the monitor disconnected
+  - id: SM-15
+    name: Independent vehicle state
+    host: CMP-07
+    uses: []
+    does: Delivers speed, acceleration and steering angle to the monitor on its own path, with the sensors' own fault flags
+    implements: [FSR-01.05, FSR-04.06]
+    reaction: []
+    verify: Supplier evidence; fault injection on the signal path
+  - id: SM-16
+    name: Park brake hold
+    host: CMP-08
+    uses: []
+    does: Applies and holds the park brake on the monitor's command
+    implements: [FSR-05.04]
+    reaction: []
+    verify: Supplier evidence under the DIA
+  - id: SM-17
+    name: Door interlock
+    host: CMP-09
+    uses: []
+    does: Reports door state to the monitor and inhibits motion with any door open
+    implements: [FSR-05.05]
+    reaction: []
+    verify: Supplier evidence; vehicle test
+  - id: SM-18
+    name: Independent monitor supply
+    host: CMP-10
+    uses: []
+    does: Keeps the monitor, the safety channel and the actuation path powered after any single fault of the Autoware computer's supply
+    implements: [FSR-07.03]
+    reaction: []
+    verify: Power fault injection
+  - id: SM-19
+    name: Remote command protection
+    host: CMP-11
+    uses: []
+    does: Stamps, numbers and signs every remote command and release before it leaves the station (CSR-01)
+    implements: [FSR-08.03]
+    reaction: []
+    verify: Interface test; cybersecurity verification (WP-W-11)
+
+redundancy:
+  - id: RD-01
+    between: [CMP-01, CMP-03]
+    what: Autoware's perception and the safety channel's
+    diversity: Different sensors (DQ-018 A), learned classification against geometry, different processors and software
+    common: [TC-02, TC-03, TC-04, TC-15, TC-24]
+  - id: RD-02
+    between: [CMP-04, CMP-05]
+    what: LiDAR and radar inside the safety channel
+    diversity: Different physics (light against radio), different failure modes in rain, spray and darkness
+    common: [TC-03, TC-24]
+    pending: DQ-031
+  - id: RD-03
+    between: [CMP-02, CMP-06]
+    what: The monitor's stop and the vehicle's own stop when the monitor falls silent
+    diversity: Different controllers and suppliers; the vehicle's stop needs only the absence of the monitor's commands
+    common: [TC-25]
+  - id: RD-04
+    between: [CMP-06, CMP-06]
+    what: Primary and secondary brake paths
+    diversity: As the vehicle supplier designs them (AOU-01)
+    common: [TC-25]
