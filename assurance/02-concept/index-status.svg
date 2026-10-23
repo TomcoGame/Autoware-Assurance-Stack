@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="622" viewBox="0 0 640 622" role="img" aria-labelledby="t d">
 <title id="t">02-concept: work products by gate and status</title>
-<desc id="d">Work products of 02-concept from WP-M-00 §3, with the gates they are needed for and their status: WP-C-01 Item definition: G1, Draft; WP-C-02 ODD and intended functionality (DDT, OEDR, manoeuvres): G1, Draft; WP-C-03 Hazard analysis and risk assessment, safety goals: G1, Draft; WP-C-04 Functional safety concept (FSRs, allocation, assumptions): G1, Draft; WP-C-05 SOTIF hazard identification, risk evaluation and acceptance criteria: G1, Draft; WP-C-06 Functional insufficiencies and triggering conditions: G1, Draft; WP-C-07 Functional modifications addressing SOTIF risk: G1, Draft; WP-C-08 Interaction with passengers, road users and remote operators; foreseeable misuse: G1, Skeleton; WP-C-09 Threat analysis and risk assessment (TARA): G1, Skeleton; WP-C-10 Cybersecurity goals, claims and concept: G1, Skeleton; WP-C-11 AI system definition and AI safety requirements: G1, Skeleton; WP-C-12 Fallback, minimal risk manoeuvres and minimal risk conditions: G1, Draft.</desc>
+<desc id="d">Work products of 02-concept from WP-M-00 §3, with the gates they are needed for and their status: WP-C-01 Item definition: G1, Draft; WP-C-02 ODD and intended functionality (DDT, OEDR, manoeuvres): G1, Draft; WP-C-03 Hazard analysis and risk assessment, safety goals: G1, Draft; WP-C-04 Functional safety concept (FSRs, allocation, assumptions): G1, Draft; WP-C-05 SOTIF hazard identification, risk evaluation and acceptance criteria: G1, Draft; WP-C-06 Functional insufficiencies and triggering conditions: G1, Draft; WP-C-07 Functional modifications addressing SOTIF risk: G1, Draft; WP-C-08 Interaction with passengers, road users and remote operators; foreseeable misuse: G1, Skeleton; WP-C-09 Threat analysis and risk assessment (TARA): G1, Draft; WP-C-10 Cybersecurity goals, claims and concept: G1, Skeleton; WP-C-11 AI system definition and AI safety requirements: G1, Skeleton; WP-C-12 Fallback, minimal risk manoeuvres and minimal risk conditions: G1, Draft.</desc>
 <style>
 svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
 @media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
@@ -58,7 +58,7 @@ svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dashar
 <rect x="16" y="420" width="608" height="40" rx="4" class="card"/>
 <text x="24" y="437" class="tb">WP-C-09</text>
 <text x="24" y="452" class="s">Threat analysis and risk assessment (TARA)</text>
-<rect x="401.6" y="433" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="401.6" y="433" width="26.6" height="14" rx="7" class="st-d"/>
 <text x="24" y="477" class="tb">WP-C-10</text>
 <text x="24" y="492" class="s">Cybersecurity goals, claims and concept</text>
 <rect x="401.6" y="473" width="26.6" height="14" rx="7" class="st-s"/>
@@ -70,7 +70,7 @@ svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dashar
 <text x="24" y="572" class="s">Fallback, minimal risk manoeuvres and minimal risk cond…</text>
 <rect x="401.6" y="553" width="26.6" height="14" rx="7" class="st-d"/>
 <rect x="24" y="593" width="26" height="14" rx="7" class="st-s"/>
-<text x="56" y="604" class="t">Skeleton (4)</text>
+<text x="56" y="604" class="t">Skeleton (3)</text>
 <rect x="154.0" y="593" width="26" height="14" rx="7" class="st-d"/>
-<text x="186" y="604" class="t">Draft (8)</text>
+<text x="186" y="604" class="t">Draft (9)</text>
 </svg>
