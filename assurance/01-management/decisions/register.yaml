@@ -787,7 +787,9 @@
         No new hardware. Cost: depends on the link, the video and the operator's attention (SH-13), and one
         operator watches several vehicles.
   sources: [WP-C-07 FM-15, WP-C-06 FI-13, TC-21, WP-C-05 SH-09, WP-C-02 OEDR-09]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#18", record: "WP-C-07 v0.3 FM-15, §4", at: 2026-10-23}
 
 - id: DQ-026
   question: How assertively should the robotaxi drive?
@@ -819,4 +821,6 @@
         Blends in best. Cost: accepts the gaps typical drivers do, which the acceptance criterion (careful,
         competent driver, DQ-020 A) does not support.
   sources: [WP-C-07 FM-17, WP-C-06 FI-15, TC-23, WP-C-05 SH-05, SH-11, DQ-020]
-  status: open
+  status: applied
+  answer: {choice: C, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#18", record: "WP-C-07 v0.3 FM-17, §4", at: 2026-10-23}
