@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-02 ODD and intended functionality (DDT, OEDR, manoeuvres) |
 | Standard reference | UL 4600 §8; ISO 26262-3 §5; ISO 21448 §5; ISO/PAS 8800:2024 (Input space definition); ASPICE 4.0 SYS.1; ISO 34503:2023 and SAE J3016 (informative, taxonomy and terms) |
-| Version | 0.3 (one US state, so US vehicle code and mph (DQ-009 A); remote driving allowed, so MON-04 bounds the remote loop (DQ-010 C); 2026-10-23). 0.2 (first content: ODD attributes with proposed limits, ODD monitoring, intended functionality, AI input space; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.4 (unprotected turns and roundabouts inside the ODD (DQ-011 C); rain and visibility limits decided (DQ-012 A); state still open, so traffic rules are rated against common US rules until it is chosen (DQ-013); 2026-10-23). 0.3 (one US state, so US vehicle code and mph (DQ-009 A); remote driving allowed, so MON-04 bounds the remote loop (DQ-010 C); 2026-10-23). 0.2 (first content: ODD attributes with proposed limits, ODD monitoring, intended functionality, AI input space; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -23,10 +23,10 @@ With no driver, the ODD carries more weight than it would for a supervised syste
 | Input | What it fixes | Source |
 |---|---|---|
 | Item and ODD envelope | Geofenced urban robotaxi; public urban roads up to 50 km/h; day and night; dry weather and light rain | DQ-001 B ([WP-M-01 §3.1](../01-management/WP-M-01-assurance-strategy.md#31-reference-configuration)) |
-| Traffic rules | The vehicle code of one US state; the state is not yet chosen | DQ-009 A, DQ-013 (open) |
+| Traffic rules | The vehicle code of one US state. The state is not chosen yet (the lead leans to the state where testing is easiest); until it is, the analyses use rules common to US states (§5.1) and check the chosen state's differences then | DQ-009 A, DQ-013 (deferred) |
 | Remote operation | Remote operators may drive the vehicle as well as assist it | DQ-010 C |
-| Intersection manoeuvres | Whether unprotected turns and roundabouts are inside the ODD | DQ-011 (open) |
-| Weather and visibility limits | The numbers behind "light rain" and the visibility floor | DQ-012 (open) |
+| Intersection manoeuvres | Unprotected turns across oncoming traffic and roundabouts are inside the ODD | DQ-011 C |
+| Weather and visibility limits | Rain up to 2.5 mm/h; visibility of 200 m or more | DQ-012 A |
 
 Limits are the safety authority's to set. Each limit below that is not yet decided is marked **Proposed**: it is Claude's draft value, used so the analyses can start, and it is replaced by the decision when it is made. Values that depend on the vehicle are marked **Provisional** (DQ-008).
 
@@ -41,7 +41,7 @@ Attributes follow the three top-level groups of ISO 34503: scenery (static), env
 | ODD-01 | Area | Public roads inside a mapped geofence; every road in it has a verified HD map (WP-W-12) | Anywhere outside the geofence or without a verified map | MON-01 | Decided (DQ-001) |
 | ODD-02 | Road type | Urban streets and collector roads, one or two lanes per direction, with or without a centre line | Motorways, expressways, ramps; unpaved roads; private car parks; drive-throughs | MON-01 (map) | Proposed |
 | ODD-03 | Posted speed limit | Roads posted at or below 30 mph (48 km/h) | Roads posted higher, including the 35 mph arterials common in US cities | MON-01 (map) | Proposed; DQ-001 set 50 km/h, and the nearest US posted limit at or below it is 30 mph |
-| ODD-04 | Junctions | Signalised intersections with protected turns; stop-controlled and yield-controlled junctions; T-junctions | Unprotected turns across oncoming traffic and roundabouts unless DQ-011 includes them; level crossings with railways or trams | MON-01 (map, route planning) | Open (DQ-011) |
+| ODD-04 | Junctions | Signalised intersections with protected and unprotected turns; stop-controlled and yield-controlled junctions; T-junctions; single-lane and multi-lane roundabouts | Level crossings with railways or trams | MON-01 (map, route planning) | Decided (DQ-011 C), except level crossings: Proposed |
 | ODD-05 | Crossings | Marked pedestrian crossings, with or without signals; cycle lanes alongside the road | Unmarked mid-block crossings are not excluded (people cross anyway) and are handled by OEDR (§5.2) | n/a | Proposed |
 | ODD-06 | Road surface and geometry | Paved, gradients up to 8 %, curves the vehicle can take at the posted speed | Gradients above 8 %; surfaces the map flags as damaged | MON-01 (map) | Proposed; gradient depends on the vehicle (Provisional) |
 | ODD-07 | Lane markings | Present and visible, or absent where the map encodes the lane | Roads under re-marking where the map and the markings disagree | MON-02 | Proposed |
@@ -52,8 +52,8 @@ Attributes follow the three top-level groups of ISO 34503: scenery (static), env
 
 | ID | Attribute | Inside the ODD | Outside the ODD | Detected by | State |
 |---|---|---|---|---|---|
-| ODD-10 | Precipitation | Dry; light rain up to 2.5 mm/h | Rain above 2.5 mm/h; snow, sleet, hail | MON-03 | Proposed (DQ-012) |
-| ODD-11 | Visibility | Meteorological visibility of 200 m or more | Fog, mist, smoke, dust or spray below 200 m | MON-03 | Proposed (DQ-012) |
+| ODD-10 | Precipitation | Dry; light rain up to 2.5 mm/h | Rain above 2.5 mm/h; snow, sleet, hail | MON-03 | Decided (DQ-012 A) |
+| ODD-11 | Visibility | Meteorological visibility of 200 m or more | Fog, mist, smoke, dust or spray below 200 m | MON-03 | Decided (DQ-012 A) |
 | ODD-12 | Illumination | Day, dusk and night, including unlit streets | None excluded by time of day; low sun and glare are triggering conditions (WP-C-06) | n/a | Decided (DQ-001) |
 | ODD-13 | Road surface condition | Dry or wet | Standing water deeper than the vehicle allows; ice; snow cover | MON-03, temperature | Proposed |
 | ODD-14 | Temperature | The operating range of the sensors and computer | Outside it | Hardware diagnostics | Provisional (WP-H-02) |
@@ -86,7 +86,7 @@ Each monitor's response when its condition leaves the ODD is a minimal risk mano
 
 ### 5.1 Dynamic driving task
 
-Inside the ODD the item performs the whole dynamic driving task: steering, acceleration and braking, object and event detection and response, manoeuvre planning, and signalling (SAE J3016). It also performs the fallback: when it can no longer drive safely it reaches a minimal risk condition by itself (WP-C-12). It drives to the vehicle code of the chosen US state (DQ-009 A, DQ-013), and in doubt it yields. In `REMOTE` mode a remote operator drives instead (DQ-010 C); the safety monitor's envelope and MON-04 still apply.
+Inside the ODD the item performs the whole dynamic driving task: steering, acceleration and braking, object and event detection and response, manoeuvre planning, and signalling (SAE J3016). It also performs the fallback: when it can no longer drive safely it reaches a minimal risk condition by itself (WP-C-12). It drives to the vehicle code of the chosen US state (DQ-009 A), and in doubt it yields. Until the state is chosen (DQ-014), the analyses use the rules common to US states: the MUTCD for signs, signals and markings, and the right-of-way rules of the Uniform Vehicle Code, the model code many state codes follow. Where states differ (for example turns on red, or rules at roundabouts), the hazard analysis rates the stricter case and marks it for checking. In `REMOTE` mode a remote operator drives instead (DQ-010 C); the safety monitor's envelope and MON-04 still apply.
 
 ### 5.2 Object and event detection and response
 
@@ -112,8 +112,8 @@ Inside the ODD the item performs the whole dynamic driving task: steering, accel
 | MAN-01 | Lane following and speed keeping | Yes | `autoware_behavior_path_planner`, `autoware_velocity_smoother`, trajectory follower |
 | MAN-02 | Lane change, including to pass a stopped vehicle | Yes | `autoware_behavior_path_lane_change_module`, `avoidance_by_lane_change_module` |
 | MAN-03 | Turns at signalised junctions with a protected phase | Yes | `autoware_behavior_velocity_intersection_module`, `traffic_light_module` |
-| MAN-04 | Unprotected turns across oncoming traffic | Open (DQ-011) | `autoware_behavior_velocity_intersection_module` |
-| MAN-05 | Roundabouts | Open (DQ-011) | `autoware_behavior_velocity_roundabout_module` |
+| MAN-04 | Unprotected turns across oncoming traffic, including left turns on a permissive green | Yes (DQ-011 C) | `autoware_behavior_velocity_intersection_module` |
+| MAN-05 | Roundabouts, single-lane and multi-lane | Yes (DQ-011 C) | `autoware_behavior_velocity_roundabout_module` |
 | MAN-06 | Pull in to a kerbside stop and pull out again | Yes, at stops marked in the map (ODD-09) | `autoware_behavior_path_goal_planner_module`, `start_planner_module` |
 | MAN-07 | Stop in lane as a minimal risk manoeuvre | Yes, as a fallback only | `autoware_mrm_comfortable_stop_operator`, `mrm_emergency_stop_operator` |
 | MAN-08 | Reversing, U-turns, three-point turns | No | Excluded by route planning |
@@ -138,8 +138,8 @@ Gaps between this and what the pinned models were trained on are assessed in WP-
 
 | ID | Open item | Closes at |
 |---|---|---|
-| OI-1 | Replace each Proposed value with the safety authority's decision (DQ-011, DQ-012 and the remaining Proposed rows) | G1 |
-| OI-2 | Fill the traffic rules of the chosen state (DQ-013) | G1 |
+| OI-1 | Replace each remaining Proposed value with the safety authority's decision | G1 |
+| OI-2 | Choose the state (DQ-014), then check its vehicle code against the common US rules the analyses used, and redo any rating that differs | G1 |
 | OI-3 | Replace Provisional values from the chosen vehicle (DQ-008): gradients, temperature range | G2 |
 | OI-4 | Specify MON-01 to MON-04 as requirements in WP-S-01 and WP-S-02 | G2 |
 | OI-5 | Specify the emergency-vehicle response (OEDR-09) and the person-directing-traffic response (OEDR-10), which Autoware does not provide | G2 |

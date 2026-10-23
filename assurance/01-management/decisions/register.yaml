@@ -320,7 +320,9 @@
       detail: >-
         The fullest urban service. Cost: the largest hazard and validation scope of the three.
   sources: [WP-C-02 ODD-04, MAN-04, MAN-05, autoware_behavior_velocity_intersection_module, autoware_behavior_velocity_roundabout_module]
-  status: open
+  status: applied
+  answer: {choice: C, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#6", record: "WP-M-01 v0.4 §8; WP-C-02 v0.4 §2, ODD-04, MAN-04, MAN-05", at: 2026-10-23}
 
 - id: DQ-012
   question: What are the weather and visibility limits of the ODD?
@@ -350,7 +352,9 @@
         Moderate rain. Cost: much more sensor degradation to characterise and validate; spray from other vehicles
         becomes a main triggering condition.
   sources: [WP-C-02 ODD-10, ODD-11, MON-03, DQ-001]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#6", record: "WP-M-01 v0.4 §8; WP-C-02 v0.4 §2, ODD-10, ODD-11", at: 2026-10-23}
 
 - id: DQ-013
   question: Which US state should the robotaxi first operate in?
@@ -382,4 +386,37 @@
         State law allows driverless operation with notification to the state. Cost: a lighter permit path does not
         lighten this project's safety case; local weather favours the dry ODD.
   sources: [DQ-009, WP-C-01 §7, OI-2, WP-C-02 OI-2, OI-6]
-  status: open
+  status: applied
+  answer: {choice: other, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg, note: hmmm tbd for now; maybe the eaiset state to perform testing i presume}
+  applied: {ref: "#6", record: "WP-M-01 v0.4 §8; WP-C-01 v0.4 §7; WP-C-02 v0.4 §2, §5.1 (common US rules until chosen); asked again as DQ-014", at: 2026-10-23}
+
+- id: DQ-014
+  question: Which US state should the robotaxi first operate in?
+  context: >-
+    You deferred this on 2026-10-23 (DQ-013), leaning to the state where testing is easiest. Until it is chosen the
+    hazard analysis rates against rules common to US states and rates the stricter case where states differ. **The
+    chosen state's vehicle code is then checked against those ratings,** and the geofence and its HD map follow
+    from the state and city.
+  reversibility: hard
+  blocks: Item definition §7, ODD geofence (OI-6), HARA confirmation review
+  gate: G1
+  after: [DQ-007]
+  options:
+    - key: A
+      recommended: true
+      title: The state where you can run test operations soonest
+      detail: >-
+        Name it in the note. Test drives with safety drivers are the first activity on public roads. Cost: none
+        beyond the choice.
+    - key: B
+      title: California
+      detail: >-
+        Separate permits for testing with and without a safety driver and for deployment, plus a commission permit
+        for paid passenger service. Cost: the longest permit path; detailed reporting.
+    - key: C
+      title: Arizona
+      detail: >-
+        State law allows driverless operation with notification to the state. Cost: a lighter permit path does not
+        lighten this project's safety case.
+  sources: [DQ-013, WP-C-01 §7, OI-2, WP-C-02 §5.1, OI-2, OI-6]
+  status: queued
