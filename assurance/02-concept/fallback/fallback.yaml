@@ -1,0 +1,219 @@
+# Fallback model for WP-C-12: what makes the item give up driving (triggers), how it stops (minimal risk
+# manoeuvres, MRMs) and where it ends up (minimal risk conditions, MRCs). fallback.py checks the model against the
+# functional safety concept (../fsc/fsc.yaml), the HARA, the ODD monitors of WP-C-02 §4, the assumptions of
+# WP-C-01 §8 and the decision register, computes the stopping times and distances, and writes the WP-C-12 tables
+# and Figure 3-1.
+# MRMs are listed in fallback order: an MRM's `fallback` is the next one tried when it cannot complete, so it must
+# come later in the list, and every chain must end in an MRM rated at SG-07's ASIL.
+# `lost` names the elements a trigger takes away; the MRM that answers it must not be carried out by one of them.
+# Deceleration and jerk are magnitudes in m/s² and m/s³, from the pinned Autoware's default parameters where
+# `source` says so; they are not decided values.
+# Every entry is a draft by Claude (I0). `pending` marks content that waits on a decision.
+
+triggers:
+  - id: TR-01
+    kind: fault
+    condition: Autoware's commands stop, arrive late or are implausible (computer, power, network or process fault)
+    detected_by: [EL-02]
+    lost: [EL-01]
+    response: MRM-4
+    refs: [FSR-07.01, FSR-07.02, FSR-07.03, AOU-05]
+  - id: TR-02
+    kind: fault
+    condition: Autoware's diagnostics report a fault that leaves it able to drive on with reduced margin (one sensor of a redundant set, a non-critical node)
+    detected_by: [EL-01]
+    lost: []
+    response: MRM-1
+    refs: [FSR-07.05]
+  - id: TR-03
+    kind: fault
+    condition: Autoware's diagnostics report a fault that leaves it able to follow its lane but not to drive on
+    detected_by: [EL-01]
+    lost: []
+    response: MRM-2
+    refs: [FSR-07.05]
+  - id: TR-04
+    kind: fault
+    condition: Autoware can no longer follow its lane (localisation, planning or control lost), or its MRM handler has no availability report for 0.5 s
+    detected_by: [EL-01]
+    lost: []
+    response: MRM-3
+    refs: [FSR-07.05]
+  - id: TR-05
+    kind: fault
+    condition: The safety perception channel fails or is blocked (dirt, snow, sensor fault)
+    detected_by: [EL-02, EL-03]
+    lost: [EL-03]
+    response: MRM-2
+    pending: DQ-021
+    refs: [FSR-02.01, SH-14]
+  - id: TR-06
+    kind: fault
+    condition: The vehicle reports a braking, steering or by-wire fault, or its state signals to the monitor are lost
+    detected_by: [EL-02]
+    lost: []
+    response: MRM-4
+    refs: [FSR-02.03, FSR-04.03, AOU-01, AOU-03]
+  - id: TR-07
+    kind: fault
+    condition: The safety monitor detects a fault of its own, or loses its power
+    detected_by: [EL-02, EL-04]
+    lost: [EL-02, EL-03]
+    response: MRM-5
+    refs: [FSR-07.07, FSR-07.06, AOU-11]
+  - id: TR-08
+    kind: odd
+    condition: The planned route leaves the geofence or the road types of the ODD
+    detected_by: [EL-01]
+    lost: []
+    response: MRM-1
+    refs: [MON-01]
+  - id: TR-09
+    kind: odd
+    condition: The scene disagrees with the map (closed or re-marked lanes, a work zone, a person directing traffic)
+    detected_by: [EL-01]
+    lost: []
+    response: MRM-2
+    refs: [MON-02, SH-07, SH-10]
+  - id: TR-10
+    kind: odd
+    condition: Rain, visibility or road surface is outside the ODD, or the monitor cannot tell
+    detected_by: [EL-01]
+    lost: []
+    response: MRM-1
+    refs: [MON-03, SH-08]
+  - id: TR-11
+    kind: odd
+    condition: The remote operations link is lost while Autoware drives
+    detected_by: [EL-01]
+    lost: []
+    response: MRM-1
+    refs: [MON-04, AOU-09]
+  - id: TR-12
+    kind: odd
+    condition: While a remote operator drives, the link is lost or commands arrive too old, out of sequence or corrupted
+    detected_by: [EL-02]
+    lost: []
+    response: MRM-4
+    refs: [MON-04, FSR-08.01]
+  - id: TR-13
+    kind: performance
+    condition: The safety monitor has had to correct Autoware's commands more often than WP-S-04 allows in a set time
+    detected_by: [EL-02]
+    lost: []
+    response: MRM-1
+    refs: [FSR-01.01, FSR-02.02, FSR-04.01, FSR-06.01]
+  - id: TR-14
+    kind: performance
+    condition: Autoware cannot find a safe way on (a blocked road, an emergency vehicle it cannot yield to, unclear right of way)
+    detected_by: [EL-01]
+    lost: []
+    response: MRM-2
+    refs: [SH-09, SH-10, SH-11]
+  - id: TR-15
+    kind: event
+    condition: The vehicle has had a collision
+    detected_by: [EL-02]
+    lost: []
+    response: MRM-3
+    refs: [AOU-12]
+  - id: TR-16
+    kind: request
+    condition: A passenger asks to stop, through the in-vehicle stop request to be specified in WP-C-08
+    detected_by: [EL-01]
+    lost: []
+    response: MRM-1
+    refs: []
+  - id: TR-17
+    kind: request
+    condition: The remote operations centre asks for a minimal risk manoeuvre
+    detected_by: [EL-01]
+    lost: []
+    response: MRM-1
+    refs: [AOU-09]
+  - id: TR-18
+    kind: request
+    condition: The remote operations centre presses emergency stop (external emergency stop of `vehicle_cmd_gate`; QM, not relied on for safety)
+    detected_by: [EL-01]
+    lost: []
+    response: MRM-3
+    refs: []
+
+mrms:
+  - id: MRM-1
+    name: Pull over to a mapped safe stopping place
+    by: EL-01
+    asil: QM
+    autoware: No operator in the pinned Autoware (MAN-10); to be built, then `use_pull_over` turned on
+    when: Autoware can still drive safely and a mapped safe stopping place is within reach (DQ-016 A)
+    fails_when: No stopping place is within reach or free, or Autoware's state gets worse on the way
+    decel: null
+    jerk: null
+    source: Comfortable deceleration, set with the operator
+    reaches: MRC-1
+    fallback: MRM-2
+  - id: MRM-2
+    name: Comfortable stop in lane
+    by: EL-01
+    asil: QM
+    autoware: "`autoware_mrm_comfortable_stop_operator`; off by default (`use_comfortable_stop: false`)"
+    when: Autoware can follow its lane but should not drive on
+    fails_when: Autoware loses the ability to follow its lane, or does not slow as planned
+    decel: 1.0
+    jerk: 0.3
+    source: Default parameters of `autoware_mrm_comfortable_stop_operator` (0.52.1)
+    reaches: MRC-2
+    fallback: MRM-3
+  - id: MRM-3
+    name: Emergency stop in lane
+    by: EL-01
+    asil: QM
+    autoware: "`autoware_mrm_emergency_stop_operator`; the only MRM the pinned defaults select"
+    when: Autoware can still command braking but not follow its lane, or must stop now
+    fails_when: Autoware's commands stop or the vehicle does not decelerate as commanded (the monitor sees it, TR-01)
+    decel: 2.5
+    jerk: 1.5
+    source: Default parameters of `autoware_mrm_emergency_stop_operator` (0.52.1)
+    reaches: MRC-2
+    fallback: MRM-4
+  - id: MRM-4
+    name: Safety monitor stop in lane
+    by: EL-02
+    asil: D
+    autoware: Not Autoware; part of the safety monitor to be built (F-10)
+    when: Autoware cannot be relied on to stop, or the monitor itself must stop the vehicle (FSR-07.02)
+    fails_when: The monitor itself fails (TR-07)
+    decel: null
+    jerk: null
+    source: Firm level of FSR-03.02, raised to emergency braking only when FSR-02.02 requires it; set in WP-S-04
+    reaches: MRC-2
+    fallback: MRM-5
+  - id: MRM-5
+    name: Vehicle's own stop on loss of the monitor
+    by: EL-04
+    asil: D
+    autoware: Not Autoware; a function of the vehicle's drive-by-wire (AOU-11)
+    when: Commands from the safety monitor stop for longer than WP-S-04 allows
+    fails_when: Not covered further; AOU-01 makes the braking path single-fault tolerant
+    decel: null
+    jerk: null
+    source: Set by the vehicle supplier within the limits WP-S-04 gives
+    reaches: MRC-2
+    fallback: null
+
+mrcs:
+  - id: MRC-1
+    name: Stopped at the kerb
+    state: Stopped in a mapped safe stopping place, hazard lights on, park brake applied, gear in park
+    held_by: [EL-01, EL-02, EL-05]
+    asil: QM
+    passengers: May leave on the kerb side once the remote operations centre agrees (SH-16)
+    leaves: On release by the remote operations centre with the conditions of FSR-05.01 met (FSR-07.04)
+  - id: MRC-2
+    name: Stopped in lane
+    state: Stopped in its lane, hazard lights on, park brake applied and held by the safety monitor
+    held_by: [EL-02, EL-05]
+    asil: D
+    passengers: Doors stay locked except as the decision on leaving at a stop in lane allows (SH-16)
+    pending: DQ-023
+    leaves: On release by the remote operations centre with the conditions of FSR-05.01 met (FSR-07.04); Autoware then drives on, a remote operator moves the vehicle, or it is recovered

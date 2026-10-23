@@ -248,6 +248,18 @@ fsrs:
     element: EL-01
     text: Carry out an MRM when its diagnostics or ODD monitors (MON-01 to MON-04) require it, pulling over when it can and stopping in lane otherwise (DQ-016 A)
     verify: Simulation and vehicle test
+  - id: FSR-07.06
+    goal: SG-07
+    asil: D
+    element: EL-04
+    text: Brake to a standstill and hold it when commands from the safety monitor stop for longer than the time WP-S-04 sets, whatever Autoware sends (WP-C-12 MRM-5)
+    verify: Supplier evidence under the DIA; vehicle test with the monitor disconnected
+  - id: FSR-07.07
+    goal: SG-07
+    asil: D
+    element: EL-02
+    text: On detecting a fault of its own, stop sending commands to the vehicle, so that the vehicle's own stop (FSR-07.06) takes over
+    verify: Fault injection inside the monitor; review of its diagnostic coverage
   # SG-08 Do not act on stale, corrupted or foreign remote commands
   - id: FSR-08.01
     goal: SG-08
