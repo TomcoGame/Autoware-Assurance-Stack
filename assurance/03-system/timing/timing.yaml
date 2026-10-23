@@ -1,0 +1,87 @@
+# Timing model for WP-S-04: how long a fault may persist before it violates a safety goal (FTTI), how that time is
+# shared between detecting the fault and reacting to it, and the budget each safety mechanism of WP-S-03 gets.
+# timing.py computes every FTTI from the margins and fault magnitudes below, checks the model against the HARA and
+# the technical safety concept, and writes the WP-S-04 tables and Figure 2-1.
+# No value here is a measurement. Margins are proposals to be set with the envelope (WP-S-02); fault magnitudes are
+# ranges for a sensitivity until the vehicle is chosen (DQ-008). The budgets therefore come out as ranges.
+# Every entry is a draft by Claude (I0).
+
+ranges:
+  # Worst-case acceleration a fault can cause, in m/s², over the vehicles still under consideration.
+  longitudinal: {low: 2.0, high: 4.0, note: Unintended propulsion or loss of commanded braking}
+  lateral: {low: 1.0, high: 3.0, note: Lateral acceleration from an unintended steering command}
+  creep: {low: 0.5, high: 1.5, note: Acceleration from standstill when the hold fails}
+  # Speed of a vehicle under remote driving, in m/s (FM-11 limits it; the value is set in WP-O-02).
+  remote_speed: {low: 2.8, high: 5.6, note: 10 to 20 km/h}
+
+# Share of each FTTI given to detecting the fault and to reacting to it; the rest is reserve.
+allocation: {detect: 0.4, react: 0.4}
+
+goals:
+  - id: SG-01
+    kind: deviation
+    range: longitudinal
+    margin: 0.5
+    basis: The longitudinal margin the envelope keeps beyond the safe distance (proposed) is consumed by unintended acceleration
+  - id: SG-02
+    kind: deviation
+    range: longitudinal
+    margin: 0.5
+    basis: The same margin is consumed when commanded braking is lost
+  - id: SG-03
+    kind: limit
+    basis: Unintended hard braking is prevented by a limit on deceleration (FSR-03.02), not by detecting it in time; its firm level is set in WP-S-02
+  - id: SG-04
+    kind: deviation
+    range: lateral
+    margin: 0.3
+    basis: The lateral margin to the lane edge or a road user (proposed) is consumed by an unintended steering command
+  - id: SG-05
+    kind: deviation
+    range: creep
+    margin: 0.2
+    basis: Motion from standstill must be stopped within a short creep distance (proposed), for example before reaching a pedestrian at the bumper
+  - id: SG-06
+    kind: derived
+    from: [SG-02]
+    basis: Entering a conflict area against right of way is prevented by the same braking as SG-02
+  - id: SG-07
+    kind: derived
+    from: [SG-01, SG-02, SG-04]
+    basis: The loss of Autoware must be caught before any of its possible consequences violates a goal
+  - id: SG-08
+    kind: drift
+    range: remote_speed
+    margin: 1.0
+    basis: A stale remote command acts on a scene that has moved on; at remote driving speed, the vehicle may drift this far (proposed) from where the operator saw it
+  - id: SG-09
+    kind: limit
+    basis: A wrong indicator misleads others only while it is shown; FSR-09.01 switches to hazard lights, and the time it may take is set in WP-S-02 with the indicator's own timing
+
+# Safety mechanisms of WP-S-03 whose detection or reaction is time-critical, and the goals that bound them.
+mechanisms:
+  - {id: SM-01, goals: [SG-01, SG-02, SG-06]}
+  - {id: SM-02, goals: [SG-04]}
+  - {id: SM-03, goals: [SG-01, SG-02, SG-04]}
+  - {id: SM-05, goals: [SG-07, SG-08]}
+  - {id: SM-06, goals: [SG-05]}
+  - {id: SM-08, goals: [SG-07]}
+  - {id: SM-09, goals: [SG-02]}
+  - {id: SM-10, goals: [SG-02]}
+  - {id: SM-14, goals: [SG-07]}
+  - {id: SM-15, goals: [SG-01, SG-04]}
+
+# The chain from sensing to actuation along the safety monitor's path. Every stage is to be measured (§6); none has a
+# budget yet. Their sum must fit inside the response time the envelope assumes for the item itself (WP-S-02).
+chain:
+  - {stage: Safety channel sensor frame and transfer, component: CMP-04}
+  - {stage: Geometric detection on the safety channel processor, component: CMP-03}
+  - {stage: Transfer to the safety monitor, component: CMP-03}
+  - {stage: Envelope check and command arbitration, component: CMP-02}
+  - {stage: Transfer to the drive-by-wire, component: CMP-02}
+  - {stage: Brake pressure or torque build-up, component: CMP-06}
+
+# The rated manoeuvres of WP-C-12 and the mechanism whose detection starts them.
+fallback:
+  MRM-4: SM-05
+  MRM-5: SM-14
