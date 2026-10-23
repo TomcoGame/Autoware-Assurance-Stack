@@ -20,6 +20,7 @@ for sub in (
     "02-concept/figures",
     "02-concept/hara",
     "02-concept/fsc",
+    "02-concept/sotif",
     "case/tools",
     "trace/tools",
 ):
@@ -40,6 +41,7 @@ import figkit  # noqa: E402
 import folder_index  # noqa: E402
 import fsc  # noqa: E402
 import hara  # noqa: E402
+import sotif  # noqa: E402
 import wpregister  # noqa: E402
 
 GOOD = {
@@ -316,6 +318,34 @@ class Fsc(unittest.TestCase):
             self.assertTrue(any(needle in x for x in self.errs(model)), needle)
 
 
+class Sotif(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(sotif.check(sotif.load(), sotif.functions(), sotif.hara_hazards()), [])
+
+    def test_further_evaluation_follows_iso_21448_section_6(self):
+        self.assertTrue(sotif.further({"severity": "S2", "controllability": "C3"}))
+        self.assertFalse(sotif.further({"severity": "S0", "controllability": "C3"}))
+        self.assertFalse(sotif.further({"severity": "S3", "controllability": "C0"}))
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, funcs, hz = sotif.load(), sotif.functions(), sotif.hara_hazards()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["hazards"][0]["functions"] = ["F-99"]
+        cases.append((bad, "is not in WP-C-01"))
+        bad = copy.deepcopy(m)
+        bad["hazards"][0]["hara"] = ["H-99"]
+        cases.append((bad, "does not exist"))
+        bad = copy.deepcopy(m)
+        bad["hazards"][0]["insufficiency"] = "both"
+        cases.append((bad, "insufficiency must be"))
+        bad = copy.deepcopy(m)
+        bad["hazards"][1]["id"] = bad["hazards"][0]["id"]
+        cases.append((bad, "duplicate id"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in sotif.check(model, funcs, hz)), needle)
+
+
 class TreeChecks(unittest.TestCase):
     def test_table_cell_count(self):
         md = "| A | B |\n|---|---|\n| 1 | 2 |\n| 1 |\n"
@@ -375,6 +405,7 @@ class Generators(unittest.TestCase):
             fig_c01_boundary,
             hara,
             fsc,
+            sotif,
         ):
             first, second = mod.build(), mod.build()
             self.assertEqual(first, second, mod.__name__)
