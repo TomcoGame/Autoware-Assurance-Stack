@@ -992,3 +992,36 @@
         provisional until then.
   sources: [WP-S-03 §4, RD-02, FSR-02.01, ISO 26262-9 §5, WP-A-01, WP-A-03]
   status: open
+
+- id: DQ-032
+  question: How fast may a remote operator drive the vehicle?
+  context: >-
+    A remote command is always a little old when it arrives: the operator reacts to video that is already late, and
+    the command then crosses the cellular link. The faster the vehicle moves, the further it has gone by then. At
+    20 km/h, keeping that drift under 1 m leaves under 200 ms for the whole round trip, which a cellular link is
+    unlikely to hold in its worst hours (WP-S-04 §2). **This sets how useful remote driving is, against how often the
+    monitor stops it for stale commands.**
+  reversibility: revisit
+  blocks: WP-S-04 SG-08 budget, FM-11, remote operations procedures (WP-O-02)
+  gate: G2
+  asked: 2026-10-23
+  batch: 10
+  options:
+    - key: A
+      recommended: true
+      title: Walking pace, up to 10 km/h
+      detail: >-
+        Enough to move a vehicle out of a lane or round an obstruction. Cost: remote driving cannot cover longer
+        distances; a stranded vehicle further away needs recovery.
+    - key: B
+      title: Up to 20 km/h
+      detail: >-
+        Remote driving can move a vehicle along a street. Cost: about half the time for latency; the monitor will
+        stop the vehicle more often on slow links.
+    - key: C
+      title: Up to the posted limit, with the monitor's age check deciding
+      detail: >-
+        No fixed limit. Cost: at normal speeds almost every command will be too old, so the monitor will stop the
+        vehicle nearly every time.
+  sources: [WP-S-04 §2, SG-08, FSR-08.01, FM-11, DQ-010]
+  status: open
