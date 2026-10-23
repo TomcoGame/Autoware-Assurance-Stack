@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-M-01 Assurance strategy and lifecycle tailoring |
 | Standard reference | UL 4600 §5, §17; ISO 26262-2:2018 §6 (tailoring, safety plan inputs); ISO 21448:2022 §4; ISO/SAE 21434:2021 §6; ISO/PAS 8800:2024 (AI safety management); ASPICE 4.0 MAN.3 |
-| Version | 0.2 (decisions of the lead, 2026-10-23: urban robotaxi ODD (DQ-001 B), independent safety monitor (DQ-002 A), vehicle chosen at G2 (DQ-003 C), safety authority and assessor deferred (DQ-004), hazard analysis may start (DQ-005 A); 2026-10-23). 0.1 (first issue; 2026-10-22) |
+| Version | 0.3 (one US state (DQ-009 A), remote driving allowed (DQ-010 C); 2026-10-23). 0.2 (decisions of the lead, 2026-10-23: urban robotaxi ODD (DQ-001 B), independent safety monitor (DQ-002 A), vehicle chosen at G2 (DQ-003 C), safety authority and assessor deferred (DQ-004), hazard analysis may start (DQ-005 A); 2026-10-23). 0.1 (first issue; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All (FuSa, SOTIF, CS, AI, process) |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -95,8 +95,12 @@ Questions are asked and answered in the [decision register](decisions/README.md)
 | Which vehicle and drive-by-wire platform | C: decide at G2; work against a generic vehicle model in simulation until then (§3.1) | DQ-003 |
 | Who is the safety authority, and who assesses | Deferred by the lead. Asked again before the HARA confirmation review (DQ-007); consequences in §9 | DQ-004 |
 | May the hazard analysis start | A: start once DQ-001 to DQ-003 are answered, which they now are | DQ-005 |
+| Where the robotaxi first operates | A: one US state; the state is asked next (DQ-013) | DQ-009 |
+| May remote operators drive the vehicle | C: yes, remote driving in general, as well as assistance | DQ-010 |
 
 **What the combination means.** An urban ODD at 50 km/h with pedestrians and cyclists gives the largest hazard space of the options, and the vehicle is not yet chosen. So the severity and exposure ratings can be drafted now, but the ratings that depend on the vehicle (mass, braking and steering capability, actuator redundancy) and everything downstream of them stay provisional until G2. The vehicle question returns at G2 (DQ-008).
+
+**Remote driving (DQ-010 C)** puts the wireless link and the remote operator inside the control loop. The hazard analysis rates remote-driving situations, the TARA treats the link as a path to vehicle control, and the safety monitor bounds remote commands like any other, including their age (WP-C-02 MON-04).
 
 ## 9. AI-authored work
 

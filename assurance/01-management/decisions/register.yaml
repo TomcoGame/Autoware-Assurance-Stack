@@ -253,7 +253,9 @@
         A Level 4 operating permit under the amended Road Traffic Act, issued for a defined route and operator.
         Cost: permits so far are for narrow routes and low speeds, which fits a 50 km/h urban ODD poorly.
   sources: [WP-C-01 §7, OI-2]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#5", record: "WP-M-01 v0.3 §8; WP-C-01 v0.3 §7; WP-C-02 v0.3 §2, ODD-03; asked next as DQ-013", at: 2026-10-23}
 
 - id: DQ-010
   question: May remote operators drive the vehicle, or only assist it?
@@ -285,7 +287,9 @@
         Operators may take over driving. Cost: link latency and loss, operator attention and the operator station
         become safety-critical; the largest addition to the hazard analysis and the TARA.
   sources: [WP-C-01 §4, OI-4, I-08, autoware_adapi_msgs 1.9.2 OperationModeState]
-  status: open
+  status: applied
+  answer: {choice: C, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#5", record: "WP-M-01 v0.3 §8; WP-C-01 v0.3 §4, I-08, AOU-10, §9; WP-C-02 v0.3 §2, ODD-15, MON-04, §5.1", at: 2026-10-23}
 
 - id: DQ-011
   question: Should the first ODD include unprotected turns across oncoming traffic, and roundabouts?
@@ -346,4 +350,36 @@
         Moderate rain. Cost: much more sensor degradation to characterise and validate; spray from other vehicles
         becomes a main triggering condition.
   sources: [WP-C-02 ODD-10, ODD-11, MON-03, DQ-001]
+  status: open
+
+- id: DQ-013
+  question: Which US state should the robotaxi first operate in?
+  context: >-
+    You chose one US state (DQ-009). The state sets the permits, the vehicle code the vehicle must follow and any
+    rules on remote driving, which you allowed (DQ-010 C). **The geofence, its HD map and the traffic rules the
+    hazard analysis rates against all follow from it.** Permit rules change; the one chosen is checked against the
+    state's current law before an application.
+  reversibility: hard
+  blocks: Item definition §7, ODD traffic rules and geofence, HARA operational situations
+  gate: G1
+  asked: 2026-10-23
+  batch: 2
+  options:
+    - key: A
+      recommended: true
+      title: The state where you can run test operations soonest
+      detail: >-
+        Name it in the note. Test drives with safety drivers (WP-V-07) are the first activity on public roads, so the
+        state where you have a site, staff and permit access shortens everything after G1. Cost: none beyond the choice.
+    - key: B
+      title: California
+      detail: >-
+        Separate permits for testing with and without a safety driver and for deployment, plus a separate commission
+        permit for paid passenger service. Cost: the longest and most demanding permit path; detailed reporting.
+    - key: C
+      title: Arizona
+      detail: >-
+        State law allows driverless operation with notification to the state. Cost: a lighter permit path does not
+        lighten this project's safety case; local weather favours the dry ODD.
+  sources: [DQ-009, WP-C-01 §7, OI-2, WP-C-02 OI-2, OI-6]
   status: open
