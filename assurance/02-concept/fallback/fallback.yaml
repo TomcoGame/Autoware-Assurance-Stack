@@ -45,8 +45,7 @@ triggers:
     detected_by: [EL-02, EL-03]
     lost: [EL-03]
     response: MRM-2
-    pending: DQ-021
-    refs: [FSR-02.01, SH-14]
+    refs: [FSR-02.01, FSR-07.08, SH-14]
   - id: TR-06
     kind: fault
     condition: The vehicle reports a braking, steering or by-wire fault, or its state signals to the monitor are lost
@@ -207,13 +206,12 @@ mrcs:
     state: Stopped in a mapped safe stopping place, hazard lights on, park brake applied, gear in park
     held_by: [EL-01, EL-02, EL-05]
     asil: QM
-    passengers: May leave on the kerb side once the remote operations centre agrees (SH-16)
+    passengers: Doors unlock at standstill (DQ-023 C)
     leaves: On release by the remote operations centre with the conditions of FSR-05.01 met (FSR-07.04)
   - id: MRC-2
     name: Stopped in lane
     state: Stopped in its lane, hazard lights on, park brake applied and held by the safety monitor
     held_by: [EL-02, EL-05]
     asil: D
-    passengers: Doors stay locked except as the decision on leaving at a stop in lane allows (SH-16)
-    pending: DQ-023
+    passengers: Doors unlock at standstill, as in a taxi (DQ-023 C); the vehicle tells passengers to leave on the kerb side and to watch for traffic (SH-16, WP-O-03)
     leaves: On release by the remote operations centre with the conditions of FSR-05.01 met (FSR-07.04); Autoware then drives on, a remote operator moves the vehicle, or it is recovered

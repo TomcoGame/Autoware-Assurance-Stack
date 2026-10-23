@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-12 Fallback, minimal risk manoeuvres and minimal risk conditions |
 | Standard reference | UL 4600 §8, §10; ISO 26262-3 §7; ISO 21448 §5, §8; ASPICE 4.0 SYS.2 |
-| Version | 0.2 (first content: triggers, the chain of minimal risk manoeuvres, minimal risk conditions, what the pinned Autoware does today, stopping times, the remote operations role, generated from `fallback/fallback.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.3 (the monitor's sensors failing ends in Autoware's comfortable stop under the monitor's check (DQ-021 A); every MRM runs to a stop (DQ-022 A); doors unlock at standstill (DQ-023 C); 2026-10-23). 0.2 (first content: triggers, the chain of minimal risk manoeuvres, minimal risk conditions, what the pinned Autoware does today, stopping times, the remote operations role, generated from `fallback/fallback.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | ASIL D (SG-07) |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -22,7 +22,7 @@ The triggers, manoeuvres and conditions are kept in `fallback/fallback.yaml`; `f
 
 <!-- BEGIN GENERATED: fallback-summary (assurance/02-concept/fallback/fallback.py) -->
 
-18 triggers lead to 5 minimal risk manoeuvres and 2 minimal risk conditions. 2 manoeuvres (MRM-4, MRM-5) are rated at SG-07's ASIL D, and every chain of fallbacks ends in one of them. Entries marked proposed wait on DQ-021, DQ-023.
+18 triggers lead to 5 minimal risk manoeuvres and 2 minimal risk conditions. 2 manoeuvres (MRM-4, MRM-5) are rated at SG-07's ASIL D, and every chain of fallbacks ends in one of them. No entry waits on a decision.
 
 <!-- END GENERATED: fallback-summary -->
 
@@ -38,7 +38,7 @@ A trigger is anything after which the vehicle should stop driving its trip: a fa
 | TR-02 | Fault | Autoware's diagnostics report a fault that leaves it able to drive on with reduced margin (one sensor of a redundant set, a non-critical node) | EL-01 | — | MRM-1 | FSR-07.05 |
 | TR-03 | Fault | Autoware's diagnostics report a fault that leaves it able to follow its lane but not to drive on | EL-01 | — | MRM-2 | FSR-07.05 |
 | TR-04 | Fault | Autoware can no longer follow its lane (localisation, planning or control lost), or its MRM handler has no availability report for 0.5 s | EL-01 | — | MRM-3 | FSR-07.05 |
-| TR-05 | Fault | The safety perception channel fails or is blocked (dirt, snow, sensor fault) | EL-02, EL-03 | EL-03 | MRM-2 (proposed, DQ-021) | FSR-02.01, SH-14 |
+| TR-05 | Fault | The safety perception channel fails or is blocked (dirt, snow, sensor fault) | EL-02, EL-03 | EL-03 | MRM-2 | FSR-02.01, FSR-07.08, SH-14 |
 | TR-06 | Fault | The vehicle reports a braking, steering or by-wire fault, or its state signals to the monitor are lost | EL-02 | — | MRM-4 | FSR-02.03, FSR-04.03, AOU-01, AOU-03 |
 | TR-07 | Fault | The safety monitor detects a fault of its own, or loses its power | EL-02, EL-04 | EL-02, EL-03 | MRM-5 | FSR-07.07, FSR-07.06, AOU-11 |
 | TR-08 | ODD exit | The planned route leaves the geofence or the road types of the ODD | EL-01 | — | MRM-1 | MON-01 |
@@ -60,7 +60,7 @@ Two rules apply to every trigger:
 - **The answer comes from an element that survives the trigger.** When Autoware is lost (TR-01) the safety monitor stops the vehicle; when the monitor is lost (TR-07) the vehicle's own drive-by-wire does (AOU-11). The generator enforces this.
 - **The remote operations centre is told of every trigger and every MRM** (§7), but no trigger waits for it: the vehicle reaches an MRC by itself even with the link down (AOU-09).
 
-TR-05, the loss of the safety monitor's own sensors, has no good answer: Autoware's stop is unchecked, and the monitor's stop is rated but just as blind. The proposed answer waits on the lead (DQ-021).
+TR-05, the loss of the safety monitor's own sensors, has no good answer: Autoware's stop is unchecked for road users, and the monitor's stop is rated but just as blind. The lead decided (DQ-021 A, 2026-10-23) that Autoware makes its comfortable stop in lane while the monitor checks speed, deceleration and steering against the vehicle's own signals, and stops the vehicle itself if Autoware does not slow as expected (FSR-07.08). For about 16 s from 50 km/h (§6) only Autoware looks for road users.
 
 ## 3. Minimal risk manoeuvres (comfortable stop, emergency stop, pull over)
 
@@ -98,8 +98,8 @@ None of this is a defect for a supervised vehicle; for a driverless one it means
 |---|---|---|---|
 | `use_comfortable_stop` | `false` | `true` | MRM-2 exists; without it every Autoware MRM is an emergency stop |
 | `use_pull_over` | `false` | `true` once the operator exists | MRM-1 (DQ-016 A, MAN-10) |
-| `use_emergency_holding` | `false` | `true` | An MRM must not be called off by itself; the holding time depends on DQ-022 |
-| `timeout_emergency_recovery` | 5.0 s | Set by DQ-022 (0 s under option A) | How long a fault must last before the vehicle stays stopped |
+| `use_emergency_holding` | `false` | `true` | An MRM must not be called off by itself (DQ-022 A) |
+| `timeout_emergency_recovery` | 5.0 s | 0 s (DQ-022 A) | Any fault that starts an MRM keeps the vehicle stopped |
 | `use_parking_after_stopped` | `false` | `true` | Park gear at the MRC, in addition to the monitor's park brake (FSR-05.04) |
 | `turning_hazard_on.emergency` | `true` | `true` | Hazard lights during and after an MRM |
 
@@ -107,7 +107,7 @@ These are proposals for the configuration managed under WP-W-03; the safety moni
 
 ### 3.2 Rules for every manoeuvre
 
-- A manoeuvre runs to a stop once started, unless the lead decides otherwise (DQ-022, proposed: never called off).
+- A manoeuvre runs to a stop once started, even if its fault clears, and the vehicle then waits for the remote operations centre (DQ-022 A, 2026-10-23).
 - The safety monitor checks every Autoware manoeuvre like any other driving: its envelope still applies (FSR-01.01, FSR-02.02, FSR-04.01, FSR-06.01).
 - The monitor softens hard braking it cannot match to a road user or obstacle (FSR-03.02, DQ-019 A). If WP-S-04 sets that firm level below the 2.5 m/s² of Autoware's emergency stop, an unconfirmed MRM-3 becomes a firm stop and takes longer; WP-S-04 sets the two together.
 - Hazard lights are on from the start of every MRM (F-12, FSR-09.01).
@@ -118,12 +118,12 @@ These are proposals for the configuration managed under WP-W-03; the safety moni
 
 | ID | Condition | State | Held by | ASIL | Passengers | Left when |
 |---|---|---|---|---|---|---|
-| MRC-1 | Stopped at the kerb | Stopped in a mapped safe stopping place, hazard lights on, park brake applied, gear in park | EL-01, EL-02, EL-05 | QM | May leave on the kerb side once the remote operations centre agrees (SH-16) | On release by the remote operations centre with the conditions of FSR-05.01 met (FSR-07.04) |
-| MRC-2 | Stopped in lane | Stopped in its lane, hazard lights on, park brake applied and held by the safety monitor | EL-02, EL-05 | D | Doors stay locked except as the decision on leaving at a stop in lane allows (SH-16) (proposed, DQ-023) | On release by the remote operations centre with the conditions of FSR-05.01 met (FSR-07.04); Autoware then drives on, a remote operator moves the vehicle, or it is recovered |
+| MRC-1 | Stopped at the kerb | Stopped in a mapped safe stopping place, hazard lights on, park brake applied, gear in park | EL-01, EL-02, EL-05 | QM | Doors unlock at standstill (DQ-023 C) | On release by the remote operations centre with the conditions of FSR-05.01 met (FSR-07.04) |
+| MRC-2 | Stopped in lane | Stopped in its lane, hazard lights on, park brake applied and held by the safety monitor | EL-02, EL-05 | D | Doors unlock at standstill, as in a taxi (DQ-023 C); the vehicle tells passengers to leave on the kerb side and to watch for traffic (SH-16, WP-O-03) | On release by the remote operations centre with the conditions of FSR-05.01 met (FSR-07.04); Autoware then drives on, a remote operator moves the vehicle, or it is recovered |
 
 <!-- END GENERATED: fallback-mrcs -->
 
-**Why a stop in lane is acceptable as the rated condition.** It is the one condition the safety monitor can always reach without Autoware, and a stopped vehicle with hazard lights is something other road users meet every day (a breakdown, a delivery stop). Its residual risks are a following vehicle striking it, and passengers leaving it into traffic; the first is reduced by a comfortable stop wherever Autoware can still make one and by hazard lights, the second by the door rule (DQ-023). How long a vehicle may stand in lane before it is recovered is set with the remote operations procedures (WP-O-02).
+**Why a stop in lane is acceptable as the rated condition.** It is the one condition the safety monitor can always reach without Autoware, and a stopped vehicle with hazard lights is something other road users meet every day (a breakdown, a delivery stop). Its residual risks are a following vehicle striking it, and passengers leaving it into traffic. The first is reduced by a comfortable stop wherever Autoware can still make one and by hazard lights. For the second, the lead decided that the doors unlock at standstill, as in a taxi (DQ-023 C, 2026-10-23): nothing keeps a passenger from stepping out on the traffic side, so the measures are hazard lights and telling passengers to leave on the kerb side and watch for traffic (WP-O-03), and the residual risk of SH-16 counts against the SOTIF acceptance criteria (WP-C-05 AC-02). How long a vehicle may stand in lane before it is recovered is set with the remote operations procedures (WP-O-02).
 
 **Holding the condition.** A rated MRC needs the vehicle held, not just stopped: the monitor applies the park brake (FSR-05.04, AOU-02) and keeps propulsion off until the remote operations centre releases it and the conditions of FSR-05.01 hold (FSR-07.04). This does not rely on Autoware's handler, which neither holds nor parks by default (§3.1).
 
@@ -166,7 +166,6 @@ The values for MRM-2 and MRM-3 are the pinned Autoware's defaults, not decided v
 | Time after which the vehicle stops on loss of the monitor's commands | MRM-5, FSR-07.06 | The same intervals, less the monitor's own detection time |
 | Age bound of remote commands | TR-12, FSR-08.01 | AOU-10 |
 | Number of envelope corrections that ends the trip | TR-13 | To be set from fleet data; a proposal, not a safety bound |
-| Time a fault must last before an MRM may no longer be called off | `timeout_emergency_recovery` | DQ-022 |
 
 ## 7. Remote operations role
 
@@ -176,7 +175,7 @@ The remote operations centre is not part of the rated fallback: the item reaches
 |---|---|---|
 | Any trigger or MRM | Is alerted with the trigger, the manoeuvre and the vehicle's position and camera views | WP-O-02 |
 | While Autoware drives | May ask for an MRM (TR-17) or press emergency stop (TR-18); both go through Autoware and are not relied on for safety | — |
-| At an MRC | Talks to the passengers, decides on the doors (DQ-023), and calls for recovery or other help | WP-O-02, WP-O-03 |
+| At an MRC | Talks to the passengers, and calls for recovery or other help | WP-O-02, WP-O-03 |
 | To leave an MRC | Releases the vehicle once the conditions of FSR-05.01 hold; Autoware drives on, or a remote operator moves the vehicle out of the lane | FSR-07.04; in `REMOTE` mode the monitor's envelope still applies (FSR-08.02) |
 | Stuck, not faulty (TR-09, TR-14) | Gives remote assistance, such as confirming a path round a blockage, which Autoware then drives under the monitor | WP-C-04 §2 |
 
@@ -186,9 +185,9 @@ The vehicle does not resume a trip after an MRC without the centre, so a vehicle
 
 | ID | Open item | Closes at |
 |---|---|---|
-| OI-1 | Decide the response to a failure of the safety perception channel (DQ-021) | G1 |
-| OI-2 | Decide whether an MRM may be called off when its fault clears (DQ-022), then set Autoware's handler parameters (§3.1) in WP-W-03 | G1 |
-| OI-3 | Decide the door rule at a stop in lane (DQ-023) and carry it into WP-C-08 and WP-O-03 | G1 |
+| OI-1 | Set the expected deceleration profile and tolerance the monitor checks Autoware's stop against when EL-03 has failed (FSR-07.08, WP-S-04) | G2 |
+| OI-2 | Set Autoware's handler parameters of §3.1 in WP-W-03 | G2 |
+| OI-3 | Carry the door rule (DQ-023 C) into WP-C-08 and the passenger information into WP-O-03 | G1 |
 | OI-4 | Specify the pull-over operator (MRM-1) and the mapped safe stopping places it may use (WP-C-01 OI-3) | G2 |
 | OI-5 | Set the timing of §6 in WP-S-04 | G2 |
 | OI-6 | Confirm with the vehicle supplier that the drive-by-wire stops on loss of the monitor's commands and reports collisions (AOU-11, AOU-12) | G2 |

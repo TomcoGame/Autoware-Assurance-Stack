@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="565" viewBox="0 0 640 565" role="img" aria-labelledby="t d">
 <title id="t">WP-C-04 Figure 4-1: allocation of safety goals to elements</title>
-<desc id="d">Functional safety requirements by safety goal and element: SG-01 (ASIL D): Autoware computer 1, Safety monitor 2, Vehicle drive-by-wire 1, Vehicle state sensing 1; SG-02 (ASIL D): Autoware computer 1, Safety monitor 2, Safety perception channel 1, Vehicle drive-by-wire 1; SG-03 (ASIL C): Safety monitor 2, Safety perception channel 1; SG-04 (ASIL D): Autoware computer 1, Safety monitor 3, Vehicle drive-by-wire 1, Vehicle state sensing 1; SG-05 (ASIL D): Safety monitor 3, Park brake 1, Door system 1; SG-06 (ASIL D): Autoware computer 1, Safety monitor 2; SG-07 (ASIL D): Autoware computer 1, Safety monitor 4, Vehicle drive-by-wire 1, Monitor power supply 1; SG-08 (ASIL C): Safety monitor 2, Remote operations station 1; SG-09 (ASIL C): Safety monitor 1. Element ASILs: Autoware computer QM, Safety monitor D, Safety perception channel D, Vehicle drive-by-wire D, Park brake D, Vehicle state sensing D, Monitor power supply D, Door system D, Remote operations station C.</desc>
+<desc id="d">Functional safety requirements by safety goal and element: SG-01 (ASIL D): Autoware computer 1, Safety monitor 2, Vehicle drive-by-wire 1, Vehicle state sensing 1; SG-02 (ASIL D): Autoware computer 1, Safety monitor 2, Safety perception channel 1, Vehicle drive-by-wire 1; SG-03 (ASIL C): Safety monitor 2, Safety perception channel 1; SG-04 (ASIL D): Autoware computer 1, Safety monitor 3, Vehicle drive-by-wire 1, Vehicle state sensing 1; SG-05 (ASIL D): Safety monitor 3, Park brake 1, Door system 1; SG-06 (ASIL D): Autoware computer 1, Safety monitor 2; SG-07 (ASIL D): Autoware computer 1, Safety monitor 5, Vehicle drive-by-wire 1, Monitor power supply 1; SG-08 (ASIL C): Safety monitor 2, Remote operations station 1; SG-09 (ASIL C): Safety monitor 1. Element ASILs: Autoware computer QM, Safety monitor D, Safety perception channel D, Vehicle drive-by-wire D, Park brake D, Vehicle state sensing D, Monitor power supply D, Door system D, Remote operations station C.</desc>
 <style>
 svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
 @media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
@@ -110,7 +110,7 @@ svg .outcol { fill:none; stroke:var(--ink3); stroke-width:1; stroke-dasharray:3 
 <rect x="251" y="332" width="34.9" height="22" rx="4" class="qm"/>
 <text x="268.4" y="348" class="tq" text-anchor="middle">1</text>
 <rect x="291.9" y="332" width="34.9" height="22" rx="4" class="ad"/>
-<text x="309.3" y="348" class="t4" text-anchor="middle">4</text>
+<text x="309.3" y="348" class="t4" text-anchor="middle">5</text>
 <rect x="373.7" y="332" width="34.9" height="22" rx="4" class="ad"/>
 <text x="391.1" y="348" class="t4" text-anchor="middle">1</text>
 <rect x="496.3" y="332" width="34.9" height="22" rx="4" class="ad"/>
