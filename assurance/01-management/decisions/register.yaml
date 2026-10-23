@@ -890,7 +890,9 @@
         A supplier provides models and their evidence. Cost: licence, integration into Autoware, and dependence on the
         supplier's evidence meeting ISO/PAS 8800 for this ODD.
   sources: [WP-C-11 §5, ISO/PAS 8800, WP-C-02 §6, WP-C-06 §6]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#26", record: "WP-C-11 v0.3 §5, AISR-11", at: 2026-10-23}
 
 - id: DQ-029
   question: What should the robotaxi do when a passenger is not wearing a seat belt?
@@ -922,4 +924,6 @@
         Like most taxis today. Cost: no protection for unbelted passengers in a hard stop; harder to argue under UL 4600
         with no driver to insist.
   sources: [WP-C-08 MU-07, HR-03, WP-C-12, FSR-03.02]
-  status: open
+  status: applied
+  answer: {choice: B, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#26", record: "WP-C-08 v0.3 §5, HR-03", at: 2026-10-23}
