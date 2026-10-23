@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-01 Item definition |
 | Standard reference | UL 4600 §5; ISO 26262-3 §5; ISO 21448 §5; ISO/SAE 21434 §9.3; ASPICE 4.0 SYS.1 |
-| Version | 0.4 (state deferred to DQ-014; 2026-10-23). 0.3 (first market one US state (DQ-009 A); remote driving allowed (DQ-010 C): §4, I-08, §7, new AOU-10, hazard added; 2026-10-23). 0.2 (first content: item, functions, modes, boundary and interfaces, vehicle placeholders, legal context, assumptions, preliminary hazards, from DQ-001 B, DQ-002 A, DQ-003 C; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.5 (minimal risk condition decided (DQ-016 A); 2026-10-23). 0.4 (state deferred to DQ-014; 2026-10-23). 0.3 (first market one US state (DQ-009 A); remote driving allowed (DQ-010 C): §4, I-08, §7, new AOU-10, hazard added; 2026-10-23). 0.2 (first content: item, functions, modes, boundary and interfaces, vehicle placeholders, legal context, assumptions, preliminary hazards, from DQ-001 B, DQ-002 A, DQ-003 C; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All (ASILs follow from WP-C-03) |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -64,7 +64,7 @@ The modes are those of the Autoware AD API (`OperationModeState` in `autoware_ad
 | MRM `MRM_FAILED` | The manoeuvre did not complete | Must be covered by the safety monitor's independent stop (F-10) |
 | Monitor stop | The safety monitor stops the vehicle without Autoware: Autoware silent, command outside the envelope, or monitor fault | Used; to be specified in WP-C-12 |
 
-`MrmState` also defines a `PULL_OVER` behaviour, and `autoware_mrm_handler` can select it, but no pull-over operator package is present in `autoware_universe` 0.52.1. Until one is added and assured, the only Autoware MRMs are comfortable stop and emergency stop, both of which stop in lane. Whether stopping in lane on an urban road is an acceptable minimal risk condition is a question for the hazard analysis (OI-3).
+`MrmState` also defines a `PULL_OVER` behaviour, and `autoware_mrm_handler` can select it, but no pull-over operator package is present in `autoware_universe` 0.52.1. Until one is added, the only Autoware MRMs are comfortable stop and emergency stop, both of which stop in lane. The safety authority decided (DQ-016 A, 2026-10-23) that Autoware pulls over to the kerb when it still can, through a pull-over operator to be built and not rated for safety, and that the rated minimal risk condition is a stop in lane with hazard lights on, which the safety monitor can always reach (WP-C-03 SG-07).
 
 ## 5. Item boundary and interfaces
 
@@ -159,7 +159,7 @@ ISO 26262-3 §5 asks the item definition to name the hazards already known. This
 | Decelerates hard when it should not (unexpected braking) | False detection (F-02), malfunction |
 | Steers out of its lane or path | Localisation error (F-01), map error (AOU-04), malfunction (F-07) |
 | Enters an intersection or crosswalk against the right of way | Traffic light recognition (F-03), planning (F-06) |
-| Stops somewhere unsafe and stays there | MRM in lane (§4, OI-3), loss of the remote link (AOU-09) |
+| Stops somewhere unsafe and stays there | MRM in lane (§4, DQ-016 A), loss of the remote link (AOU-09) |
 | Operates outside its ODD without noticing | ODD monitoring (WP-C-02), weather and lighting detection |
 | Responds to a forged or corrupted command or update | Remote link and updates (I-08, I-10; WP-C-09) |
 | Is driven unsafely by a remote operator, or keeps moving on stale remote commands when the link is delayed or lost | Remote driving (DQ-010 C, I-08, AOU-10), link monitoring (MON-04) |
@@ -170,6 +170,6 @@ ISO 26262-3 §5 asks the item definition to name the hazards already known. This
 |---|---|---|
 | OI-1 | Replace the provisional vehicle values of §6 from the chosen platform, and re-check AOU-01 to AOU-03 and AOU-06 (DQ-008) | G2 |
 | OI-2 | Choose the state (DQ-014) and fill §7 for it | G1 |
-| OI-3 | Decide in the HARA whether a stop in lane is an acceptable minimal risk condition in the urban ODD, or whether a pull-over operator must be added and assured | G1 |
+| OI-3 | Specify the pull-over operator Autoware lacks (DQ-016 A): when it is tried, and when Autoware falls back to the stop in lane | G2 |
 | OI-4 | Bound the remote driving loop: maximum link delay, the speed allowed under remote driving, and the response to link loss (WP-S-04, WP-C-12) | G2 |
 | OI-5 | Specify the passenger interface (I-09) with the vehicle | G2 |
