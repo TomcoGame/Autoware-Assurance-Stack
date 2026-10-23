@@ -1,0 +1,299 @@
+# HARA model for WP-C-03: operational situations, hazards, hazardous events and safety goals.
+# Ratings are typed here; ASILs are not. hara.py computes each ASIL from S, E and C (ISO 26262-3 Table 4),
+# writes the tables of WP-C-03 and its Figure 6-1, and refuses a model that breaks the rules in its docstring.
+# Every rating is a draft by Claude (I0) for the safety authority's review.
+
+situations:
+  - id: OS-01
+    name: Driving in lane on an urban street
+    description: 25–30 mph, mixed traffic, cyclists in or beside the lane, pedestrians on the sidewalks
+    exposure: E4
+    basis: Duration; most of the operating time in a 30 mph urban ODD
+  - id: OS-02
+    name: Driving slowly where pedestrians are dense
+    description: Up to 15 mph downtown, near crosswalks and pick-up zones, pedestrians close to the kerb
+    exposure: E3
+    basis: Duration; part of most trips but under a tenth of operating time
+  - id: OS-03
+    name: At a signalised intersection with cross traffic
+    description: Approaching, waiting at or crossing a signalised intersection while cross traffic moves at up to 30 mph
+    exposure: E4
+    basis: Frequency; several intersections on every trip
+  - id: OS-04
+    name: Turning left across oncoming traffic without a protected phase
+    description: Permissive green or uncontrolled junction, oncoming traffic at up to 30 mph (DQ-011 C)
+    exposure: E3
+    basis: Frequency; several times a day per vehicle, not on every trip
+  - id: OS-05
+    name: Entering or circulating in a roundabout
+    description: Single-lane or multi-lane roundabout, circulating traffic at up to 20 mph (DQ-011 C)
+    exposure: E3
+    basis: Frequency; the geofence is not known yet, so rated as a few times a day (to be confirmed with DQ-014)
+  - id: OS-06
+    name: Stopped in a queue or at a red light, pedestrians crossing in front
+    description: Standstill with vehicles ahead and behind, pedestrians on the crosswalk in front
+    exposure: E4
+    basis: Frequency; at every red light and in every queue
+  - id: OS-07
+    name: Stopped at a kerbside stop while passengers board or alight
+    description: Standstill at a mapped stop, doors opening, passengers and pedestrians beside and behind the vehicle
+    exposure: E4
+    basis: Frequency; twice on every trip
+  - id: OS-08
+    name: Following another vehicle in congested traffic
+    description: 0–30 mph, short gaps, the lead vehicle braking often
+    exposure: E4
+    basis: Duration; a large share of urban operating time
+  - id: OS-09
+    name: Approaching a crosswalk with pedestrians crossing
+    description: 25–30 mph towards a marked crosswalk with a pedestrian on it or stepping onto it
+    exposure: E4
+    basis: Frequency; many times on every downtown trip
+  - id: OS-10
+    name: Driven by a remote operator
+    description: REMOTE mode in urban traffic at up to 30 mph (DQ-010 C)
+    exposure: E3
+    basis: Duration; remote driving in general is allowed and its share of operating time is not yet bounded, so rated above the rare-recovery case (E2)
+
+hazards:
+  - id: H-01
+    name: Unintended acceleration
+    description: The vehicle accelerates more than needed, or when it should not accelerate at all
+  - id: H-02
+    name: Insufficient deceleration
+    description: The vehicle decelerates less than needed, or not at all, when it must slow down or stop
+  - id: H-03
+    name: Unintended hard deceleration
+    description: The vehicle brakes hard when there is no reason to
+  - id: H-04
+    name: Unintended lateral motion
+    description: The vehicle leaves its planned path or lane
+  - id: H-05
+    name: Unintended motion from standstill
+    description: The vehicle moves forward or rolls when it should be held at standstill
+  - id: H-06
+    name: Proceeding against right of way
+    description: Because of a malfunction, the vehicle enters an intersection, roundabout or crosswalk when it must stop or yield
+  - id: H-07
+    name: No minimal risk manoeuvre when one is needed
+    description: The item can no longer drive safely and does not bring the vehicle to a minimal risk condition
+  - id: H-08
+    name: Acting on stale or corrupted remote driving commands
+    description: In REMOTE mode the vehicle keeps executing commands that are too old, corrupted or not the operator's
+  - id: H-09
+    name: Wrong signalling
+    description: Turn indicators show a manoeuvre other than the one the vehicle makes
+  - id: H-10
+    name: Unintended reverse motion
+    description: The vehicle selects reverse or moves backwards when it should not
+
+events:
+  - id: HE-01.1
+    hazard: H-01
+    situation: OS-06
+    description: Pulls away from standstill into the pedestrians crossing in front
+    severity: S3
+    s_rationale: Accelerating from standstill reaches about 25 km/h within a crosswalk's width; a pedestrian struck at that speed and run over can be killed
+    controllability: C3
+    c_rationale: No driver; pedestrians in front of a stopped vehicle do not expect it to move
+    at_risk: Pedestrians
+  - id: HE-01.2
+    hazard: H-01
+    situation: OS-01
+    description: Accelerates into the vehicle ahead
+    severity: S2
+    s_rationale: Rear impact at an urban speed difference; serious injury possible, survival probable
+    controllability: C3
+    c_rationale: No driver; the driver ahead cannot avoid being hit
+    at_risk: Occupants of both vehicles
+  - id: HE-02.1
+    hazard: H-02
+    situation: OS-09
+    description: Does not slow down for a pedestrian on the crosswalk
+    severity: S3
+    s_rationale: Pedestrian struck at 40–48 km/h
+    controllability: C3
+    c_rationale: No driver; a pedestrian on the crosswalk has no time to get clear
+    at_risk: Pedestrians
+  - id: HE-02.2
+    hazard: H-02
+    situation: OS-08
+    description: Does not brake when the vehicle ahead slows or stops
+    severity: S2
+    s_rationale: Rear impact at up to 48 km/h into a slowing vehicle
+    controllability: C3
+    c_rationale: No driver; the driver ahead cannot avoid it
+    at_risk: Occupants of both vehicles
+  - id: HE-03.1
+    hazard: H-03
+    situation: OS-01
+    description: Brakes hard for no reason with a vehicle or motorcycle following
+    severity: S2
+    s_rationale: Rear-end impact at an urban speed difference; S2 rather than S1 because the follower may be a motorcycle
+    controllability: C2
+    c_rationale: Most following drivers keeping a legal gap can stop or swerve
+    at_risk: The following road user
+  - id: HE-03.2
+    hazard: H-03
+    situation: OS-01
+    description: Brakes hard for no reason while a passenger is unbelted (foreseeable misuse)
+    severity: S1
+    s_rationale: An unbelted seated passenger thrown against the seat ahead; light to moderate injury
+    controllability: C3
+    c_rationale: Passengers cannot influence the vehicle
+    at_risk: Passengers
+  - id: HE-04.1
+    hazard: H-04
+    situation: OS-01
+    description: Steers into the oncoming lane
+    severity: S3
+    s_rationale: Head-on impact with a combined closing speed near 100 km/h
+    controllability: C3
+    c_rationale: No driver; the oncoming driver has little time and room to avoid it
+    at_risk: Occupants of both vehicles
+  - id: HE-04.2
+    hazard: H-04
+    situation: OS-01
+    description: Steers into a cyclist in or beside the lane
+    severity: S3
+    s_rationale: Cyclist struck from behind or the side at 40–48 km/h
+    controllability: C3
+    c_rationale: No driver; the cyclist cannot see it coming
+    at_risk: Cyclists
+  - id: HE-04.3
+    hazard: H-04
+    situation: OS-02
+    description: Steers onto the sidewalk at low speed
+    severity: S2
+    s_rationale: Pedestrian struck at up to 24 km/h
+    controllability: C2
+    c_rationale: At low speed most pedestrians can step away
+    at_risk: Pedestrians
+  - id: HE-05.1
+    hazard: H-05
+    situation: OS-07
+    description: Moves off while a passenger is boarding or alighting
+    severity: S3
+    s_rationale: A person half in the vehicle can be dragged or run over
+    controllability: C3
+    c_rationale: The person boarding cannot get clear
+    at_risk: Passengers
+  - id: HE-05.2
+    hazard: H-05
+    situation: OS-06
+    description: Creeps or rolls into the crosswalk while stopped at a red light
+    severity: S2
+    s_rationale: Pedestrian knocked down at walking pace; run-over possible
+    controllability: C2
+    c_rationale: Slow movement; most pedestrians notice and step back
+    at_risk: Pedestrians
+  - id: HE-06.1
+    hazard: H-06
+    situation: OS-03
+    description: Enters the intersection on red into crossing traffic
+    severity: S3
+    s_rationale: Side impact into the occupant compartment at up to 48 km/h
+    controllability: C3
+    c_rationale: No driver; the crossing driver has right of way and little time
+    at_risk: Occupants of both vehicles
+  - id: HE-06.2
+    hazard: H-06
+    situation: OS-04
+    description: Turns left in front of an oncoming vehicle
+    severity: S3
+    s_rationale: Oncoming vehicle at up to 48 km/h strikes the turning vehicle's side
+    controllability: C3
+    c_rationale: No driver; the oncoming driver expects to keep right of way
+    at_risk: Occupants of both vehicles
+  - id: HE-06.3
+    hazard: H-06
+    situation: OS-05
+    description: Enters the roundabout without yielding to circulating traffic
+    severity: S2
+    s_rationale: Angled impact at roundabout speeds up to 32 km/h
+    controllability: C2
+    c_rationale: Circulating drivers are slow and usually able to brake
+    at_risk: Occupants of both vehicles
+  - id: HE-06.4
+    hazard: H-06
+    situation: OS-09
+    description: Does not yield to a pedestrian on the crosswalk
+    severity: S3
+    s_rationale: Pedestrian struck at 40–48 km/h
+    controllability: C3
+    c_rationale: No driver; the pedestrian has right of way and no time to react
+    at_risk: Pedestrians
+  - id: HE-07.1
+    hazard: H-07
+    situation: OS-01
+    description: After a fault in planning or control, keeps driving without control instead of stopping
+    severity: S3
+    s_rationale: Any collision at urban speed, including with pedestrians and cyclists
+    controllability: C3
+    c_rationale: No driver and no other road user can take over
+    at_risk: All road users and passengers
+  - id: HE-08.1
+    hazard: H-08
+    situation: OS-10
+    description: Keeps moving on stale commands after the remote link is delayed or lost
+    severity: S3
+    s_rationale: Collision at urban speed, including with pedestrians
+    controllability: C3
+    c_rationale: The remote operator cannot correct what the vehicle no longer receives
+    at_risk: All road users and passengers
+  - id: HE-09.1
+    hazard: H-09
+    situation: OS-01
+    description: Indicates the wrong direction before a turn or lane change
+    severity: S2
+    s_rationale: A cyclist or driver moves into the path the vehicle then takes
+    controllability: C1
+    c_rationale: Other road users react to the vehicle's actual motion, not only its indicators
+    at_risk: Cyclists and drivers nearby
+  - id: HE-10.1
+    hazard: H-10
+    situation: OS-07
+    description: Reverses into a person behind the vehicle at a kerbside stop
+    severity: S2
+    s_rationale: Pedestrian knocked down at walking pace; run-over possible
+    controllability: C3
+    c_rationale: No driver; a person behind a stopped taxi does not expect it to reverse
+    at_risk: Pedestrians and passengers
+
+goals:
+  - id: SG-01
+    statement: Avoid unintended acceleration
+    hazards: [H-01]
+    safe_state: Propulsion off and the vehicle held at standstill
+  - id: SG-02
+    statement: Decelerate at least as much as needed to avoid a collision the planned trajectory avoids
+    hazards: [H-02]
+    safe_state: Vehicle braked to standstill and held
+  - id: SG-03
+    statement: Avoid unintended hard deceleration
+    hazards: [H-03]
+    safe_state: Normal driving continues, or a comfortable stop
+  - id: SG-04
+    statement: Avoid unintended lateral motion out of the planned path
+    hazards: [H-04]
+    safe_state: Vehicle stopped in its lane
+  - id: SG-05
+    statement: Avoid unintended motion from standstill, forward or backward
+    hazards: [H-05, H-10]
+    safe_state: Vehicle held at standstill with the park brake applied
+  - id: SG-06
+    statement: Do not enter an intersection, roundabout or crosswalk against right of way
+    hazards: [H-06]
+    safe_state: Vehicle stopped before the stop line or conflict area
+  - id: SG-07
+    statement: Reach a minimal risk condition whenever the item can no longer drive safely
+    hazards: [H-07]
+    safe_state: Vehicle stopped and held (where to stop is DQ-016)
+  - id: SG-08
+    statement: Do not act on remote driving commands that are stale, corrupted or not the operator's
+    hazards: [H-08]
+    safe_state: Vehicle brought to a stop and held
+  - id: SG-09
+    statement: Avoid signalling a manoeuvre other than the one performed
+    hazards: [H-09]
+    safe_state: Indicators off, hazard lights on
