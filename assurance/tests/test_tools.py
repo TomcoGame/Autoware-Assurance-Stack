@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import copy
 from pathlib import Path
+import re
 import sys
 import tempfile
 import unittest
@@ -17,6 +18,7 @@ for sub in (
     "01-management/figures",
     "01-management/decisions",
     "02-concept/figures",
+    "02-concept/hara",
     "case/tools",
     "trace/tools",
 ):
@@ -35,6 +37,7 @@ import fig_m00_register  # noqa: E402
 import fig_questions  # noqa: E402
 import figkit  # noqa: E402
 import folder_index  # noqa: E402
+import hara  # noqa: E402
 import wpregister  # noqa: E402
 
 GOOD = {
@@ -217,6 +220,59 @@ class Case(unittest.TestCase):
         self.assertEqual(caselib.check(caselib.load()), [])
 
 
+class Hara(unittest.TestCase):
+    def test_asil_matches_iso_26262_3_table_4(self):
+        # Spot cases read from ISO 26262-3:2018 Table 4, independent of the sum rule hara.asil uses.
+        table = {
+            ("S3", "E4", "C3"): "D",
+            ("S3", "E4", "C2"): "C",
+            ("S3", "E4", "C1"): "B",
+            ("S3", "E3", "C3"): "C",
+            ("S3", "E2", "C3"): "B",
+            ("S3", "E1", "C3"): "A",
+            ("S2", "E4", "C3"): "C",
+            ("S2", "E4", "C2"): "B",
+            ("S2", "E3", "C2"): "A",
+            ("S1", "E4", "C3"): "B",
+            ("S1", "E4", "C1"): "QM",
+            ("S1", "E3", "C3"): "A",
+            ("S1", "E2", "C3"): "QM",
+            ("S2", "E1", "C1"): "QM",
+            ("S0", "E4", "C3"): "QM",
+            ("S3", "E0", "C3"): "QM",
+            ("S3", "E4", "C0"): "QM",
+        }
+        for (s, e, c), want in table.items():
+            self.assertEqual(hara.asil(s, e, c), want, (s, e, c))
+
+    def test_real_model_passes_and_goals_take_the_highest_asil(self):
+        m = hara.load()
+        self.assertEqual(hara.check(m), [])
+        ev = hara.rated(m)
+        ga = hara.goal_asil(m, ev)
+        for g in m["goals"]:
+            mine = [e["asil"] for e in ev if e["hazard"] in g["hazards"]]
+            self.assertEqual(ga[g["id"]], max(mine, key=hara.ASILS.index), g["id"])
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m = hara.load()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["events"][0]["severity"] = "S4"
+        cases.append((bad, "severity"))
+        bad = copy.deepcopy(m)
+        bad["events"][0]["id"] = "HE-09.9"  # number does not match its hazard
+        cases.append((bad, "must start with"))
+        bad = copy.deepcopy(m)
+        bad["goals"][0]["hazards"].append("H-02")  # H-02 now in two goals
+        cases.append((bad, "exactly one safety goal"))
+        bad = copy.deepcopy(m)
+        bad["events"] = [e for e in bad["events"] if e["hazard"] != "H-09"]
+        cases.append((bad, "no hazardous event rates it"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in hara.check(model)), needle)
+
+
 class TreeChecks(unittest.TestCase):
     def test_table_cell_count(self):
         md = "| A | B |\n|---|---|\n| 1 | 2 |\n| 1 |\n"
@@ -252,9 +308,11 @@ class TreeChecks(unittest.TestCase):
 
     def test_header_status_must_match_register(self):
         p = next(x for x in wpregister.load().products if x.wid == "WP-C-03")
-        text = p.path.read_text(encoding="utf-8").replace(
-            "| Status | Skeleton |", "| Status | Approved |"
+        original = p.path.read_text(encoding="utf-8")
+        text = re.sub(
+            r"^\| Status \| [^|]+ \|$", "| Status | Approved |", original, count=1, flags=re.M
         )
+        self.assertNotEqual(text, original)
         self.assertTrue(any("register says" in x for x in check_headers.check_product(p, text)))
         self.assertEqual(check_headers.check_product(p, p.path.read_text(encoding="utf-8")), [])
 
@@ -272,6 +330,7 @@ class Generators(unittest.TestCase):
             fig_questions,
             dashboard,
             fig_c01_boundary,
+            hara,
         ):
             first, second = mod.build(), mod.build()
             self.assertEqual(first, second, mod.__name__)
