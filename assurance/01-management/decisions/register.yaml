@@ -629,3 +629,99 @@
   status: applied
   answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
   applied: {ref: "#12", record: "WP-C-05 v0.3 §6, AC-01; WP-M-01 v0.7 §3.2, §8", at: 2026-10-23}
+
+- id: DQ-021
+  question: What should the vehicle do when the safety monitor's own sensors fail?
+  context: >-
+    The safety monitor checks Autoware with its own sensors (DQ-018 A). If they fail or are blocked, nothing
+    rated looks for road users until the vehicle has stopped, whichever way it stops: the monitor's own stop is
+    rated but just as blind. **The choice is between a short comfortable stop by Autoware, which can still see,
+    and a firmer immediate stop by the monitor, which cannot.**
+  reversibility: revisit
+  blocks: WP-C-12 TR-05, the monitor's fault reactions (WP-S-03), WP-S-04
+  gate: G1
+  asked: 2026-10-23
+  batch: 6
+  options:
+    - key: A
+      recommended: true
+      title: Autoware stops in lane comfortably, the monitor watches its speed and braking
+      detail: >-
+        Autoware's comfortable stop, while the monitor checks speed, deceleration and steering from the vehicle's
+        own signals and stops the vehicle itself if Autoware does not slow as expected. Cost: about 16 s and 120 m
+        from 50 km/h (WP-C-12 §6) in which only Autoware looks for road users.
+    - key: B
+      title: The monitor stops the vehicle in lane at once
+      detail: >-
+        The monitor's own stop at its firm level. Cost: a harder stop with no one looking ahead or behind, so a
+        higher rear-end risk (SG-03), and the stop is no better informed than Autoware's.
+    - key: C
+      title: Autoware pulls over to the next stopping place, the monitor watches its speed and braking
+      detail: >-
+        Ends at the kerb rather than in lane. Cost: the longest drive with no rated check on road users, and it
+        needs the pull-over operator that does not exist yet.
+  sources: [WP-C-12 §2 TR-05, WP-C-12 §6, FSR-02.01, WP-C-05 SH-14, WP-C-04 §6]
+  status: open
+
+- id: DQ-022
+  question: Once the vehicle has started a minimal risk manoeuvre, may it call it off if the fault clears?
+  context: >-
+    Autoware's default is to cancel the manoeuvre and drive on as soon as the fault report clears. Even with its
+    "emergency holding" option on, it only stays stopped after a fault that lasted 5 s. A fault that comes and goes
+    is often the sign of a deeper one. **This sets how often the vehicle stops and waits for remote help, against
+    the risk of driving on with an intermittent fault.** After the vehicle has stopped, only the remote operations
+    centre can release it in every option (FSR-07.04).
+  reversibility: revisit
+  blocks: WP-C-12 §3 rules and Autoware's configuration, WP-S-04
+  gate: G1
+  asked: 2026-10-23
+  batch: 6
+  options:
+    - key: A
+      recommended: true
+      title: Never; every manoeuvre runs to a stop
+      detail: >-
+        The vehicle always stops and waits for the remote operations centre. Cost: more stops in traffic and more
+        work for remote operators; the simplest rule to argue and to test.
+    - key: B
+      title: Only if the fault clears within a short time set in WP-S-04, and it is reported
+      detail: >-
+        Brief glitches do not stop the vehicle. Cost: needs a list of which faults may clear themselves and evidence
+        that they really are transient; more to argue.
+    - key: C
+      title: Whenever it clears (Autoware's default)
+      detail: >-
+        Fewest stops. Cost: an intermittent fault can make the vehicle stop and start repeatedly in traffic; hard
+        to argue under SG-07.
+  sources: [WP-C-12 §3, FSR-07.04, autoware_mrm_handler 0.52.1]
+  status: open
+
+- id: DQ-023
+  question: When the vehicle has stopped in its lane, may passengers get out?
+  context: >-
+    The rated minimal risk condition is a stop in lane (DQ-016 A), sometimes beside moving traffic. A passenger who
+    steps out may be struck (SH-16). A passenger kept inside for long may be distressed, and after a crash or in a
+    fire must be able to leave. **This sets the door rule at a stop in lane.**
+  reversibility: revisit
+  blocks: WP-C-12 MRC-2, WP-C-05 SH-16, WP-C-08, WP-O-03
+  gate: G1
+  asked: 2026-10-23
+  batch: 6
+  options:
+    - key: A
+      recommended: true
+      title: Doors stay locked until the remote operations centre unlocks the kerb side
+      detail: >-
+        An operator checks the cameras, talks to the passengers, then unlocks the kerb-side doors; the vehicle's
+        manual emergency release always works. Cost: needs a reliable voice link and a camera view of the kerb side,
+        and passengers wait for an operator.
+    - key: B
+      title: Kerb-side doors unlock at standstill, the others stay locked
+      detail: >-
+        No wait for an operator. Cost: in a middle lane the kerb side faces another lane of traffic.
+    - key: C
+      title: All doors unlock at standstill, as in a taxi
+      detail: >-
+        Simplest for passengers. Cost: no protection against SH-16.
+  sources: [WP-C-12 MRC-2, WP-C-05 SH-16, DQ-016]
+  status: open

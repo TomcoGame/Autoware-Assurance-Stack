@@ -21,6 +21,7 @@ for sub in (
     "02-concept/hara",
     "02-concept/fsc",
     "02-concept/sotif",
+    "02-concept/fallback",
     "case/tools",
     "trace/tools",
 ):
@@ -33,6 +34,7 @@ import check_headers  # noqa: E402
 import check_links  # noqa: E402
 import check_tables  # noqa: E402
 import dashboard  # noqa: E402
+import fallback  # noqa: E402
 import fig_c01_boundary  # noqa: E402
 import fig_lifecycle  # noqa: E402
 import fig_m00_register  # noqa: E402
@@ -346,6 +348,51 @@ class Sotif(unittest.TestCase):
             self.assertTrue(any(needle in x for x in sotif.check(model, funcs, hz)), needle)
 
 
+class Fallback(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(fallback.check(fallback.load(), fallback.known()), [])
+
+    def test_stopping_time_and_distance(self):
+        # Constant deceleration when the jerk is very high: v²/2a and v/a.
+        t, d = fallback.stop(10.0, 2.0, 1e9)
+        self.assertAlmostEqual(t, 5.0, places=3)
+        self.assertAlmostEqual(d, 25.0, places=3)
+        # Stops while the braking is still ramping up: v0 = j t²/2.
+        t, d = fallback.stop(0.5, 5.0, 1.0)
+        self.assertAlmostEqual(t, 1.0)
+        self.assertAlmostEqual(d, 0.5 - 1.0 / 6)
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = fallback.load(), fallback.known()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["mrms"][-1]["asil"] = "B"
+        cases.append((bad, "below SG-07"))
+        bad = copy.deepcopy(m)
+        bad["mrms"][2]["fallback"] = "MRM-1"
+        cases.append((bad, "must be a later MRM"))
+        bad = copy.deepcopy(m)
+        tr = next(t for t in bad["triggers"] if t["id"] == "TR-01")
+        tr["response"] = "MRM-3"
+        cases.append((bad, "which it takes away"))
+        bad = copy.deepcopy(m)
+        tr = next(t for t in bad["triggers"] if t["id"] == "TR-01")
+        tr["detected_by"] = ["EL-01"]
+        cases.append((bad, "no element that detects it survives"))
+        bad = copy.deepcopy(m)
+        bad["triggers"][0]["refs"] = ["MON-99"]
+        cases.append((bad, "does not exist"))
+        bad = copy.deepcopy(m)
+        bad["triggers"][0]["pending"] = "DQ-001"
+        cases.append((bad, "apply the decision"))
+        bad = copy.deepcopy(m)
+        for c in bad["mrcs"]:
+            c["asil"] = "QM"
+        cases.append((bad, "no minimal risk condition is rated"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in fallback.check(model, k)), needle)
+
+
 class TreeChecks(unittest.TestCase):
     def test_table_cell_count(self):
         md = "| A | B |\n|---|---|\n| 1 | 2 |\n| 1 |\n"
@@ -406,6 +453,7 @@ class Generators(unittest.TestCase):
             hara,
             fsc,
             sotif,
+            fallback,
         ):
             first, second = mod.build(), mod.build()
             self.assertEqual(first, second, mod.__name__)
