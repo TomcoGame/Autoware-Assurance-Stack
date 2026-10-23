@@ -100,8 +100,8 @@ text{font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;fill:var(--
 <rect x="664" y="356" width="98" height="52" rx="6" class="wp"/>
 <text x="713" y="374" class="b" text-anchor="middle">AI safety</text>
 <text x="713" y="389" class="s" text-anchor="middle">WP-C-11</text>
-<rect x="686" y="395" width="8" height="8" rx="2" class="st-S"/>
-<text x="698" y="403" class="s">Skeleton</text>
+<rect x="686" y="395" width="8" height="8" rx="2" class="st-D"/>
+<text x="698" y="403" class="s">Draft</text>
 <rect x="770" y="356" width="98" height="52" rx="6" class="wp"/>
 <text x="819" y="374" class="b" text-anchor="middle">Fallback</text>
 <text x="819" y="389" class="s" text-anchor="middle">WP-C-12</text>
