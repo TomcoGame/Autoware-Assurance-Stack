@@ -1,0 +1,380 @@
+# STPA model for WP-A-05, after the STPA Handbook (Leveson and Thomas, 2018): losses, system-level hazards, the
+# control structure, unsafe control actions (UCAs) and loss scenarios. stpa.py checks it against the HARA, the
+# SOTIF hazards, the functional safety concept, the fallback concept and the functional modifications, and writes
+# the WP-A-05 tables and Figure 3-1 (the control structure).
+# Each control action is examined for the four ways it can be unsafe: not provided (N), provided (P), too early,
+# too late or out of order (T), stopped too soon or applied too long (D). A type with no UCA says why in `none`.
+# `x` and `fx` place a link's control and feedback arrows in Figure 3-1, `label: left` puts its label on the
+# left; the generator refuses an arrow that would cross a box.
+# Every entry is a draft by Claude (I0).
+
+losses:
+  - {id: L-1, text: Death or injury of people outside the vehicle}
+  - {id: L-2, text: Death or injury of passengers}
+  - {id: L-3, text: Damage to vehicles or property}
+  - {id: L-4, text: Obstruction of traffic or of emergency services}
+
+hazards:
+  - id: HZ-1
+    text: The vehicle comes closer to a road user or obstacle than it can stop or steer away from
+    losses: [L-1, L-2, L-3]
+    hara: [H-01, H-02, H-04, H-05, H-10]
+  - id: HZ-2
+    text: The vehicle enters a conflict area against right of way
+    losses: [L-1, L-2, L-3]
+    hara: [H-06]
+  - id: HZ-3
+    text: The vehicle decelerates hard without need
+    losses: [L-1, L-2, L-3]
+    hara: [H-03]
+  - id: HZ-4
+    text: The vehicle keeps driving when it can no longer drive safely
+    losses: [L-1, L-2, L-3]
+    hara: [H-07]
+  - id: HZ-5
+    text: The vehicle acts on commands that are stale, corrupted or not from the intended controller
+    losses: [L-1, L-2, L-3]
+    hara: [H-08]
+  - id: HZ-6
+    text: The vehicle misleads other road users about what it will do
+    losses: [L-1, L-3]
+    hara: [H-09]
+  - id: HZ-7
+    text: Passengers are exposed to traffic, or cannot leave the vehicle when they must
+    losses: [L-2]
+    hara: []
+    sotif: [SH-16]
+  - id: HZ-8
+    text: The vehicle stays stopped where it obstructs traffic or emergency services for longer than needed
+    losses: [L-4, L-1]
+    hara: []
+
+controllers:
+  - {id: CT-1, name: Map and update process, box: [24, 96, 160, 54]}
+  - {id: CT-2, name: Remote operations centre, box: [204, 96, 412, 54]}
+  - {id: CT-3, name: Autoware, box: [60, 210, 380, 58]}
+  - {id: CT-4, name: Passengers, box: [500, 210, 116, 58]}
+  - {id: CT-5, name: Safety monitor, box: [100, 324, 390, 54]}
+  - {id: CT-6, name: Vehicle, box: [24, 434, 592, 54]}
+
+links:
+  - from: CT-1
+    to: CT-3
+    x: 118
+    actions:
+      - id: CA-06
+        name: Install a map, software or model update
+        ucas:
+          N: [{id: UCA-16, text: The map is not updated after the road has changed, hz: [HZ-1, HZ-2]}]
+          P: [{id: UCA-17, text: "An update is installed that was not validated, or whose map, software and models do not match", hz: [HZ-1, HZ-4]}]
+          T: [{id: UCA-18, text: An update is installed while the vehicle is in service, hz: [HZ-4]}]
+          D: {none: An update is a single action}
+    feedback: []
+  - from: CT-2
+    to: CT-3
+    x: 250
+    fx: 330
+    actions:
+      - id: CA-01
+        name: Dispatch a trip
+        ucas:
+          N: {none: Without a trip the vehicle stays parked; no hazard}
+          P: [{id: UCA-01, text: "A trip is dispatched into conditions outside the ODD (weather, closures)", hz: [HZ-4]}]
+          T: [{id: UCA-02, text: A trip is dispatched before the checks after a minimal risk condition are done, hz: [HZ-4]}]
+          D: {none: A dispatch is a single action}
+      - id: CA-02
+        name: Request an MRM or an emergency stop
+        ucas:
+          N: [{id: UCA-03, text: The operator does not request a stop when the vehicle is in a situation it does not recognise, hz: [HZ-2, HZ-4]}]
+          P: [{id: UCA-04, text: The operator requests an emergency stop where hard braking itself endangers a following vehicle, hz: [HZ-3]}]
+          T: [{id: UCA-05, text: The request arrives late because of link delay or operator workload, hz: [HZ-4]}]
+          D: {none: Once requested the manoeuvre runs to a stop (DQ-022 A)}
+      - id: CA-03
+        name: Give remote assistance (confirm a path)
+        ucas:
+          N: [{id: UCA-06, text: No assistance is given for a long time to a vehicle stopped in lane, hz: [HZ-8]}]
+          P: [{id: UCA-07, text: The operator confirms a path that is blocked or crosses a road user they cannot see, hz: [HZ-1, HZ-2]}]
+          T: [{id: UCA-08, text: The confirmation is acted on after the scene has changed, hz: [HZ-1, HZ-5]}]
+          D: {none: A confirmation is a single action}
+      - id: CA-04
+        name: Drive the vehicle remotely
+        ucas:
+          N: [{id: UCA-09, text: Remote commands stop while the vehicle is in a conflict area, hz: [HZ-1, HZ-8]}]
+          P: [{id: UCA-10, text: A command drives toward a road user the operator cannot see on the video, hz: [HZ-1]}]
+          T: [{id: UCA-11, text: Commands are applied late or out of sequence, hz: [HZ-5]}]
+          D: [{id: UCA-12, text: A steering or acceleration command is still applied after the link has dropped, hz: [HZ-1, HZ-5]}]
+    feedback: [Trip and MRM status, camera video, vehicle state, requests for assistance]
+  - from: CT-2
+    to: CT-5
+    x: 470
+    label: left
+    actions:
+      - id: CA-05
+        name: Release the vehicle from a minimal risk condition
+        ucas:
+          N: [{id: UCA-13, text: "The vehicle is not released although it is safe to, and stays stopped in lane", hz: [HZ-8]}]
+          P: [{id: UCA-14, text: "The vehicle is released while a door is open, a passenger is getting out, or the fault persists", hz: [HZ-4, HZ-7]}]
+          T: [{id: UCA-15, text: "A release arrives late after conditions changed, or is replayed", hz: [HZ-5]}]
+          D: {none: A release is a single action}
+    feedback: []
+  - from: CT-3
+    to: CT-5
+    x: 180
+    fx: 380
+    actions:
+      - id: CA-07
+        name: Command acceleration or braking
+        ucas:
+          N:
+            - {id: UCA-19, text: No braking is commanded when a road user is in the path, hz: [HZ-1]}
+            - {id: UCA-20, text: No stop is commanded when a minimal risk manoeuvre is needed, hz: [HZ-4]}
+          P:
+            - {id: UCA-21, text: "Acceleration is commanded toward a road user, or from standstill when the path is not clear", hz: [HZ-1]}
+            - {id: UCA-22, text: Hard braking is commanded without need, hz: [HZ-3]}
+          T: [{id: UCA-23, text: Braking starts too late for the stopping distance, hz: [HZ-1]}]
+          D: [{id: UCA-24, text: Braking is released before the road user has cleared the path, hz: [HZ-1]}]
+      - id: CA-08
+        name: Command steering
+        ucas:
+          N: [{id: UCA-25, text: No steering is commanded to follow the lane through a curve, hz: [HZ-1]}]
+          P: [{id: UCA-26, text: Steering is commanded out of the lane toward a road user or the kerb, hz: [HZ-1]}]
+          T: [{id: UCA-27, text: Steering in a turn comes too late and cuts into the opposing lane, hz: [HZ-1, HZ-2]}]
+          D: [{id: UCA-28, text: Steering is held too long and the vehicle overshoots its lane, hz: [HZ-1]}]
+      - id: CA-09
+        name: Command the gear
+        ucas:
+          N: {none: Without a gear command the gear does not change}
+          P: [{id: UCA-29, text: "Reverse is selected while moving forward, or with a road user behind", hz: [HZ-1]}]
+          T: [{id: UCA-30, text: Park is selected before the vehicle has stopped, hz: [HZ-3]}]
+          D: {none: A gear change is a single action}
+      - id: CA-10
+        name: Command the turn indicators and hazard lights
+        ucas:
+          N: [{id: UCA-31, text: No hazard lights at a stop in lane, hz: [HZ-6]}]
+          P: [{id: UCA-32, text: An indicator shows a direction other than the manoeuvre, hz: [HZ-6]}]
+          T: [{id: UCA-33, text: The indicator comes on too late for others to react, hz: [HZ-6]}]
+          D: [{id: UCA-34, text: The indicator stays on after the manoeuvre, hz: [HZ-6]}]
+    feedback: [Interventions and the monitor's state]
+  - from: CT-4
+    to: CT-6
+    x: 560
+    label: left
+    fx: 596
+    actions:
+      - id: CA-14
+        name: Open a door
+        ucas:
+          N: [{id: UCA-45, text: A door cannot be opened after a crash or in a fire, hz: [HZ-7]}]
+          P: [{id: UCA-46, text: A door is opened on the traffic side at a stop in lane, hz: [HZ-7]}]
+          T: [{id: UCA-47, text: A door is opened before the vehicle has stopped, hz: [HZ-7]}]
+          D: {none: Opening a door is a single action}
+      - id: CA-15
+        name: Ask the vehicle to stop (in-vehicle stop request, relayed to Autoware through the AD API, I-09)
+        ucas:
+          N: [{id: UCA-48, text: A passenger who sees a danger cannot ask the vehicle to stop, hz: [HZ-7]}]
+          P: [{id: UCA-49, text: A stop request makes the vehicle stop in a conflict area or brake hard, hz: [HZ-3, HZ-8]}]
+          T: {none: The request starts an MRM; its timing is that of UCA-49}
+          D: {none: A request is a single action}
+    feedback: [Door state, trip status, messages from the vehicle and remote operations]
+  - from: CT-5
+    to: CT-6
+    x: 250
+    fx: 420
+    actions:
+      - id: CA-11
+        name: Pass or bound the command
+        ucas:
+          N: [{id: UCA-35, text: "The monitor stops forwarding commands while the vehicle is moving, and nothing stops it", hz: [HZ-4]}]
+          P: [{id: UCA-36, text: The monitor passes a command that leaves the envelope, hz: [HZ-1, HZ-2]}]
+          T: [{id: UCA-37, text: The monitor checks the command against stale data from its sensors or the vehicle, hz: [HZ-1]}]
+          D: {none: Passing is continuous; its stopping is UCA-35}
+      - id: CA-12
+        name: Intervene (brake, cut propulsion, reject steering)
+        ucas:
+          N: [{id: UCA-38, text: The monitor does not intervene when the envelope is violated, hz: [HZ-1, HZ-2]}]
+          P: [{id: UCA-39, text: The monitor brakes hard for a road user that is not there, hz: [HZ-3]}]
+          T: [{id: UCA-40, text: The intervention comes too late for the stopping distance, hz: [HZ-1]}]
+          D: [{id: UCA-41, text: "The intervention is released too soon, or held until the vehicle stops in a conflict area", hz: [HZ-1, HZ-8]}]
+      - id: CA-13
+        name: Apply and hold the park brake
+        ucas:
+          N: [{id: UCA-42, text: The park brake is not applied at a minimal risk condition on a slope, hz: [HZ-1]}]
+          P: [{id: UCA-43, text: The park brake is applied while the vehicle is moving, hz: [HZ-3]}]
+          T: {none: Applying it before standstill is UCA-43}
+          D: [{id: UCA-44, text: The park brake is released before the release conditions hold, hz: [HZ-1, HZ-7]}]
+    feedback: [Speed, steering angle, gear, by-wire faults, door state, collision signal]
+  - from: CT-6
+    to: CT-3
+    x: 80
+    actions: []
+    feedback: [Speed, steering, gear, control mode, turn signal state]
+
+scenarios:
+  - id: LS-01
+    kind: process model
+    text: Autoware's perception misses or loses the road user (WP-C-06 FI-01 to FI-03), so it plans as if the path were clear
+    ucas: [UCA-19, UCA-21, UCA-23, UCA-24]
+    measures: [FM-02, FSR-02.01, FSR-02.02, FM-04]
+  - id: LS-02
+    kind: controller
+    text: Autoware predicts a road user's motion wrongly (FI-05) and plans too little margin
+    ucas: [UCA-21, UCA-26, UCA-27]
+    measures: [FM-06, FSR-06.01]
+  - id: LS-03
+    kind: control path
+    text: A command is corrupted, delayed or stuck between Autoware and the monitor
+    ucas: [UCA-21, UCA-23, UCA-26, UCA-28]
+    measures: [FSR-07.01, FSR-01.01, FSR-04.01, FSR-04.02]
+  - id: LS-04
+    kind: controlled process
+    text: The vehicle brakes less than commanded (wet road, a fault in the brake path)
+    ucas: [UCA-23, UCA-40]
+    measures: [FSR-02.03, FSR-02.04, FM-12, AOU-01]
+  - id: LS-05
+    kind: process model
+    text: Autoware believes it is somewhere else on the map (FI-07)
+    ucas: [UCA-25, UCA-26, UCA-27]
+    measures: [FM-09, FSR-04.01]
+  - id: LS-06
+    kind: controller
+    text: Autoware's MRM handler does not start an MRM, or calls it off when the fault report clears (WP-C-12 §3.1)
+    ucas: [UCA-20]
+    measures: [TR-01, TR-04, FSR-07.01, FSR-07.05]
+  - id: LS-07
+    kind: process model
+    text: Autoware or the dispatcher does not know the conditions have left the ODD (FI-12)
+    ucas: [UCA-01, UCA-20]
+    measures: [FM-14, MON-01, MON-03]
+    new: [SR-07]
+  - id: LS-08
+    kind: process model
+    text: A false detection by Autoware or by the safety channel (spray, steam, reflections)
+    ucas: [UCA-22, UCA-39]
+    measures: [FSR-03.01, FSR-03.02, FM-10]
+  - id: LS-09
+    kind: process model
+    text: The remote operator's picture of the scene is late, narrow or incomplete (FI-09)
+    ucas: [UCA-03, UCA-07, UCA-10]
+    measures: [FM-11, FSR-08.02, AOU-10]
+  - id: LS-10
+    kind: control path
+    text: The remote link is delayed, lost or replayed
+    ucas: [UCA-05, UCA-08, UCA-09, UCA-11, UCA-12, UCA-15]
+    measures: [FSR-08.01, FSR-08.03, MON-04, TR-12]
+    new: [SR-02]
+  - id: LS-11
+    kind: controller
+    text: The remote operator is busy with other vehicles, or the centre is understaffed
+    ucas: [UCA-03, UCA-06, UCA-13]
+    measures: [AOU-09, AOU-10]
+    new: [SR-01]
+  - id: LS-12
+    kind: process model
+    text: The operator releases the vehicle without knowing a door is open or a passenger is getting out
+    ucas: [UCA-14]
+    measures: [FSR-05.01, FSR-05.05, FSR-07.04]
+  - id: LS-13
+    kind: controller
+    text: A release message is forged or replayed
+    ucas: [UCA-15]
+    measures: [FSR-07.04]
+    new: [SR-02]
+  - id: LS-14
+    kind: process model
+    text: The map process does not learn of a change to the road
+    ucas: [UCA-16]
+    measures: [FM-13, MON-02]
+  - id: LS-15
+    kind: controller
+    text: An update is released without validation, or the map, software and models are mixed across versions
+    ucas: [UCA-17, UCA-18]
+    measures: []
+    new: [SR-03]
+  - id: LS-16
+    kind: controller
+    text: Autoware commands the wrong gear
+    ucas: [UCA-29, UCA-30]
+    measures: [FSR-05.03]
+    new: [SR-04]
+  - id: LS-17
+    kind: controller
+    text: Autoware commands the wrong lamps, or none
+    ucas: [UCA-31, UCA-32, UCA-33, UCA-34]
+    measures: [FSR-09.01, FSR-07.02]
+  - id: LS-18
+    kind: controller
+    text: The safety monitor has a fault of its own
+    ucas: [UCA-35, UCA-36, UCA-38, UCA-41]
+    measures: [FSR-07.07, FSR-07.06, AOU-11]
+  - id: LS-19
+    kind: process model
+    text: The safety channel's data are stale or its sensors blocked (FI-08)
+    ucas: [UCA-37, UCA-38, UCA-39, UCA-40]
+    measures: [FSR-07.08, FM-10]
+  - id: LS-20
+    kind: controller
+    text: The monitor's hold logic lets go before the release conditions hold
+    ucas: [UCA-41, UCA-44]
+    measures: [FSR-07.04, FSR-05.01]
+  - id: LS-21
+    kind: controlled process
+    text: The park brake does not hold on the slope
+    ucas: [UCA-42]
+    measures: [AOU-02, FSR-05.04, FSR-05.02]
+  - id: LS-22
+    kind: controller
+    text: A fault makes the monitor apply the park brake while moving
+    ucas: [UCA-43]
+    measures: [FSR-07.07]
+    new: [SR-04]
+  - id: LS-23
+    kind: process model
+    text: A passenger does not know the vehicle is stopped in a traffic lane, or that it is still moving
+    ucas: [UCA-46, UCA-47]
+    measures: [FM-20, AOU-06, FSR-05.05]
+  - id: LS-24
+    kind: controlled process
+    text: The doors stay locked after a crash or a loss of power
+    ucas: [UCA-45]
+    measures: []
+    new: [SR-05]
+  - id: LS-25
+    kind: controller
+    text: There is no stop request in the vehicle, or it starts a hard stop wherever the vehicle is
+    ucas: [UCA-48, UCA-49]
+    measures: [TR-16]
+  - id: LS-26
+    kind: controller
+    text: The operator presses emergency stop by reflex when a firm stop would do
+    ucas: [UCA-04]
+    measures: [FSR-03.02]
+    new: [SR-06]
+  - id: LS-27
+    kind: process model
+    text: A trip is dispatched without checking the forecast and closures along the route, or before the post-MRC checks
+    ucas: [UCA-01, UCA-02]
+    measures: [MON-01, FSR-07.04]
+    new: [SR-07]
+
+requirements:
+  - id: SR-01
+    text: Staff the remote operations centre so that a vehicle stopped in lane, or asking for help, reaches an operator within a time WP-O-02 sets
+    to: Remote operations (WP-O-02)
+  - id: SR-02
+    text: Authenticate every release and remote driving message, bind it to one vehicle, and reject it when stale or replayed
+    to: Safety monitor and remote operations station; cybersecurity concept (WP-C-10)
+  - id: SR-03
+    text: Install updates only when the vehicle is out of service, after the release checks of WP-P-02, and check software, map and model versions as one set before driving
+    to: Update process (WP-P-02) and Autoware start-up checks
+  - id: SR-04
+    text: Let the monitor apply the park brake or accept park and reverse only at standstill as reported by the vehicle state (EL-06)
+    to: Safety monitor
+  - id: SR-05
+    text: Doors can always be opened from inside with a manual release, also without the vehicle's power
+    to: Vehicle (an assumption on the vehicle, to add to WP-C-01 §8)
+  - id: SR-06
+    text: A remote emergency stop uses the firm deceleration of FSR-03.02 unless the safety channel confirms an obstacle
+    to: Safety monitor
+  - id: SR-07
+    text: Before dispatch, and while driving, check the forecast and closures along the route against the ODD
+    to: Remote operations and route planning (MON-01, MON-03)

@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="542" viewBox="0 0 640 542" role="img" aria-labelledby="t d">
+<title id="t">WP-A-05 Figure 3-1: control structure</title>
+<desc id="d">Control structure: Map and update process to Autoware: CA-06 Install a map, software or model update; Remote operations centre to Autoware: CA-01 Dispatch a trip, CA-02 Request an MRM or an emergency stop, CA-03 Give remote assistance (confirm a path), CA-04 Drive the vehicle remotely; feedback: Trip and MRM status, camera video, vehicle state, requests for assistance; Remote operations centre to Safety monitor: CA-05 Release the vehicle from a minimal risk condition; Autoware to Safety monitor: CA-07 Command acceleration or braking, CA-08 Command steering, CA-09 Command the gear, CA-10 Command the turn indicators and hazard lights; feedback: Interventions and the monitor's state; Passengers to Vehicle: CA-14 Open a door, CA-15 Ask the vehicle to stop (in-vehicle stop request, relayed to Autoware through the AD API, I-09); feedback: Door state, trip status, messages from the vehicle and remote operations; Safety monitor to Vehicle: CA-11 Pass or bound the command, CA-12 Intervene (brake, cut propulsion, reject steering), CA-13 Apply and hold the park brake; feedback: Speed, steering angle, gear, by-wire faults, door state, collision signal; Vehicle to Autoware: feedback only; feedback: Speed, steering, gear, control mode, turn signal state.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg .box { fill:var(--accsoft); stroke:var(--acc); stroke-width:1.6; }
+svg .ctl { stroke:var(--ink2); stroke-width:1.5; fill:none; }
+svg .fbk { stroke:var(--ink3); stroke-width:1.3; fill:none; stroke-dasharray:5 3; }
+svg .hd { fill:var(--ink2); } svg .hf { fill:var(--ink3); }
+svg .lab { font:600 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink2); }
+</style>
+<rect class="bg" width="640" height="542"/>
+<text x="24" y="32" class="h">Control structure</text>
+<text x="24" y="54" class="t">WP-A-05 §3: who controls whom; solid arrows carry control actions,</text>
+<text x="24" y="71" class="t">dashed arrows feedback</text>
+<path d="M118 150 L118 204" class="ctl"/>
+<path d="M118 210 L114 203 L122 203 Z" class="hd"/>
+<text x="124" y="176" class="lab">CA-06</text>
+<path d="M250 150 L250 204" class="ctl"/>
+<path d="M250 210 L246 203 L254 203 Z" class="hd"/>
+<text x="256" y="176" class="lab">CA-01–04</text>
+<path d="M330 210 L330 156" class="fbk"/>
+<path d="M330 150 L326 157 L334 157 Z" class="hf"/>
+<path d="M470 150 L470 318" class="ctl"/>
+<path d="M470 324 L466 317 L474 317 Z" class="hd"/>
+<text x="464" y="176" class="lab" text-anchor="end">CA-05</text>
+<path d="M180 268 L180 318" class="ctl"/>
+<path d="M180 324 L176 317 L184 317 Z" class="hd"/>
+<text x="186" y="294" class="lab">CA-07–10</text>
+<path d="M380 324 L380 274" class="fbk"/>
+<path d="M380 268 L376 275 L384 275 Z" class="hf"/>
+<path d="M560 268 L560 428" class="ctl"/>
+<path d="M560 434 L556 427 L564 427 Z" class="hd"/>
+<text x="554" y="294" class="lab" text-anchor="end">CA-14–15</text>
+<path d="M596 434 L596 274" class="fbk"/>
+<path d="M596 268 L592 275 L600 275 Z" class="hf"/>
+<path d="M250 378 L250 428" class="ctl"/>
+<path d="M250 434 L246 427 L254 427 Z" class="hd"/>
+<text x="256" y="404" class="lab">CA-11–13</text>
+<path d="M420 434 L420 384" class="fbk"/>
+<path d="M420 378 L416 385 L424 385 Z" class="hf"/>
+<path d="M80 434 L80 274" class="fbk"/>
+<path d="M80 268 L76 275 L84 275 Z" class="hf"/>
+<rect x="24" y="96" width="160" height="54" rx="7" class="box"/>
+<text x="104" y="120" class="tb" text-anchor="middle">Map and update</text>
+<text x="104" y="136" class="tb" text-anchor="middle">process</text>
+<rect x="204" y="96" width="412" height="54" rx="7" class="box"/>
+<text x="410" y="128" class="tb" text-anchor="middle">Remote operations centre</text>
+<rect x="60" y="210" width="380" height="58" rx="7" class="box"/>
+<text x="250" y="244" class="tb" text-anchor="middle">Autoware</text>
+<rect x="500" y="210" width="116" height="58" rx="7" class="box"/>
+<text x="558" y="244" class="tb" text-anchor="middle">Passengers</text>
+<rect x="100" y="324" width="390" height="54" rx="7" class="box"/>
+<text x="295" y="356" class="tb" text-anchor="middle">Safety monitor</text>
+<rect x="24" y="434" width="592" height="54" rx="7" class="box"/>
+<text x="320" y="466" class="tb" text-anchor="middle">Vehicle</text>
+<path d="M24 517 L56 517" class="ctl"/>
+<path d="M62 517 L55 513 L55 521 Z" class="hd"/>
+<text x="70" y="522" class="t">Control actions (table in §3)</text>
+<path d="M300 517 L332 517" class="fbk"/>
+<path d="M338 517 L331 513 L331 521 Z" class="hf"/>
+<text x="346" y="522" class="t">Feedback</text>
+</svg>
