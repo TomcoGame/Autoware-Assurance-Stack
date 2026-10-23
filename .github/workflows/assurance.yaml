@@ -61,6 +61,7 @@ jobs:
           python3 assurance/02-concept/figures/fig_c01_boundary.py --check
           python3 assurance/02-concept/hara/hara.py --check
           python3 assurance/02-concept/fsc/fsc.py --check
+          python3 assurance/02-concept/sotif/sotif.py --check
           python3 assurance/case/tools/dashboard.py --check
 
       - name: Unit tests of the tools

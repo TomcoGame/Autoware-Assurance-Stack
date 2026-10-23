@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="669" viewBox="0 0 640 669" role="img" aria-labelledby="t d">
+<title id="t">WP-C-05 Figure 4-1: functions and SOTIF hazards</title>
+<desc id="d">SOTIF hazards and the functions whose insufficiencies can cause them: SH-01 (performance, S3): F-02, F-06; SH-02 (performance, S2): F-02, F-10; SH-03 (performance, S3): F-03, F-06; SH-04 (performance, S3): F-04, F-06; SH-05 (performance, S3): F-02, F-04, F-06; SH-06 (performance, S3): F-01, F-07; SH-07 (specification, S3): F-05, F-06; SH-08 (specification, S3): F-09; SH-09 (specification, S3): F-02, F-06; SH-10 (specification, S3): F-02, F-06; SH-11 (specification, S2): F-06; SH-12 (specification, S3): F-02, F-06; SH-13 (performance, S3): F-11; SH-14 (performance, S3): F-10; SH-15 (specification, S2): F-09; SH-16 (specification, S3): F-09.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg .perf { fill:var(--acc); } svg .spec { fill:var(--bg); stroke:var(--acc); stroke-width:2; }
+svg .col { font:500 11px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink2); }
+svg .sev { font:600 11px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+</style>
+<rect class="bg" width="640" height="669"/>
+<text x="24" y="32" class="h">Which insufficiencies lead to which hazards</text>
+<text x="24" y="54" class="t">WP-C-05 §4: a dot where a function's insufficiency can cause</text>
+<text x="24" y="71" class="t">the hazard; filled for performance, hollow for specification</text>
+<text x="173.3" y="100" class="col" text-anchor="middle">01</text>
+<text x="219.9" y="100" class="col" text-anchor="middle">02</text>
+<text x="266.5" y="100" class="col" text-anchor="middle">03</text>
+<text x="313.1" y="100" class="col" text-anchor="middle">04</text>
+<text x="359.7" y="100" class="col" text-anchor="middle">05</text>
+<text x="406.3" y="100" class="col" text-anchor="middle">06</text>
+<text x="452.9" y="100" class="col" text-anchor="middle">07</text>
+<text x="499.5" y="100" class="col" text-anchor="middle">09</text>
+<text x="546.1" y="100" class="col" text-anchor="middle">10</text>
+<text x="592.7" y="100" class="col" text-anchor="middle">11</text>
+<text x="142" y="100" class="col" text-anchor="end">F-</text>
+<rect x="16" y="112" width="608" height="26" rx="4" class="card"/>
+<text x="24" y="129" class="tb">SH-01</text>
+<text x="76" y="129" class="sev">S3 · H-02</text>
+<circle cx="219.9" cy="125" r="6" class="perf"/>
+<circle cx="406.3" cy="125" r="6" class="perf"/>
+<text x="24" y="155" class="tb">SH-02</text>
+<text x="76" y="155" class="sev">S2 · H-03</text>
+<circle cx="219.9" cy="151" r="6" class="perf"/>
+<circle cx="546.1" cy="151" r="6" class="perf"/>
+<rect x="16" y="164" width="608" height="26" rx="4" class="card"/>
+<text x="24" y="181" class="tb">SH-03</text>
+<text x="76" y="181" class="sev">S3 · H-06</text>
+<circle cx="266.5" cy="177" r="6" class="perf"/>
+<circle cx="406.3" cy="177" r="6" class="perf"/>
+<text x="24" y="207" class="tb">SH-04</text>
+<text x="76" y="207" class="sev">S3 · H-02, H-06</text>
+<circle cx="313.1" cy="203" r="6" class="perf"/>
+<circle cx="406.3" cy="203" r="6" class="perf"/>
+<rect x="16" y="216" width="608" height="26" rx="4" class="card"/>
+<text x="24" y="233" class="tb">SH-05</text>
+<text x="76" y="233" class="sev">S3 · H-06</text>
+<circle cx="219.9" cy="229" r="6" class="perf"/>
+<circle cx="313.1" cy="229" r="6" class="perf"/>
+<circle cx="406.3" cy="229" r="6" class="perf"/>
+<text x="24" y="259" class="tb">SH-06</text>
+<text x="76" y="259" class="sev">S3 · H-04</text>
+<circle cx="173.3" cy="255" r="6" class="perf"/>
+<circle cx="452.9" cy="255" r="6" class="perf"/>
+<rect x="16" y="268" width="608" height="26" rx="4" class="card"/>
+<text x="24" y="285" class="tb">SH-07</text>
+<text x="76" y="285" class="sev">S3 · H-04, H-06</text>
+<circle cx="359.7" cy="281" r="6" class="spec"/>
+<circle cx="406.3" cy="281" r="6" class="spec"/>
+<text x="24" y="311" class="tb">SH-08</text>
+<text x="76" y="311" class="sev">S3 · H-07</text>
+<circle cx="499.5" cy="307" r="6" class="spec"/>
+<rect x="16" y="320" width="608" height="26" rx="4" class="card"/>
+<text x="24" y="337" class="tb">SH-09</text>
+<text x="76" y="337" class="sev">S3 · H-06</text>
+<circle cx="219.9" cy="333" r="6" class="spec"/>
+<circle cx="406.3" cy="333" r="6" class="spec"/>
+<text x="24" y="363" class="tb">SH-10</text>
+<text x="76" y="363" class="sev">S3 · H-06</text>
+<circle cx="219.9" cy="359" r="6" class="spec"/>
+<circle cx="406.3" cy="359" r="6" class="spec"/>
+<rect x="16" y="372" width="608" height="26" rx="4" class="card"/>
+<text x="24" y="389" class="tb">SH-11</text>
+<text x="76" y="389" class="sev">S2 · H-03</text>
+<circle cx="406.3" cy="385" r="6" class="spec"/>
+<text x="24" y="415" class="tb">SH-12</text>
+<text x="76" y="415" class="sev">S3 · H-02, H-06</text>
+<circle cx="219.9" cy="411" r="6" class="spec"/>
+<circle cx="406.3" cy="411" r="6" class="spec"/>
+<rect x="16" y="424" width="608" height="26" rx="4" class="card"/>
+<text x="24" y="441" class="tb">SH-13</text>
+<text x="76" y="441" class="sev">S3 · H-08</text>
+<circle cx="592.7" cy="437" r="6" class="perf"/>
+<text x="24" y="467" class="tb">SH-14</text>
+<text x="76" y="467" class="sev">S3 · H-02, H-03</text>
+<circle cx="546.1" cy="463" r="6" class="perf"/>
+<rect x="16" y="476" width="608" height="26" rx="4" class="card"/>
+<text x="24" y="493" class="tb">SH-15</text>
+<text x="76" y="493" class="sev">S2 · SOTIF only</text>
+<circle cx="499.5" cy="489" r="6" class="spec"/>
+<text x="24" y="519" class="tb">SH-16</text>
+<text x="76" y="519" class="sev">S3 · H-07</text>
+<circle cx="499.5" cy="515" r="6" class="spec"/>
+<circle cx="30" cy="548" r="6" class="perf"/>
+<text x="42" y="552" class="t">Performance insufficiency</text>
+<circle cx="240" cy="548" r="6" class="spec"/>
+<text x="252" y="552" class="t">Specification insufficiency</text>
+<text x="24" y="576" class="s">F-01 Localise the vehicle on the HD map</text>
+<text x="324" y="576" class="s">F-02 Detect and track objects: vehicles, pedestri…</text>
+<text x="24" y="593" class="s">F-03 Recognise traffic lights</text>
+<text x="324" y="593" class="s">F-04 Predict the motion of other road users</text>
+<text x="24" y="610" class="s">F-05 Plan the route to the passenger's destinatio…</text>
+<text x="324" y="610" class="s">F-06 Plan behaviour and motion: lanes, intersecti…</text>
+<text x="24" y="627" class="s">F-07 Follow the planned trajectory</text>
+<text x="324" y="627" class="s">F-09 Monitor the system and carry out a minimal r…</text>
+<text x="24" y="644" class="s">F-10 Bound every command to a safety envelope, an…</text>
+<text x="324" y="644" class="s">F-11 Accept trips, mode changes and requests from…</text>
+</svg>
