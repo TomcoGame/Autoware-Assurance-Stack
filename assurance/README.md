@@ -32,7 +32,7 @@ across the whole operational design domain. The other standards supply the metho
 | Work products in the register | 91 (2 draft, 89 skeleton) |
 | Work products approved or baselined | 0 |
 | Decisions waiting on the safety authority | 0 open |
-| Decisions applied | 0 |
+| Decisions applied | 5 |
 | Safety case claims | 0 |
 | Evidence items | 0 |
 | Open defeaters | 0 |

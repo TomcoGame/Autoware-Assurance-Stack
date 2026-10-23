@@ -30,8 +30,9 @@
       title: Private-site logistics with no public traffic
       detail: "Factory yard or port, up to 15 km/h, trained staff only. Cheapest to argue. Cost: little of the result carries over to public roads, and machinery standards (for example ISO 3691-4) may govern instead."
   sources: ["WP-M-01 §3.1, OI-1", WP-C-01, WP-C-02, UL 4600 §8 (ODD)]
-  status: answered
+  status: applied
   answer: {choice: B, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#2", record: "WP-M-01 v0.2 §3.1, §8", at: 2026-10-23}
 
 - id: DQ-002
   question: "What should stop an unsafe command from reaching the actuators: a separate safety monitor, or vehicle_cmd_gate rated for safety?"
@@ -60,8 +61,9 @@
       title: Rely on the drive-by-wire platform's own limits
       detail: "The vehicle's by-wire controllers clamp commands and brake to a stop if commands stop arriving. Least work for this project. Cost: the case rests on supplier evidence, which aftermarket kits rarely provide for driverless use; their limits do not know about the planned path, so they can only bound, not judge, a command."
   sources: ["WP-M-01 §2, §6, OI-2", "autoware_universe 0.52.1: control/autoware_vehicle_cmd_gate, system/autoware_mrm_handler", "ISO 26262-9 §5, §7"]
-  status: answered
+  status: applied
   answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#2", record: "WP-M-01 v0.2 §3.1, §6, §8", at: 2026-10-23}
 
 - id: DQ-003
   question: Which vehicle and drive-by-wire platform should the reference configuration use?
@@ -88,8 +90,9 @@
       title: Decide at G2; work in simulation until then
       detail: "Run the concept phase against Autoware's planning simulator and AWSIM with a generic vehicle model. Cost: hazard ratings, the HSI and the timing budget stay provisional, and the HARA is likely to be redone when the vehicle is chosen."
   sources: [WP-M-01 §3.1, WP-C-01, WP-S-05, WP-M-11]
-  status: answered
+  status: applied
   answer: {choice: C, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#2", record: "WP-M-01 v0.2 §3.1, §8; WP-M-00 v0.2 §2 (G2)", at: 2026-10-23}
 
 - id: DQ-004
   question: Who is the safety authority, and who will assess the safety case?
@@ -115,8 +118,9 @@
       title: Appoint a separate safety manager now, plus an external assessor
       detail: "You stay project lead; another person approves safety work products. Removes self-approval. Cost: a second qualified person from the start."
   sources: ["WP-M-01 §8, §9", WP-M-02, WP-M-06, UL 4600 §17]
-  status: answered
+  status: applied
   answer: {choice: other, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg, note: not sure; lets defer until later}
+  applied: {ref: "#2", record: "WP-M-01 v0.2 §8, §9, OI-2; asked again as DQ-007", at: 2026-10-23}
 
 - id: DQ-005
   question: May Claude start the hazard analysis once the item, the command bound and the vehicle are decided?
@@ -141,8 +145,9 @@
       title: Start now on provisional assumptions
       detail: "Claude assumes the recommended options above and marks the results provisional. Cost: likely rework if any answer differs."
   sources: [WP-C-03, WP-C-05, WP-A-05]
-  status: answered
+  status: applied
   answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#2", record: WP-M-01 v0.2 §8, at: 2026-10-23}
 
 - id: DQ-006
   question: Should the upstream spell-check workflow stay off until the assurance tree has its own word list?
