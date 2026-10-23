@@ -41,7 +41,7 @@ python3 assurance/case/tools/validate.py
 python3 assurance/trace/tools/check_headers.py && python3 assurance/trace/tools/check_links.py && python3 assurance/trace/tools/check_tables.py
 for g in assurance/01-management/figures/fig_m00_register.py assurance/01-management/figures/folder_index.py \
          assurance/01-management/decisions/fig_lifecycle.py assurance/01-management/decisions/fig_questions.py \
-         assurance/02-concept/figures/fig_c01_boundary.py \
+         assurance/02-concept/figures/fig_c01_boundary.py assurance/02-concept/hara/hara.py \
          assurance/case/tools/dashboard.py; do python3 "$g" --check; done
 python3 -m unittest discover -s assurance/tests -p 'test_*.py'
 ```
