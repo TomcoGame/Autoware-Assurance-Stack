@@ -451,7 +451,11 @@
         Lowers several vehicle-to-vehicle events by one ASIL. Cost: hard to defend without a driver in the vehicle;
         likely to be reversed at assessment.
   sources: [WP-C-03 §3.3, OI-1, ISO 26262-3 §6]
-  status: open
+  status: applied
+  answer: {choice: B, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#8", record: "WP-C-03 v0.3 §3.3, hara.yaml (five events to C3); WP-M-01 v0.5 §8", at: 2026-10-23}
+  note: >-
+    Option B said each of the five events rises one ASIL. HE-09.1 rose two (A to C), because the draft rated it C1, not C2; SG-09 is therefore ASIL C.
 
 - id: DQ-016
   question: Where should the vehicle stop when it has to stop on its own?
@@ -484,4 +488,6 @@
         The minimal risk condition is a stop at the kerb. Cost: steering and perception for the pull-over must keep
         working after faults, at ASIL D, which the independent monitor alone cannot provide.
   sources: [WP-C-03 §7, HA-5, WP-C-01 §4, OI-3, autoware_universe 0.52.1 autoware_mrm_handler]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#8", record: "WP-C-03 v0.3 SG-07 safe state, HA-5; WP-C-01 v0.5 §4, OI-3; WP-C-02 v0.5 MAN-07, MAN-10; WP-M-01 v0.5 §8", at: 2026-10-23}
