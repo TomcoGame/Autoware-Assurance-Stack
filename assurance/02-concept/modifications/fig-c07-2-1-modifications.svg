@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="596" viewBox="0 0 640 596" role="img" aria-labelledby="t d">
+<title id="t">WP-C-07 Figure 2-1: modifications by hazard</title>
+<desc id="d">Functional modifications per SOTIF hazard: SH-01: FM-01 (new work), FM-02 (required by the concept), FM-03 (new work), FM-04 (new work), FM-12 (new work); SH-02: FM-01 (new work), FM-02 (required by the concept), FM-03 (new work); SH-03: FM-01 (new work), FM-05 (required by the concept); SH-04: FM-02 (required by the concept), FM-04 (new work), FM-06 (new work), FM-07 (required by the concept), FM-08 (new work); SH-05: FM-02 (required by the concept), FM-06 (new work), FM-07 (required by the concept), FM-08 (new work); SH-06: FM-09 (new work), FM-12 (new work); SH-07: FM-13 (required by the concept); SH-08: FM-14 (required by the concept); SH-09: FM-15 (waits on a decision); SH-10: FM-16 (required by the concept); SH-11: FM-17 (waits on a decision); SH-12: FM-02 (required by the concept), FM-04 (new work), FM-06 (new work), FM-07 (required by the concept), FM-08 (new work), FM-18 (required by the concept); SH-13: FM-11 (required by the concept); SH-14: FM-10 (required by the concept); SH-15: FM-19 (required by the concept); SH-16: FM-20 (new work).</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg .concept { fill:var(--ok); } svg .new { fill:var(--accsoft); stroke:var(--acc); stroke-width:1.4; }
+svg .pending { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.4; stroke-dasharray:4 2; }
+svg .chip { font:600 11px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .chipi { font:600 11px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--bg); }
+</style>
+<rect class="bg" width="640" height="596"/>
+<text x="24" y="32" class="h">What addresses each SOTIF hazard</text>
+<text x="24" y="54" class="t">WP-C-07 §2: the functional modifications for each hazard, and how</text>
+<text x="24" y="71" class="t">far each has got</text>
+<text x="24" y="115" class="tb">SH-01</text>
+<text x="76" y="115" class="s">S3</text>
+<rect x="120" y="101" width="52" height="20" rx="4" class="new"/>
+<text x="146" y="115" class="chip" text-anchor="middle">FM-01</text>
+<rect x="178" y="101" width="52" height="20" rx="4" class="concept"/>
+<text x="204" y="115" class="chipi" text-anchor="middle">FM-02</text>
+<rect x="236" y="101" width="52" height="20" rx="4" class="new"/>
+<text x="262" y="115" class="chip" text-anchor="middle">FM-03</text>
+<rect x="294" y="101" width="52" height="20" rx="4" class="new"/>
+<text x="320" y="115" class="chip" text-anchor="middle">FM-04</text>
+<rect x="352" y="101" width="52" height="20" rx="4" class="new"/>
+<text x="378" y="115" class="chip" text-anchor="middle">FM-12</text>
+<text x="24" y="143" class="tb">SH-02</text>
+<text x="76" y="143" class="s">S2</text>
+<rect x="120" y="129" width="52" height="20" rx="4" class="new"/>
+<text x="146" y="143" class="chip" text-anchor="middle">FM-01</text>
+<rect x="178" y="129" width="52" height="20" rx="4" class="concept"/>
+<text x="204" y="143" class="chipi" text-anchor="middle">FM-02</text>
+<rect x="236" y="129" width="52" height="20" rx="4" class="new"/>
+<text x="262" y="143" class="chip" text-anchor="middle">FM-03</text>
+<text x="24" y="171" class="tb">SH-03</text>
+<text x="76" y="171" class="s">S3</text>
+<rect x="120" y="157" width="52" height="20" rx="4" class="new"/>
+<text x="146" y="171" class="chip" text-anchor="middle">FM-01</text>
+<rect x="178" y="157" width="52" height="20" rx="4" class="concept"/>
+<text x="204" y="171" class="chipi" text-anchor="middle">FM-05</text>
+<text x="24" y="199" class="tb">SH-04</text>
+<text x="76" y="199" class="s">S3</text>
+<rect x="120" y="185" width="52" height="20" rx="4" class="concept"/>
+<text x="146" y="199" class="chipi" text-anchor="middle">FM-02</text>
+<rect x="178" y="185" width="52" height="20" rx="4" class="new"/>
+<text x="204" y="199" class="chip" text-anchor="middle">FM-04</text>
+<rect x="236" y="185" width="52" height="20" rx="4" class="new"/>
+<text x="262" y="199" class="chip" text-anchor="middle">FM-06</text>
+<rect x="294" y="185" width="52" height="20" rx="4" class="concept"/>
+<text x="320" y="199" class="chipi" text-anchor="middle">FM-07</text>
+<rect x="352" y="185" width="52" height="20" rx="4" class="new"/>
+<text x="378" y="199" class="chip" text-anchor="middle">FM-08</text>
+<text x="24" y="227" class="tb">SH-05</text>
+<text x="76" y="227" class="s">S3</text>
+<rect x="120" y="213" width="52" height="20" rx="4" class="concept"/>
+<text x="146" y="227" class="chipi" text-anchor="middle">FM-02</text>
+<rect x="178" y="213" width="52" height="20" rx="4" class="new"/>
+<text x="204" y="227" class="chip" text-anchor="middle">FM-06</text>
+<rect x="236" y="213" width="52" height="20" rx="4" class="concept"/>
+<text x="262" y="227" class="chipi" text-anchor="middle">FM-07</text>
+<rect x="294" y="213" width="52" height="20" rx="4" class="new"/>
+<text x="320" y="227" class="chip" text-anchor="middle">FM-08</text>
+<text x="24" y="255" class="tb">SH-06</text>
+<text x="76" y="255" class="s">S3</text>
+<rect x="120" y="241" width="52" height="20" rx="4" class="new"/>
+<text x="146" y="255" class="chip" text-anchor="middle">FM-09</text>
+<rect x="178" y="241" width="52" height="20" rx="4" class="new"/>
+<text x="204" y="255" class="chip" text-anchor="middle">FM-12</text>
+<text x="24" y="283" class="tb">SH-07</text>
+<text x="76" y="283" class="s">S3</text>
+<rect x="120" y="269" width="52" height="20" rx="4" class="concept"/>
+<text x="146" y="283" class="chipi" text-anchor="middle">FM-13</text>
+<text x="24" y="311" class="tb">SH-08</text>
+<text x="76" y="311" class="s">S3</text>
+<rect x="120" y="297" width="52" height="20" rx="4" class="concept"/>
+<text x="146" y="311" class="chipi" text-anchor="middle">FM-14</text>
+<text x="24" y="339" class="tb">SH-09</text>
+<text x="76" y="339" class="s">S3</text>
+<rect x="120" y="325" width="52" height="20" rx="4" class="pending"/>
+<text x="146" y="339" class="chip" text-anchor="middle">FM-15</text>
+<text x="24" y="367" class="tb">SH-10</text>
+<text x="76" y="367" class="s">S3</text>
+<rect x="120" y="353" width="52" height="20" rx="4" class="concept"/>
+<text x="146" y="367" class="chipi" text-anchor="middle">FM-16</text>
+<text x="24" y="395" class="tb">SH-11</text>
+<text x="76" y="395" class="s">S2</text>
+<rect x="120" y="381" width="52" height="20" rx="4" class="pending"/>
+<text x="146" y="395" class="chip" text-anchor="middle">FM-17</text>
+<text x="24" y="423" class="tb">SH-12</text>
+<text x="76" y="423" class="s">S3</text>
+<rect x="120" y="409" width="52" height="20" rx="4" class="concept"/>
+<text x="146" y="423" class="chipi" text-anchor="middle">FM-02</text>
+<rect x="178" y="409" width="52" height="20" rx="4" class="new"/>
+<text x="204" y="423" class="chip" text-anchor="middle">FM-04</text>
+<rect x="236" y="409" width="52" height="20" rx="4" class="new"/>
+<text x="262" y="423" class="chip" text-anchor="middle">FM-06</text>
+<rect x="294" y="409" width="52" height="20" rx="4" class="concept"/>
+<text x="320" y="423" class="chipi" text-anchor="middle">FM-07</text>
+<rect x="352" y="409" width="52" height="20" rx="4" class="new"/>
+<text x="378" y="423" class="chip" text-anchor="middle">FM-08</text>
+<rect x="410" y="409" width="52" height="20" rx="4" class="concept"/>
+<text x="436" y="423" class="chipi" text-anchor="middle">FM-18</text>
+<text x="24" y="451" class="tb">SH-13</text>
+<text x="76" y="451" class="s">S3</text>
+<rect x="120" y="437" width="52" height="20" rx="4" class="concept"/>
+<text x="146" y="451" class="chipi" text-anchor="middle">FM-11</text>
+<text x="24" y="479" class="tb">SH-14</text>
+<text x="76" y="479" class="s">S3</text>
+<rect x="120" y="465" width="52" height="20" rx="4" class="concept"/>
+<text x="146" y="479" class="chipi" text-anchor="middle">FM-10</text>
+<text x="24" y="507" class="tb">SH-15</text>
+<text x="76" y="507" class="s">S2</text>
+<rect x="120" y="493" width="52" height="20" rx="4" class="concept"/>
+<text x="146" y="507" class="chipi" text-anchor="middle">FM-19</text>
+<text x="24" y="535" class="tb">SH-16</text>
+<text x="76" y="535" class="s">S3</text>
+<rect x="120" y="521" width="52" height="20" rx="4" class="new"/>
+<text x="146" y="535" class="chip" text-anchor="middle">FM-20</text>
+<rect x="24" y="561" width="26" height="18" rx="4" class="concept"/>
+<text x="58" y="574" class="t">Required by the concept</text>
+<rect x="235.5" y="561" width="26" height="18" rx="4" class="new"/>
+<text x="269.5" y="574" class="t">New work</text>
+<rect x="349.5" y="561" width="26" height="18" rx="4" class="pending"/>
+<text x="383.5" y="574" class="t">Waits on a decision</text>
+</svg>
