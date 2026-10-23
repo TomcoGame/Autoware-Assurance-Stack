@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-01 Item definition |
 | Standard reference | UL 4600 §5; ISO 26262-3 §5; ISO 21448 §5; ISO/SAE 21434 §9.3; ASPICE 4.0 SYS.1 |
-| Version | 0.5 (minimal risk condition decided (DQ-016 A); 2026-10-23). 0.4 (state deferred to DQ-014; 2026-10-23). 0.3 (first market one US state (DQ-009 A); remote driving allowed (DQ-010 C): §4, I-08, §7, new AOU-10, hazard added; 2026-10-23). 0.2 (first content: item, functions, modes, boundary and interfaces, vehicle placeholders, legal context, assumptions, preliminary hazards, from DQ-001 B, DQ-002 A, DQ-003 C; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.6 (the safety monitor has its own sensors: Sensors element, new I-13 (DQ-018 A); 2026-10-23). 0.5 (minimal risk condition decided (DQ-016 A); 2026-10-23). 0.4 (state deferred to DQ-014; 2026-10-23). 0.3 (first market one US state (DQ-009 A); remote driving allowed (DQ-010 C): §4, I-08, §7, new AOU-10, hazard added; 2026-10-23). 0.2 (first content: item, functions, modes, boundary and interfaces, vehicle placeholders, legal context, assumptions, preliminary hazards, from DQ-001 B, DQ-002 A, DQ-003 C; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All (ASILs follow from WP-C-03) |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -68,7 +68,7 @@ The modes are those of the Autoware AD API (`OperationModeState` in `autoware_ad
 
 ## 5. Item boundary and interfaces
 
-![The item boundary: inside it the sensors, the Autoware computer and the safety monitor; outside it, on the left, the HD map data, the update backend, the remote operations centre and the passengers; on the right, the vehicle platform with its drive-by-wire system, the power supply and the other road users. Arrows numbered I-01 to I-12 show what crosses the boundary, as listed in the table of §5.2.](figures/fig-c01-5-1-boundary.svg)
+![The item boundary: inside it the sensors, the Autoware computer and the safety monitor; outside it, on the left, the HD map data, the update backend, the remote operations centre and the passengers; on the right, the vehicle platform with its drive-by-wire system, the power supply and the other road users. Arrows numbered I-01 to I-13 show what crosses the boundary, as listed in the table of §5.2.](figures/fig-c01-5-1-boundary.svg)
 
 *Figure 5-1. The elements of §5.1 and the interfaces of §5.2. Drawn from both tables by [`figures/fig_c01_boundary.py`](figures/fig_c01_boundary.py); CI fails if it is stale.*
 
@@ -76,7 +76,7 @@ The modes are those of the Autoware AD API (`OperationModeState` in `autoware_ad
 
 | Element | In the item | What it is |
 |---|---|---|
-| Sensors | Yes | LiDAR, cameras, radar, GNSS and IMU, with their mounts and calibration; selection open until the vehicle is chosen (WP-H-02) |
+| Sensors | Yes | Two independent sets with their mounts and calibration: Autoware's (LiDAR, cameras, radar, GNSS, IMU) and the safety monitor's own (DQ-018 A, WP-C-04 EL-03). Selection open until the vehicle is chosen (WP-H-02) |
 | Autoware computer | Yes | The main computer running Linux, ROS 2 and the Autoware functions F-01 to F-09, F-11 and F-12 |
 | Safety monitor | Yes | An independent controller on its own hardware between Autoware and the drive-by-wire system (F-10) |
 | Vehicle platform | No | The vehicle with its drive-by-wire steering, braking, propulsion and gear, its lamps, doors and park brake; provisional until G2 |
@@ -102,6 +102,7 @@ The modes are those of the Autoware AD API (`OperationModeState` in `autoware_ad
 | I-09 | Passengers | Autoware computer | Trip start, stop request; trip status back | Through the vehicle's passenger interface and the AD API |
 | I-10 | Update backend | Autoware computer | Software, map, model and parameter updates | Change-controlled (WP-P-02); cybersecurity-relevant |
 | I-11 | Vehicle platform | Other road users | Motion, turn indicators, hazard lights, horn | What others see of the item's decisions |
+| I-13 | Sensors | Safety monitor | The safety channel's own sensor data, on a path that does not pass through the Autoware computer | Independent of I-02 (DQ-018 A); dependent failures checked in WP-A-03 |
 | I-12 | Power supply | Safety monitor | Low-voltage power; the monitor's supply must stay up when the Autoware computer's fails (AOU-05) | The other elements are supplied too; this path is drawn because the fallback depends on it |
 
 ## 6. Vehicle and platform (provisional)
