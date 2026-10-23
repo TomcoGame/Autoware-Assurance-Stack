@@ -286,3 +286,64 @@
         become safety-critical; the largest addition to the hazard analysis and the TARA.
   sources: [WP-C-01 §4, OI-4, I-08, autoware_adapi_msgs 1.9.2 OperationModeState]
   status: open
+
+- id: DQ-011
+  question: Should the first ODD include unprotected turns across oncoming traffic, and roundabouts?
+  context: >-
+    Turning across oncoming traffic without a protected signal phase, and entering roundabouts, both need the vehicle
+    to judge gaps in fast cross traffic, which is where perception range and prediction errors matter most. Autoware
+    has modules for both. **Leaving them out means the route planner avoids them**, at the cost of longer routes; a
+    later release can add them through impact analysis.
+  reversibility: revisit
+  blocks: ODD-04, MAN-04, MAN-05, HARA operational situations
+  gate: G1
+  asked: 2026-10-23
+  batch: 2
+  options:
+    - key: A
+      recommended: true
+      title: Leave both out of the first ODD
+      detail: >-
+        Routes use protected turns, right turns (left turns where traffic drives on the left) and stop-controlled
+        junctions only. Cost: longer routes; some destinations in the geofence may be unreachable.
+    - key: B
+      title: Include unprotected turns, leave out roundabouts
+      detail: >-
+        Typical for a US city. Cost: gap acceptance against oncoming traffic up to the posted speed becomes a
+        rated hazard and a large validation item.
+    - key: C
+      title: Include both
+      detail: >-
+        The fullest urban service. Cost: the largest hazard and validation scope of the three.
+  sources: [WP-C-02 ODD-04, MAN-04, MAN-05, autoware_behavior_velocity_intersection_module, autoware_behavior_velocity_roundabout_module]
+  status: open
+
+- id: DQ-012
+  question: What are the weather and visibility limits of the ODD?
+  context: >-
+    You set the ODD to dry weather and light rain (DQ-001). The analyses need numbers. **Rain and spray degrade LiDAR
+    and cameras together,** so the limit also bounds how much the perception can degrade before the vehicle must
+    stop. The proposed numbers use the usual meteorological definition of light rain.
+  reversibility: revisit
+  blocks: ODD-10, ODD-11, MON-03, SOTIF triggering conditions
+  gate: G1
+  asked: 2026-10-23
+  batch: 2
+  options:
+    - key: A
+      recommended: true
+      title: Rain up to 2.5 mm/h, visibility of 200 m or more
+      detail: >-
+        Light rain in the meteorological sense; fog, smoke or spray below 200 m is outside the ODD and the vehicle
+        stops. Cost: the vehicle needs a way to estimate rain rate and visibility (MON-03).
+    - key: B
+      title: Dry roads only at first
+      detail: >-
+        Any rain ends service. Cost: narrower than what you chose in DQ-001; many service days lost in a wet city.
+    - key: C
+      title: Rain up to 7.6 mm/h, visibility of 100 m or more
+      detail: >-
+        Moderate rain. Cost: much more sensor degradation to characterise and validate; spray from other vehicles
+        becomes a main triggering condition.
+  sources: [WP-C-02 ODD-10, ODD-11, MON-03, DQ-001]
+  status: open
