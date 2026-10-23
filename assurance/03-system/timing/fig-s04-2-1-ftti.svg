@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="436" viewBox="0 0 640 436" role="img" aria-labelledby="t d">
+<title id="t">WP-S-04 Figure 2-1: FTTI against fault size</title>
+<desc id="d">FTTI against fault acceleration: SG-01, SG-02 with 0.5 m margin, from 707 ms at 2 m/s² to 500 ms at 4 m/s²; SG-04 with 0.3 m margin, from 775 ms at 1 m/s² to 447 ms at 3 m/s²; SG-05 with 0.2 m margin, from 894 ms at 0.5 m/s² to 516 ms at 1.5 m/s².</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg .ax { stroke:var(--ink3); stroke-width:1; fill:none; }
+svg .gl { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .l1 { stroke:var(--acc); stroke-width:2.4; fill:none; }
+svg .l2 { stroke:var(--amb); stroke-width:2.4; fill:none; stroke-dasharray:7 4; }
+svg .l3 { stroke:var(--ok); stroke-width:2.4; fill:none; stroke-dasharray:2 3; }
+svg .k1 { font:600 12px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--acc); }
+svg .k2 { font:600 12px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--amb); }
+svg .k3 { font:600 12px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ok); }
+</style>
+<rect class="bg" width="640" height="436"/>
+<text x="24" y="32" class="h">How long a fault may last</text>
+<text x="24" y="54" class="t">WP-S-04 §2: FTTI against the acceleration a fault produces, over each</text>
+<text x="24" y="71" class="t">goal's range; the larger the fault, the less time to catch it</text>
+<path d="M70 356 L500 356" class="gl"/>
+<text x="62" y="360" class="s" text-anchor="end">0 ms</text>
+<path d="M70 291 L500 291" class="gl"/>
+<text x="62" y="295" class="s" text-anchor="end">250 ms</text>
+<path d="M70 226 L500 226" class="gl"/>
+<text x="62" y="230" class="s" text-anchor="end">500 ms</text>
+<path d="M70 161 L500 161" class="gl"/>
+<text x="62" y="165" class="s" text-anchor="end">750 ms</text>
+<path d="M70 96 L500 96" class="gl"/>
+<text x="62" y="100" class="s" text-anchor="end">1000 ms</text>
+<text x="70" y="374" class="s" text-anchor="middle">0</text>
+<text x="177.5" y="374" class="s" text-anchor="middle">1</text>
+<text x="285" y="374" class="s" text-anchor="middle">2</text>
+<text x="392.5" y="374" class="s" text-anchor="middle">3</text>
+<text x="500" y="374" class="s" text-anchor="middle">4</text>
+<text x="285" y="394" class="t" text-anchor="middle">Fault acceleration (m/s²)</text>
+<path d="M70 96 L70 356 L500 356" class="ax"/>
+<path d="M285 172.2 L294 175.9 L302.9 179.4 L311.9 182.7 L320.8 185.8 L329.8 188.8 L338.8 191.6 L347.7 194.2 L356.7 196.8 L365.6 199.2 L374.6 201.5 L383.5 203.8 L392.5 205.9 L401.5 207.9 L410.4 209.9 L419.4 211.8 L428.3 213.6 L437.3 215.3 L446.2 217 L455.2 218.6 L464.2 220.2 L473.1 221.7 L482.1 223.2 L491 224.6 L500 226" class="l1"/>
+<text x="291" y="164.2" class="k1">SG-01, SG-02 · 0.5 m</text>
+<path d="M177.5 154.6 L186.5 162.5 L195.4 169.5 L204.4 175.9 L213.3 181.6 L222.3 186.8 L231.2 191.6 L240.2 195.9 L249.2 200 L258.1 203.8 L267.1 207.3 L276 210.5 L285 213.6 L294 216.5 L302.9 219.2 L311.9 221.7 L320.8 224.2 L329.8 226.4 L338.8 228.6 L347.7 230.7 L356.7 232.7 L365.6 234.6 L374.6 236.4 L383.5 238.1 L392.5 239.7" class="l2"/>
+<text x="183.5" y="146.6" class="k2">SG-04 · 0.3 m</text>
+<path d="M123.8 123.4 L128.2 132.6 L132.7 140.7 L137.2 148 L141.7 154.6 L146.1 160.6 L150.6 166.1 L155.1 171.2 L159.6 175.9 L164.1 180.2 L168.5 184.2 L173 188 L177.5 191.6 L182 194.9 L186.5 198 L190.9 201 L195.4 203.8 L199.9 206.4 L204.4 208.9 L208.9 211.3 L213.3 213.6 L217.8 215.8 L222.3 217.8 L226.8 219.8 L231.2 221.7" class="l3"/>
+<text x="129.8" y="115.4" class="k3">SG-05 · 0.2 m</text>
+<text x="24" y="420" class="s">Margins are proposals (WP-S-02); fault ranges span the candidate vehicles (DQ-008).</text>
+</svg>
