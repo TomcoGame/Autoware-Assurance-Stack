@@ -491,3 +491,101 @@
   status: applied
   answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
   applied: {ref: "#8", record: "WP-C-03 v0.3 SG-07 safe state, HA-5; WP-C-01 v0.5 §4, OI-3; WP-C-02 v0.5 MAN-07, MAN-10; WP-M-01 v0.5 §8", at: 2026-10-23}
+
+- id: DQ-017
+  question: Should the right-of-way goal (SG-06, ASIL D) rest on collision avoidance rather than on traffic-rule compliance?
+  context: >-
+    SG-06 says the vehicle must not enter an intersection, roundabout or crosswalk against right of way. Checking that
+    at ASIL D needs to know the light is red, which takes learned perception or infrastructure data. **The concept
+    proposes that the safety monitor prevents the collision a violation would cause, with any road user its own
+    sensors can see, and limits speed where it cannot see,** while obeying the rules stays with Autoware and is
+    argued under SOTIF.
+  reversibility: hard
+  blocks: FSR-06.01 to FSR-06.03, the safety perception channel's design, technical safety concept
+  gate: G1
+  asked: 2026-10-23
+  batch: 4
+  options:
+    - key: A
+      recommended: true
+      title: Collision avoidance at ASIL D; rule compliance QM with SOTIF argument
+      detail: >-
+        The monitor checks the swept path against detected road users and occlusions, with stated bounds on how
+        others move. Cost: running an empty red light is not prevented at ASIL D; the assessor must accept that the
+        rated goal is the collision, which matches what the HARA rated.
+    - key: B
+      title: Add an independent traffic-light channel to the monitor
+      detail: >-
+        A second camera and a diverse classifier, or signal phase data from the infrastructure, give the monitor its
+        own view of the light. Cost: learned perception at ASIL D (ISO/PAS 8800), or dependence on equipped
+        intersections the geofence may not have.
+    - key: C
+      title: Rate Autoware's traffic-light chain as well (decomposition)
+      detail: >-
+        Share SG-06 between Autoware and the monitor, for example ASIL B(D) each. Cost: reverses the decision to keep
+        Autoware QM (DQ-002 A) for this chain.
+  sources: [WP-C-04 §2.2, FSR-06.01, FSR-06.02, FSR-06.03, WP-C-03 SG-06, IEEE 2846-2022]
+  status: open
+
+- id: DQ-018
+  question: Should the safety monitor's perception have its own sensors?
+  context: >-
+    The safety perception channel detects road users for the monitor. If it uses Autoware's sensors, one sensor
+    fault, a dirty lens or a mounting error can blind both the doer and the checker. **Own sensors make the two
+    independent, at the cost of a second sensor set.** The vehicle is not chosen yet, so this sets a requirement on
+    it rather than a part number.
+  reversibility: hard
+  blocks: Safety perception channel (EL-03), hardware design, dependent failure analysis, vehicle choice
+  gate: G1
+  asked: 2026-10-23
+  batch: 4
+  options:
+    - key: A
+      recommended: true
+      title: Own sensors for the safety channel
+      detail: >-
+        For example radar at the corners and front plus one LiDAR, processed on the monitor's hardware. Cost: a
+        second sensor set and its mounting, cleaning and calibration.
+    - key: B
+      title: Share Autoware's sensors, process independently
+      detail: >-
+        The monitor reads raw sensor data through its own interface. Cost: a common-cause failure path through the
+        sensors that the dependent failure analysis must argue away, which is hard at ASIL D.
+    - key: C
+      title: Decide with the vehicle at G2
+      detail: >-
+        Keep both open. Cost: the technical safety concept and the hardware design wait until G2.
+  sources: [WP-C-04 §2.3, FSR-02.01, EL-03, WP-A-03]
+  status: open
+
+- id: DQ-019
+  question: May the safety monitor soften hard braking from Autoware that its own sensors cannot confirm?
+  context: >-
+    Unexpected hard braking is an ASIL C hazard (SG-03), and the monitor is the only rated element. But if Autoware
+    brakes hard for something only it can see, softening that braking could let a collision happen. **Either the
+    monitor softens unconfirmed hard braking, or SG-03 needs another rated mechanism.**
+  reversibility: revisit
+  blocks: FSR-03.02, SG-03 argument
+  gate: G1
+  asked: 2026-10-23
+  batch: 4
+  options:
+    - key: A
+      recommended: true
+      title: Soften unconfirmed hard braking to a firm, non-emergency level
+      detail: >-
+        Braking above a comfortable level that the safety channel cannot match to an object is held to a firm level
+        (to be set in WP-S-04). Cost: Autoware alone can no longer emergency-brake for an object the channel misses,
+        so the channel's detection must be good enough to carry SG-02 by itself, which it must anyway.
+    - key: B
+      title: Never soften Autoware's braking
+      detail: >-
+        Every brake request passes unchanged. Cost: SG-03 has no rated mechanism; it would need ASIL decomposition or
+        a rated part of Autoware's braking decision.
+    - key: C
+      title: Soften only above the maximum the vehicle should ever need in the ODD
+      detail: >-
+        Only clips extreme decelerations. Cost: spurious braking at just below that level, still hazardous for a
+        following motorcycle, is not prevented.
+  sources: [WP-C-04 §2.4, FSR-03.02, WP-C-03 SG-03, HE-03.1]
+  status: open
