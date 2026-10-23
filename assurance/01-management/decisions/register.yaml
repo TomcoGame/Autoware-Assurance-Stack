@@ -891,3 +891,35 @@
         supplier's evidence meeting ISO/PAS 8800 for this ODD.
   sources: [WP-C-11 §5, ISO/PAS 8800, WP-C-02 §6, WP-C-06 §6]
   status: open
+
+- id: DQ-029
+  question: What should the robotaxi do when a passenger is not wearing a seat belt?
+  context: >-
+    With no driver, nobody in the vehicle tells passengers to buckle up, and the vehicle can brake hard at any time
+    (its monitor may intervene, and an MRM can be an emergency stop). An unbelted passenger is the one most likely to be
+    hurt by a hard stop. **This sets a default every passenger will meet, and how often trips are delayed.**
+  reversibility: revisit
+  blocks: WP-C-08 HR-03, passenger information (WP-O-03), vehicle seat belt sensing
+  gate: G1
+  asked: 2026-10-23
+  batch: 9
+  options:
+    - key: A
+      recommended: true
+      title: Do not start until every occupied seat is belted; if one is unbuckled while driving, warn, then pull over
+      detail: >-
+        Starts only when belts are fastened; mid-trip it warns by voice and on screen, and pulls over (MRM-1) if the belt
+        is not refastened within a short time. Cost: seat occupancy and belt sensing on every seat; some trips delayed or
+        cut short.
+    - key: B
+      title: Do not start until every occupied seat is belted; only warn while driving
+      detail: >-
+        Same at the start; mid-trip only warnings. Cost: a passenger who unbuckles stays unbelted for the rest of the
+        trip.
+    - key: C
+      title: Only remind passengers to buckle up
+      detail: >-
+        Like most taxis today. Cost: no protection for unbelted passengers in a hard stop; harder to argue under UL 4600
+        with no driver to insist.
+  sources: [WP-C-08 MU-07, HR-03, WP-C-12, FSR-03.02]
+  status: open
