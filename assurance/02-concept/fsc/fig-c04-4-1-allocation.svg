@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="565" viewBox="0 0 640 565" role="img" aria-labelledby="t d">
+<title id="t">WP-C-04 Figure 4-1: allocation of safety goals to elements</title>
+<desc id="d">Functional safety requirements by safety goal and element: SG-01 (ASIL D): Autoware computer 1, Safety monitor 2, Vehicle drive-by-wire 1, Vehicle state sensing 1; SG-02 (ASIL D): Autoware computer 1, Safety monitor 2, Safety perception channel 1, Vehicle drive-by-wire 1; SG-03 (ASIL C): Safety monitor 2, Safety perception channel 1; SG-04 (ASIL D): Autoware computer 1, Safety monitor 3, Vehicle drive-by-wire 1, Vehicle state sensing 1; SG-05 (ASIL D): Safety monitor 3, Park brake 1, Door system 1; SG-06 (ASIL D): Autoware computer 1, Safety monitor 2; SG-07 (ASIL D): Autoware computer 1, Safety monitor 3, Monitor power supply 1; SG-08 (ASIL C): Safety monitor 2, Remote operations station 1; SG-09 (ASIL C): Safety monitor 1. Element ASILs: Autoware computer QM, Safety monitor D, Safety perception channel D, Vehicle drive-by-wire D, Park brake D, Vehicle state sensing D, Monitor power supply D, Door system D, Remote operations station C.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg { --a1:#f5dcd3; --a2:#eaa48f; --a3:#d4644a; --a4:#9e2f1c; --t1:#3b140b; --t4:#ffffff; }
+@media (prefers-color-scheme: dark) { svg { --a1:#4a2820; --a2:#7d3a28; --a3:#bb4f34; --a4:#f07656; --t1:#f6e3dd; --t4:#1b0a05; } }
+svg .qm { fill:var(--card); stroke:var(--ink3); stroke-width:1; }
+svg .aa { fill:var(--a1); } svg .ab { fill:var(--a2); } svg .ac { fill:var(--a3); } svg .ad { fill:var(--a4); }
+svg .tq { font:600 12px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .t1 { font:700 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--t1); }
+svg .t4 { font:700 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--t4); }
+svg .col { font:500 11px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink2); }
+svg .outcol { fill:none; stroke:var(--ink3); stroke-width:1; stroke-dasharray:3 3; }
+</style>
+<rect class="bg" width="640" height="565"/>
+<text x="24" y="32" class="h">Which element carries which safety goal</text>
+<text x="24" y="54" class="t">WP-C-04 §4: FSRs per goal and element, shaded by their ASIL;</text>
+<text x="24" y="71" class="t">a number is the count of FSRs in that cell</text>
+<rect x="371.7" y="94" width="243.3" height="326" rx="6" class="outcol"/>
+<text x="378.7" y="106" class="s">outside the item</text>
+<text x="268.4" y="126" class="col" text-anchor="middle">01</text>
+<rect x="257.4" y="131" width="22" height="12" rx="3" class="qm"/>
+<text x="309.3" y="126" class="col" text-anchor="middle">02</text>
+<rect x="298.3" y="131" width="22" height="12" rx="3" class="ad"/>
+<text x="350.2" y="126" class="col" text-anchor="middle">03</text>
+<rect x="339.2" y="131" width="22" height="12" rx="3" class="ad"/>
+<text x="391.1" y="126" class="col" text-anchor="middle">04</text>
+<rect x="380.1" y="131" width="22" height="12" rx="3" class="ad"/>
+<text x="432" y="126" class="col" text-anchor="middle">05</text>
+<rect x="421" y="131" width="22" height="12" rx="3" class="ad"/>
+<text x="472.9" y="126" class="col" text-anchor="middle">06</text>
+<rect x="461.9" y="131" width="22" height="12" rx="3" class="ad"/>
+<text x="513.8" y="126" class="col" text-anchor="middle">07</text>
+<rect x="502.8" y="131" width="22" height="12" rx="3" class="ad"/>
+<text x="554.7" y="126" class="col" text-anchor="middle">08</text>
+<rect x="543.7" y="131" width="22" height="12" rx="3" class="ad"/>
+<text x="595.6" y="126" class="col" text-anchor="middle">09</text>
+<rect x="584.6" y="131" width="22" height="12" rx="3" class="ac"/>
+<text x="240" y="126" class="col" text-anchor="end">EL-</text>
+<text x="240" y="140" class="s" text-anchor="end">element ASIL</text>
+<rect x="16" y="148" width="608" height="30" rx="4" class="card"/>
+<text x="24" y="167" class="tb">SG-01</text>
+<text x="74" y="167" class="s">ASIL D</text>
+<rect x="251" y="152" width="34.9" height="22" rx="4" class="qm"/>
+<text x="268.4" y="168" class="tq" text-anchor="middle">1</text>
+<rect x="291.9" y="152" width="34.9" height="22" rx="4" class="ad"/>
+<text x="309.3" y="168" class="t4" text-anchor="middle">2</text>
+<rect x="373.7" y="152" width="34.9" height="22" rx="4" class="ad"/>
+<text x="391.1" y="168" class="t4" text-anchor="middle">1</text>
+<rect x="455.4" y="152" width="34.9" height="22" rx="4" class="ad"/>
+<text x="472.9" y="168" class="t4" text-anchor="middle">1</text>
+<text x="24" y="197" class="tb">SG-02</text>
+<text x="74" y="197" class="s">ASIL D</text>
+<rect x="251" y="182" width="34.9" height="22" rx="4" class="qm"/>
+<text x="268.4" y="198" class="tq" text-anchor="middle">1</text>
+<rect x="291.9" y="182" width="34.9" height="22" rx="4" class="ad"/>
+<text x="309.3" y="198" class="t4" text-anchor="middle">2</text>
+<rect x="332.8" y="182" width="34.9" height="22" rx="4" class="ad"/>
+<text x="350.2" y="198" class="t4" text-anchor="middle">1</text>
+<rect x="373.7" y="182" width="34.9" height="22" rx="4" class="ad"/>
+<text x="391.1" y="198" class="t4" text-anchor="middle">1</text>
+<rect x="16" y="208" width="608" height="30" rx="4" class="card"/>
+<text x="24" y="227" class="tb">SG-03</text>
+<text x="74" y="227" class="s">ASIL C</text>
+<rect x="291.9" y="212" width="34.9" height="22" rx="4" class="ac"/>
+<text x="309.3" y="228" class="t4" text-anchor="middle">2</text>
+<rect x="332.8" y="212" width="34.9" height="22" rx="4" class="ac"/>
+<text x="350.2" y="228" class="t4" text-anchor="middle">1</text>
+<text x="24" y="257" class="tb">SG-04</text>
+<text x="74" y="257" class="s">ASIL D</text>
+<rect x="251" y="242" width="34.9" height="22" rx="4" class="qm"/>
+<text x="268.4" y="258" class="tq" text-anchor="middle">1</text>
+<rect x="291.9" y="242" width="34.9" height="22" rx="4" class="ad"/>
+<text x="309.3" y="258" class="t4" text-anchor="middle">3</text>
+<rect x="373.7" y="242" width="34.9" height="22" rx="4" class="ad"/>
+<text x="391.1" y="258" class="t4" text-anchor="middle">1</text>
+<rect x="455.4" y="242" width="34.9" height="22" rx="4" class="ad"/>
+<text x="472.9" y="258" class="t4" text-anchor="middle">1</text>
+<rect x="16" y="268" width="608" height="30" rx="4" class="card"/>
+<text x="24" y="287" class="tb">SG-05</text>
+<text x="74" y="287" class="s">ASIL D</text>
+<rect x="291.9" y="272" width="34.9" height="22" rx="4" class="ad"/>
+<text x="309.3" y="288" class="t4" text-anchor="middle">3</text>
+<rect x="414.6" y="272" width="34.9" height="22" rx="4" class="ad"/>
+<text x="432" y="288" class="t4" text-anchor="middle">1</text>
+<rect x="537.2" y="272" width="34.9" height="22" rx="4" class="ad"/>
+<text x="554.7" y="288" class="t4" text-anchor="middle">1</text>
+<text x="24" y="317" class="tb">SG-06</text>
+<text x="74" y="317" class="s">ASIL D</text>
+<rect x="251" y="302" width="34.9" height="22" rx="4" class="qm"/>
+<text x="268.4" y="318" class="tq" text-anchor="middle">1</text>
+<rect x="291.9" y="302" width="34.9" height="22" rx="4" class="ad"/>
+<text x="309.3" y="318" class="t4" text-anchor="middle">2</text>
+<rect x="16" y="328" width="608" height="30" rx="4" class="card"/>
+<text x="24" y="347" class="tb">SG-07</text>
+<text x="74" y="347" class="s">ASIL D</text>
+<rect x="251" y="332" width="34.9" height="22" rx="4" class="qm"/>
+<text x="268.4" y="348" class="tq" text-anchor="middle">1</text>
+<rect x="291.9" y="332" width="34.9" height="22" rx="4" class="ad"/>
+<text x="309.3" y="348" class="t4" text-anchor="middle">3</text>
+<rect x="496.3" y="332" width="34.9" height="22" rx="4" class="ad"/>
+<text x="513.8" y="348" class="t4" text-anchor="middle">1</text>
+<text x="24" y="377" class="tb">SG-08</text>
+<text x="74" y="377" class="s">ASIL C</text>
+<rect x="291.9" y="362" width="34.9" height="22" rx="4" class="ac"/>
+<text x="309.3" y="378" class="t4" text-anchor="middle">2</text>
+<rect x="578.1" y="362" width="34.9" height="22" rx="4" class="ac"/>
+<text x="595.6" y="378" class="t4" text-anchor="middle">1</text>
+<rect x="16" y="388" width="608" height="30" rx="4" class="card"/>
+<text x="24" y="407" class="tb">SG-09</text>
+<text x="74" y="407" class="s">ASIL C</text>
+<rect x="291.9" y="392" width="34.9" height="22" rx="4" class="ac"/>
+<text x="309.3" y="408" class="t4" text-anchor="middle">1</text>
+<rect x="24" y="433" width="22" height="18" rx="4" class="qm"/>
+<text x="52" y="446" class="t">QM</text>
+<rect x="81.0" y="433" width="22" height="18" rx="4" class="aa"/>
+<text x="109" y="446" class="t">ASIL A</text>
+<rect x="164.0" y="433" width="22" height="18" rx="4" class="ab"/>
+<text x="192" y="446" class="t">ASIL B</text>
+<rect x="247.0" y="433" width="22" height="18" rx="4" class="ac"/>
+<text x="275" y="446" class="t">ASIL C</text>
+<rect x="330.0" y="433" width="22" height="18" rx="4" class="ad"/>
+<text x="358" y="446" class="t">ASIL D</text>
+<text x="24" y="472" class="s">EL-01 Autoware computer</text>
+<text x="324" y="472" class="s">EL-02 Safety monitor</text>
+<text x="24" y="489" class="s">EL-03 Safety perception channel</text>
+<text x="324" y="489" class="s">EL-04 Vehicle drive-by-wire</text>
+<text x="24" y="506" class="s">EL-05 Park brake</text>
+<text x="324" y="506" class="s">EL-06 Vehicle state sensing</text>
+<text x="24" y="523" class="s">EL-07 Monitor power supply</text>
+<text x="324" y="523" class="s">EL-08 Door system</text>
+<text x="24" y="540" class="s">EL-09 Remote operations station</text>
+</svg>

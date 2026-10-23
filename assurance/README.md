@@ -29,9 +29,9 @@ across the whole operational design domain. The other standards supply the metho
 | Indicator | Value |
 |---|---|
 | Assurance state | Before G0: hazard analysis draft |
-| Work products in the register | 91 (5 draft, 86 skeleton) |
+| Work products in the register | 91 (6 draft, 85 skeleton) |
 | Work products approved or baselined | 0 |
-| Decisions waiting on the safety authority | 0 open |
+| Decisions waiting on the safety authority | 3 open |
 | Decisions applied | 12 |
 | Safety case claims | 0 |
 | Evidence items | 0 |
@@ -137,6 +137,7 @@ and commit the result.
 | `python3 assurance/01-management/decisions/fig_questions.py` | The figures of decision register entries | Its own option data, checked against `register.yaml` |
 | `python3 assurance/02-concept/figures/fig_c01_boundary.py` | WP-C-01 Figure 5-1 | WP-C-01 §3, §5.1, §5.2 |
 | `python3 assurance/02-concept/hara/hara.py` | WP-C-03 §1 summary, §4 to §7 tables and Figure 6-1 (every ASIL computed) | `02-concept/hara/hara.yaml` |
+| `python3 assurance/02-concept/fsc/fsc.py` | WP-C-04 §1 summary, §3 to §5 tables and Figure 4-1 (element ASILs derived) | `02-concept/fsc/fsc.yaml`, `hara/hara.yaml`, WP-C-01 §8, the decision register |
 | `python3 assurance/case/tools/dashboard.py` | `case/figures/dashboard.svg`, the summary block above | WP-M-00, `register.yaml`, `case/records/` |
 
 The decision inbox page is built by `decisions/build_inbox.py` and published outside the repository; CI builds it
