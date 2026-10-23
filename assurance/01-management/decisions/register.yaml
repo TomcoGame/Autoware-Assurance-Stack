@@ -927,3 +927,68 @@
   status: applied
   answer: {choice: B, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
   applied: {ref: "#26", record: "WP-C-08 v0.3 §5, HR-03", at: 2026-10-23}
+
+- id: DQ-030
+  question: What hardware should the safety monitor run on?
+  context: >-
+    The safety monitor and its perception processor carry every ASIL D requirement of the item (WP-S-03). The
+    monitor's logic is small; the perception processor must handle LiDAR and radar data in real time. Hardware that is
+    already developed and assessed to ISO 26262 brings its own safety evidence; other hardware must be argued for from
+    scratch. **This is the largest hardware cost of the safety architecture, and fixes the lead time of the monitor.**
+  reversibility: hard
+  blocks: WP-S-03 CMP-02 and CMP-03, hardware safety requirements (WP-H-01), WP-S-04 timing
+  gate: G2
+  asked: 2026-10-23
+  batch: 10
+  options:
+    - key: A
+      recommended: true
+      title: An automotive ASIL D microcontroller for the monitor, and an automotive processor with a safety island for its perception
+      detail: >-
+        Both parts come with the supplier's safety manual and evidence. Cost: automotive parts, their development tools
+        and lead times; the perception software must fit the processor's safety island and its budget.
+    - key: B
+      title: An industrial safety controller and an industrial PC
+      detail: >-
+        Quick to obtain and familiar from industrial machinery. Cost: their evidence is for IEC 61508, not ISO 26262; the
+        mapping and the automotive environment (temperature, vibration, supply) must be argued and tested.
+    - key: C
+      title: One automotive processor for both, with the monitor on its safety island
+      detail: >-
+        Fewest parts. Cost: the monitor and its perception share a chip, so a common fault defeats both; the dependent
+        failure analysis must show that cannot defeat SG-02.
+  sources: [WP-S-03 §2, CMP-02, CMP-03, WP-C-04 EL-02, EL-03, ISO 26262-5]
+  status: open
+
+- id: DQ-031
+  question: Should the safety channel's ASIL D detection be split across LiDAR and radar?
+  context: >-
+    The safety channel must detect road users to ASIL D (FSR-02.01). Few sensors are developed to ASIL D on their own.
+    ISO 26262-9 allows a requirement to be decomposed into two independent ones of lower ASIL, here ASIL B(D) each on
+    LiDAR and radar, if their independence is shown. **Decomposition is an ASIL decision, and changes what sensors the
+    vehicle needs and how much the dependent failure analysis must show.** It does not lower the goal's ASIL.
+  reversibility: hard
+  blocks: WP-S-03 CMP-04, CMP-05 and RD-02, ASIL decomposition rationale (WP-A-01), sensor choice (WP-H-02)
+  gate: G2
+  asked: 2026-10-23
+  batch: 10
+  options:
+    - key: A
+      recommended: true
+      title: Decompose into LiDAR and radar, each to ASIL B(D)
+      detail: >-
+        Two different physics, each developed to a level sensors can reach; a road user is detected if either sees it.
+        Cost: both sensor types around the vehicle, and an independence argument in WP-A-03 against the shared triggering
+        conditions (spray, dirt).
+    - key: B
+      title: Keep one channel at ASIL D
+      detail: >-
+        Simplest architecture. Cost: needs a sensor and processing chain developed to ASIL D, which may not exist for the
+        range and resolution the ODD needs.
+    - key: C
+      title: Decide when the vehicle and its sensors are chosen
+      detail: >-
+        Waits for the supplier's sensor options (DQ-008). Cost: the technical safety concept and timing budget stay
+        provisional until then.
+  sources: [WP-S-03 §4, RD-02, FSR-02.01, ISO 26262-9 §5, WP-A-01, WP-A-03]
+  status: open
