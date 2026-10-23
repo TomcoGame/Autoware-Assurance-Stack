@@ -13,6 +13,7 @@ from pathlib import Path
 import struct
 import sys
 import unittest
+from xml.sax.saxutils import escape
 import zlib
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -277,6 +278,21 @@ class Figures(unittest.TestCase):
         arch = self.out[figures.OUT / "architecture.svg"]
         self.assertIn(v["dq_sensors"], arch)
         self.assertIn(f"({v['dbw_aou']})", arch)
+
+    def test_item_figure_lists_every_element_with_its_rating(self):
+        f = fx.load()
+        item = self.out[figures.OUT / "item.svg"]
+        for e in f.elements.values():
+            self.assertIn(escape(f"{e.eid}  {e.name}"), item)
+        self.assertIn("ILLUSTRATION", item)
+        self.assertIn("positions are not decided", item)
+
+    def test_minimal_risk_figure_quotes_the_safe_state(self):
+        v = fx.need(fx.load())
+        mrc = self.out[figures.OUT / "minimal-risk-condition.svg"]
+        self.assertIn(escape(v["sg07_safe_state"]), mrc)
+        self.assertIn(v["dq_mrc"], mrc)
+        self.assertIn("ILLUSTRATION", mrc)
 
     def test_sizes_stay_reasonable_for_a_readme(self):
         for path, text in self.out.items():

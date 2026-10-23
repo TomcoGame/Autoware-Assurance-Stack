@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""The README figures: a concept illustration of the doer-and-checker architecture in an urban
-scene, the architecture strip and the standards map.
+"""The README and wiki figures: a concept illustration of the doer-and-checker architecture in an
+urban scene, the architecture strip, the standards map, the item and the minimal risk condition.
 
     python3 tools/readme/figures.py            # write tools/readme/figures/*.svg
     python3 tools/readme/figures.py --check    # fail if any of them is stale
@@ -416,12 +416,12 @@ def pills(x, y, labels, color):
     return out
 
 
-def stamp(x, y, size=11.5):
-    w = tw(STAMP, size) + 34
+def stamp(x, y, size=11.5, label=STAMP):
+    w = tw(label, size) + 34
     return [
         f'<rect x="{x:.1f}" y="{y:.1f}" width="{w:.1f}" height="24" rx="12" fill="#2a2108" fill-opacity="0.92" stroke="{AMBER}" stroke-width="1.1"/>',
         f'<circle cx="{x + 14}" cy="{y + 12}" r="4" fill="{AMBER}"/>',
-        text(x + 24, y + 16.5, STAMP, size, AMBER, 650),
+        text(x + 24, y + 16.5, label, size, AMBER, 650),
     ]
 
 
@@ -844,6 +844,275 @@ def standards(f: fx.Facts) -> str:
     return themed_svg(W, H, "Standards map", desc, b)
 
 
+# ---------------------------------------------------------------- wiki figures: the item, the minimal risk condition
+
+
+def look_at(pos, target, pitch, focal, cx, cy):
+    """A camera at `pos` turned towards `target` in the horizontal plane, pitched down by `pitch`."""
+    dx, dy = target[0] - pos[0], target[1] - pos[1]
+    return r3.Camera(
+        pos=pos, pitch=pitch, focal=focal, cx=cx, cy=cy, yaw=math.degrees(math.atan2(-dx, dy))
+    )
+
+
+def ground_grid(cam, x0, x1, y0, y1, step=1.0):
+    out = []
+    for i in range(int((x1 - x0) / step) + 1):
+        x = x0 + i * step
+        out.append(line(cam, (x, y0), (x, y1), "stroke:#2a2f36;stroke-width:1"))
+    for j in range(int((y1 - y0) / step) + 1):
+        y = y0 + j * step
+        out.append(line(cam, (x0, y), (x1, y), "stroke:#2a2f36;stroke-width:1"))
+    return out
+
+
+def xray_box(cam, centre, size, color, label=None):
+    """A translucent box seen through the body: where an element sits, roughly."""
+    (x, y, z), (w, ln, h) = centre, size
+    xs, ys, zs = (x - w / 2, x + w / 2), (y - ln / 2, y + ln / 2), (z - h / 2, z + h / 2)
+    faces = [
+        [
+            (xs[0], ys[0], zs[1]),
+            (xs[1], ys[0], zs[1]),
+            (xs[1], ys[1], zs[1]),
+            (xs[0], ys[1], zs[1]),
+        ],
+        [
+            (xs[0], ys[0], zs[0]),
+            (xs[0], ys[1], zs[0]),
+            (xs[0], ys[1], zs[1]),
+            (xs[0], ys[0], zs[1]),
+        ],
+        [
+            (xs[0], ys[1], zs[0]),
+            (xs[1], ys[1], zs[0]),
+            (xs[1], ys[1], zs[1]),
+            (xs[0], ys[1], zs[1]),
+        ],
+        [
+            (xs[1], ys[0], zs[0]),
+            (xs[1], ys[1], zs[0]),
+            (xs[1], ys[1], zs[1]),
+            (xs[1], ys[0], zs[1]),
+        ],
+    ]
+    out = [
+        poly(cam, f, f"fill:{color};fill-opacity:0.22;stroke:{color};stroke-width:1.4")
+        for f in faces
+    ]
+    if label:
+        out += tag(cam, (x, y, zs[1] + 0.25), label, color)
+    return out
+
+
+def element_rows(f: fx.Facts, in_item: bool) -> list[tuple[str, str, str]]:
+    rows = []
+    for e in f.elements.values():
+        if e.in_item == in_item:
+            note_ = f"required of others ({e.assumption})" if e.assumption else ""
+            rows.append((e.eid, e.name, asil_label(e.asil) + (f" · {note_}" if note_ else "")))
+    return rows
+
+
+def item_figure(f: fx.Facts, v: dict, models) -> str:
+    W, H = 1100, 520
+    cam = look_at((-6.6, 7.2, 3.4), (0.0, 0.0), 15, 700, 345, 312)
+    b = [f'<rect width="{W}" height="{H}" fill="url(#sky)"/>']
+    b += ground_grid(cam, -4.0, 4.0, -4.0, 6.0)
+    sx, sy = cam(0, 0, 0)
+    b.append(
+        f'<ellipse cx="{sx:.1f}" cy="{sy + 6:.1f}" rx="150" ry="30" fill="#000" fill-opacity="0.5" filter="url(#soft)"/>'
+    )
+    b += vehicle(cam, models["kiri10"], 0.0, 0.0, 0.0, EGO_PAINT, 0.025)[1]
+    # elements of the item, at illustrative positions (the hardware is chosen with the vehicle)
+    b += xray_box(cam, (0.0, -1.6, 0.75), (1.1, 0.6, 0.3), "#ff8a80", "Autoware computer")
+    b += xray_box(cam, (0.0, -0.95, 0.62), (0.5, 0.35, 0.18), BLUE2, "Safety monitor")
+    lx, ly = cam(0.0, -0.2, 1.62)
+    b.append(
+        f'<ellipse cx="{lx:.1f}" cy="{ly:.1f}" rx="13" ry="7" fill="#1d2126" stroke="{GREEN}" stroke-width="1.6"/>'
+    )
+    b += tag(cam, (0.0, -0.2, 2.05), "Autoware's sensors", GREEN)
+    for p in ((-0.7, 2.1, 0.55), (0.7, 2.1, 0.55)):
+        px, py = cam(*p)
+        b.append(
+            f'<circle cx="{px:.1f}" cy="{py:.1f}" r="6" fill="{BLUE}" fill-opacity="0.5" stroke="{BLUE2}" stroke-width="1.4"/>'
+        )
+    b += tag(cam, (-0.7, 2.3, 0.15), "monitor's own sensors", BLUE2)
+    b.append(text(28, 40, "The item: what the safety case is about", 22, "#ffffff", 700))
+    b.append(
+        text(
+            28,
+            64,
+            "The sensors, the Autoware computer and the safety monitor are the item; the vehicle they drive is not (WP-C-01).",
+            13.5,
+            "#c9ced6",
+        )
+    )
+    x0 = 690
+    y = 110
+    b.append(text(x0, y, "INSIDE THE ITEM", 11, "#9aa3ad", 700, extra='letter-spacing="1"'))
+    y += 12
+    for eid, name, rating in element_rows(f, True):
+        b.append(
+            f'<rect x="{x0}" y="{y}" width="380" height="40" rx="8" fill="#141820" stroke="#2c3440"/>'
+        )
+        b.append(text(x0 + 12, y + 17, f"{eid}  {name}", 13, "#f1f3f4", 650))
+        b.append(text(x0 + 12, y + 33, rating, 11.5, BLUE2 if "ASIL" in rating else "#c9ced6"))
+        y += 46
+    y += 14
+    b.append(
+        text(
+            x0,
+            y,
+            "OUTSIDE THE ITEM, BOUND BY AN ASSUMPTION",
+            11,
+            "#9aa3ad",
+            700,
+            extra='letter-spacing="1"',
+        )
+    )
+    y += 12
+    for eid, name, rating in element_rows(f, False):
+        b.append(text(x0 + 2, y + 14, f"{eid}  {name}", 12.5, "#dfe2e6", 600))
+        b.append(text(x0 + 380, y + 14, rating.split(" · ")[0], 12, AMBER, 650, "end"))
+        y += 22
+    b.append(
+        text(
+            x0,
+            y + 16,
+            f"Ratings derived in WP-C-04 §4; {v['dq_sensors']}: the monitor has its own sensors.",
+            11,
+            "#9aa3ad",
+        )
+    )
+    b += stamp(
+        28,
+        H - 44,
+        11,
+        "ILLUSTRATION · positions are not decided; the hardware is chosen with the vehicle · draft",
+    )
+    desc = (
+        "A white robotaxi seen from the front left, with the elements of the item drawn inside it at illustrative "
+        "positions: the Autoware computer, the safety monitor, Autoware's roof sensor and the monitor's own sensors "
+        "at the front. A list gives each element inside the item and outside it, with its rating from WP-C-04. "
+        "The positions are not decided; everything is a draft for engineering review."
+    )
+    return svg(W, H, "The item", desc, b)
+
+
+def mrc_figure(f: fx.Facts, v: dict, models) -> str:
+    W, H = 1100, 470
+    pw = W / 2
+    b = [f'<rect width="{W}" height="{H}" fill="url(#sky)"/>']
+    panels = [
+        (
+            "1",
+            "Autoware pulls over when it still can",
+            f"Its own minimal risk manoeuvre, rated {v['autoware']}",
+            4.75,
+            False,
+            "#ff8a80",
+        ),
+        (
+            "2",
+            "If not: stopped and held in its lane",
+            f"The rated condition: SG-07, ASIL {v['sg07']} ({v['dq_mrc']})",
+            EGO[0],
+            True,
+            AMBER,
+        ),
+    ]
+    for i, (num, title, sub, x, hazard, color) in enumerate(panels):
+        ox = i * pw
+        cam = r3.Camera(pos=(1.2, -12.0, 7.5), pitch=24, focal=560, cx=ox + pw / 2, cy=300)
+        clip = f"panel{i}"
+        b.append(
+            f'<clipPath id="{clip}"><rect x="{ox + 12}" y="96" width="{pw - 24}" height="300" rx="12"/></clipPath>'
+        )
+        b.append(f'<g clip-path="url(#{clip})">')
+        b.append(f'<rect x="{ox}" y="96" width="{pw}" height="300" fill="#15181d"/>')
+        b += road(cam)
+        b.append(
+            poly(
+                cam,
+                [(3.6, -10, 0), (7.5, -10, 0), (7.5, 30, 0), (3.6, 30, 0)],
+                "fill:#ffffff;fill-opacity:0.02",
+            )
+        )
+        oncoming = vehicle(
+            cam, models["sedan"], -1.75, 24.0, 180.0, TRAFFIC_PAINT["sedan"], ambient=0.55
+        )[1]
+        b += oncoming
+        paint = r3.Paint(
+            body=EGO_PAINT.body, indicator=(255, 176, 32) if hazard else EGO_PAINT.indicator
+        )
+        b += vehicle(cam, models["kiri10"], x, 6.0, 0.0, paint, 0.03)[1]
+        if hazard:
+            for dx, dy in ((-0.8, 8.1), (0.8, 8.1), (-0.8, 3.9), (0.8, 3.9)):
+                hx, hy = cam(x + dx, dy, 0.75)
+                b.append(
+                    f'<circle class="pulse" cx="{hx:.1f}" cy="{hy:.1f}" r="9" fill="{AMBER}" fill-opacity="0.55" filter="url(#soft)"/>'
+                )
+        else:
+            pts = [
+                (EGO[0], 0.0, 0.02),
+                (EGO[0] + 0.6, 2.0, 0.02),
+                (x - 0.4, 4.0, 0.02),
+                (x, 6.0, 0.02),
+            ]
+            d = " ".join(
+                f"{'M' if k == 0 else 'L'}{a:.1f} {c:.1f}"
+                for k, (a, c) in enumerate(cam(*p) for p in pts)
+            )
+            b.append(
+                f'<path d="{d}" stroke="#ff8a80" stroke-width="3" stroke-dasharray="7 5" fill="none" stroke-opacity="0.9"/>'
+            )
+        b.append(
+            f'<rect x="{ox + 12}" y="96" width="{pw - 24}" height="300" rx="12" fill="url(#vignette)"/>'
+        )
+        b.append("</g>")
+        b.append(
+            f'<rect x="{ox + 12}" y="96" width="{pw - 24}" height="300" rx="12" fill="none" stroke="{color}" stroke-opacity="0.6"/>'
+        )
+        b.append(f'<circle cx="{ox + 36}" cy="{124}" r="11" fill="{color}"/>')
+        b.append(text(ox + 36, 128.5, num, 12.5, "#0d0f12", 800, "middle"))
+        b.append(text(ox + 56, 129, title, 15, "#ffffff", 650))
+        b.append(text(ox + 56, 148, sub, 12, "#c9ced6"))
+    b.append(text(28, 40, "When it can no longer drive on safely", 22, "#ffffff", 700))
+    b.append(
+        text(
+            28,
+            64,
+            "No driver takes over: the vehicle reaches a minimal risk condition by itself.",
+            13.5,
+            "#c9ced6",
+        )
+    )
+    b.append(text(28, 424, "Safe state of SG-07 (WP-C-03):", 12, "#9aa3ad", 650))
+    words, ln, lines_ = v["sg07_safe_state"].split(), "", []
+    for w_ in words:
+        if tw(ln + " " + w_, 12) > 820 and ln:
+            lines_.append(ln)
+            ln = w_
+        else:
+            ln = f"{ln} {w_}".strip()
+    lines_.append(ln)
+    for k, ln in enumerate(lines_[:2]):
+        b.append(text(222, 424 + 16 * k, ln, 12, "#dfe2e6"))
+    b += stamp(
+        W - tw("ILLUSTRATION · draft for engineering review", 11) - 62,
+        22,
+        11,
+        "ILLUSTRATION · draft for engineering review",
+    )
+    desc = (
+        "Two panels. Left: the robotaxi has pulled over to the kerb, Autoware's own minimal risk manoeuvre. Right: "
+        "the robotaxi is stopped in its lane with its hazard lights flashing, the rated minimal risk condition of "
+        f"safety goal SG-07. Below, the safe state as WP-C-03 states it: {v['sg07_safe_state']}"
+    )
+    return svg(W, H, "Minimal risk condition", desc, b)
+
+
 def build() -> dict[Path, str]:
     f = fx.load()
     v = fx.need(f)
@@ -853,6 +1122,8 @@ def build() -> dict[Path, str]:
         OUT / "scene.svg": full(f, v, models),
         OUT / "architecture.svg": architecture(f, v),
         OUT / "standards.svg": standards(f),
+        OUT / "item.svg": item_figure(f, v, models),
+        OUT / "minimal-risk-condition.svg": mrc_figure(f, v, models),
     }
 
 
