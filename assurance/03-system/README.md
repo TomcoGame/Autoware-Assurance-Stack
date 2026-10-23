@@ -6,7 +6,7 @@ Technical safety requirements and concept, system architecture, timing, HSI, sys
 
 Standard clauses: UL 4600 §9–10; 26262-4; SYS.1–5.
 
-![The 9 work products of this folder, one row each, with a chip at each gate it is needed for, coloured by its status in the WP-M-00 register: 7 at G2, 2 at G4; 8 skeleton, 1 draft](index-status.svg)
+![The 9 work products of this folder, one row each, with a chip at each gate it is needed for, coloured by its status in the WP-M-00 register: 7 at G2, 2 at G4; 7 skeleton, 2 draft](index-status.svg)
 
 *Drawn from [WP-M-00](../01-management/WP-M-00-work-product-register.md#3-register) §3.3, which also has the clauses of each work product.*
 
@@ -17,7 +17,7 @@ Standard clauses: UL 4600 §9–10; 26262-4; SYS.1–5.
 | [WP-S-01](WP-S-01-system-requirements.md) | System requirements specification | G2 | Skeleton |
 | [WP-S-02](WP-S-02-technical-safety-requirements.md) | Technical safety requirements specification | G2 | Skeleton |
 | [WP-S-03](WP-S-03-technical-safety-concept-architecture.md) | Technical safety concept and system architectural design | G2 | Draft |
-| [WP-S-04](WP-S-04-timing-ftti-budget.md) | Timing: FTTI, detection and reaction budget, fallback timing | G2 | Skeleton |
+| [WP-S-04](WP-S-04-timing-ftti-budget.md) | Timing: FTTI, detection and reaction budget, fallback timing | G2 | Draft |
 | [WP-S-05](WP-S-05-hsi-specification.md) | Hardware-software interface, including the drive-by-wire interface | G2 | Skeleton |
 | [WP-S-06](WP-S-06-requirements-production-operation.md) | Requirements for production, operation, service and decommissioning | G2 | Skeleton |
 | [WP-S-07](WP-S-07-cybersecurity-requirements-architecture.md) | Cybersecurity requirements and architectural design | G2 | Skeleton |
@@ -28,4 +28,5 @@ Standard clauses: UL 4600 §9–10; 26262-4; SYS.1–5.
 
 | Folder | What it holds |
 |---|---|
+| [`timing/`](timing/) | — |
 | [`tsc/`](tsc/) | — |

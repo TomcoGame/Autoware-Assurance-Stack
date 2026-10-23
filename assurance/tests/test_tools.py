@@ -30,6 +30,7 @@ for sub in (
     "02-concept/ai",
     "02-concept/misuse",
     "03-system/tsc",
+    "03-system/timing",
     "case/tools",
     "trace/tools",
 ):
@@ -58,6 +59,7 @@ import modifications  # noqa: E402
 import sotif  # noqa: E402
 import stpa  # noqa: E402
 import tara  # noqa: E402
+import timing  # noqa: E402
 import triggering  # noqa: E402
 import tsc  # noqa: E402
 import wpregister  # noqa: E402
@@ -658,6 +660,40 @@ class Tsc(unittest.TestCase):
             self.assertTrue(any(needle in x for x in tsc.check(model, k)), needle)
 
 
+class Timing(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(timing.check(timing.load(), timing.known()), [])
+
+    def test_ftti_follows_the_kinematics(self):
+        m = timing.load()
+        g = next(x for x in m["goals"] if x["id"] == "SG-01")
+        hi = m["ranges"][g["range"]]["high"]
+        self.assertAlmostEqual(timing.ftti(m, "SG-01", "high"), (2 * g["margin"] / hi) ** 0.5)
+        self.assertEqual(
+            timing.ftti(m, "SG-07", "high"),
+            min(timing.ftti(m, x, "high") for x in ("SG-01", "SG-02", "SG-04")),
+        )
+        self.assertIsNone(timing.ftti(m, "SG-03", "high"))
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = timing.load(), timing.known()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["goals"] = [g for g in bad["goals"] if g["id"] != "SG-09"]
+        cases.append((bad, "SG-09: safety goal with no timing entry"))
+        bad = copy.deepcopy(m)
+        bad["allocation"] = {"detect": 0.6, "react": 0.6}
+        cases.append((bad, "add up to at most 1"))
+        bad = copy.deepcopy(m)
+        bad["goals"][0]["margin"] = 0
+        cases.append((bad, "margin must be a positive number"))
+        bad = copy.deepcopy(m)
+        bad["mechanisms"][0]["goals"] = ["SG-03"]
+        cases.append((bad, "goal SG-03 has no FTTI"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in timing.check(model, k)), needle)
+
+
 class TreeChecks(unittest.TestCase):
     def test_table_cell_count(self):
         md = "| A | B |\n|---|---|\n| 1 | 2 |\n| 1 |\n"
@@ -727,6 +763,7 @@ class Generators(unittest.TestCase):
             ai,
             misuse,
             tsc,
+            timing,
         ):
             first, second = mod.build(), mod.build()
             self.assertEqual(first, second, mod.__name__)
