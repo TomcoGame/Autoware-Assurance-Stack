@@ -1,0 +1,153 @@
+# Cybersecurity goals, claims and concept for WP-C-10 (ISO/SAE 21434 §9.4, §9.5). cybersecurity.py checks the model
+# against the TARA (../tara/tara.yaml): every threat whose risk is reduced needs a goal, every retained one a claim,
+# every goal a requirement, and every control the TARA proposed must be taken up. It computes each goal's CAL from
+# the impact and attack vector of its threats, and writes the WP-C-10 tables and Figure 2-1.
+# Every entry is a draft by Claude (I0).
+
+method:
+  # CAL by impact (rows) and attack vector (columns: physical, local, adjacent, network); the example of
+  # ISO/SAE 21434 Annex E. Values to be checked against the standard's text by the reviewer (WP-C-10 OI-1).
+  vectors: [physical, local, adjacent, network]
+  cal:
+    Negligible: [null, null, null, null]
+    Moderate: [CAL1, CAL1, CAL2, CAL3]
+    Major: [CAL1, CAL2, CAL3, CAL4]
+    Severe: [CAL2, CAL3, CAL4, CAL4]
+
+# Attack vector of each threat scenario: how close the attacker must be.
+vectors:
+  TS-01: network
+  TS-02: network
+  TS-03: network
+  TS-04: adjacent
+  TS-05: physical
+  TS-06: network
+  TS-07: local
+  TS-08: adjacent
+  TS-09: adjacent
+  TS-10: adjacent
+  TS-11: physical
+  TS-12: network
+  TS-13: network
+  TS-14: network
+  TS-15: local
+  TS-16: physical
+
+goals:
+  - id: CG-01
+    text: Remote driving commands, assistance and releases act on a vehicle only when they come unaltered and fresh from an authorised operator
+    threats: [TS-01, TS-02, TS-03]
+  - id: CG-02
+    text: Losing the link to remote operations, by jamming or by flooding, does not strand vehicles; they still reach and leave minimal risk conditions safely
+    threats: [TS-04]
+  - id: CG-03
+    text: Only maps and models released through the controlled process, unaltered, are used in service
+    threats: [TS-07]
+  - id: CG-04
+    text: False sensor inputs made with known attack methods do not lead perception or localisation into unsafe behaviour
+    threats: [TS-08, TS-09, TS-10]
+  - id: CG-05
+    text: Passengers' trip data and cabin video are not disclosed to anyone without a need for them
+    threats: [TS-12]
+  - id: CG-06
+    text: A trip's destination or route changes only at the request of its passenger or an authorised operator, and the passenger is told
+    threats: [TS-14]
+  - id: CG-07
+    text: Commands from the passenger interface act only within their intended use
+    threats: [TS-15]
+
+claims:
+  - id: CC-01
+    threats: [TS-05]
+    text: The risk of tampering with the safety monitor through a service port is retained at 2; it needs physical access, confidential knowledge and specialised equipment. Signed firmware and closed ports (CR-03) are applied anyway, and the design TARA revisits it
+    controls: [CR-03]
+  - id: CC-02
+    threats: [TS-06]
+    text: The risk of a malicious update through the update channel is retained at 2; it needs a compromise of the signing process by several experts. Signed updates (CR-04) are required by CG-03 in any case
+    controls: []
+  - id: CC-03
+    threats: [TS-11]
+    text: The risk of reaching the drive-by-wire bus past the monitor is retained at 2 until the vehicle is chosen (DQ-008); the vehicle must keep its bus reachable only from the monitor (CR-09), checked at G2
+    controls: [CR-09]
+  - id: CC-04
+    threats: [TS-13]
+    text: The risk of tracking the fleet from telemetry is retained at 2; its impact is moderate and the encryption required for CG-05 covers telemetry too
+    controls: []
+  - id: CC-05
+    threats: [TS-16]
+    text: The risk of tampering with the command path inside the vehicle is retained at 2; it needs physical access, and the safety monitor's envelope bounds whatever reaches it (FSR-01.01, FSR-04.01)
+    controls: []
+
+requirements:
+  - id: CSR-01
+    text: Sign remote driving, assistance and release messages end to end, from the operator station to the safety monitor, bound to one vehicle, with sequence numbers and time stamps; the monitor rejects any other
+    goals: [CG-01]
+    scope: item
+    element: EL-02 Safety monitor; EL-09 Remote operations station
+    from: [SR-02, FSR-08.01, FSR-08.03]
+  - id: CSR-02
+    text: Authenticate remote operators with phishing-resistant multi-factor authentication, give each the least privilege, log every action, and ask a second confirmation for releases and route changes
+    goals: [CG-01, CG-06]
+    scope: environment
+    element: Remote operations centre
+    from: [CR-01]
+  - id: CSR-03
+    text: Give each vehicle a second link to remote operations, independent of the first, and allow a field technician to release a vehicle locally when both are lost
+    goals: [CG-02]
+    scope: item
+    element: EL-01 Autoware computer; remote operations
+    from: [CR-02]
+  - id: CSR-04
+    text: Protect the remote operations backend against flooding, with capacity and filtering sized for the fleet
+    goals: [CG-02]
+    scope: environment
+    element: Remote operations backend
+    from: []
+  - id: CSR-05
+    text: Accept only updates signed with keys held in hardware, verify them before install, install them only out of service, and check software, map and model versions as one set
+    goals: [CG-03]
+    scope: item
+    element: EL-01 Autoware computer; EL-02 Safety monitor
+    from: [CR-04, SR-03]
+  - id: CSR-06
+    text: Change maps and training data only through reviewed, logged changes, with separation of duties between who changes and who releases
+    goals: [CG-03]
+    scope: environment
+    element: Map and ML engineering (WP-W-10, WP-W-12)
+    from: [CR-05]
+  - id: CSR-07
+    text: Test perception against the physical attacks on sensors and models known for the ODD, and keep the list current
+    goals: [CG-04]
+    scope: item
+    element: EL-01 Autoware computer; EL-03 Safety perception channel
+    from: [CR-06, FM-02]
+  - id: CSR-08
+    text: Cross-check the initial pose against the map and the last known pose before driving, and never take GNSS alone
+    goals: [CG-04]
+    scope: item
+    element: EL-01 Autoware computer
+    from: [CR-07, FM-09]
+  - id: CSR-09
+    text: Confirm an emergency vehicle by sound and light together before yielding, and report yields where no emergency vehicle is plausible
+    goals: [CG-04]
+    scope: item
+    element: EL-01 Autoware computer
+    from: [CR-08, FM-15]
+  - id: CSR-10
+    text: Encrypt trip data, cabin video and telemetry in transit and at rest, keep them only as long as needed, and give access by role
+    goals: [CG-05]
+    scope: environment
+    element: Fleet backend
+    from: [CR-10]
+  - id: CSR-11
+    text: Show any change of destination or route to the passenger, and act on it only when the passenger or an operator confirms it
+    goals: [CG-06]
+    scope: item
+    element: EL-01 Autoware computer; passenger interface
+    from: [CR-11]
+  - id: CSR-12
+    text: Accept from the passenger interface only the stop request and door commands, and let the vehicle's interlocks decide whether they act
+    goals: [CG-07]
+    scope: item
+    element: EL-01 Autoware computer; EL-08 Door system
+    from: [FSR-05.05, AOU-06, TR-16]
