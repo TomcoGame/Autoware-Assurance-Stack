@@ -420,3 +420,68 @@
         lighten this project's safety case.
   sources: [DQ-013, WP-C-01 §7, OI-2, WP-C-02 §5.1, OI-2, OI-6]
   status: queued
+
+- id: DQ-015
+  question: With no driver, how much controllability may the hazard analysis credit?
+  context: >-
+    Controllability is one of the three ratings that set an ASIL. With no driver, nobody in the vehicle can avoid
+    harm, so the draft rates C3 by default and credits other road users only in four named cases (following drivers,
+    pedestrians facing walking-pace motion, roundabout traffic, wrong indicators). **Crediting more lowers ASILs;
+    crediting less raises six of the nineteen ratings.** An assessor will challenge whichever rule is used, so it
+    should be yours.
+  reversibility: revisit
+  blocks: Every ASIL in the HARA; the functional safety concept
+  gate: G1
+  asked: 2026-10-23
+  batch: 3
+  options:
+    - key: A
+      recommended: true
+      title: C3 by default; credit other road users only where stated (as drafted)
+      detail: >-
+        Gives six ASIL D goals. Cost: the safety monitor and drive-by-wire path carry ASIL D for most goals.
+    - key: B
+      title: C3 everywhere; credit nobody
+      detail: >-
+        The most conservative reading. Cost: raises HE-03.1, HE-04.3, HE-05.2, HE-06.3 and HE-09.1 by one ASIL each;
+        SG-03 becomes ASIL C.
+    - key: C
+      title: Also credit other drivers in general (C2 for all vehicle-to-vehicle events)
+      detail: >-
+        Lowers several vehicle-to-vehicle events by one ASIL. Cost: hard to defend without a driver in the vehicle;
+        likely to be reversed at assessment.
+  sources: [WP-C-03 §3.3, OI-1, ISO 26262-3 §6]
+  status: open
+
+- id: DQ-016
+  question: Where should the vehicle stop when it has to stop on its own?
+  context: >-
+    When the item can no longer drive safely it must reach a minimal risk condition (SG-07, ASIL D). Autoware today can
+    only stop in its lane; it has no pull-over operator. **A stop in lane on a 30 mph street leaves a stationary
+    vehicle in traffic until someone moves it,** but pulling over needs more working functions at the moment
+    something has failed.
+  reversibility: revisit
+  blocks: SG-07 safe state, fallback concept (WP-C-12), safety monitor design
+  gate: G1
+  asked: 2026-10-23
+  batch: 3
+  options:
+    - key: A
+      recommended: true
+      title: Pull over when Autoware still can; the rated fallback is a stop in lane
+      detail: >-
+        Autoware tries to pull over to the kerb (a new pull-over operator, not rated for safety); if it cannot, it stops
+        in lane; the safety monitor's own stop is always in lane, with hazard lights, and a remote operator then moves
+        the vehicle. Cost: a pull-over operator to build and validate.
+    - key: B
+      title: Always stop in lane
+      detail: >-
+        Simplest; uses what Autoware has. Cost: more stops in traffic lanes and more rear-end exposure, which the
+        hazard analysis must rate.
+    - key: C
+      title: Always reach the kerb, rated for safety
+      detail: >-
+        The minimal risk condition is a stop at the kerb. Cost: steering and perception for the pull-over must keep
+        working after faults, at ASIL D, which the independent monitor alone cannot provide.
+  sources: [WP-C-03 §7, HA-5, WP-C-01 §4, OI-3, autoware_universe 0.52.1 autoware_mrm_handler]
+  status: open
