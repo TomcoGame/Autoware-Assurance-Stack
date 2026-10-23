@@ -1,0 +1,152 @@
+# Functional modifications for WP-C-07: the changes to the function, its ODD, its architecture or its operation that
+# reduce the SOTIF risk of the insufficiencies of WP-C-06. modifications.py checks them against
+# ../triggering/triggering.yaml, the functional safety concept, the ODD monitors and the decision register, works out
+# which SOTIF hazards each modification addresses (through the insufficiencies), and writes the WP-C-07 tables and
+# Figure 2-1.
+# `concept` lists the requirements or monitors already in the concept that carry the modification; a modification
+# with none is new work. `pending` names a decision the modification waits on.
+# Every entry is a draft by Claude (I0). Whether a modification is enough is decided by test (WP-V-03).
+
+modifications:
+  - id: FM-01
+    type: data
+    name: Training and test data for the ODD
+    change: Train and test the LiDAR detector and the traffic light models on data covering the input space of WP-C-02 §6, with children, wheelchairs and e-scooters as their own classes and US signal heads, and fill the gaps WP-C-11 finds
+    addresses: [FI-01, FI-04]
+    by: ML engineering (WP-W-10)
+    concept: []
+  - id: FM-02
+    type: architecture
+    name: Independent safety channel and envelope
+    change: The safety monitor, with its own sensors, bounds every command so that a missed or mispredicted road user is still avoided
+    addresses: [FI-01, FI-02, FI-03, FI-05, FI-06]
+    by: Safety monitor (EL-02, EL-03)
+    concept: [FSR-02.01, FSR-02.02, FSR-06.01]
+  - id: FM-03
+    type: function
+    name: Ground segmentation for low objects
+    change: Set and validate the smallest object height that must survive ground removal (kerbs, debris, a child lying down), and tune the segmentation to it
+    addresses: [FI-02]
+    by: Autoware configuration (`autoware_ground_segmentation`)
+    concept: []
+  - id: FM-04
+    type: function
+    name: Tracks held through occlusion
+    change: Keep and predict tracks of road users that pass behind others for a set time, and give new tracks a conservative velocity until it is measured
+    addresses: [FI-03]
+    by: Autoware change (`autoware_multi_object_tracker`)
+    concept: []
+  - id: FM-05
+    type: function
+    name: Conservative traffic light reading
+    change: Treat an unknown, low-confidence or conflicting reading as red, and take the more restrictive of two heads for the same lane
+    addresses: [FI-04]
+    by: Autoware configuration and change (traffic light recognition, F-03)
+    concept: [FSR-06.03]
+  - id: FM-06
+    type: function
+    name: Prediction of rule-breaking road users
+    change: Add hypotheses for pedestrians crossing away from crossings, cyclists leaving their lane, and vehicles approaching a red light too fast to stop, and plan against them
+    addresses: [FI-05]
+    by: Autoware change (`autoware_map_based_prediction`)
+    concept: []
+  - id: FM-07
+    type: function
+    name: Conservative gap acceptance
+    change: At unprotected turns and roundabout entries, assume unseen or fast-approaching vehicles at the bound of WP-C-04 OI-4, creep for a view, and wait when the gap cannot be confirmed
+    addresses: [FI-05, FI-06]
+    by: Autoware configuration (`autoware_behavior_velocity_intersection_module`)
+    concept: [FSR-06.01, FSR-06.02]
+  - id: FM-08
+    type: odd
+    name: Route preference away from the hardest junctions
+    change: Route planning prefers routes without unprotected left turns across more than one oncoming lane and without multi-lane roundabouts, when one of similar length exists; both stay inside the ODD (DQ-011 C), and the preference is Claude's reversible choice (DQ-024)
+    addresses: [FI-05, FI-06]
+    by: Route planning (F-05) and map attributes
+    concept: []
+  - id: FM-09
+    type: function
+    name: Localisation integrity monitor
+    change: Judge localisation from the scan-matching score, its covariance and a cross-check with odometry, start an MRM when integrity is lost, and flag map areas with few features
+    addresses: [FI-07]
+    by: New Autoware package with the diagnostics
+    concept: []
+  - id: FM-10
+    type: function
+    name: Safety channel sensors and blockage detection
+    change: Choose the safety channel's sensors so that dark and low objects are seen at night and in light rain, detect their blockage, and clean them
+    addresses: [FI-08]
+    by: Safety monitor hardware (WP-H-02) and the vehicle
+    concept: [FSR-02.01]
+  - id: FM-11
+    type: operations
+    name: Limits on remote driving
+    change: Remote driving at a reduced speed set in WP-S-04, one vehicle per operator, video delay bounded, every command checked by the monitor
+    addresses: [FI-09]
+    by: Remote operations (WP-O-02) and the safety monitor
+    concept: [FSR-08.01, FSR-08.02, AOU-10]
+  - id: FM-12
+    type: function
+    name: Wet-road driving
+    change: When the road is wet, plan with the deceleration and lateral acceleration a wet road allows, and lower the speed accordingly
+    addresses: [FI-10]
+    by: Autoware configuration (planning limits), with MON-03 reporting the surface
+    concept: []
+  - id: FM-13
+    type: operations
+    name: Map change management
+    change: Feed permits and closures from the city into the map process, report every map–world divergence the fleet sees (MON-02), and block affected lanes in routing until the map is updated
+    addresses: [FI-11]
+    by: Map process (WP-W-12) and remote operations
+    concept: [MON-02, AOU-04]
+  - id: FM-14
+    type: function
+    name: ODD monitors
+    change: Build the ODD monitors MON-01 to MON-04 of WP-C-02 §4, each ending in an MRM when it cannot tell inside from outside
+    addresses: [FI-12]
+    by: New Autoware packages
+    concept: [MON-01, MON-02, MON-03, MON-04, FSR-07.05]
+  - id: FM-15
+    type: function
+    name: Emergency vehicle response
+    change: Detect an approaching emergency vehicle and pull to the side or stop to let it pass (WP-C-02 OEDR-09); how it is detected waits on the decision
+    addresses: [FI-13]
+    by: New Autoware function; sensors per the decision
+    concept: []
+    pending: DQ-025
+  - id: FM-16
+    type: function
+    name: Response to people directing traffic
+    change: Detect a person standing in the roadway at a junction, or a dark signal, stop safely and ask for remote assistance (WP-C-02 OEDR-10)
+    addresses: [FI-14]
+    by: New Autoware function with MON-02
+    concept: [MON-02]
+  - id: FM-17
+    type: function
+    name: Predictable driving style
+    change: Tune waits, gap acceptance and creeping to the style the decision sets, cap how long the vehicle waits before it asks for remote assistance, and signal its intent
+    addresses: [FI-15]
+    by: Autoware configuration (planning)
+    concept: []
+    pending: DQ-026
+  - id: FM-18
+    type: function
+    name: Occlusion-aware speed
+    change: Enable and tune Autoware's occlusion handling, cap speed at occlusion zones marked in the map, and let the monitor enforce the stopping distance
+    addresses: [FI-16]
+    by: Autoware configuration (`occlusion_spot_module`) and map attributes
+    concept: [FSR-06.02]
+  - id: FM-19
+    type: function
+    name: Pull-over to mapped safe stopping places
+    change: Build the pull-over operator so that it stops only at mapped safe stopping places, never in a bike lane, driveway, bus stop or crosswalk
+    addresses: [FI-17]
+    by: New Autoware package (MRM-1 of WP-C-12)
+    concept: [FSR-07.05]
+  - id: FM-20
+    type: operations
+    name: Passenger warning at a stop in lane
+    change: When the vehicle stops in lane, tell the passengers by voice and on screen to leave on the kerb side and look for traffic, and connect them to a remote operator
+    addresses: [FI-18]
+    by: Vehicle interface and remote operations (WP-O-03)
+    concept: []

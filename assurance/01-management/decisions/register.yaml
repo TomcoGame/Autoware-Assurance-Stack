@@ -731,3 +731,92 @@
   status: applied
   answer: {choice: C, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
   applied: {ref: "#15", record: WP-C-12 v0.3 §4 MRC-2; WP-C-05 v0.4 SH-16, at: 2026-10-23}
+
+- id: DQ-024
+  question: Should route planning prefer routes that avoid the hardest junctions?
+  context: >-
+    Unprotected left turns across several oncoming lanes and multi-lane roundabouts carry the most triggering
+    conditions for gap acceptance (WP-C-06 TC-12, TC-13). Both stay inside the ODD (DQ-011 C); the question is only
+    whether routing should avoid them when an alternative of similar length exists.
+  reversibility: easy
+  blocks: Nothing
+  decider: claude
+  gate: G1
+  asked: 2026-10-23
+  proceed_after: 2026-10-23
+  options:
+    - key: A
+      recommended: true
+      title: Prefer routes without them when one of similar length exists
+      detail: >-
+        Lowers exposure to the hardest gap decisions without leaving the ODD. Cost: slightly longer trips on some routes; a routing weight to tune.
+    - key: B
+      title: Route without regard to junction type
+      detail: >-
+        Shortest trips. Cost: the most exposure to TC-12 and TC-13.
+  sources: [WP-C-07 FM-08, WP-C-06 TC-12, TC-13, DQ-011]
+  status: assumed
+  answer: {choice: A, via: assumed, at: 2026-10-23}
+
+- id: DQ-025
+  question: How should the robotaxi know an emergency vehicle is coming?
+  context: >-
+    The pinned Autoware has no response to emergency vehicles (WP-C-06 FI-13), and the vehicle must pull aside or
+    stop for one. An ambulance is often heard before it is seen, especially at a junction. **This decides what
+    hardware the vehicle needs and how much the response depends on the remote operations centre.**
+  reversibility: revisit
+  blocks: WP-C-07 FM-15, sensor set (WP-H-02), WP-C-11
+  gate: G2
+  asked: 2026-10-23
+  batch: 7
+  options:
+    - key: A
+      recommended: true
+      title: Microphones for sirens and cameras for emergency lights, on the vehicle
+      detail: >-
+        Hears sirens from any direction and confirms with the lights. Cost: a microphone array and a new detection
+        model to build, train and validate; a new AI component under ISO/PAS 8800.
+    - key: B
+      title: Cameras for emergency lights only
+      detail: >-
+        Uses the existing cameras. Cost: misses an emergency vehicle that cannot yet be seen, for example behind
+        buildings at a junction.
+    - key: C
+      title: The remote operator watches and listens, and tells the vehicle to yield
+      detail: >-
+        No new hardware. Cost: depends on the link, the video and the operator's attention (SH-13), and one
+        operator watches several vehicles.
+  sources: [WP-C-07 FM-15, WP-C-06 FI-13, TC-21, WP-C-05 SH-09, WP-C-02 OEDR-09]
+  status: open
+
+- id: DQ-026
+  question: How assertively should the robotaxi drive?
+  context: >-
+    A vehicle that waits long and gives way to everyone causes its own collisions: drivers behind it lose patience,
+    and others misread its hesitation (SH-11). A vehicle that takes gaps as people do accepts more risk at turns
+    (SH-05). **This sets the default behaviour at junctions, merges and four-way stops, and how often the vehicle
+    asks the remote operations centre for help.** The safety monitor bounds every option.
+  reversibility: revisit
+  blocks: WP-C-07 FM-17, planning parameters (WP-W-03)
+  gate: G1
+  asked: 2026-10-23
+  batch: 7
+  options:
+    - key: A
+      recommended: true
+      title: At the cautious end of normal human driving, with a cap on waiting
+      detail: >-
+        Gaps and waits a careful driver would take; after a set time without a gap, it asks for remote assistance.
+        Cost: tuning against data of human driving in the geofence, and more requests for assistance.
+    - key: B
+      title: As cautious as possible
+      detail: >-
+        Takes only large gaps and waits as long as needed. Cost: long waits, blocked traffic and more rear-end and
+        frustration risk (SH-11).
+    - key: C
+      title: Like the typical driver in the geofence
+      detail: >-
+        Blends in best. Cost: accepts the gaps typical drivers do, which the acceptance criterion (careful,
+        competent driver, DQ-020 A) does not support.
+  sources: [WP-C-07 FM-17, WP-C-06 FI-15, TC-23, WP-C-05 SH-05, SH-11, DQ-020]
+  status: open
