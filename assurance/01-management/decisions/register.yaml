@@ -525,7 +525,9 @@
         Share SG-06 between Autoware and the monitor, for example ASIL B(D) each. Cost: reverses the decision to keep
         Autoware QM (DQ-002 A) for this chain.
   sources: [WP-C-04 §2.2, FSR-06.01, FSR-06.02, FSR-06.03, WP-C-03 SG-06, IEEE 2846-2022]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#10", record: "WP-C-04 v0.3 §2.2, FSR-06.01 to FSR-06.03, OI-1; WP-M-01 v0.6 §8", at: 2026-10-23}
 
 - id: DQ-018
   question: Should the safety monitor's perception have its own sensors?
@@ -556,7 +558,9 @@
       detail: >-
         Keep both open. Cost: the technical safety concept and the hardware design wait until G2.
   sources: [WP-C-04 §2.3, FSR-02.01, EL-03, WP-A-03]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#10", record: "WP-C-04 v0.3 §2.3, EL-03; WP-C-01 v0.6 §5.1 Sensors, I-13; WP-M-01 v0.6 §8", at: 2026-10-23}
 
 - id: DQ-019
   question: May the safety monitor soften hard braking from Autoware that its own sensors cannot confirm?
@@ -588,4 +592,6 @@
         Only clips extreme decelerations. Cost: spurious braking at just below that level, still hazardous for a
         following motorcycle, is not prevented.
   sources: [WP-C-04 §2.4, FSR-03.02, WP-C-03 SG-03, HE-03.1]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#10", record: "WP-C-04 v0.3 §2.4, FSR-03.02; WP-M-01 v0.6 §8", at: 2026-10-23}
