@@ -260,6 +260,12 @@ fsrs:
     element: EL-02
     text: On detecting a fault of its own, stop sending commands to the vehicle, so that the vehicle's own stop (FSR-07.06) takes over
     verify: Fault injection inside the monitor; review of its diagnostic coverage
+  - id: FSR-07.08
+    goal: SG-07
+    asil: D
+    element: EL-02
+    text: When EL-03 fails, have Autoware stop in lane comfortably, check its speed, deceleration and steering against the vehicle state (EL-06), and stop the vehicle itself if it does not slow as expected (DQ-021 A)
+    verify: Fault injection of EL-03 faults with Autoware's stop delayed or missing
   # SG-08 Do not act on stale, corrupted or foreign remote commands
   - id: FSR-08.01
     goal: SG-08
