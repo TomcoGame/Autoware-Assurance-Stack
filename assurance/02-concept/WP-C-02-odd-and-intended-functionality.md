@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-02 ODD and intended functionality (DDT, OEDR, manoeuvres) |
 | Standard reference | UL 4600 §8; ISO 26262-3 §5; ISO 21448 §5; ISO/PAS 8800:2024 (Input space definition); ASPICE 4.0 SYS.1; ISO 34503:2023 and SAE J3016 (informative, taxonomy and terms) |
-| Version | 0.2 (first content: ODD attributes with proposed limits, ODD monitoring, intended functionality, AI input space; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.3 (one US state, so US vehicle code and mph (DQ-009 A); remote driving allowed, so MON-04 bounds the remote loop (DQ-010 C); 2026-10-23). 0.2 (first content: ODD attributes with proposed limits, ODD monitoring, intended functionality, AI input space; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -23,8 +23,8 @@ With no driver, the ODD carries more weight than it would for a supervised syste
 | Input | What it fixes | Source |
 |---|---|---|
 | Item and ODD envelope | Geofenced urban robotaxi; public urban roads up to 50 km/h; day and night; dry weather and light rain | DQ-001 B ([WP-M-01 §3.1](../01-management/WP-M-01-assurance-strategy.md#31-reference-configuration)) |
-| Traffic rules | Those of the first market, not yet chosen | DQ-009 (open) |
-| Remote operation | Whether remote operators may drive or only assist | DQ-010 (open) |
+| Traffic rules | The vehicle code of one US state; the state is not yet chosen | DQ-009 A, DQ-013 (open) |
+| Remote operation | Remote operators may drive the vehicle as well as assist it | DQ-010 C |
 | Intersection manoeuvres | Whether unprotected turns and roundabouts are inside the ODD | DQ-011 (open) |
 | Weather and visibility limits | The numbers behind "light rain" and the visibility floor | DQ-012 (open) |
 
@@ -40,7 +40,7 @@ Attributes follow the three top-level groups of ISO 34503: scenery (static), env
 |---|---|---|---|---|---|
 | ODD-01 | Area | Public roads inside a mapped geofence; every road in it has a verified HD map (WP-W-12) | Anywhere outside the geofence or without a verified map | MON-01 | Decided (DQ-001) |
 | ODD-02 | Road type | Urban streets and collector roads, one or two lanes per direction, with or without a centre line | Motorways, expressways, ramps; unpaved roads; private car parks; drive-throughs | MON-01 (map) | Proposed |
-| ODD-03 | Posted speed limit | Roads posted at or below 50 km/h (in the US, at or below 30 mph) | Roads posted higher | MON-01 (map) | Proposed; the US unit depends on DQ-009 |
+| ODD-03 | Posted speed limit | Roads posted at or below 30 mph (48 km/h) | Roads posted higher, including the 35 mph arterials common in US cities | MON-01 (map) | Proposed; DQ-001 set 50 km/h, and the nearest US posted limit at or below it is 30 mph |
 | ODD-04 | Junctions | Signalised intersections with protected turns; stop-controlled and yield-controlled junctions; T-junctions | Unprotected turns across oncoming traffic and roundabouts unless DQ-011 includes them; level crossings with railways or trams | MON-01 (map, route planning) | Open (DQ-011) |
 | ODD-05 | Crossings | Marked pedestrian crossings, with or without signals; cycle lanes alongside the road | Unmarked mid-block crossings are not excluded (people cross anyway) and are handled by OEDR (§5.2) | n/a | Proposed |
 | ODD-06 | Road surface and geometry | Paved, gradients up to 8 %, curves the vehicle can take at the posted speed | Gradients above 8 %; surfaces the map flags as damaged | MON-01 (map) | Proposed; gradient depends on the vehicle (Provisional) |
@@ -57,7 +57,7 @@ Attributes follow the three top-level groups of ISO 34503: scenery (static), env
 | ODD-12 | Illumination | Day, dusk and night, including unlit streets | None excluded by time of day; low sun and glare are triggering conditions (WP-C-06) | n/a | Decided (DQ-001) |
 | ODD-13 | Road surface condition | Dry or wet | Standing water deeper than the vehicle allows; ice; snow cover | MON-03, temperature | Proposed |
 | ODD-14 | Temperature | The operating range of the sensors and computer | Outside it | Hardware diagnostics | Provisional (WP-H-02) |
-| ODD-15 | Connectivity | Remote operations link available; GNSS available or not (localisation uses the point cloud map) | Loss of the remote link: the item stays inside the ODD only long enough to reach a minimal risk condition (AOU-09) | MON-04 | Proposed |
+| ODD-15 | Connectivity | Remote operations link available, with a delay inside the bound WP-S-04 sets while a remote operator drives (DQ-010 C); GNSS available or not (localisation uses the point cloud map) | Loss of the remote link: the item stays inside the ODD only long enough to reach a minimal risk condition (AOU-09) | MON-04 | Proposed |
 
 ### 3.3 Dynamic elements
 
@@ -78,7 +78,7 @@ The item must know when it is about to leave its ODD or has left it, and then re
 | MON-01 | Map and route check: the planned route stays inside the geofence, on roads whose map attributes are inside ODD-02 to ODD-06 and ODD-09 | ODD-01 to ODD-06, ODD-09 | Route planning on the Lanelet2 map; no check of map attributes against the ODD | To be built |
 | MON-02 | Map–world divergence: what the sensors see disagrees with the map (markings, lanes, closures, a person directing traffic) | ODD-07, ODD-08, ODD-19 | Localisation score in diagnostics; nothing that compares the scene with the map's lanes | To be built |
 | MON-03 | Weather and visibility: rain rate, visibility and surface condition, from sensor degradation and an external weather feed | ODD-10, ODD-11, ODD-13 | Camera image diagnostics; LiDAR raindrop filtering; no rain-rate or visibility estimate | To be built |
-| MON-04 | Remote link: loss or delay of the link to the remote operations centre | ODD-15 | AD API connectivity is not monitored as an ODD condition | To be built |
+| MON-04 | Remote link: loss or delay of the link to the remote operations centre. While a remote operator drives, it stops the vehicle on commands older than the bound, independently of the operator | ODD-15 | `autoware_vehicle_cmd_gate` times out the system emergency and external emergency-stop heartbeats; a reading of its source (0.52.1) found no check on the age of the external control commands themselves, to be confirmed in WP-W-03. AD API connectivity is not monitored as an ODD condition | To be built |
 
 Each monitor's response when its condition leaves the ODD is a minimal risk manoeuvre, specified in WP-C-12. A monitor that cannot tell inside from outside (for example, rain rate near 2.5 mm/h) counts as outside.
 
@@ -86,7 +86,7 @@ Each monitor's response when its condition leaves the ODD is a minimal risk mano
 
 ### 5.1 Dynamic driving task
 
-Inside the ODD the item performs the whole dynamic driving task: steering, acceleration and braking, object and event detection and response, manoeuvre planning, and signalling (SAE J3016). It also performs the fallback: when it can no longer drive safely it reaches a minimal risk condition by itself (WP-C-12). It drives to the traffic rules of the first market (DQ-009), and in doubt it yields.
+Inside the ODD the item performs the whole dynamic driving task: steering, acceleration and braking, object and event detection and response, manoeuvre planning, and signalling (SAE J3016). It also performs the fallback: when it can no longer drive safely it reaches a minimal risk condition by itself (WP-C-12). It drives to the vehicle code of the chosen US state (DQ-009 A, DQ-013), and in doubt it yields. In `REMOTE` mode a remote operator drives instead (DQ-010 C); the safety monitor's envelope and MON-04 still apply.
 
 ### 5.2 Object and event detection and response
 
@@ -130,7 +130,7 @@ ISO/PAS 8800 asks for the input space of each AI component to be defined from th
 | Weather | Dry and light rain up to the limit of ODD-10, with wet roads and spray | ODD-10, ODD-13 |
 | Visibility | Down to the floor of ODD-11 | ODD-11 |
 | Scenery | The road types, junctions and crossings of the geofence | ODD-02 to ODD-05 |
-| Traffic lights | The signal heads used in the first market, including pedestrian and cycle signals | ODD-04, DQ-009 |
+| Traffic lights | US signal heads (MUTCD), including protected-turn arrows, pedestrian and bicycle signals | ODD-04, DQ-009 A |
 
 Gaps between this and what the pinned models were trained on are assessed in WP-C-11 and WP-W-10.
 
@@ -139,7 +139,7 @@ Gaps between this and what the pinned models were trained on are assessed in WP-
 | ID | Open item | Closes at |
 |---|---|---|
 | OI-1 | Replace each Proposed value with the safety authority's decision (DQ-011, DQ-012 and the remaining Proposed rows) | G1 |
-| OI-2 | Fill the traffic rules and the speed units for the first market (DQ-009) | G1 |
+| OI-2 | Fill the traffic rules of the chosen state (DQ-013) | G1 |
 | OI-3 | Replace Provisional values from the chosen vehicle (DQ-008): gradients, temperature range | G2 |
 | OI-4 | Specify MON-01 to MON-04 as requirements in WP-S-01 and WP-S-02 | G2 |
 | OI-5 | Specify the emergency-vehicle response (OEDR-09) and the person-directing-traffic response (OEDR-10), which Autoware does not provide | G2 |
