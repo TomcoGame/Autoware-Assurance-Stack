@@ -1,0 +1,1 @@
+Built from [`wiki/`](../wiki/README.md) of {{REPO}} on branch {{BRANCH}} at commit {{SYNC_COMMIT}} ({{SYNC_DATE}}). Edit the pages there by pull request; edits made on the wiki are overwritten. Everything in this project is a draft for engineering review: nothing is certified, assessed or approved for driverless operation.

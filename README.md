@@ -1,90 +1,72 @@
-# Autoware - the world's leading open-source software project for autonomous driving
+# Autoware Assurance Stack
 
-<p align="center">
-    <img src="https://user-images.githubusercontent.com/63835446/158918717-58d6deaf-93fb-47f9-891d-e242b02cba7b.png"
-        alt="Autoware_RViz" width="75%" />
-</p>
+The assurance work for a driverless urban robotaxi built on unmodified [Autoware](https://github.com/autowarefoundation/autoware).
+This repository is a fork of `autowarefoundation/autoware`: the upstream content is left as it is, and the fork adds
+the assurance work products in [`assurance/`](assurance/README.md) and the checks that run on them.
 
-<!--- License -->
-<p align="center">
-    <a href="https://github.com/autowarefoundation/autoware/blob/main/LICENSE">
-        <img src="https://img.shields.io/github/license/autowarefoundation/autoware?style=flat&label=License"
-            alt="License" /></a>
-</p>
+UL 4600 is the main framework, because there is no driver to fall back on: the vehicle has to detect its own failures
+and limits and reach a minimal risk condition by itself, and the safety case has to argue that across the whole
+operational design domain. ISO 26262, ISO 21448 (SOTIF), ISO/SAE 21434, ISO/PAS 8800 and Automotive SPICE 4.0
+supply the methods and evidence ([WP-M-01 §4](assurance/01-management/WP-M-01-assurance-strategy.md#4-how-the-standards-fit-together)).
 
-<!--- Social Media -->
-<p align="center">
-    <a href="https://discord.gg/Q94UsPvReQ">
-        <img src="https://img.shields.io/discord/953808765935816715?logo=discord&logoColor=white&style=flat&label=Autoware%20Discord"
-            alt="Autoware Discord"></a>
-    <a href="https://twitter.com/intent/follow?screen_name=AutowareFdn">
-        <img src="https://img.shields.io/twitter/follow/AutowareFdn?logo=x&logoColor=white&style=flat"
-            alt="Autoware Twitter / X"></a>
-    <a href="https://www.linkedin.com/company/the-autoware-foundation/">
-        <img src="https://img.shields.io/badge/Linkedin-Autoware%20Foundation-0a66c2?logo=linkedin&logoColor=white&style=flat"
-            alt="Autoware Linkedin"></a>
-</p>
+> [!WARNING]
+> Everything in this repository's assurance work is a **draft prepared for engineering review**. Nothing is
+> certified, assessed or approved for driverless operation. No work product has passed verification review,
+> confirmation review or assessment, and a document existing here does not mean the activity behind it is done.
+> Much of the drafting is done by an AI assistant at independence level I0, which counts for nothing until a human
+> reviewer has verified it. Do not use anything here to put a vehicle on the road.
 
-Autoware is the world's leading open-source autonomous driving framework. Autoware provides a comprehensive, production-ready software stack designed to accelerate the commercial deployment of autonomous vehicles across diverse platforms and use cases.
+## Assurance status
 
-## 🚀 Get Started
+![Assurance dashboard: the assurance state, work products by status and by gate, decisions waiting on the safety authority, and the safety case records. The same values are listed as text in assurance/README.md.](assurance/case/figures/dashboard.svg)
 
-<p align="center">
-    <a href="https://autowarefoundation.github.io/autoware-documentation/main/installation">
-        <img src="https://img.shields.io/badge/📥_Installation-Get_Autoware_Running-2ea44f?style=for-the-badge"
-            alt="Installation" /></a>
-    &nbsp;&nbsp;
-    <a href="https://autowarefoundation.github.io/autoware-documentation/main/demos/">
-        <img src="https://img.shields.io/badge/⚡_Quick_Start-Try_the_Demo-1f6feb?style=for-the-badge"
-            alt="Quick Start" /></a>
-</p>
+_Generated from the work-product register, the decision register and the safety case records by
+[`dashboard.py`](assurance/case/tools/dashboard.py); CI fails if it is stale. The same values as text are in
+[`assurance/README.md`](assurance/README.md#status)._
 
-> **New to Autoware?**
->
-> 1. **[Install Autoware](https://autowarefoundation.github.io/autoware-documentation/main/installation)** → Set up your environment and build the stack from source.
-> 2. **[Run the Quick Start demo](https://autowarefoundation.github.io/autoware-documentation/main/demos/)** → Drive a simulated vehicle in just a few minutes.
+| Start here                                                                                               | What it is                                                                                   |
+| -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| [`assurance/README.md`](assurance/README.md)                                                             | The assurance stack: layout, identifiers, document header, status meanings, generators       |
+| [WP-M-00 Work-product register](assurance/01-management/WP-M-00-work-product-register.md)                | Every work product, the clauses it answers, the gate that needs it and its status            |
+| [WP-M-01 Assurance strategy](assurance/01-management/WP-M-01-assurance-strategy.md)                      | What will be claimed and for which configuration, how the standards fit, the decisions taken |
+| [WP-C-01 Item definition](assurance/02-concept/WP-C-01-item-definition.md)                               | The item: its functions, modes, boundary, interfaces and assumptions                         |
+| [WP-C-02 ODD and intended functionality](assurance/02-concept/WP-C-02-odd-and-intended-functionality.md) | Where and when the vehicle may drive, what it must do there, and how it knows it has left    |
+| [WP-C-03 HARA](assurance/02-concept/WP-C-03-hara.md)                                                     | Hazard analysis and risk assessment: hazardous events, ratings, safety goals and their ASILs |
+| [WP-C-04 Functional safety concept](assurance/02-concept/WP-C-04-functional-safety-concept.md)           | How the safety goals are met: functional safety requirements and their allocation            |
+| [Decision register](assurance/01-management/decisions/README.md)                                         | The questions only the safety authority can answer, and how they are asked and recorded      |
 
-## Documentation
+## Wiki
 
-To learn more about using or developing Autoware, refer to the [Autoware documentation site](https://autowarefoundation.github.io/autoware-documentation/main/). You can find the source for the documentation in [autowarefoundation/autoware-documentation](https://github.com/autowarefoundation/autoware-documentation).
+The [wiki](https://github.com/TomcoGame/Autoware-Assurance-Stack/wiki) explains the project for newcomers,
+contributors and assessors: how the repository is organized, what a safety case is, the standards at a glance, how
+decisions are made, how to read the status, and a glossary. Its pages are kept in [`wiki/`](wiki/README.md) and
+published by the [wiki workflow](.github/workflows/wiki.yaml) on every push to `main`. The wiki explains and links;
+it is not a work product.
+
+## Upstream Autoware
+
+The assurance work refers to Autoware as pinned in [`repositories/autoware.repos`](repositories/autoware.repos),
+which fixes the version of each Autoware source repository. This repository holds no driving code itself; the
+packages live in the repositories it pins. Each work product names the commit it refers to in the `Baseline` field
+of its header.
+
+To build and run Autoware, follow the upstream documentation:
+
+- [Installation](https://autowarefoundation.github.io/autoware-documentation/main/installation)
+- [Demos](https://autowarefoundation.github.io/autoware-documentation/main/demos/)
+- [Autoware documentation](https://autowarefoundation.github.io/autoware-documentation/main/)
+
+The Ansible and Docker tooling in [`ansible/`](ansible) and [`docker/`](docker) is upstream's, unchanged.
 
 ## Contributing
 
-<p align="left">
-    <a href="https://github.com/autowarefoundation/autoware_universe/graphs/contributors">
-        <img src="https://img.shields.io/github/contributors/autowarefoundation/autoware_universe?style=flat&label=Autoware%20Universe%20Contributors"
-            alt="Autoware Universe Contributors" /></a>
-    <a href="https://github.com/autowarefoundation/autoware/graphs/contributors">
-        <img src="https://img.shields.io/github/contributors/autowarefoundation/autoware?style=flat&label=Autoware%20Contributors"
-            alt="Autoware Contributors" /></a>
-</p>
+Work on a branch and open a pull request; the project lead decides what is merged. The rules for assurance work and
+the checks to run before pushing are in [`CLAUDE.md`](CLAUDE.md), and the
+[contributor guide](wiki/Contributor-guide.md) collects them. Changes to Autoware itself belong upstream; see
+[Autoware's contribution guidelines](https://autowarefoundation.github.io/autoware-documentation/main/contributing/).
 
-<!--- Commit Activity -->
-<p align="left">
-    <a href="https://github.com/autowarefoundation/autoware_universe/pulse">
-        <img src="https://img.shields.io/github/commit-activity/m/autowarefoundation/autoware_universe?style=flat&label=Autoware%20Universe%20Commit%20Activity"
-            alt="Autoware Universe Activity" /></a>
-    <a href="https://github.com/autowarefoundation/autoware/pulse">
-        <img src="https://img.shields.io/github/commit-activity/m/autowarefoundation/autoware?style=flat&label=Autoware%20Commit%20Activity"
-            alt="Autoware Activity" /></a>
-</p>
+## Credit and licence
 
-- Make sure to follow the [Contribution Guidelines](https://autowarefoundation.github.io/autoware-documentation/main/contributing/).
-- Take a look at Autoware's [various working groups](https://github.com/autowarefoundation/autoware-projects/wiki#working-group-list) to gain an understanding of any work in progress and to see how projects are managed.
-- If you have any technical questions, you can start a discussion in the [Q&A category](https://github.com/autowarefoundation/autoware/discussions/categories/q-a) to request help and confirm if a potential issue is a bug or not.
-
-## Useful resources
-
-<!--- CI Reports -->
-<p align="left">
-    <a href="https://github.com/autowarefoundation/autoware/actions/workflows/health-check.yaml?query=branch%3Amain">
-        <img src="https://img.shields.io/github/actions/workflow/status/autowarefoundation/autoware/health-check.yaml?style=flat&label=health-check"
-            alt="health-check CI" /></a>
-    <a href="https://app.codecov.io/gh/autowarefoundation/autoware_universe">
-        <img src="https://img.shields.io/codecov/c/gh/autowarefoundation/autoware_universe?style=flat&label=Coverage&logo=codecov&logoColor=white"
-            alt="Code Coverage" /></a>
-</p>
-
-- [Autoware Foundation homepage](https://www.autoware.org/)
-- [Support guidelines](https://autowarefoundation.github.io/autoware-documentation/main/community/support/)
-- [CI metrics](https://autowarefoundation.github.io/autoware-ci-metrics/)
+Autoware is developed by [The Autoware Foundation](https://www.autoware.org/) and its contributors and is licensed
+under the Apache License 2.0. This repository carries Autoware's [`LICENSE`](LICENSE), [`NOTICE`](NOTICE) and
+[`DISCLAIMER.md`](DISCLAIMER.md) unchanged.
