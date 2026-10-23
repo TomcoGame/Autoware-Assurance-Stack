@@ -29,6 +29,7 @@ for sub in (
     "02-concept/cybersecurity",
     "02-concept/ai",
     "02-concept/misuse",
+    "03-system/tsc",
     "case/tools",
     "trace/tools",
 ):
@@ -58,6 +59,7 @@ import sotif  # noqa: E402
 import stpa  # noqa: E402
 import tara  # noqa: E402
 import triggering  # noqa: E402
+import tsc  # noqa: E402
 import wpregister  # noqa: E402
 
 GOOD = {
@@ -626,6 +628,36 @@ class Misuse(unittest.TestCase):
             self.assertTrue(any(needle in x for x in misuse.check(model, k)), needle)
 
 
+class Tsc(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(tsc.check(tsc.load(), tsc.known()), [])
+
+    def test_component_asil_is_derived(self):
+        m, k = tsc.load(), tsc.known()
+        ca = tsc.component_asil(m, k)
+        self.assertEqual(ca["CMP-01"], "QM")
+        self.assertEqual(ca["CMP-02"], "D")
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = tsc.load(), tsc.known()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["mechanisms"] = [s for s in bad["mechanisms"] if "FSR-07.03" not in s["implements"]]
+        cases.append((bad, "FSR-07.03: rated D but no mechanism"))
+        bad = copy.deepcopy(m)
+        sm = next(s for s in bad["mechanisms"] if s["id"] == "SM-07")
+        sm["host"] = "CMP-01"
+        cases.append((bad, "but CMP-01 is part of EL-01"))
+        bad = copy.deepcopy(m)
+        bad["mechanisms"][0]["reaction"] = ["MRM-9"]
+        cases.append((bad, "is not a fallback trigger or MRM"))
+        bad = copy.deepcopy(m)
+        bad["links"][1]["x"] = 600
+        cases.append((bad, "is not within both boxes"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in tsc.check(model, k)), needle)
+
+
 class TreeChecks(unittest.TestCase):
     def test_table_cell_count(self):
         md = "| A | B |\n|---|---|\n| 1 | 2 |\n| 1 |\n"
@@ -694,6 +726,7 @@ class Generators(unittest.TestCase):
             cybersecurity,
             ai,
             misuse,
+            tsc,
         ):
             first, second = mod.build(), mod.build()
             self.assertEqual(first, second, mod.__name__)
