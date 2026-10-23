@@ -81,5 +81,5 @@ svg .ax { font:600 12px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fil
 <rect x="493" y="331" width="122" height="72" rx="4" class="r1"/>
 <text x="608" y="346" class="rv" text-anchor="end">1</text>
 <text x="24" y="96" class="ax">Impact ↓</text>
-<text x="24" y="448" class="t">Cell number: risk value 1 to 5. Reduce at 3 or more (proposed).</text>
+<text x="24" y="448" class="t">Cell number: risk value 1 to 5. Reduce at 3 or more.</text>
 </svg>
