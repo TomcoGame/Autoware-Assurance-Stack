@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-11 AI system definition and AI safety requirements |
 | Standard reference | UL 4600 §8; ISO 21448 §7; ISO/PAS 8800:2024 (AI safety requirements); ASPICE 4.0 MLE.1 |
-| Version | 0.2 (first content: the five AI systems, their role, input space and the safety mechanisms that bound them, AI safety requirements of five kinds and their allocation, generated from `ai/ai.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.3 (the published models are fine-tuned on data from the geofence (DQ-028 A); 2026-10-23). 0.2 (first content: the five AI systems, their role, input space and the safety mechanisms that bound them, AI safety requirements of five kinds and their allocation, generated from `ai/ai.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | AI |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -82,7 +82,7 @@ The siren detector (AIS-04) hears rather than sees: its input space is not yet i
 | AISR-08 | Uncertainty | AIS-01 | Report a confidence for each detection that matches how often detections at that confidence are right, so that tracking and planning can weigh them | WP-W-10 (calibration measure) |
 | AISR-09 | Uncertainty | AIS-02, AIS-03 | Report a state as unknown when its confidence is below the level that keeps AISR-02, so that it is treated as red (FSR-06.03) | WP-W-10 |
 | AISR-10 | Uncertainty | AIS-04, AIS-05 | Report confidence for each detection, and yield only when sound and light agree (CSR-09) | WP-W-10 |
-| AISR-11 | Data | AIS-01, AIS-02, AIS-03, AIS-04, AIS-05 | Train and test on data covering every dimension of the input space in WP-C-02 §6, collected or verified in the geofence, with the coverage of each dimension measured and reported | WP-W-10 |
+| AISR-11 | Data | AIS-01, AIS-02, AIS-03, AIS-04, AIS-05 | Fine-tune the published models, and train the new ones, on data collected and labelled in the geofence that covers every dimension of the input space in WP-C-02 §6, with the coverage of each dimension measured and reported (DQ-028 A) | WP-W-10 |
 | AISR-12 | Data | AIS-01, AIS-02, AIS-03, AIS-04, AIS-05 | Keep training, validation and test sets apart, label them to a written guide with measured label quality, and record each set's version with the model it produced | WP-W-10 |
 | AISR-13 | Monitoring | AIS-01 | Rely on the safety channel's own detection, without learned classification, to bound the effect of any detection error (DQ-002 A, DQ-018 A) | FSR-02.01, FSR-02.02 |
 | AISR-14 | Monitoring | AIS-01, AIS-02, AIS-03, AIS-04, AIS-05 | Monitor in operation for inputs unlike the training data and for drops in performance, report them, and feed them into retraining and the search for unknown scenarios (WP-V-04) | WP-O-06 (safety performance indicators) |
@@ -104,15 +104,14 @@ No requirement carries a number yet. Performance targets follow from allotting t
 
 <!-- END GENERATED: ai-allocation -->
 
-How the data requirements AISR-11 and AISR-12 are met depends on whether the project trains its own versions of the models or uses the published ones: the lead's decision (DQ-028).
+The lead decided (DQ-028 A, 2026-10-23) that the project fine-tunes the published models on data collected and labelled in the geofence, keeping Autoware's model architectures, and trains the two new detectors the same way. The data requirements AISR-11 and AISR-12 are met by that programme, planned in WP-W-10; the coverage of the input space can then be measured on the project's own data rather than inferred from what the publishers released.
 
 ## 6. Open items
 
 | ID | Open item | Closes at |
 |---|---|---|
-| OI-1 | Decide whether the project trains its own versions of the models (DQ-028) | G1 |
+| OI-1 | Plan the data collection, labelling and fine-tuning programme (DQ-028 A) and its schedule before the first validation (WP-W-10) | G2 |
 | OI-2 | Inventory every learned component the deployed launch configuration starts, and add any missing AI system | G1 |
 | OI-3 | Add the acoustic dimensions of the siren detector's input space to WP-C-02 §6 | G1 |
 | OI-4 | Set the targets of AISR-01 to AISR-03 from the allotment of AC-02 (WP-V-02) | G2 |
-| OI-5 | Plan data collection, labelling, training and release in WP-W-10 | G2 |
-| OI-6 | Review by an ML engineer independent of the author | G1 |
+| OI-5 | Review by an ML engineer independent of the author | G1 |
