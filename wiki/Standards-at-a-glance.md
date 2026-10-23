@@ -10,6 +10,10 @@ summarises it.
 
 ## The six frameworks
 
+![Standards map: UL 4600 is the safety case; ISO 26262, ISO 21448, ISO/SAE 21434, ISO/PAS 8800 and Automotive SPICE 4.0 each feed evidence into it.](../tools/readme/figures/standards.svg)
+
+*From WP-M-01 §4, drawn by [`figures.py`](../tools/readme/figures.py); the questions are a plain-language summary.*
+
 | Framework | Edition used | The question it answers here | Main work products |
 |---|---|---|---|
 | UL 4600 | 3rd edition | Is there a complete, convincing argument that the driverless system is acceptably safe across its ODD and lifecycle? | [WP-K-01](../assurance/10-safety-case/WP-K-01-safety-case.md), [WP-K-07](../assurance/10-safety-case/WP-K-07-ul4600-assessment.md), [WP-O-06](../assurance/09-production-operation/WP-O-06-safety-performance-indicators.md) |
@@ -32,6 +36,10 @@ requires a safety case that covers the whole ODD and lifecycle, and accepts othe
 producing evidence ([WP-M-01 §4](../assurance/01-management/WP-M-01-assurance-strategy.md#4-how-the-standards-fit-together)).
 
 ## Two consequences of having no driver
+
+![When it can no longer drive on safely: left, the robotaxi pulled over to the kerb, Autoware's own manoeuvre; right, the robotaxi stopped in its lane with hazard lights on, the rated minimal risk condition of SG-07. Below, the safe state as WP-C-03 states it.](../tools/readme/figures/minimal-risk-condition.svg)
+
+*Illustration. Labels read from the work products by [`figures.py`](../tools/readme/figures.py); vehicle models CC BY 4.0, see [credits](../tools/readme/models/CREDITS.md).*
 
 - **Controllability.** ISO 26262 rates how well the driver or others can avoid harm. With no driver, the safety
   authority decided that the hazard analysis credits no controllability: every hazardous event is rated C3

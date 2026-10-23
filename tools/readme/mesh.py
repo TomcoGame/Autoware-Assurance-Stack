@@ -4,7 +4,7 @@ classified into parts and simplified.
 
 Every model comes out in the frame of the README scenes: x to the right, y forward, z up, in metres,
 with the origin on the ground under the centre of the vehicle. Each triangle carries a part class
-(body, glass, light_front, light_rear, wheel, trim) that the renderer colours; textures are not used.
+(body, glass, light_front, light_rear, indicator, wheel, trim) that the renderer colours; textures are not used.
 Badges, number plates and the interior are dropped. Simplification clusters vertices on a grid and
 drops the triangles that collapse, so a car of thousands of triangles becomes a few hundred.
 
@@ -23,7 +23,7 @@ import fbx
 MODELS = Path(__file__).resolve().parent / "models"
 KIRI = MODELS / "kiri10.fbx"
 PACK = MODELS / "generic-passenger-car-pack.fbx"
-CLASSES = ("body", "glass", "light_front", "light_rear", "wheel", "trim")
+CLASSES = ("body", "glass", "light_front", "light_rear", "indicator", "wheel", "trim")
 Vec = tuple[float, float, float]
 
 
@@ -114,7 +114,7 @@ def simplify(m: Model, cell: float) -> Model:
 KIRI_DROP = ("interior", "Steering", "Badges", "Numberplate", "Inner", "Suspension")
 KIRI_CLASS = [  # first match on the part name wins
     ("Headlights", "light_front"),
-    ("blinkers", "light_front"),
+    ("blinkers", "indicator"),
     ("Brakelights", "light_rear"),
     ("Taillights", "light_rear"),
     ("Reverse", "light_rear"),

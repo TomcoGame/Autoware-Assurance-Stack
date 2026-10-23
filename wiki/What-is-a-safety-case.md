@@ -51,6 +51,10 @@ current counts of claims, evidence and open defeaters are on the dashboard, comp
 
 ## How the rest of the work feeds it
 
+![Doer and checker architecture: sensors, Autoware and the independent safety monitor in the item, the drive-by-wire outside it, each with its rating from WP-C-04; below, the concept work products with their status in the register, all feeding the UL 4600 safety case.](../tools/readme/figures/architecture.svg)
+
+*Ratings from WP-C-04, statuses from WP-M-00; drawn by [`figures.py`](../tools/readme/figures.py).*
+
 The hazard analysis ([WP-C-03](../assurance/02-concept/WP-C-03-hara.md)) finds what can go wrong and sets safety
 goals; the functional safety concept ([WP-C-04](../assurance/02-concept/WP-C-04-functional-safety-concept.md)) says
 how each goal is met and by which element; later work products refine and verify that down to hardware and

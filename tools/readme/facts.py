@@ -57,7 +57,7 @@ class Limit:
 @dataclass(frozen=True)
 class Facts:
     elements: dict[str, Element]
-    goals: dict[str, tuple[str, str]]  # SG id -> (statement, ASIL)
+    goals: dict[str, tuple[str, str, str]]  # SG id -> (statement, ASIL, safe state)
     requirements: dict[str, str]  # FSR id -> ASIL
     limits: dict[str, Limit]
     decisions: dict[str, str]  # DQ id -> chosen option, applied decisions only
@@ -107,11 +107,15 @@ def elements() -> dict[str, Element]:
     return out
 
 
-def goals() -> dict[str, tuple[str, str]]:
+def goals() -> dict[str, tuple[str, str, str]]:
     head, rows = _rows(WP_C03, "ID", "## 7.")
-    ci, cs, ca = (fk.col(head, c) for c in ("ID", "Safety goal", "ASIL"))
+    ci, cs, ca, css = (fk.col(head, c) for c in ("ID", "Safety goal", "ASIL", "Safe state"))
     return {
-        fk.plain(r[ci]): (fk.plain(r[cs]), _asil(r[ca], f"WP-C-03 {fk.plain(r[ci])}"))
+        fk.plain(r[ci]): (
+            fk.plain(r[cs]),
+            _asil(r[ca], f"WP-C-03 {fk.plain(r[ci])}"),
+            fk.plain(r[css]),
+        )
         for r in rows
         if fk.plain(r[ci]).startswith("SG-")
     }
@@ -202,6 +206,7 @@ def need(facts: Facts) -> dict[str, str]:
         "sg02": sg["SG-02"][1],
         "sg06": sg["SG-06"][1],
         "sg07": sg["SG-07"][1],
+        "sg07_safe_state": sg["SG-07"][2],
         "fsr0601": fsr["FSR-06.01"],
         "fsr0602": fsr["FSR-06.02"],
         "dq_qm": facts.dq("DQ-002"),
