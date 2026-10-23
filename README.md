@@ -1,5 +1,19 @@
 # Autoware Assurance Stack
 
+[![assurance checks](https://github.com/TomcoGame/Autoware-Assurance-Stack/actions/workflows/assurance.yaml/badge.svg)](https://github.com/TomcoGame/Autoware-Assurance-Stack/actions/workflows/assurance.yaml)
+[![README figures](https://github.com/TomcoGame/Autoware-Assurance-Stack/actions/workflows/readme.yaml/badge.svg)](https://github.com/TomcoGame/Autoware-Assurance-Stack/actions/workflows/readme.yaml)
+[![wiki](https://github.com/TomcoGame/Autoware-Assurance-Stack/actions/workflows/wiki.yaml/badge.svg)](https://github.com/TomcoGame/Autoware-Assurance-Stack/wiki)
+![status: draft for engineering review](https://img.shields.io/badge/status-draft%20for%20engineering%20review-d29922)
+![framework: UL 4600](https://img.shields.io/badge/framework-UL%204600-2d55c8)
+![built on: Autoware, Apache-2.0](https://img.shields.io/badge/built%20on-Autoware%20%C2%B7%20Apache--2.0-6e7781)
+
+[![Concept illustration: a white robotaxi on Autoware approaches a crosswalk. Autoware's planned path is red; the independent safety monitor's envelope is blue and ends at a stop wall before a pedestrian. A parked minivan hides the kerb, and the ODD limits are shown along the bottom. Stamped: concept illustration, the safety monitor is not built yet, draft for engineering review.](tools/readme/figures/hero.svg)](tools/readme/figures/scene.svg)
+
+_Concept illustration, not output of the system; select it for the full figure. Every label is read from the work
+products and the decision register by [`tools/readme/figures.py`](tools/readme/figures.py), and CI fails if a figure
+is stale. Vehicle models by Daniel Zhabotinsky and Comrade1280, CC BY 4.0, simplified and recoloured
+([credits](tools/readme/models/CREDITS.md))._
+
 The assurance work for a driverless urban robotaxi built on unmodified [Autoware](https://github.com/autowarefoundation/autoware).
 This repository is a fork of `autowarefoundation/autoware`: the upstream content is left as it is, and the fork adds
 the assurance work products in [`assurance/`](assurance/README.md) and the checks that run on them.
@@ -15,6 +29,21 @@ supply the methods and evidence ([WP-M-01 §4](assurance/01-management/WP-M-01-a
 > confirmation review or assessment, and a document existing here does not mean the activity behind it is done.
 > Much of the drafting is done by an AI assistant at independence level I0, which counts for nothing until a human
 > reviewer has verified it. Do not use anything here to put a vehicle on the road.
+
+## How the system is built
+
+![Doer and checker architecture: sensors feed Autoware, whose commands pass through an independent safety monitor (not built yet) to the vehicle drive-by-wire; remote operations also pass through the monitor, which has its own sensors. Each element carries its rating from WP-C-04. Below, the concept work products with their status in the register.](tools/readme/figures/architecture.svg)
+
+_Ratings from the functional safety concept ([WP-C-04 §4](assurance/02-concept/WP-C-04-functional-safety-concept.md#4-allocation-to-elements)),
+statuses from the [register](assurance/01-management/WP-M-00-work-product-register.md); drawn by
+[`figures.py`](tools/readme/figures.py)._
+
+## How the standards fit
+
+![Standards map: UL 4600 is the safety case; ISO 26262, ISO 21448, ISO/SAE 21434, ISO/PAS 8800 and Automotive SPICE 4.0 each feed evidence into it.](tools/readme/figures/standards.svg)
+
+_From [WP-M-01 §4](assurance/01-management/WP-M-01-assurance-strategy.md#4-how-the-standards-fit-together); the
+questions are a plain-language summary._
 
 ## Assurance status
 
@@ -70,3 +99,8 @@ the checks to run before pushing are in [`CLAUDE.md`](CLAUDE.md), and the
 Autoware is developed by [The Autoware Foundation](https://www.autoware.org/) and its contributors and is licensed
 under the Apache License 2.0. This repository carries Autoware's [`LICENSE`](LICENSE), [`NOTICE`](NOTICE) and
 [`DISCLAIMER.md`](DISCLAIMER.md) unchanged.
+
+The vehicles in the README figures are rendered from ["Kiri '10 - Low poly model"](https://sketchfab.com/3d-models/kiri-10-low-poly-model-7fd6e15785fa4aa9bfd6e31eb7c97ba6)
+by Daniel Zhabotinsky and ["Generic passenger car pack"](https://sketchfab.com/3d-models/generic-passenger-car-pack-20f9af9b8a404d5cb022ac6fe87f21f5)
+by Comrade1280, both licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). They are simplified,
+recoloured and partly removed; the changes are listed in [`CREDITS.md`](tools/readme/models/CREDITS.md).

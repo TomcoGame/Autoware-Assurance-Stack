@@ -11,6 +11,11 @@ leaves the upstream content as it is and adds the assurance work products in
 
 ## What the project is
 
+![Concept illustration: a white robotaxi on Autoware approaches a crosswalk. Autoware's planned path is red; the independent safety monitor's envelope is blue and ends at a stop wall before a pedestrian; a parked minivan hides the kerb; the ODD limits are shown as tags. Stamped: concept illustration, the safety monitor is not built yet, draft for engineering review.](../tools/readme/figures/scene.svg)
+
+*Concept illustration, not output of the system. Labels are read from the work products by
+[`figures.py`](../tools/readme/figures.py); vehicle models CC BY 4.0, see [credits](../tools/readme/models/CREDITS.md).*
+
 - **The system.** A geofenced urban robotaxi: driverless passenger transport on public urban roads inside a mapped
   geofence, with a remote operations centre. The reference configuration and the decisions behind it are in
   [WP-M-01 §3.1](../assurance/01-management/WP-M-01-assurance-strategy.md#31-reference-configuration).
