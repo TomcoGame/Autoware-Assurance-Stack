@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-04 Functional safety concept (FSRs, allocation, assumptions) |
 | Standard reference | UL 4600 §10; ISO 26262-3 §7; ASPICE 4.0 SYS.2; IEEE 2846-2022 (informative, assumptions in safety-related models) |
-| Version | 0.4 (FSR-07.06 and FSR-07.07: the vehicle stops when the monitor falls silent, from the fallback concept (WP-C-12); 2026-10-23). 0.3 (collision avoidance carries SG-06 (DQ-017 A); the safety channel has its own sensors (DQ-018 A); the monitor softens unconfirmed hard braking (DQ-019 A); 2026-10-23). 0.2 (first content: the envelope concept, nine elements, functional safety requirements for the nine safety goals, generated from `fsc/fsc.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.5 (FSR-07.08: the monitor checks Autoware's stop after its own sensors fail (DQ-021 A); 2026-10-23). 0.4 (FSR-07.06 and FSR-07.07: the vehicle stops when the monitor falls silent, from the fallback concept (WP-C-12); 2026-10-23). 0.3 (collision avoidance carries SG-06 (DQ-017 A); the safety channel has its own sensors (DQ-018 A); the monitor softens unconfirmed hard braking (DQ-019 A); 2026-10-23). 0.2 (first content: the envelope concept, nine elements, functional safety requirements for the nine safety goals, generated from `fsc/fsc.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | Up to ASIL D |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -20,7 +20,7 @@ In summary:
 
 <!-- BEGIN GENERATED: fsc-summary (assurance/02-concept/fsc/fsc.py) -->
 
-38 functional safety requirements for 9 safety goals: 33 rated, 5 QM supporting the nominal function. 9 elements, 3 of them in the item. No requirement waits on a decision.
+39 functional safety requirements for 9 safety goals: 34 rated, 5 QM supporting the nominal function. 9 elements, 3 of them in the item. No requirement waits on a decision.
 
 <!-- END GENERATED: fsc-summary -->
 
@@ -62,7 +62,7 @@ SG-02 (brake enough, ASIL D) and SG-03 (do not brake hard without reason, ASIL C
 | SG-04 Avoid unintended lateral motion out of the planned path | **D** | Vehicle stopped in its lane | FSR-04.01, FSR-04.02, FSR-04.03, FSR-04.04, FSR-04.06 | FSR-04.05 |
 | SG-05 Avoid unintended motion from standstill, forward or backward | **D** | Vehicle held at standstill with the park brake applied | FSR-05.01, FSR-05.02, FSR-05.03, FSR-05.04, FSR-05.05 | — |
 | SG-06 Do not enter an intersection, roundabout or crosswalk against right of way | **D** | Vehicle stopped before the stop line or conflict area | FSR-06.01, FSR-06.02 | FSR-06.03 |
-| SG-07 Reach a minimal risk condition whenever the item can no longer drive safely | **D** | Vehicle stopped and held in its lane with hazard lights on; Autoware pulls over to the kerb first when it still can, but the rated condition is the stop in lane (DQ-016 A) | FSR-07.01, FSR-07.02, FSR-07.03, FSR-07.04, FSR-07.06, FSR-07.07 | FSR-07.05 |
+| SG-07 Reach a minimal risk condition whenever the item can no longer drive safely | **D** | Vehicle stopped and held in its lane with hazard lights on; Autoware pulls over to the kerb first when it still can, but the rated condition is the stop in lane (DQ-016 A) | FSR-07.01, FSR-07.02, FSR-07.03, FSR-07.04, FSR-07.06, FSR-07.07, FSR-07.08 | FSR-07.05 |
 | SG-08 Do not act on remote driving commands that are stale, corrupted or not the operator's | **C** | Vehicle brought to a stop and held | FSR-08.01, FSR-08.02, FSR-08.03 | — |
 | SG-09 Avoid signalling a manoeuvre other than the one performed | **C** | Indicators off, hazard lights on | FSR-09.01 | — |
 
@@ -81,7 +81,7 @@ Each element's ASIL is derived: the highest ASIL among the FSRs allocated to it.
 | ID | Element | In the item | Derived ASIL | Role | Assumption | FSRs |
 |---|---|---|---|---|---|---|
 | EL-01 | Autoware computer | Yes | **QM** | Plans and controls nominal driving, carries out its own MRMs and ODD monitors; QM by decision DQ-002 A | — | 5 |
-| EL-02 | Safety monitor | Yes | **D** | Independent controller between Autoware and drive-by-wire; enforces the safety envelope and can stop the vehicle alone | — | 21 |
+| EL-02 | Safety monitor | Yes | **D** | Independent controller between Autoware and drive-by-wire; enforces the safety envelope and can stop the vehicle alone | — | 22 |
 | EL-03 | Safety perception channel | Yes | **D** | Own sensors and processing for the safety monitor, independent of Autoware's (DQ-018 A); detects road users and obstacles without relying on learned classification | — | 2 |
 | EL-04 | Vehicle drive-by-wire | No | **D** | Braking, steering, propulsion and gear by wire, with the redundancy AOU-01 requires | AOU-01 | 4 |
 | EL-05 | Park brake | No | **D** | Holds the vehicle at standstill on the monitor's command | AOU-02 | 1 |
@@ -134,6 +134,7 @@ Requirements that depended on a decision of the safety authority name it.
 | FSR-07.05 | Carry out an MRM when its diagnostics or ODD monitors (MON-01 to MON-04) require it, pulling over when it can and stopping in lane otherwise (DQ-016 A) | QM | EL-01 Autoware computer | Simulation and vehicle test |
 | FSR-07.06 | Brake to a standstill and hold it when commands from the safety monitor stop for longer than the time WP-S-04 sets, whatever Autoware sends (WP-C-12 MRM-5) | D | EL-04 Vehicle drive-by-wire | Supplier evidence under the DIA; vehicle test with the monitor disconnected |
 | FSR-07.07 | On detecting a fault of its own, stop sending commands to the vehicle, so that the vehicle's own stop (FSR-07.06) takes over | D | EL-02 Safety monitor | Fault injection inside the monitor; review of its diagnostic coverage |
+| FSR-07.08 | When EL-03 fails, have Autoware stop in lane comfortably, check its speed, deceleration and steering against the vehicle state (EL-06), and stop the vehicle itself if it does not slow as expected (DQ-021 A) | D | EL-02 Safety monitor | Fault injection of EL-03 faults with Autoware's stop delayed or missing |
 | FSR-08.01 | In REMOTE mode, reject commands older than the age bound WP-S-04 sets, out of sequence or failing their integrity check, and stop | C | EL-02 Safety monitor | Fault injection of delayed, repeated and corrupted commands |
 | FSR-08.02 | Apply the same envelope checks to remote commands as to Autoware's (FSR-01.01, FSR-02.02, FSR-04.01, FSR-06.01) | C | EL-02 Safety monitor | Scenario tests in REMOTE mode |
 | FSR-08.03 | Send every remote driving command with a time stamp, sequence number and integrity protection | C | EL-09 Remote operations station | Interface test; cybersecurity verification (WP-C-10) |
