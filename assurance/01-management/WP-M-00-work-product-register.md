@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-M-00 Work product register |
 | Standard reference | UL 4600 §5 (safety case work products); ISO 26262-2:2018 §6 (safety plan, work product list); ISO/SAE 21434:2021 §6; ASPICE 4.0 MAN.3 (define work products), SUP.8 (configuration items) |
-| Version | 0.3 (WP-C-01 drafted; 2026-10-23). 0.2 (G2 exit criterion adds the vehicle choice, deferred to G2 by DQ-003 C; 2026-10-23). 0.1 (first issue: every work product of the assurance path, its clauses, gate and status; 2026-10-22) |
+| Version | 0.4 (WP-C-02 drafted; 2026-10-23). 0.3 (WP-C-01 drafted; 2026-10-23). 0.2 (G2 exit criterion adds the vehicle choice, deferred to G2 by DQ-003 C; 2026-10-23). 0.1 (first issue: every work product of the assurance path, its clauses, gate and status; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -65,7 +65,7 @@ Clause columns cite the editions in [assurance/README.md](../README.md#standards
 | ID | Work product | UL 4600 | ISO 26262 | ISO 21448 | ISO/SAE 21434 | ISO/PAS 8800 | ASPICE | Gate | Status |
 |---|---|---|---|---|---|---|---|---|---|
 | [WP-C-01](../02-concept/WP-C-01-item-definition.md) | Item definition | §5 | 3 §5 | §5 | §9.3 | | SYS.1 | G1 | D |
-| [WP-C-02](../02-concept/WP-C-02-odd-and-intended-functionality.md) | ODD and intended functionality (DDT, OEDR, manoeuvres) | §8 | 3 §5 | §5 | | Input space definition | SYS.1 | G1 | S |
+| [WP-C-02](../02-concept/WP-C-02-odd-and-intended-functionality.md) | ODD and intended functionality (DDT, OEDR, manoeuvres) | §8 | 3 §5 | §5 | | Input space definition | SYS.1 | G1 | D |
 | [WP-C-03](../02-concept/WP-C-03-hara.md) | Hazard analysis and risk assessment, safety goals | §6 | 3 §6 | | | | | G1 | S |
 | [WP-C-04](../02-concept/WP-C-04-functional-safety-concept.md) | Functional safety concept (FSRs, allocation, assumptions) | §10 | 3 §7 | | | | SYS.2 | G1 | S |
 | [WP-C-05](../02-concept/WP-C-05-sotif-hazard-identification.md) | SOTIF hazard identification, risk evaluation and acceptance criteria | §6 | | §6 | | | | G1 | S |
