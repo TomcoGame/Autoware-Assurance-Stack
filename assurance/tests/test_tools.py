@@ -28,6 +28,7 @@ for sub in (
     "02-concept/tara",
     "02-concept/cybersecurity",
     "02-concept/ai",
+    "02-concept/misuse",
     "case/tools",
     "trace/tools",
 ):
@@ -51,6 +52,7 @@ import figkit  # noqa: E402
 import folder_index  # noqa: E402
 import fsc  # noqa: E402
 import hara  # noqa: E402
+import misuse  # noqa: E402
 import modifications  # noqa: E402
 import sotif  # noqa: E402
 import stpa  # noqa: E402
@@ -601,6 +603,29 @@ class Ai(unittest.TestCase):
             self.assertTrue(any(needle in x for x in ai.check(model, k)), needle)
 
 
+class Misuse(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(misuse.check(misuse.load(), misuse.known()), [])
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = misuse.load(), misuse.known()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["entries"] = [e for e in bad["entries"] if e["role"] != "R-04"]
+        cases.append((bad, "R-04: no interaction or misuse"))
+        bad = copy.deepcopy(m)
+        bad["entries"][0]["measures"], bad["entries"][0]["new"] = [], []
+        cases.append((bad, "neither a measure nor a new requirement"))
+        bad = copy.deepcopy(m)
+        bad["entries"][0]["refs"] = ["UCA-99"]
+        cases.append((bad, "UCA-99 does not exist"))
+        bad = copy.deepcopy(m)
+        bad["requirements"].append({"id": "HR-99", "text": "x", "to": "y"})
+        cases.append((bad, "HR-99: no entry needs it"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in misuse.check(model, k)), needle)
+
+
 class TreeChecks(unittest.TestCase):
     def test_table_cell_count(self):
         md = "| A | B |\n|---|---|\n| 1 | 2 |\n| 1 |\n"
@@ -668,6 +693,7 @@ class Generators(unittest.TestCase):
             tara,
             cybersecurity,
             ai,
+            misuse,
         ):
             first, second = mod.build(), mod.build()
             self.assertEqual(first, second, mod.__name__)

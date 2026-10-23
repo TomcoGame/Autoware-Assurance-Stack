@@ -29,9 +29,9 @@ across the whole operational design domain. The other standards supply the metho
 | Indicator | Value |
 |---|---|
 | Assurance state | Before G0: hazard analysis draft |
-| Work products in the register | 91 (14 draft, 77 skeleton) |
+| Work products in the register | 91 (15 draft, 76 skeleton) |
 | Work products approved or baselined | 0 |
-| Decisions waiting on the safety authority | 1 open |
+| Decisions waiting on the safety authority | 2 open |
 | Decisions applied | 22 |
 | Safety case claims | 0 |
 | Evidence items | 0 |
@@ -146,6 +146,7 @@ and commit the result.
 | `python3 assurance/02-concept/tara/tara.py` | WP-C-09 §1 summary, §2 to §5 tables and Figure 5-1 | `02-concept/tara/tara.yaml`, `stpa/stpa.yaml` and the references it checks, decision register |
 | `python3 assurance/02-concept/cybersecurity/cybersecurity.py` | WP-C-10 §1 summary, §2 to §4 tables and Figure 2-1 | `02-concept/cybersecurity/cybersecurity.yaml`, `tara/tara.yaml` and the references it checks |
 | `python3 assurance/02-concept/ai/ai.py` | WP-C-11 §1 summary, §2 to §5 tables and Figure 4-1 | `02-concept/ai/ai.yaml`, WP-C-01 §3, WP-C-02 §6, `fsc/fsc.yaml`, `triggering/triggering.yaml`, `cybersecurity/cybersecurity.yaml` |
+| `python3 assurance/02-concept/misuse/misuse.py` | WP-C-08 §1 summary, §2 and §4 to §6 tables, Figure 5-1 | `02-concept/misuse/misuse.yaml` and the analyses it refers to, decision register |
 | `python3 assurance/case/tools/dashboard.py` | `case/figures/dashboard.svg`, the summary block above | WP-M-00, `register.yaml`, `case/records/` |
 
 The decision inbox page is built by `decisions/build_inbox.py` and published outside the repository; CI builds it
