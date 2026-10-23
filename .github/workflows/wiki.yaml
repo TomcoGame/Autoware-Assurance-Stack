@@ -1,0 +1,94 @@
+name: wiki
+
+# The GitHub wiki is built from wiki/ by tools/wiki/build_wiki.py. Pages are changed by pull request, never on
+# the wiki itself: the next publish overwrites an edit made there.
+#
+# On every pull request: run the build tool's unit tests and check the pages (sidebar, page links, repository
+# links and anchors, placeholders). This runs whatever the pull request touches, because moving or renaming a
+# file a page links to must fail here rather than break the wiki after merge.
+# On every push to main: build the pages and push them to the wiki repository (<owner>/<repo>.wiki.git).
+#
+# One-time setup: GitHub creates the wiki repository only when a first page is saved from the repository's Wiki
+# tab. Until then the publish job fails at "Clone the wiki" and says so. Any first page will do; the first
+# publish replaces it.
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || 'publish' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  check:
+    name: check the wiki pages
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Install PyYAML
+        run: python3 -m pip install --quiet --user --break-system-packages -r assurance/requirements.txt
+
+      - name: Unit tests of the build tool
+        run: python3 -m unittest discover -s tools/wiki -p 'test_*.py' -v
+
+      - name: Check the pages
+        run: python3 tools/wiki/build_wiki.py --check --repo "${{ github.repository }}"
+
+  publish:
+    name: publish to the GitHub wiki
+    needs: check
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write # the wiki repository is written with this repository's token
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Install PyYAML
+        run: python3 -m pip install --quiet --user --break-system-packages -r assurance/requirements.txt
+
+      - name: Build the pages
+        run: >-
+          python3 tools/wiki/build_wiki.py --out "$RUNNER_TEMP/wiki"
+          --repo "${{ github.repository }}" --branch "${{ github.ref_name }}" --commit "${{ github.sha }}"
+
+      - name: Clone the wiki
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if ! git clone --quiet --depth 1 \
+            "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.wiki.git" "$RUNNER_TEMP/wiki-repo"; then
+            echo "::error::Could not clone ${GITHUB_REPOSITORY}.wiki.git. Save a first page from the repository's Wiki tab once, then re-run this workflow."
+            exit 1
+          fi
+
+      - name: Replace the wiki pages and push if they changed
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/wiki-repo"
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -R "$RUNNER_TEMP/wiki/." .
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "The wiki already matches wiki/ at ${GITHUB_SHA::7}."
+            exit 0
+          fi
+          git commit --quiet -m "Build wiki/ of ${GITHUB_REPOSITORY}@${GITHUB_SHA::7}"
+          git push --quiet
+          echo "Published the wiki built from ${GITHUB_SHA::7}."
