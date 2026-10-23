@@ -824,3 +824,35 @@
   status: applied
   answer: {choice: C, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
   applied: {ref: "#18", record: "WP-C-07 v0.3 FM-17, §4", at: 2026-10-23}
+
+- id: DQ-027
+  question: Which cybersecurity risks must the project reduce, rather than accept?
+  context: >-
+    The threat analysis gives each attack a risk value from 1 (lowest) to 5. Every risk the project does not reduce
+    it accepts, with a written reason. **This sets how much cybersecurity work the vehicle and the remote operations
+    centre need before driverless service, and is a risk acceptance only the safety authority can make.** With no
+    driver, an attack that reaches vehicle control has no human to stop it.
+  reversibility: revisit
+  blocks: WP-C-09 §5 treatment, cybersecurity goals and CALs (WP-C-10), WP-S-07
+  gate: G1
+  asked: 2026-10-23
+  batch: 8
+  options:
+    - key: A
+      recommended: true
+      title: Reduce every risk of 3 or more; accept 1 and 2 with a reason
+      detail: >-
+        Covers every attack that is both serious and reasonably feasible. Cost: in the current analysis 11 of 16
+        threats need controls, among them operator accounts, the remote link, GNSS at start-up and fake sirens.
+    - key: B
+      title: Reduce every risk of 2 or more
+      detail: >-
+        Also covers attacks that are serious but very hard today, such as tampering with the safety monitor. Cost:
+        nearly every threat needs controls; more hardware security and testing before service.
+    - key: C
+      title: Reduce only risks of 4 and 5
+      detail: >-
+        Least work before service. Cost: accepts forged remote commands and releases, sensor spoofing and fake
+        sirens, which an assessor is unlikely to accept for a vehicle with no driver.
+  sources: [WP-C-09 §5, ISO/SAE 21434 §15.9, UL 4600 §11]
+  status: open

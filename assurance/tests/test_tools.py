@@ -25,6 +25,7 @@ for sub in (
     "02-concept/triggering",
     "02-concept/modifications",
     "08-analyses/stpa",
+    "02-concept/tara",
     "case/tools",
     "trace/tools",
 ):
@@ -49,6 +50,7 @@ import hara  # noqa: E402
 import modifications  # noqa: E402
 import sotif  # noqa: E402
 import stpa  # noqa: E402
+import tara  # noqa: E402
 import triggering  # noqa: E402
 import wpregister  # noqa: E402
 
@@ -494,6 +496,52 @@ class Stpa(unittest.TestCase):
             self.assertTrue(any(needle in x for x in stpa.check(model, k)), needle)
 
 
+class Tara(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(tara.check(tara.load(), tara.known()), [])
+
+    def test_feasibility_and_risk_are_computed(self):
+        m = tara.load()
+        t = {
+            "damage": ["DS-01"],
+            "factors": {
+                "time": "≤1 day",
+                "expertise": "layman",
+                "knowledge": "public",
+                "window": "unlimited",
+                "equipment": "standard",
+            },
+        }
+        self.assertEqual(tara.potential(m, t), 0)
+        self.assertEqual(tara.feasibility(m, t), "High")
+        self.assertEqual(tara.impact(m, t), "Severe")
+        self.assertEqual(tara.risk(m, t), 5)
+        t["factors"].update(time=">6 months", expertise="multiple experts")
+        self.assertEqual(tara.feasibility(m, t), "Very low")
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = tara.load(), tara.known()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["threats"] = [t for t in bad["threats"] if "DS-09" not in t["damage"]]
+        cases.append((bad, "DS-09: no threat scenario leads to it"))
+        bad = copy.deepcopy(m)
+        ts = next(t for t in bad["threats"] if t["id"] == "TS-03")
+        ts["controls"] = []
+        cases.append((bad, "TS-03: its risk must be reduced but it names no control"))
+        bad = copy.deepcopy(m)
+        bad["threats"][0]["factors"]["time"] = "a fortnight"
+        cases.append((bad, "is not a value of the method"))
+        bad = copy.deepcopy(m)
+        bad["assets"][0]["properties"] = ["X"]
+        cases.append((bad, "properties must be among C, I, A"))
+        bad = copy.deepcopy(m)
+        bad["method"]["pending"] = "DQ-001"
+        cases.append((bad, "apply the decision"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in tara.check(model, k)), needle)
+
+
 class TreeChecks(unittest.TestCase):
     def test_table_cell_count(self):
         md = "| A | B |\n|---|---|\n| 1 | 2 |\n| 1 |\n"
@@ -558,6 +606,7 @@ class Generators(unittest.TestCase):
             triggering,
             modifications,
             stpa,
+            tara,
         ):
             first, second = mod.build(), mod.build()
             self.assertEqual(first, second, mod.__name__)
