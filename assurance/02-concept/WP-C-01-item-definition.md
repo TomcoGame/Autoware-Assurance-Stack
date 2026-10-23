@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-01 Item definition |
 | Standard reference | UL 4600 §5; ISO 26262-3 §5; ISO 21448 §5; ISO/SAE 21434 §9.3; ASPICE 4.0 SYS.1 |
-| Version | 0.2 (first content: item, functions, modes, boundary and interfaces, vehicle placeholders, legal context, assumptions, preliminary hazards, from DQ-001 B, DQ-002 A, DQ-003 C; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.3 (first market one US state (DQ-009 A); remote driving allowed (DQ-010 C): §4, I-08, §7, new AOU-10, hazard added; 2026-10-23). 0.2 (first content: item, functions, modes, boundary and interfaces, vehicle placeholders, legal context, assumptions, preliminary hazards, from DQ-001 B, DQ-002 A, DQ-003 C; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All (ASILs follow from WP-C-03) |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -57,7 +57,7 @@ The modes are those of the Autoware AD API (`OperationModeState` in `autoware_ad
 | `STOP` | Autoware holds the vehicle at standstill | Used; the state between trips |
 | `AUTONOMOUS` | Autoware drives | Used; the normal driving mode |
 | `LOCAL` | A person in the vehicle drives through a local controller | Development only, with a safety driver ([WP-V-07](../06-validation/WP-V-07-test-operations.md)); not available in driverless operation (AOU-07) |
-| `REMOTE` | A remote operator commands the vehicle | Scope open: remote driving or remote assistance only (DQ-010) |
+| `REMOTE` | A remote operator drives the vehicle: steering, acceleration and braking commands from the remote operations centre | Used (DQ-010 C). Remote commands reach the vehicle through `vehicle_cmd_gate` and the safety monitor like any other command, so the monitor's envelope bounds them; loss or delay of the link while driving is detected (MON-04) and ends in a minimal risk manoeuvre |
 | MRM `NORMAL` | No minimal risk manoeuvre active | |
 | MRM `MRM_OPERATING` | A minimal risk manoeuvre is running: comfortable stop or emergency stop | Used |
 | MRM `MRM_SUCCEEDED` | The vehicle reached a minimal risk condition (stopped) | Used; needs remote recovery |
@@ -98,7 +98,7 @@ The modes are those of the Autoware AD API (`OperationModeState` in `autoware_ad
 | I-05 | Vehicle platform | Safety monitor | Speed, steering angle, gear, control mode, by-wire faults | Must not depend on the Autoware computer (AOU-03) |
 | I-06 | Vehicle platform | Autoware computer | Speed, steering, gear, control mode, turn signal state | Used by localisation and control |
 | I-07 | HD map data | Autoware computer | Lanelet2 vector map and point cloud map | Safety-related data (WP-W-12); loaded at start and on update |
-| I-08 | Remote operations centre | Autoware computer | Trips, routes, mode changes, MRM requests, assistance commands; fleet telemetry back | Through the AD API over a wireless link; cybersecurity-relevant (WP-C-09) |
+| I-08 | Remote operations centre | Autoware computer | Trips, routes, mode changes, MRM requests, assistance commands and remote driving commands; fleet telemetry and camera video back | Through the AD API and the external command path over a wireless link. With remote driving (DQ-010 C) the link is in the control loop: its delay, loss and integrity are safety-relevant (WP-C-03, WP-S-04) as well as cybersecurity-relevant (WP-C-09) |
 | I-09 | Passengers | Autoware computer | Trip start, stop request; trip status back | Through the vehicle's passenger interface and the AD API |
 | I-10 | Update backend | Autoware computer | Software, map, model and parameter updates | Change-controlled (WP-P-02); cybersecurity-relevant |
 | I-11 | Vehicle platform | Other road users | Motion, turn indicators, hazard lights, horn | What others see of the item's decisions |
@@ -120,15 +120,16 @@ The vehicle is chosen at G2 (DQ-008). Until then the concept phase uses a generi
 
 ## 7. Legal and regulatory context
 
-Which rules apply depends on where the robotaxi first operates, which is not yet decided (DQ-009). The candidates below are named so the decision can be made; none is analysed yet.
+The robotaxi first operates in one US state (DQ-009 A, 2026-10-23); which state is still open (DQ-013). The instruments below apply in any state; the state's own law adds its permits, its vehicle code (the traffic rules of WP-C-02) and any rules on remote driving.
 
-| Market | Main instruments that would apply (informative) |
-|---|---|
-| United States | State permits for driverless testing and deployment in the chosen state; Federal Motor Vehicle Safety Standards for the vehicle; NHTSA Standing General Order 2021-01 crash reporting for automated driving systems |
-| European Union | Commission Implementing Regulation (EU) 2022/1426 for the type approval of automated driving systems of fully automated vehicles; UN Regulations 155 and 156 for cybersecurity and software updates; national rules such as Germany's act on autonomous driving |
-| Japan | Level 4 operating permits under the amended Road Traffic Act (in force April 2023) |
+| Level | Instrument (informative; to be confirmed for the chosen state) | Bears on |
+|---|---|---|
+| Federal | Federal Motor Vehicle Safety Standards (FMVSS); a vehicle built without manual controls needs an exemption | Vehicle choice (DQ-008) |
+| Federal | NHTSA Standing General Order 2021-01: crash reporting for vehicles equipped with automated driving systems | Field monitoring (WP-O-04) |
+| State | Permits for driverless testing and for deployment or passenger service, with their conditions on the ODD, reporting and remote operation | ODD (WP-C-02), test operations (WP-V-07), remote operations (WP-O-02) |
+| State | The vehicle code: right of way, signals, speed limits, school zones, yielding to emergency vehicles | Intended functionality (WP-C-02 §5), HARA |
 
-In every market the traffic rules of the chosen jurisdiction are part of the intended functionality (WP-C-02) and the hazard analysis rates violations of them.
+The traffic rules of the chosen state are part of the intended functionality and the hazard analysis rates violations of them. Speeds in the US are posted in miles per hour; the ODD uses 30 mph as the posted-limit ceiling (WP-C-02 ODD-03).
 
 ## 8. Assumptions
 
@@ -145,6 +146,7 @@ Assumptions are what the item relies on from outside its boundary. Each is check
 | AOU-07 | In driverless operation there is no driver: `LOCAL` mode is not available, and passengers cannot take control | Vehicle, operation | WP-O-02 |
 | AOU-08 | Sensors are cleaned, calibrated and inspected at the intervals WP-O-02 sets | Operation | WP-O-02 |
 | AOU-09 | The remote operations centre is staffed whenever a vehicle is in service, and its link loss is detected by the item | Operation | WP-O-02, WP-C-12 |
+| AOU-10 | A remote operator who drives a vehicle is trained and qualified for it, drives one vehicle at a time, and has video and vehicle state with a delay inside the bound WP-S-04 sets | Operation | WP-O-02, WP-S-04 |
 
 ## 9. Preliminary hazards
 
@@ -160,13 +162,14 @@ ISO 26262-3 §5 asks the item definition to name the hazards already known. This
 | Stops somewhere unsafe and stays there | MRM in lane (§4, OI-3), loss of the remote link (AOU-09) |
 | Operates outside its ODD without noticing | ODD monitoring (WP-C-02), weather and lighting detection |
 | Responds to a forged or corrupted command or update | Remote link and updates (I-08, I-10; WP-C-09) |
+| Is driven unsafely by a remote operator, or keeps moving on stale remote commands when the link is delayed or lost | Remote driving (DQ-010 C, I-08, AOU-10), link monitoring (MON-04) |
 
 ## 10. Open items
 
 | ID | Open item | Closes at |
 |---|---|---|
 | OI-1 | Replace the provisional vehicle values of §6 from the chosen platform, and re-check AOU-01 to AOU-03 and AOU-06 (DQ-008) | G2 |
-| OI-2 | Choose the first market (DQ-009) and fill §7 for it | G1 |
+| OI-2 | Choose the state (DQ-013) and fill §7 for it | G1 |
 | OI-3 | Decide in the HARA whether a stop in lane is an acceptable minimal risk condition in the urban ODD, or whether a pull-over operator must be added and assured | G1 |
-| OI-4 | Decide whether remote operators may drive the vehicle in `REMOTE` mode or only assist (DQ-010), and update §4 and I-08 | G1 |
+| OI-4 | Bound the remote driving loop: maximum link delay, the speed allowed under remote driving, and the response to link loss (WP-S-04, WP-C-12) | G2 |
 | OI-5 | Specify the passenger interface (I-09) with the vehicle | G2 |
