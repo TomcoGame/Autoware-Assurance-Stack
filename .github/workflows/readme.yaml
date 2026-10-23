@@ -1,0 +1,38 @@
+name: readme
+
+# The README figures (tools/readme/figures/) are generated from the work products, the decision register and the
+# 3D models by tools/readme/figures.py. This runs on every pull request, whatever it touches: a change to a work
+# product that a figure reads (an ASIL, an ODD limit, a decision, a status) must regenerate the figures in the same
+# pull request. Read-only: contributors run the generator and commit the result.
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'push' && github.run_id || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: README figures are current
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Install PyYAML
+        run: python3 -m pip install --quiet --user --break-system-packages -r assurance/requirements.txt
+
+      - name: Unit tests of the figure tools
+        run: python3 -m unittest discover -s tools/readme -p 'test_*.py' -v
+
+      - name: Every README figure is current
+        run: python3 tools/readme/figures.py --check
