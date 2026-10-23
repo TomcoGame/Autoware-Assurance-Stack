@@ -24,9 +24,8 @@ method:
     - [1, 2, 2, 3]
     - [1, 2, 3, 4]
     - [2, 3, 4, 5]
-  # Risks at or above this value are reduced; below it they are retained with a rationale (pending DQ-027).
+  # Risks at or above this value are reduced; below it they are retained with a rationale (DQ-027 A).
   reduce_at: 3
-  pending: DQ-027
 
 assets:
   - {id: A-01, name: Remote driving commands, properties: [I, A]}
