@@ -23,6 +23,7 @@ for sub in (
     "02-concept/sotif",
     "02-concept/fallback",
     "02-concept/triggering",
+    "02-concept/modifications",
     "case/tools",
     "trace/tools",
 ):
@@ -44,6 +45,7 @@ import figkit  # noqa: E402
 import folder_index  # noqa: E402
 import fsc  # noqa: E402
 import hara  # noqa: E402
+import modifications  # noqa: E402
 import sotif  # noqa: E402
 import triggering  # noqa: E402
 import wpregister  # noqa: E402
@@ -437,6 +439,30 @@ class Triggering(unittest.TestCase):
             self.assertTrue(any(needle in x for x in triggering.check(model, k)), needle)
 
 
+class Modifications(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(modifications.check(modifications.load(), modifications.known()), [])
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = modifications.load(), modifications.known()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["modifications"] = [x for x in bad["modifications"] if "FI-11" not in x["addresses"]]
+        cases.append((bad, "FI-11: no modification addresses it"))
+        bad = copy.deepcopy(m)
+        fm = next(x for x in bad["modifications"] if "FI-13" in x["addresses"])
+        fm["type"] = "data"
+        cases.append((bad, "FI-13: a specification insufficiency needs"))
+        bad = copy.deepcopy(m)
+        bad["modifications"][0]["concept"] = ["FSR-99.99"]
+        cases.append((bad, "does not exist"))
+        bad = copy.deepcopy(m)
+        bad["modifications"][0]["pending"] = "DQ-001"
+        cases.append((bad, "apply the decision"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in modifications.check(model, k)), needle)
+
+
 class TreeChecks(unittest.TestCase):
     def test_table_cell_count(self):
         md = "| A | B |\n|---|---|\n| 1 | 2 |\n| 1 |\n"
@@ -499,6 +525,7 @@ class Generators(unittest.TestCase):
             sotif,
             fallback,
             triggering,
+            modifications,
         ):
             first, second = mod.build(), mod.build()
             self.assertEqual(first, second, mod.__name__)
