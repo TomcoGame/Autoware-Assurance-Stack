@@ -54,12 +54,13 @@ class Paint:
     glass: tuple[int, int, int] = (38, 48, 62)
     light_front: tuple[int, int, int] = (255, 244, 214)
     light_rear: tuple[int, int, int] = (226, 46, 40)
+    indicator: tuple[int, int, int] = (255, 244, 214)  # amber when the hazard lights are on
     wheel: tuple[int, int, int] = (28, 30, 34)
     trim: tuple[int, int, int] = (46, 49, 54)
 
     def colour(self, cls: str, light: float) -> str:
         base = getattr(self, cls)
-        if cls.startswith("light"):
+        if cls.startswith("light") or cls == "indicator":
             light = 1.0  # lamps are lit, not shaded
         elif cls == "glass":
             light = 0.55 + 0.6 * light  # glass shows mostly reflection
