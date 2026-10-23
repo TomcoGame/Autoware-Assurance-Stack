@@ -168,8 +168,8 @@ hazards:
 
 acceptance:
   - id: AC-01
-    statement: The rate of harm the item causes across its ODD is acceptable against the benchmark DQ-020 sets
-    basis: Pending DQ-020; the validation target that demonstrates it is derived in WP-V-02
+    statement: The rate of injury crashes the item causes across its ODD does not exceed that of careful, competent human drivers on the same roads
+    basis: DQ-020 A; the benchmark (published US crash data for urban streets at up to 30 mph, careful and competent drivers) is chosen and the validation target derived in WP-V-02
   - id: AC-02
     statement: For each SOTIF hazard needing further evaluation, its residual rate of hazardous behaviour is below the share of AC-01 allotted to it
     basis: Allotment in WP-V-02 once AC-01 is set

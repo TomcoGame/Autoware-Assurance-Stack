@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-05 SOTIF hazard identification, risk evaluation and acceptance criteria |
 | Standard reference | UL 4600 §6; ISO 21448 §6 |
-| Version | 0.2 (first content: method, sixteen SOTIF hazards with their evaluation, the acceptance criteria framework, generated from `sotif/sotif.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.3 (AC-01 set: at least as safe as a careful, competent human driver on the same roads (DQ-020 A); 2026-10-23). 0.2 (first content: method, sixteen SOTIF hazards with their evaluation, the acceptance criteria framework, generated from `sotif/sotif.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | SOTIF |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -102,13 +102,13 @@ Three hazards come from gaps already found in the pinned Autoware: SH-09 (no res
 
 ## 6. Acceptance criteria
 
-ISO 21448 asks for acceptance criteria for the residual risk of the hazards that need further evaluation, and UL 4600 asks the safety case to argue that the risk is acceptable across the ODD. With no driver, the natural yardstick is the risk of the same trips driven by people, but how it is set is the safety authority's decision (DQ-020): it is a statement about how much risk the project will accept.
+ISO 21448 asks for acceptance criteria for the residual risk of the hazards that need further evaluation, and UL 4600 asks the safety case to argue that the risk is acceptable across the ODD. With no driver, the natural yardstick is the risk of the same trips driven by people, and the lead, acting as safety authority until one is named, set it on 2026-10-23 (DQ-020 A): the item must be at least as safe as a careful, competent human driver on the same roads, not merely the average driver, who includes impaired and distracted ones. Which published crash data stands for that driver in an urban ODD at up to 30 mph, and with what statistical confidence the rate must be shown, are worked out in WP-V-02.
 
 <!-- BEGIN GENERATED: sotif-acceptance (assurance/02-concept/sotif/sotif.py) -->
 
 | ID | Acceptance criterion | Basis |
 |---|---|---|
-| AC-01 | The rate of harm the item causes across its ODD is acceptable against the benchmark DQ-020 sets | Pending DQ-020; the validation target that demonstrates it is derived in WP-V-02 |
+| AC-01 | The rate of injury crashes the item causes across its ODD does not exceed that of careful, competent human drivers on the same roads | DQ-020 A; the benchmark (published US crash data for urban streets at up to 30 mph, careful and competent drivers) is chosen and the validation target derived in WP-V-02 |
 | AC-02 | For each SOTIF hazard needing further evaluation, its residual rate of hazardous behaviour is below the share of AC-01 allotted to it | Allotment in WP-V-02 once AC-01 is set |
 
 <!-- END GENERATED: sotif-acceptance -->
@@ -119,7 +119,7 @@ The validation targets that show the criteria are met (how many miles, how many 
 
 | ID | Open item | Closes at |
 |---|---|---|
-| OI-1 | Set the acceptance criterion AC-01 (DQ-020) and allot it across the hazards (AC-02, WP-V-02) | G1 |
+| OI-1 | Choose the benchmark crash data for AC-01 and allot it across the hazards (AC-02, WP-V-02) | G1 |
 | OI-2 | Analyse the triggering conditions of every hazard in WP-C-06 | G1 |
 | OI-3 | Specify the functional modifications for SH-09, SH-10, SH-15 and SH-16, which have no measure in the concept yet (WP-C-07) | G1 |
 | OI-4 | Cross-check with the STPA (WP-A-05) and the misuse analysis (WP-C-08) once drafted | G1 |

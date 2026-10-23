@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-M-01 Assurance strategy and lifecycle tailoring |
 | Standard reference | UL 4600 §5, §17; ISO 26262-2:2018 §6 (tailoring, safety plan inputs); ISO 21448:2022 §4; ISO/SAE 21434:2021 §6; ISO/PAS 8800:2024 (AI safety management); ASPICE 4.0 MAN.3 |
-| Version | 0.6 (DQ-017 A, DQ-018 A, DQ-019 A; 2026-10-23). 0.5 (DQ-015 B, DQ-016 A; 2026-10-23). 0.4 (DQ-011 C, DQ-012 A, DQ-013 deferred; 2026-10-23). 0.3 (one US state (DQ-009 A), remote driving allowed (DQ-010 C); 2026-10-23). 0.2 (decisions of the lead, 2026-10-23: urban robotaxi ODD (DQ-001 B), independent safety monitor (DQ-002 A), vehicle chosen at G2 (DQ-003 C), safety authority and assessor deferred (DQ-004), hazard analysis may start (DQ-005 A); 2026-10-23). 0.1 (first issue; 2026-10-22) |
+| Version | 0.7 (DQ-020 A; 2026-10-23). 0.6 (DQ-017 A, DQ-018 A, DQ-019 A; 2026-10-23). 0.5 (DQ-015 B, DQ-016 A; 2026-10-23). 0.4 (DQ-011 C, DQ-012 A, DQ-013 deferred; 2026-10-23). 0.3 (one US state (DQ-009 A), remote driving allowed (DQ-010 C); 2026-10-23). 0.2 (decisions of the lead, 2026-10-23: urban robotaxi ODD (DQ-001 B), independent safety monitor (DQ-002 A), vehicle chosen at G2 (DQ-003 C), safety authority and assessor deferred (DQ-004), hazard analysis may start (DQ-005 A); 2026-10-23). 0.1 (first issue; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All (FuSa, SOTIF, CS, AI, process) |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -43,7 +43,7 @@ Claims apply to one reference configuration only. The rows below record the lead
 
 > **G0**: The reference configuration, operating without a driver inside its ODD, is acceptably safe: its risk to passengers and other road users is no greater than the acceptance criterion set by the safety authority, including when it fails, when it leaves its ODD and when it meets situations it was not designed for.
 
-The acceptance criterion (for example a positive risk balance against a stated human-driven baseline) is a decision for the safety authority and is set with the SOTIF acceptance criteria ([WP-C-05](../02-concept/WP-C-05-sotif-hazard-identification.md)).
+The acceptance criterion is AC-01 of [WP-C-05](../02-concept/WP-C-05-sotif-hazard-identification.md): the rate of injury crashes the item causes in its ODD does not exceed that of careful, competent human drivers on the same roads (DQ-020 A, 2026-10-23). The benchmark data and the confidence it must be shown with are set in WP-V-02.
 
 ## 4. How the standards fit together
 
@@ -104,6 +104,7 @@ Questions are asked and answered in the [decision register](decisions/README.md)
 | How SG-06 (right of way) is met | A: collision avoidance at ASIL D by the safety monitor; rule compliance QM, argued under SOTIF | DQ-017 |
 | Does the safety channel have its own sensors | A: yes, independent of Autoware's | DQ-018 |
 | May the monitor soften unconfirmed hard braking | A: yes, to a firm, non-emergency level | DQ-019 |
+| What residual risk the project accepts | A: at least as safe as a careful, competent human driver on the same roads | DQ-020 |
 | Which US state | Deferred by the lead, leaning to the state where testing is easiest; analyses use common US rules until then; asked again before the HARA review (DQ-014) | DQ-013 |
 
 **What the combination means.** An urban ODD at 50 km/h with pedestrians and cyclists gives the largest hazard space of the options, and the vehicle is not yet chosen. So the severity and exposure ratings can be drafted now, but the ratings that depend on the vehicle (mass, braking and steering capability, actuator redundancy) and everything downstream of them stay provisional until G2. The vehicle question returns at G2 (DQ-008).
@@ -122,7 +123,7 @@ Much of the drafting is done by an AI assistant. Its output is a draft at indepe
 
 | ID | Open item | Closes at |
 |---|---|---|
-| OI-1 | Set the acceptance criterion of §3.2 with the SOTIF acceptance criteria | G1 |
+| OI-1 | Choose the benchmark crash data for the acceptance criterion of §3.2 (WP-V-02) | G1 |
 | OI-2 | Name the safety authority and the assessor (DQ-007, deferred from DQ-004) | G1 |
 | OI-3 | Decide the tailoring candidates of §5 | G1 |
 | OI-4 | Choose the vehicle and drive-by-wire platform, then confirm or redo the provisional ratings (DQ-008) | G2 |
