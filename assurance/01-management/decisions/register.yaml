@@ -858,3 +858,170 @@
   status: applied
   answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
   applied: {ref: "#21", record: WP-C-09 v0.3 §5, at: 2026-10-23}
+
+- id: DQ-028
+  question: Should the project train its own versions of Autoware's perception models, or use the published ones?
+  context: >-
+    The item uses three machine-learning models from the pinned Autoware (LiDAR object detection and two for traffic
+    lights) and adds two of its own (sirens and emergency lights, DQ-025 A). ISO/PAS 8800 asks for evidence that the
+    data each model learned from covers its input space (WP-C-02 §6). For the published models, that evidence is
+    whatever their publishers released. **This sets whether the project runs its own data collection, labelling and
+    training programme, which is one of its largest costs and lead times.**
+  reversibility: hard
+  blocks: WP-C-11 AISR-11 and AISR-12, ML engineering plan (WP-W-10), validation data (WP-V-02)
+  gate: G1
+  asked: 2026-10-23
+  batch: 9
+  options:
+    - key: A
+      recommended: true
+      title: Fine-tune the published models on data collected and labelled in the geofence
+      detail: >-
+        Keeps Autoware's model architectures; adds data from the ODD so coverage can be measured and shown. Cost: a
+        data collection and labelling programme before the first validation, and a model release process.
+    - key: B
+      title: Use the published models as they are, and validate them on data from the geofence
+      detail: >-
+        No training programme; only test data is collected. Cost: what the models learned cannot be shown to cover the
+        ODD, only tested against it; gaps found in test cannot be fixed without moving to A.
+    - key: C
+      title: Replace them with a commercial perception stack
+      detail: >-
+        A supplier provides models and their evidence. Cost: licence, integration into Autoware, and dependence on the
+        supplier's evidence meeting ISO/PAS 8800 for this ODD.
+  sources: [WP-C-11 §5, ISO/PAS 8800, WP-C-02 §6, WP-C-06 §6]
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#26", record: "WP-C-11 v0.3 §5, AISR-11", at: 2026-10-23}
+
+- id: DQ-029
+  question: What should the robotaxi do when a passenger is not wearing a seat belt?
+  context: >-
+    With no driver, nobody in the vehicle tells passengers to buckle up, and the vehicle can brake hard at any time
+    (its monitor may intervene, and an MRM can be an emergency stop). An unbelted passenger is the one most likely to be
+    hurt by a hard stop. **This sets a default every passenger will meet, and how often trips are delayed.**
+  reversibility: revisit
+  blocks: WP-C-08 HR-03, passenger information (WP-O-03), vehicle seat belt sensing
+  gate: G1
+  asked: 2026-10-23
+  batch: 9
+  options:
+    - key: A
+      recommended: true
+      title: Do not start until every occupied seat is belted; if one is unbuckled while driving, warn, then pull over
+      detail: >-
+        Starts only when belts are fastened; mid-trip it warns by voice and on screen, and pulls over (MRM-1) if the belt
+        is not refastened within a short time. Cost: seat occupancy and belt sensing on every seat; some trips delayed or
+        cut short.
+    - key: B
+      title: Do not start until every occupied seat is belted; only warn while driving
+      detail: >-
+        Same at the start; mid-trip only warnings. Cost: a passenger who unbuckles stays unbelted for the rest of the
+        trip.
+    - key: C
+      title: Only remind passengers to buckle up
+      detail: >-
+        Like most taxis today. Cost: no protection for unbelted passengers in a hard stop; harder to argue under UL 4600
+        with no driver to insist.
+  sources: [WP-C-08 MU-07, HR-03, WP-C-12, FSR-03.02]
+  status: applied
+  answer: {choice: B, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#26", record: "WP-C-08 v0.3 §5, HR-03", at: 2026-10-23}
+
+- id: DQ-030
+  question: What hardware should the safety monitor run on?
+  context: >-
+    The safety monitor and its perception processor carry every ASIL D requirement of the item (WP-S-03). The
+    monitor's logic is small; the perception processor must handle LiDAR and radar data in real time. Hardware that is
+    already developed and assessed to ISO 26262 brings its own safety evidence; other hardware must be argued for from
+    scratch. **This is the largest hardware cost of the safety architecture, and fixes the lead time of the monitor.**
+  reversibility: hard
+  blocks: WP-S-03 CMP-02 and CMP-03, hardware safety requirements (WP-H-01), WP-S-04 timing
+  gate: G2
+  asked: 2026-10-23
+  batch: 10
+  options:
+    - key: A
+      recommended: true
+      title: An automotive ASIL D microcontroller for the monitor, and an automotive processor with a safety island for its perception
+      detail: >-
+        Both parts come with the supplier's safety manual and evidence. Cost: automotive parts, their development tools
+        and lead times; the perception software must fit the processor's safety island and its budget.
+    - key: B
+      title: An industrial safety controller and an industrial PC
+      detail: >-
+        Quick to obtain and familiar from industrial machinery. Cost: their evidence is for IEC 61508, not ISO 26262; the
+        mapping and the automotive environment (temperature, vibration, supply) must be argued and tested.
+    - key: C
+      title: One automotive processor for both, with the monitor on its safety island
+      detail: >-
+        Fewest parts. Cost: the monitor and its perception share a chip, so a common fault defeats both; the dependent
+        failure analysis must show that cannot defeat SG-02.
+  sources: [WP-S-03 §2, CMP-02, CMP-03, WP-C-04 EL-02, EL-03, ISO 26262-5]
+  status: open
+
+- id: DQ-031
+  question: Should the safety channel's ASIL D detection be split across LiDAR and radar?
+  context: >-
+    The safety channel must detect road users to ASIL D (FSR-02.01). Few sensors are developed to ASIL D on their own.
+    ISO 26262-9 allows a requirement to be decomposed into two independent ones of lower ASIL, here ASIL B(D) each on
+    LiDAR and radar, if their independence is shown. **Decomposition is an ASIL decision, and changes what sensors the
+    vehicle needs and how much the dependent failure analysis must show.** It does not lower the goal's ASIL.
+  reversibility: hard
+  blocks: WP-S-03 CMP-04, CMP-05 and RD-02, ASIL decomposition rationale (WP-A-01), sensor choice (WP-H-02)
+  gate: G2
+  asked: 2026-10-23
+  batch: 10
+  options:
+    - key: A
+      recommended: true
+      title: Decompose into LiDAR and radar, each to ASIL B(D)
+      detail: >-
+        Two different physics, each developed to a level sensors can reach; a road user is detected if either sees it.
+        Cost: both sensor types around the vehicle, and an independence argument in WP-A-03 against the shared triggering
+        conditions (spray, dirt).
+    - key: B
+      title: Keep one channel at ASIL D
+      detail: >-
+        Simplest architecture. Cost: needs a sensor and processing chain developed to ASIL D, which may not exist for the
+        range and resolution the ODD needs.
+    - key: C
+      title: Decide when the vehicle and its sensors are chosen
+      detail: >-
+        Waits for the supplier's sensor options (DQ-008). Cost: the technical safety concept and timing budget stay
+        provisional until then.
+  sources: [WP-S-03 §4, RD-02, FSR-02.01, ISO 26262-9 §5, WP-A-01, WP-A-03]
+  status: open
+
+- id: DQ-032
+  question: How fast may a remote operator drive the vehicle?
+  context: >-
+    A remote command is always a little old when it arrives: the operator reacts to video that is already late, and
+    the command then crosses the cellular link. The faster the vehicle moves, the further it has gone by then. At
+    20 km/h, keeping that drift under 1 m leaves under 200 ms for the whole round trip, which a cellular link is
+    unlikely to hold in its worst hours (WP-S-04 §2). **This sets how useful remote driving is, against how often the
+    monitor stops it for stale commands.**
+  reversibility: revisit
+  blocks: WP-S-04 SG-08 budget, FM-11, remote operations procedures (WP-O-02)
+  gate: G2
+  asked: 2026-10-23
+  batch: 10
+  options:
+    - key: A
+      recommended: true
+      title: Walking pace, up to 10 km/h
+      detail: >-
+        Enough to move a vehicle out of a lane or round an obstruction. Cost: remote driving cannot cover longer
+        distances; a stranded vehicle further away needs recovery.
+    - key: B
+      title: Up to 20 km/h
+      detail: >-
+        Remote driving can move a vehicle along a street. Cost: about half the time for latency; the monitor will
+        stop the vehicle more often on slow links.
+    - key: C
+      title: Up to the posted limit, with the monitor's age check deciding
+      detail: >-
+        No fixed limit. Cost: at normal speeds almost every command will be too old, so the monitor will stop the
+        vehicle nearly every time.
+  sources: [WP-S-04 §2, SG-08, FSR-08.01, FM-11, DQ-010]
+  status: open

@@ -29,10 +29,10 @@ across the whole operational design domain. The other standards supply the metho
 | Indicator | Value |
 |---|---|
 | Assurance state | Before G0: hazard analysis draft |
-| Work products in the register | 91 (13 draft, 78 skeleton) |
+| Work products in the register | 91 (17 draft, 74 skeleton) |
 | Work products approved or baselined | 0 |
-| Decisions waiting on the safety authority | 0 open |
-| Decisions applied | 22 |
+| Decisions waiting on the safety authority | 3 open |
+| Decisions applied | 24 |
 | Safety case claims | 0 |
 | Evidence items | 0 |
 | Open defeaters | 0 |
@@ -145,6 +145,10 @@ and commit the result.
 | `python3 assurance/08-analyses/stpa/stpa.py` | WP-A-05 §1 summary, §2 to §6 tables and Figure 3-1 | `08-analyses/stpa/stpa.yaml`, `hara/hara.yaml`, `sotif/sotif.yaml`, `fsc/fsc.yaml`, `fallback/fallback.yaml`, `modifications/modifications.yaml` |
 | `python3 assurance/02-concept/tara/tara.py` | WP-C-09 §1 summary, §2 to §5 tables and Figure 5-1 | `02-concept/tara/tara.yaml`, `stpa/stpa.yaml` and the references it checks, decision register |
 | `python3 assurance/02-concept/cybersecurity/cybersecurity.py` | WP-C-10 §1 summary, §2 to §4 tables and Figure 2-1 | `02-concept/cybersecurity/cybersecurity.yaml`, `tara/tara.yaml` and the references it checks |
+| `python3 assurance/02-concept/ai/ai.py` | WP-C-11 §1 summary, §2 to §5 tables and Figure 4-1 | `02-concept/ai/ai.yaml`, WP-C-01 §3, WP-C-02 §6, `fsc/fsc.yaml`, `triggering/triggering.yaml`, `cybersecurity/cybersecurity.yaml` |
+| `python3 assurance/02-concept/misuse/misuse.py` | WP-C-08 §1 summary, §2 and §4 to §6 tables, Figure 5-1 | `02-concept/misuse/misuse.yaml` and the analyses it refers to, decision register |
+| `python3 assurance/03-system/tsc/tsc.py` | WP-S-03 §1 summary, §2 to §4 and §6 tables, Figure 2-1 | `03-system/tsc/tsc.yaml`, `fsc/fsc.yaml`, `fallback/fallback.yaml`, `triggering/triggering.yaml`, decision register |
+| `python3 assurance/03-system/timing/timing.py` | WP-S-04 §1 summary, §2 to §5 tables and Figure 2-1 | `03-system/timing/timing.yaml`, `hara/hara.yaml`, `tsc/tsc.yaml`, `fallback/fallback.yaml`, WP-C-02 ODD-20 |
 | `python3 assurance/case/tools/dashboard.py` | `case/figures/dashboard.svg`, the summary block above | WP-M-00, `register.yaml`, `case/records/` |
 
 The decision inbox page is built by `decisions/build_inbox.py` and published outside the repository; CI builds it

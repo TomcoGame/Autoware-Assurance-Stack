@@ -27,11 +27,16 @@ for sub in (
     "08-analyses/stpa",
     "02-concept/tara",
     "02-concept/cybersecurity",
+    "02-concept/ai",
+    "02-concept/misuse",
+    "03-system/tsc",
+    "03-system/timing",
     "case/tools",
     "trace/tools",
 ):
     sys.path.insert(0, str(ASSURANCE / sub))
 
+import ai  # noqa: E402
 import build_inbox  # noqa: E402
 import caselib  # noqa: E402
 import check_decisions  # noqa: E402
@@ -49,11 +54,14 @@ import figkit  # noqa: E402
 import folder_index  # noqa: E402
 import fsc  # noqa: E402
 import hara  # noqa: E402
+import misuse  # noqa: E402
 import modifications  # noqa: E402
 import sotif  # noqa: E402
 import stpa  # noqa: E402
 import tara  # noqa: E402
+import timing  # noqa: E402
 import triggering  # noqa: E402
+import tsc  # noqa: E402
 import wpregister  # noqa: E402
 
 GOOD = {
@@ -576,6 +584,116 @@ class Cybersecurity(unittest.TestCase):
             self.assertTrue(any(needle in x for x in cybersecurity.check(model, k)), needle)
 
 
+class Ai(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(ai.check(ai.load(), ai.known()), [])
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = ai.load(), ai.known()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["systems"][0]["element"] = "EL-02"
+        cases.append((bad, "no AI system may be on a rated element"))
+        bad = copy.deepcopy(m)
+        bad["systems"] = [s for s in bad["systems"] if s["function"] != "F-03"]
+        cases.append((bad, "F-03: an ML function"))
+        bad = copy.deepcopy(m)
+        bad["requirements"] = [r for r in bad["requirements"] if r["kind"] != "uncertainty"]
+        cases.append((bad, "no uncertainty requirement"))
+        bad = copy.deepcopy(m)
+        bad["systems"][0]["input"] = ["Smell"]
+        cases.append((bad, "is not in WP-C-02"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in ai.check(model, k)), needle)
+
+
+class Misuse(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(misuse.check(misuse.load(), misuse.known()), [])
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = misuse.load(), misuse.known()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["entries"] = [e for e in bad["entries"] if e["role"] != "R-04"]
+        cases.append((bad, "R-04: no interaction or misuse"))
+        bad = copy.deepcopy(m)
+        bad["entries"][0]["measures"], bad["entries"][0]["new"] = [], []
+        cases.append((bad, "neither a measure nor a new requirement"))
+        bad = copy.deepcopy(m)
+        bad["entries"][0]["refs"] = ["UCA-99"]
+        cases.append((bad, "UCA-99 does not exist"))
+        bad = copy.deepcopy(m)
+        bad["requirements"].append({"id": "HR-99", "text": "x", "to": "y"})
+        cases.append((bad, "HR-99: no entry needs it"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in misuse.check(model, k)), needle)
+
+
+class Tsc(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(tsc.check(tsc.load(), tsc.known()), [])
+
+    def test_component_asil_is_derived(self):
+        m, k = tsc.load(), tsc.known()
+        ca = tsc.component_asil(m, k)
+        self.assertEqual(ca["CMP-01"], "QM")
+        self.assertEqual(ca["CMP-02"], "D")
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = tsc.load(), tsc.known()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["mechanisms"] = [s for s in bad["mechanisms"] if "FSR-07.03" not in s["implements"]]
+        cases.append((bad, "FSR-07.03: rated D but no mechanism"))
+        bad = copy.deepcopy(m)
+        sm = next(s for s in bad["mechanisms"] if s["id"] == "SM-07")
+        sm["host"] = "CMP-01"
+        cases.append((bad, "but CMP-01 is part of EL-01"))
+        bad = copy.deepcopy(m)
+        bad["mechanisms"][0]["reaction"] = ["MRM-9"]
+        cases.append((bad, "is not a fallback trigger or MRM"))
+        bad = copy.deepcopy(m)
+        bad["links"][1]["x"] = 600
+        cases.append((bad, "is not within both boxes"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in tsc.check(model, k)), needle)
+
+
+class Timing(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(timing.check(timing.load(), timing.known()), [])
+
+    def test_ftti_follows_the_kinematics(self):
+        m = timing.load()
+        g = next(x for x in m["goals"] if x["id"] == "SG-01")
+        hi = m["ranges"][g["range"]]["high"]
+        self.assertAlmostEqual(timing.ftti(m, "SG-01", "high"), (2 * g["margin"] / hi) ** 0.5)
+        self.assertEqual(
+            timing.ftti(m, "SG-07", "high"),
+            min(timing.ftti(m, x, "high") for x in ("SG-01", "SG-02", "SG-04")),
+        )
+        self.assertIsNone(timing.ftti(m, "SG-03", "high"))
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = timing.load(), timing.known()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["goals"] = [g for g in bad["goals"] if g["id"] != "SG-09"]
+        cases.append((bad, "SG-09: safety goal with no timing entry"))
+        bad = copy.deepcopy(m)
+        bad["allocation"] = {"detect": 0.6, "react": 0.6}
+        cases.append((bad, "add up to at most 1"))
+        bad = copy.deepcopy(m)
+        bad["goals"][0]["margin"] = 0
+        cases.append((bad, "margin must be a positive number"))
+        bad = copy.deepcopy(m)
+        bad["mechanisms"][0]["goals"] = ["SG-03"]
+        cases.append((bad, "goal SG-03 has no FTTI"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in timing.check(model, k)), needle)
+
+
 class TreeChecks(unittest.TestCase):
     def test_table_cell_count(self):
         md = "| A | B |\n|---|---|\n| 1 | 2 |\n| 1 |\n"
@@ -642,6 +760,10 @@ class Generators(unittest.TestCase):
             stpa,
             tara,
             cybersecurity,
+            ai,
+            misuse,
+            tsc,
+            timing,
         ):
             first, second = mod.build(), mod.build()
             self.assertEqual(first, second, mod.__name__)

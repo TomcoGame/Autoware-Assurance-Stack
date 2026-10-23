@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="412" viewBox="0 0 640 412" role="img" aria-labelledby="t d">
+<title id="t">WP-C-08 Figure 5-1: interactions and misuse by role</title>
+<desc id="d">Entries by role: Passenger: MU-01 misuse, MU-02 misuse, MU-03 misuse (new requirement), MU-04 misuse, MU-05 misuse, MU-06 interaction (new requirement), MU-07 misuse (new requirement); Child, elderly or less mobile passenger: MU-08 interaction (new requirement), MU-09 misuse (new requirement); Pedestrian: MU-10 misuse, MU-11 interaction (new requirement), MU-12 misuse; Cyclist or scooter rider: MU-13 interaction; Driver of another vehicle: MU-14 misuse, MU-15 interaction; Remote operator: MU-16 error (new requirement), MU-17 error, MU-18 error, MU-19 error; First responder (police, fire, ambulance): MU-20 interaction (new requirement), MU-21 interaction (new requirement); Fleet technician: MU-22 error (new requirement), MU-23 misuse.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg .misuse { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.4; }
+svg .error { fill:var(--badsoft); stroke:var(--bad); stroke-width:1.4; }
+svg .interaction { fill:var(--accsoft); stroke:var(--acc); stroke-width:1.4; }
+svg .chip { font:600 11px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .dot { fill:var(--ink); }
+</style>
+<rect class="bg" width="640" height="412"/>
+<text x="24" y="32" class="h">Interactions and misuse by role</text>
+<text x="24" y="54" class="t">WP-C-08 §2–5: what each kind of person may do with the vehicle; a</text>
+<text x="24" y="71" class="t">dot marks an entry that needs a new requirement</text>
+<text x="24" y="111" class="t">Passenger</text>
+<rect x="200" y="97" width="50" height="20" rx="4" class="misuse"/>
+<text x="205" y="111" class="chip">MU-01</text>
+<rect x="255" y="97" width="50" height="20" rx="4" class="misuse"/>
+<text x="260" y="111" class="chip">MU-02</text>
+<rect x="310" y="97" width="50" height="20" rx="4" class="misuse"/>
+<text x="315" y="111" class="chip">MU-03</text>
+<circle cx="354" cy="107" r="3" class="dot"/>
+<rect x="365" y="97" width="50" height="20" rx="4" class="misuse"/>
+<text x="370" y="111" class="chip">MU-04</text>
+<rect x="420" y="97" width="50" height="20" rx="4" class="misuse"/>
+<text x="425" y="111" class="chip">MU-05</text>
+<rect x="475" y="97" width="50" height="20" rx="4" class="interaction"/>
+<text x="480" y="111" class="chip">MU-06</text>
+<circle cx="519" cy="107" r="3" class="dot"/>
+<rect x="530" y="97" width="50" height="20" rx="4" class="misuse"/>
+<text x="535" y="111" class="chip">MU-07</text>
+<circle cx="574" cy="107" r="3" class="dot"/>
+<text x="24" y="138" class="s">Child, elderly or less</text>
+<text x="24" y="152" class="s">mobile passenger</text>
+<rect x="200" y="131" width="50" height="20" rx="4" class="interaction"/>
+<text x="205" y="145" class="chip">MU-08</text>
+<circle cx="244" cy="141" r="3" class="dot"/>
+<rect x="255" y="131" width="50" height="20" rx="4" class="misuse"/>
+<text x="260" y="145" class="chip">MU-09</text>
+<circle cx="299" cy="141" r="3" class="dot"/>
+<text x="24" y="179" class="t">Pedestrian</text>
+<rect x="200" y="165" width="50" height="20" rx="4" class="misuse"/>
+<text x="205" y="179" class="chip">MU-10</text>
+<rect x="255" y="165" width="50" height="20" rx="4" class="interaction"/>
+<text x="260" y="179" class="chip">MU-11</text>
+<circle cx="299" cy="175" r="3" class="dot"/>
+<rect x="310" y="165" width="50" height="20" rx="4" class="misuse"/>
+<text x="315" y="179" class="chip">MU-12</text>
+<text x="24" y="213" class="t">Cyclist or scooter rider</text>
+<rect x="200" y="199" width="50" height="20" rx="4" class="interaction"/>
+<text x="205" y="213" class="chip">MU-13</text>
+<text x="24" y="247" class="t">Driver of another vehicle</text>
+<rect x="200" y="233" width="50" height="20" rx="4" class="misuse"/>
+<text x="205" y="247" class="chip">MU-14</text>
+<rect x="255" y="233" width="50" height="20" rx="4" class="interaction"/>
+<text x="260" y="247" class="chip">MU-15</text>
+<text x="24" y="281" class="t">Remote operator</text>
+<rect x="200" y="267" width="50" height="20" rx="4" class="error"/>
+<text x="205" y="281" class="chip">MU-16</text>
+<circle cx="244" cy="277" r="3" class="dot"/>
+<rect x="255" y="267" width="50" height="20" rx="4" class="error"/>
+<text x="260" y="281" class="chip">MU-17</text>
+<rect x="310" y="267" width="50" height="20" rx="4" class="error"/>
+<text x="315" y="281" class="chip">MU-18</text>
+<rect x="365" y="267" width="50" height="20" rx="4" class="error"/>
+<text x="370" y="281" class="chip">MU-19</text>
+<text x="24" y="308" class="s">First responder (police,</text>
+<text x="24" y="322" class="s">fire, ambulance)</text>
+<rect x="200" y="301" width="50" height="20" rx="4" class="interaction"/>
+<text x="205" y="315" class="chip">MU-20</text>
+<circle cx="244" cy="311" r="3" class="dot"/>
+<rect x="255" y="301" width="50" height="20" rx="4" class="interaction"/>
+<text x="260" y="315" class="chip">MU-21</text>
+<circle cx="299" cy="311" r="3" class="dot"/>
+<text x="24" y="349" class="t">Fleet technician</text>
+<rect x="200" y="335" width="50" height="20" rx="4" class="error"/>
+<text x="205" y="349" class="chip">MU-22</text>
+<circle cx="244" cy="345" r="3" class="dot"/>
+<rect x="255" y="335" width="50" height="20" rx="4" class="misuse"/>
+<text x="260" y="349" class="chip">MU-23</text>
+<rect x="24" y="379" width="26" height="18" rx="4" class="misuse"/>
+<text x="58" y="392" class="t">Misuse</text>
+<rect x="125.0" y="379" width="26" height="18" rx="4" class="error"/>
+<text x="159" y="392" class="t">Error</text>
+<rect x="219.5" y="379" width="26" height="18" rx="4" class="interaction"/>
+<text x="253.5" y="392" class="t">Interaction</text>
+<circle cx="359.0" cy="388" r="3" class="dot"/>
+<text x="369" y="392" class="t">Needs a new requirement</text>
+</svg>

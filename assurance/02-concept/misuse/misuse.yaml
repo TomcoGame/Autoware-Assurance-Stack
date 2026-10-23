@@ -1,0 +1,222 @@
+# Human interaction and foreseeable misuse for WP-C-08. misuse.py checks every entry against the analyses it draws
+# on (HARA, SOTIF, STPA, TARA, functional safety concept, fallback concept, functional modifications, cybersecurity
+# concept) and writes the WP-C-08 tables and Figure 5-1.
+# kind: misuse (someone uses the vehicle in a way not intended, knowingly or not), error (a trained person makes a
+# mistake), interaction (an intended interaction the item must support safely).
+# Each entry needs a measure already in the concept or a new requirement (HR); `pending` names a decision it waits on.
+# Every entry is a draft by Claude (I0).
+
+roles:
+  - {id: R-01, name: Passenger}
+  - {id: R-02, name: "Child, elderly or less mobile passenger"}
+  - {id: R-03, name: Pedestrian}
+  - {id: R-04, name: Cyclist or scooter rider}
+  - {id: R-05, name: Driver of another vehicle}
+  - {id: R-06, name: Remote operator}
+  - {id: R-07, name: "First responder (police, fire, ambulance)"}
+  - {id: R-08, name: Fleet technician}
+
+entries:
+  - id: MU-01
+    role: R-01
+    kind: misuse
+    situation: Tries to open a door while the vehicle is moving
+    consequence: Falls out, or strikes a passing cyclist
+    refs: [UCA-47, HZ-7]
+    measures: [AOU-06, FSR-05.05]
+  - id: MU-02
+    role: R-01
+    kind: misuse
+    situation: Gets out on the traffic side at a stop in lane
+    consequence: Struck by a passing vehicle
+    refs: [SH-16, HZ-7]
+    measures: [FM-20]
+  - id: MU-03
+    role: R-01
+    kind: misuse
+    situation: Presses the stop request as a prank, or again and again
+    consequence: Needless stops; the vehicle blocks traffic
+    refs: [UCA-49, HZ-8]
+    measures: [TR-16]
+    new: [HR-01]
+  - id: MU-04
+    role: R-01
+    kind: misuse
+    situation: Covers or damages a sensor or camera in the cabin or on the body
+    consequence: Perception degraded; the monitor's channel blinded
+    refs: [TC-24, FI-08]
+    measures: [FM-10, FSR-07.08]
+  - id: MU-05
+    role: R-01
+    kind: misuse
+    situation: Tries to take control of the vehicle
+    consequence: None if no control is reachable from the cabin
+    refs: [HZ-5]
+    measures: [AOU-07]
+  - id: MU-06
+    role: R-01
+    kind: interaction
+    situation: Has a medical emergency, or is threatened by another passenger
+    consequence: Harm made worse by delay
+    refs: [HZ-7]
+    measures: []
+    new: [HR-02]
+  - id: MU-07
+    role: R-01
+    kind: misuse
+    situation: Unbuckles or never buckles the seat belt during a trip
+    consequence: Injured in a hard stop or a collision
+    refs: [HZ-3]
+    measures: []
+    new: [HR-03]
+  - id: MU-08
+    role: R-02
+    kind: interaction
+    situation: Needs more time or help to get in and out, or cannot reach the controls
+    consequence: Trapped by a door, or left in an unsafe place
+    refs: [HZ-7]
+    measures: [FSR-05.01, FSR-05.05]
+    new: [HR-04]
+  - id: MU-09
+    role: R-02
+    kind: misuse
+    situation: A child rides alone, or is left in the vehicle at the end of a trip
+    consequence: An unsupervised child in a driverless vehicle
+    refs: [HZ-7]
+    measures: []
+    new: [HR-05]
+  - id: MU-10
+    role: R-03
+    kind: misuse
+    situation: Steps in front of the vehicle to test it, knowing it will stop
+    consequence: Hard braking; the vehicle blocks traffic
+    refs: [HZ-3, HZ-8]
+    measures: [FSR-02.02, FM-17, TR-14]
+  - id: MU-11
+    role: R-03
+    kind: interaction
+    situation: Waits for eye contact or a wave before crossing, which no driver can give
+    consequence: Hesitation on both sides, or a crossing at the wrong moment
+    refs: [SH-11, HZ-6]
+    measures: [FM-17]
+    new: [HR-06]
+  - id: MU-12
+    role: R-03
+    kind: misuse
+    situation: Places cones or objects to trap the vehicle
+    consequence: The vehicle is stranded and blocks the lane
+    refs: [HZ-8]
+    measures: [TR-14, SR-01]
+  - id: MU-13
+    role: R-04
+    kind: interaction
+    situation: Rides up alongside on the inside of a right turn
+    consequence: Struck by the turning vehicle
+    refs: [SH-04, HZ-1]
+    measures: [FSR-06.01, FM-06]
+  - id: MU-14
+    role: R-05
+    kind: misuse
+    situation: Cuts in front or tailgates, because the vehicle is known to give way
+    consequence: Hard braking and rear-end collisions
+    refs: [SH-11, HZ-3]
+    measures: [FM-17, FSR-03.02]
+  - id: MU-15
+    role: R-05
+    kind: interaction
+    situation: Takes a vehicle stopped in lane with hazard lights for a parked one and overtakes into the opposing lane
+    consequence: Head-on collision between other road users
+    refs: [HZ-8]
+    measures: [FSR-07.02, SR-01]
+  - id: MU-16
+    role: R-06
+    kind: error
+    situation: Acts on the wrong vehicle
+    consequence: A vehicle released or moved that should not be
+    refs: [UCA-14, HZ-5]
+    measures: [CSR-01]
+    new: [HR-07]
+  - id: MU-17
+    role: R-06
+    kind: error
+    situation: Trusts the video too much and confirms a path that is blocked
+    consequence: Collision during remote assistance
+    refs: [UCA-07, HZ-1]
+    measures: [FSR-08.02, FM-11]
+  - id: MU-18
+    role: R-06
+    kind: error
+    situation: Tired or handling several vehicles, and responds late
+    consequence: Vehicles stopped in lane for long
+    refs: [UCA-06, HZ-8]
+    measures: [SR-01, AOU-10]
+  - id: MU-19
+    role: R-06
+    kind: error
+    situation: Releases a vehicle while a passenger is getting out
+    consequence: Passenger struck by the moving vehicle
+    refs: [UCA-14, HZ-7]
+    measures: [FSR-05.01, FSR-07.04]
+  - id: MU-20
+    role: R-07
+    kind: interaction
+    situation: Needs to stop, hold, move or direct a driverless vehicle at a scene
+    consequence: Delay at the scene, or the vehicle moves when it should not
+    refs: [HZ-8, SH-10]
+    measures: [FM-16]
+    new: [HR-08]
+  - id: MU-21
+    role: R-07
+    kind: interaction
+    situation: Needs to open doors and make the vehicle safe after a crash or in a fire
+    consequence: Rescue delayed
+    refs: [HZ-7]
+    measures: [SR-05]
+    new: [HR-09]
+  - id: MU-22
+    role: R-08
+    kind: error
+    situation: Returns a vehicle to service with a sensor misaligned, uncalibrated or dirty
+    consequence: Degraded perception in service
+    refs: [TC-24]
+    measures: [AOU-08]
+    new: [HR-10]
+  - id: MU-23
+    role: R-08
+    kind: misuse
+    situation: Uses a debug or service port to change parameters outside the release process
+    consequence: Safety limits changed without review
+    refs: [TS-05]
+    measures: [CR-03, CSR-05]
+
+requirements:
+  - id: HR-01
+    text: Act on the stop request by pulling over (MRM-1), connect the passenger to a remote operator, and after repeated requests let the operator decide
+    to: Autoware (TR-16); remote operations (WP-O-02)
+  - id: HR-02
+    text: Give every seat an emergency call to a remote operator, who can divert the vehicle to a safe stop or a meeting point with emergency services
+    to: Vehicle interface; remote operations (WP-O-02, WP-O-03)
+  - id: HR-03
+    text: Detect occupied seats and unfastened belts; do not start a trip until every occupied seat is belted, and warn by voice and on screen whenever a belt is unfastened during the trip (DQ-029 B)
+    to: Vehicle; Autoware; passenger information (WP-O-03)
+  - id: HR-04
+    text: Give passengers who need it more time and help to board and alight, with doors that never close on a person and controls reachable from a wheelchair
+    to: Vehicle (an assumption to add to WP-C-01 §8); WP-O-03
+  - id: HR-05
+    text: Check the cabin before a trip ends and before the next begins, and do not end a trip with a person still inside without a remote operator's decision
+    to: Vehicle interface; remote operations (WP-O-02)
+  - id: HR-06
+    text: Show other road users, by lamps or an external display, when the vehicle is yielding and when it is about to move
+    to: Vehicle; Autoware (F-12)
+  - id: HR-07
+    text: Show the vehicle's identity, position and cabin view on every remote action, and ask the operator to confirm the vehicle before a release or a move
+    to: Remote operations station (EL-09)
+  - id: HR-08
+    text: Publish a first responder guide, mark the vehicles as driverless, and give emergency services a line to remote operations that can stop, hold or move any vehicle
+    to: Operations (WP-O-02); vehicle markings
+  - id: HR-09
+    text: Make the high-voltage and power isolation points and the manual door release findable and usable by first responders without tools specific to the fleet
+    to: Vehicle (assumption, WP-C-01 §8); first responder guide
+  - id: HR-10
+    text: Check calibration, cleanliness and software versions before every return to service, and let the vehicle refuse driverless dispatch until the check is recorded
+    to: Operations (WP-O-02); Autoware start-up checks
