@@ -164,7 +164,7 @@ hazards:
     severity: S3
     controllability: C3
     triggers: Stop in lane as the rated minimal risk condition (DQ-016 A); passengers wanting to leave a stopped taxi
-    measures: Door release only on the kerb side and only with remote operations' consent (WP-C-08); passenger information (WP-O-03)
+    measures: None that keeps the doors shut; they unlock at standstill by the lead's decision (DQ-023 C). Hazard lights, and passengers told to leave on the kerb side and watch for traffic (WP-O-03); the residual risk counts against AC-02
 
 acceptance:
   - id: AC-01

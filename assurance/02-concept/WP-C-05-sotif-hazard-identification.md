@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-05 SOTIF hazard identification, risk evaluation and acceptance criteria |
 | Standard reference | UL 4600 §6; ISO 21448 §6 |
-| Version | 0.3 (AC-01 set: at least as safe as a careful, competent human driver on the same roads (DQ-020 A); 2026-10-23). 0.2 (first content: method, sixteen SOTIF hazards with their evaluation, the acceptance criteria framework, generated from `sotif/sotif.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.4 (SH-16: doors unlock at standstill (DQ-023 C); 2026-10-23). 0.3 (AC-01 set: at least as safe as a careful, competent human driver on the same roads (DQ-020 A); 2026-10-23). 0.2 (first content: method, sixteen SOTIF hazards with their evaluation, the acceptance criteria framework, generated from `sotif/sotif.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | SOTIF |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -73,7 +73,7 @@ The hazards are kept in [`sotif/sotif.yaml`](sotif/sotif.yaml); [`sotif/sotif.py
 
 <!-- END GENERATED: sotif-hazards -->
 
-Three hazards come from gaps already found in the pinned Autoware: SH-09 (no response to emergency vehicles), SH-10 (no response to a person directing traffic) and SH-15 (no pull-over operator, so its behaviour is still to be specified). SH-16 follows directly from making the stop in lane the rated minimal risk condition (DQ-016 A).
+Three hazards come from gaps already found in the pinned Autoware: SH-09 (no response to emergency vehicles), SH-10 (no response to a person directing traffic) and SH-15 (no pull-over operator, so its behaviour is still to be specified). SH-16 follows directly from making the stop in lane the rated minimal risk condition (DQ-016 A). The lead has since decided that doors unlock at standstill, as in a taxi (DQ-023 C), so SH-16 is reduced only by hazard lights and passenger information, and its residual risk counts against AC-02.
 
 ## 5. Evaluation
 
@@ -96,7 +96,7 @@ Three hazards come from gaps already found in the pinned Autoware: SH-09 (no res
 | SH-13 | Collision during remote driving | S3 | C3 | **Yes** | Monitor envelope applies to remote commands (FSR-08.02); remote operator qualification and limits (AOU-10, WP-O-02) |
 | SH-14 | Collision the monitor should have prevented, or an unjustified emergency stop | S3 | C3 | **Yes** | Detection and false-positive targets for EL-03 (FSR-02.01, FSR-03.01); sensor blockage detection; dependent failure analysis with Autoware's sensors (WP-A-03) |
 | SH-15 | Collision with a cyclist in a bike lane or a pedestrian at a driveway or crosswalk | S2 | C3 | **Yes** | Pull-over operator restricted to mapped safe stopping places (DQ-016 A, WP-C-01 OI-3) |
-| SH-16 | Passenger struck by a passing vehicle | S3 | C3 | **Yes** | Door release only on the kerb side and only with remote operations' consent (WP-C-08); passenger information (WP-O-03) |
+| SH-16 | Passenger struck by a passing vehicle | S3 | C3 | **Yes** | None that keeps the doors shut; they unlock at standstill by the lead's decision (DQ-023 C). Hazard lights, and passengers told to leave on the kerb side and watch for traffic (WP-O-03); the residual risk counts against AC-02 |
 
 <!-- END GENERATED: sotif-evaluation -->
 
