@@ -109,11 +109,10 @@ modifications:
   - id: FM-15
     type: function
     name: Emergency vehicle response
-    change: Detect an approaching emergency vehicle and pull to the side or stop to let it pass (WP-C-02 OEDR-09); how it is detected waits on the decision
+    change: Hear sirens with a microphone array and confirm emergency lights with the cameras (DQ-025 A), then pull to the side or stop to let the vehicle pass (WP-C-02 OEDR-09)
     addresses: [FI-13]
-    by: New Autoware function; sensors per the decision
+    by: New Autoware function and a new AI component (WP-C-11); microphones added to the sensor set (WP-H-02)
     concept: []
-    pending: DQ-025
   - id: FM-16
     type: function
     name: Response to people directing traffic
@@ -124,11 +123,10 @@ modifications:
   - id: FM-17
     type: function
     name: Predictable driving style
-    change: Tune waits, gap acceptance and creeping to the style the decision sets, cap how long the vehicle waits before it asks for remote assistance, and signal its intent
+    change: Tune waits, gap acceptance and creeping to those of the typical driver in the geofence (DQ-026 C), cap how long the vehicle waits before it asks for remote assistance, and signal its intent; the safety monitor's envelope still bounds every manoeuvre
     addresses: [FI-15]
     by: Autoware configuration (planning)
     concept: []
-    pending: DQ-026
   - id: FM-18
     type: function
     name: Occlusion-aware speed

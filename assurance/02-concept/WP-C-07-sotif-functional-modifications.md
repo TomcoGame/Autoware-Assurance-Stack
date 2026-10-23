@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-07 Functional modifications addressing SOTIF risk |
 | Standard reference | ISO 21448 §8; ASPICE 4.0 SYS.2 |
-| Version | 0.2 (first content: functional modifications for every insufficiency of WP-C-06, the hazards they address, route preference, the updated specification, residual risk to evaluate, generated from `modifications/modifications.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.3 (emergency vehicles heard and seen (DQ-025 A); driving style of the typical driver in the geofence (DQ-026 C); 2026-10-23). 0.2 (first content: functional modifications for every insufficiency of WP-C-06, the hazards they address, route preference, the updated specification, residual risk to evaluate, generated from `modifications/modifications.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | SOTIF |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -20,7 +20,7 @@ Needed at gate G1 ([WP-M-00](../01-management/WP-M-00-work-product-register.md))
 
 <!-- BEGIN GENERATED: modifications-summary (assurance/02-concept/modifications/modifications.py) -->
 
-20 functional modifications address the 18 insufficiencies of WP-C-06: 10 already required by the concept (a requirement, ODD monitor or assumption) though not yet built, 8 new work, 2 waiting on DQ-025, DQ-026. Every insufficiency is addressed; none is shown to be enough yet (WP-V-03).
+20 functional modifications address the 18 insufficiencies of WP-C-06: 10 already required by the concept (a requirement, ODD monitor or assumption) though not yet built, 10 new work, none waiting on a decision. Every insufficiency is addressed; none is shown to be enough yet (WP-V-03).
 
 <!-- END GENERATED: modifications-summary -->
 
@@ -50,9 +50,9 @@ The modifications are kept in `modifications/modifications.yaml`; `modifications
 | FM-12 | Wet-road driving | Function | When the road is wet, plan with the deceleration and lateral acceleration a wet road allows, and lower the speed accordingly | Autoware configuration (planning limits), with MON-03 reporting the surface | FI-10 | SH-01, SH-06 | — | New work |
 | FM-13 | Map change management | Operations | Feed permits and closures from the city into the map process, report every map–world divergence the fleet sees (MON-02), and block affected lanes in routing until the map is updated | Map process (WP-W-12) and remote operations | FI-11 | SH-07 | MON-02, AOU-04 | Required by the concept |
 | FM-14 | ODD monitors | Function | Build the ODD monitors MON-01 to MON-04 of WP-C-02 §4, each ending in an MRM when it cannot tell inside from outside | New Autoware packages | FI-12 | SH-08 | MON-01, MON-02, MON-03, MON-04, FSR-07.05 | Required by the concept |
-| FM-15 | Emergency vehicle response | Function | Detect an approaching emergency vehicle and pull to the side or stop to let it pass (WP-C-02 OEDR-09); how it is detected waits on the decision | New Autoware function; sensors per the decision | FI-13 | SH-09 | — | Waits on a decision (DQ-025) |
+| FM-15 | Emergency vehicle response | Function | Hear sirens with a microphone array and confirm emergency lights with the cameras (DQ-025 A), then pull to the side or stop to let the vehicle pass (WP-C-02 OEDR-09) | New Autoware function and a new AI component (WP-C-11); microphones added to the sensor set (WP-H-02) | FI-13 | SH-09 | — | New work |
 | FM-16 | Response to people directing traffic | Function | Detect a person standing in the roadway at a junction, or a dark signal, stop safely and ask for remote assistance (WP-C-02 OEDR-10) | New Autoware function with MON-02 | FI-14 | SH-10 | MON-02 | Required by the concept |
-| FM-17 | Predictable driving style | Function | Tune waits, gap acceptance and creeping to the style the decision sets, cap how long the vehicle waits before it asks for remote assistance, and signal its intent | Autoware configuration (planning) | FI-15 | SH-11 | — | Waits on a decision (DQ-026) |
+| FM-17 | Predictable driving style | Function | Tune waits, gap acceptance and creeping to those of the typical driver in the geofence (DQ-026 C), cap how long the vehicle waits before it asks for remote assistance, and signal its intent; the safety monitor's envelope still bounds every manoeuvre | Autoware configuration (planning) | FI-15 | SH-11 | — | New work |
 | FM-18 | Occlusion-aware speed | Function | Enable and tune Autoware's occlusion handling, cap speed at occlusion zones marked in the map, and let the monitor enforce the stopping distance | Autoware configuration (`occlusion_spot_module`) and map attributes | FI-16 | SH-12 | FSR-06.02 | Required by the concept |
 | FM-19 | Pull-over to mapped safe stopping places | Function | Build the pull-over operator so that it stops only at mapped safe stopping places, never in a bike lane, driveway, bus stop or crosswalk | New Autoware package (MRM-1 of WP-C-12) | FI-17 | SH-15 | FSR-07.05 | Required by the concept |
 | FM-20 | Passenger warning at a stop in lane | Operations | When the vehicle stops in lane, tell the passengers by voice and on screen to leave on the kerb side and look for traffic, and connect them to a remote operator | Vehicle interface and remote operations (WP-O-03) | FI-18 | SH-16 | — | New work |
@@ -80,14 +80,16 @@ The modifications change the specification of the intended functionality (WP-C-0
 | WP-C-02 §5.2 OEDR-05 | Take the more restrictive of two signal heads for the same lane | FM-05 |
 | WP-C-02 §5.2 OEDR-07 | Assume unseen vehicles at the bound of WP-C-04 OI-4; creep for a view; wait if the gap cannot be confirmed | FM-07 |
 | WP-C-02 §5.2 OEDR-08 | Cap speed at mapped occlusion zones | FM-18 |
-| WP-C-02 §5.2 OEDR-09 | Pull to the side or stop for an emergency vehicle, detected as DQ-025 decides | FM-15 |
+| WP-C-02 §5.2 OEDR-09 | Pull to the side or stop for an emergency vehicle, heard by microphones and confirmed by cameras (DQ-025 A) | FM-15 |
 | WP-C-02 §5.2 OEDR-10 | Treat a person standing in a junction's roadway, or a dark signal, as a person directing traffic: stop and ask for remote assistance | FM-16 |
-| WP-C-02 §5.1 | Driving style as DQ-026 decides, with a cap on waiting before asking for remote assistance | FM-17 |
+| WP-C-02 §5.1 | Drive like the typical driver in the geofence (DQ-026 C), with a cap on waiting before asking for remote assistance | FM-17 |
 | WP-C-02 §5.1 | On a wet road, plan with the deceleration and lateral acceleration it allows | FM-12 |
 | WP-C-02 §6 | Training and test data as FM-01 sets | FM-01 |
 | WP-C-12 MRM-1 | Pull over only to mapped safe stopping places | FM-19 |
 | WP-C-12 MRC-2 | Tell passengers how to leave safely at a stop in lane | FM-20 |
 | Route planning (F-05) | Prefer routes without the hardest junctions | FM-08 |
+
+**Driving style and the acceptance criterion.** The lead chose the style of the typical driver in the geofence (DQ-026 C, 2026-10-23), while the acceptance criterion is the injury-crash rate of careful, competent drivers (DQ-020 A). The two do not contradict each other: AC-01 judges outcomes, not style, and the safety monitor bounds every gap the vehicle takes. But typical gap acceptance at unprotected turns and roundabouts (SH-05) has less margin than careful driving, so the evaluation of WP-V-03 must show that it still meets AC-01; if it does not, FM-17 is tightened and the style returns to the lead as a decision.
 
 ## 5. Residual risk after modification
 
@@ -105,9 +107,9 @@ ISO 21448 asks whether the residual risk after the modifications meets the accep
 | SH-06 | FI-07, FI-10 | FM-09, FM-12 | — | To be evaluated against AC-02 (WP-V-03) |
 | SH-07 | FI-11 | FM-13 | — | To be evaluated against AC-02 (WP-V-03) |
 | SH-08 | FI-12 | FM-14 | — | To be evaluated against AC-02 (WP-V-03) |
-| SH-09 | FI-13 | FM-15 | DQ-025 | To be evaluated against AC-02 (WP-V-03) |
+| SH-09 | FI-13 | FM-15 | — | To be evaluated against AC-02 (WP-V-03) |
 | SH-10 | FI-14 | FM-16 | — | To be evaluated against AC-02 (WP-V-03) |
-| SH-11 | FI-15 | FM-17 | DQ-026 | To be evaluated against AC-02 (WP-V-03) |
+| SH-11 | FI-15 | FM-17 | — | To be evaluated against AC-02 (WP-V-03) |
 | SH-12 | FI-03, FI-05, FI-16 | FM-02, FM-04, FM-06, FM-07, FM-08, FM-18 | — | To be evaluated against AC-02 (WP-V-03) |
 | SH-13 | FI-09 | FM-11 | — | To be evaluated against AC-02 (WP-V-03) |
 | SH-14 | FI-08 | FM-10 | — | To be evaluated against AC-02 (WP-V-03) |
@@ -122,8 +124,8 @@ ISO 21448 asks whether the residual risk after the modifications meets the accep
 
 | ID | Open item | Closes at |
 |---|---|---|
-| OI-1 | Decide how emergency vehicles are detected (DQ-025) | G2 |
-| OI-2 | Decide the driving style (DQ-026) | G1 |
+| OI-1 | Add the microphone array to the sensor set (WP-H-02) and define the siren detector as an AI component (WP-C-11) | G2 |
+| OI-2 | Show by the evaluation of WP-V-03 that typical-driver gap acceptance meets AC-01, or bring the driving style back to the lead | G3 |
 | OI-3 | Update WP-C-02 §5 and §6 with §4 once this work product is reviewed | G1 |
 | OI-4 | Evaluate the residual risk of every hazard after modification (WP-V-03, WP-V-04) | G3 |
 | OI-5 | Set the smallest object height of FM-03, the track-hold time of FM-04 and the remote-driving speed of FM-11 (WP-S-04) | G2 |
