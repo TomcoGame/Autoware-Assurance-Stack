@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-M-00 Work product register |
 | Standard reference | UL 4600 §5 (safety case work products); ISO 26262-2:2018 §6 (safety plan, work product list); ISO/SAE 21434:2021 §6; ASPICE 4.0 MAN.3 (define work products), SUP.8 (configuration items) |
-| Version | 0.10 (WP-C-07 drafted; 2026-10-23). 0.9 (WP-C-06 drafted; 2026-10-23). 0.8 (WP-C-12 drafted; 2026-10-23). 0.7 (WP-C-05 drafted; 2026-10-23). 0.6 (WP-C-04 drafted; 2026-10-23). 0.5 (WP-C-03 drafted; 2026-10-23). 0.4 (WP-C-02 drafted; 2026-10-23). 0.3 (WP-C-01 drafted; 2026-10-23). 0.2 (G2 exit criterion adds the vehicle choice, deferred to G2 by DQ-003 C; 2026-10-23). 0.1 (first issue: every work product of the assurance path, its clauses, gate and status; 2026-10-22) |
+| Version | 0.11 (WP-A-05 drafted; 2026-10-23). 0.10 (WP-C-07 drafted; 2026-10-23). 0.9 (WP-C-06 drafted; 2026-10-23). 0.8 (WP-C-12 drafted; 2026-10-23). 0.7 (WP-C-05 drafted; 2026-10-23). 0.6 (WP-C-04 drafted; 2026-10-23). 0.5 (WP-C-03 drafted; 2026-10-23). 0.4 (WP-C-02 drafted; 2026-10-23). 0.3 (WP-C-01 drafted; 2026-10-23). 0.2 (G2 exit criterion adds the vehicle choice, deferred to G2 by DQ-003 C; 2026-10-23). 0.1 (first issue: every work product of the assurance path, its clauses, gate and status; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -156,7 +156,7 @@ Clause columns cite the editions in [assurance/README.md](../README.md#standards
 | [WP-A-02](../08-analyses/WP-A-02-coexistence-freedom-from-interference.md) | Coexistence of elements and freedom from interference | §10 | 9 §6 | | | | | G2 | S |
 | [WP-A-03](../08-analyses/WP-A-03-dependent-failure-analysis.md) | Dependent failure analysis | §10 | 9 §7 | | | | | G2 | S |
 | [WP-A-04](../08-analyses/WP-A-04-system-fta-fmea.md) | System-level safety analyses (FTA, FMEA) | §6, §10 | 9 §8, 4 §6 | §7 | | Safety analysis of AI | | G2 | S |
-| [WP-A-05](../08-analyses/WP-A-05-stpa.md) | System-theoretic process analysis (STPA) | §6 | 9 §8 | §6–7 | | | | G2 | S |
+| [WP-A-05](../08-analyses/WP-A-05-stpa.md) | System-theoretic process analysis (STPA) | §6 | 9 §8 | §6–7 | | | | G2 | D |
 
 ### 3.9 Production, operation and decommissioning (`09-production-operation/`)
 

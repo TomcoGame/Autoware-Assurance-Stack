@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="342" viewBox="0 0 640 342" role="img" aria-labelledby="t d">
 <title id="t">08-analyses: work products by gate and status</title>
-<desc id="d">Work products of 08-analyses from WP-M-00 §3, with the gates they are needed for and their status: WP-A-01 ASIL decomposition rationale: G2, Skeleton; WP-A-02 Coexistence of elements and freedom from interference: G2, Skeleton; WP-A-03 Dependent failure analysis: G2, Skeleton; WP-A-04 System-level safety analyses (FTA, FMEA): G2, Skeleton; WP-A-05 System-theoretic process analysis (STPA): G2, Skeleton.</desc>
+<desc id="d">Work products of 08-analyses from WP-M-00 §3, with the gates they are needed for and their status: WP-A-01 ASIL decomposition rationale: G2, Skeleton; WP-A-02 Coexistence of elements and freedom from interference: G2, Skeleton; WP-A-03 Dependent failure analysis: G2, Skeleton; WP-A-04 System-level safety analyses (FTA, FMEA): G2, Skeleton; WP-A-05 System-theoretic process analysis (STPA): G2, Draft.</desc>
 <style>
 svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
 @media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
@@ -44,7 +44,9 @@ svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dashar
 <rect x="16" y="260" width="608" height="40" rx="4" class="card"/>
 <text x="24" y="277" class="tb">WP-A-05</text>
 <text x="24" y="292" class="s">System-theoretic process analysis (STPA)</text>
-<rect x="438.1" y="273" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="438.1" y="273" width="26.6" height="14" rx="7" class="st-d"/>
 <rect x="24" y="313" width="26" height="14" rx="7" class="st-s"/>
-<text x="56" y="324" class="t">Skeleton (5)</text>
+<text x="56" y="324" class="t">Skeleton (4)</text>
+<rect x="154.0" y="313" width="26" height="14" rx="7" class="st-d"/>
+<text x="186" y="324" class="t">Draft (1)</text>
 </svg>

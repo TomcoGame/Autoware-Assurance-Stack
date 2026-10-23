@@ -24,6 +24,7 @@ for sub in (
     "02-concept/fallback",
     "02-concept/triggering",
     "02-concept/modifications",
+    "08-analyses/stpa",
     "case/tools",
     "trace/tools",
 ):
@@ -47,6 +48,7 @@ import fsc  # noqa: E402
 import hara  # noqa: E402
 import modifications  # noqa: E402
 import sotif  # noqa: E402
+import stpa  # noqa: E402
 import triggering  # noqa: E402
 import wpregister  # noqa: E402
 
@@ -463,6 +465,35 @@ class Modifications(unittest.TestCase):
             self.assertTrue(any(needle in x for x in modifications.check(model, k)), needle)
 
 
+class Stpa(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(stpa.check(stpa.load(), stpa.known()), [])
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = stpa.load(), stpa.known()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["links"][0]["actions"][0]["ucas"].pop("D")
+        cases.append((bad, "type D has neither UCAs nor a reason"))
+        bad = copy.deepcopy(m)
+        bad["scenarios"] = [s for s in bad["scenarios"] if "UCA-45" not in s["ucas"]]
+        cases.append((bad, "UCA-45: no loss scenario explains it"))
+        bad = copy.deepcopy(m)
+        bad["scenarios"][0]["measures"], bad["scenarios"][0]["new"] = [], []
+        cases.append((bad, "neither a measure nor a new requirement"))
+        bad = copy.deepcopy(m)
+        bad["scenarios"][0]["measures"] = ["FSR-99.99"]
+        cases.append((bad, "measure FSR-99.99 does not exist"))
+        bad = copy.deepcopy(m)
+        bad["requirements"].append({"id": "SR-99", "text": "x", "to": "y"})
+        cases.append((bad, "SR-99: no scenario needs it"))
+        bad = copy.deepcopy(m)
+        bad["links"][0]["x"] = 300
+        cases.append((bad, "is not within both boxes"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in stpa.check(model, k)), needle)
+
+
 class TreeChecks(unittest.TestCase):
     def test_table_cell_count(self):
         md = "| A | B |\n|---|---|\n| 1 | 2 |\n| 1 |\n"
@@ -526,6 +557,7 @@ class Generators(unittest.TestCase):
             fallback,
             triggering,
             modifications,
+            stpa,
         ):
             first, second = mod.build(), mod.build()
             self.assertEqual(first, second, mod.__name__)
