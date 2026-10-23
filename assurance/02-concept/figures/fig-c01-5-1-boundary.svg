@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="622" viewBox="0 0 640 622" role="img" aria-labelledby="t d">
+<title id="t">WP-C-01 Figure 5-1: item boundary and interfaces</title>
+<desc id="d">Inside the item: Sensors, Autoware computer, Safety monitor. Outside: Vehicle platform, Power supply, HD map data, Update backend, Remote operations centre, Passengers, Other road users. Interfaces: I-01 from Other road users to Sensors; I-02 from Sensors to Autoware computer; I-03 from Autoware computer to Safety monitor; I-04 from Safety monitor to Vehicle platform; I-05 from Vehicle platform to Safety monitor; I-06 from Vehicle platform to Autoware computer; I-07 from HD map data to Autoware computer; I-08 from Remote operations centre to Autoware computer; I-09 from Passengers to Autoware computer; I-10 from Update backend to Autoware computer; I-11 from Vehicle platform to Other road users; I-12 from Power supply to Safety monitor.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg .in { fill:var(--accsoft); stroke:var(--acc); stroke-width:1.6; }
+svg .out { fill:var(--card); stroke:var(--ink3); stroke-width:1.2; }
+svg .todo { fill:var(--bg); stroke:var(--acc); stroke-width:1.6; stroke-dasharray:5 3; }
+svg .bound { fill:none; stroke:var(--acc); stroke-width:1.4; stroke-dasharray:7 5; }
+svg .bl { font:600 12px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--acc); letter-spacing:.06em; }
+svg .wire { stroke:var(--ink2); stroke-width:1.4; fill:none; }
+svg .head { fill:var(--ink2); }
+svg .ts { font:600 12px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .iid { font:500 11px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink2); }
+</style>
+<rect class="bg" width="640" height="622"/>
+<text x="24" y="32" class="h">Item boundary and interfaces</text>
+<text x="24" y="54" class="t">WP-C-01 §5: what is inside the item, and what crosses its edge</text>
+<rect x="202" y="72" width="236" height="436" rx="12" class="bound"/>
+<text x="210" y="88" class="bl">ITEM</text>
+<path d="M474 119 L424 119" class="wire"/>
+<path d="M424 119 L431 123 L431 115 Z" class="head"/>
+<text x="456" y="113" class="iid" text-anchor="middle">I-01</text>
+<path d="M320 142 L320 196" class="wire"/>
+<path d="M320 196 L324 189 L316 189 Z" class="head"/>
+<text x="328" y="173" class="iid">I-02</text>
+<path d="M320 392 L320 446" class="wire"/>
+<path d="M320 446 L324 439 L316 439 Z" class="head"/>
+<text x="328" y="423" class="iid">I-03</text>
+<path d="M424 458 L474 458" class="wire"/>
+<path d="M474 458 L467 454 L467 462 Z" class="head"/>
+<text x="456" y="452" class="iid" text-anchor="middle">I-04</text>
+<path d="M474 480 L424 480" class="wire"/>
+<path d="M424 480 L431 484 L431 476 Z" class="head"/>
+<text x="456" y="496" class="iid" text-anchor="middle">I-05</text>
+<path d="M474 300 L424 300" class="wire"/>
+<path d="M424 300 L431 304 L431 296 Z" class="head"/>
+<text x="456" y="294" class="iid" text-anchor="middle">I-06</text>
+<path d="M152 220 L216 220" class="wire"/>
+<path d="M216 220 L209 216 L209 224 Z" class="head"/>
+<text x="177" y="214" class="iid" text-anchor="middle">I-07</text>
+<path d="M152 320 L216 320" class="wire"/>
+<path d="M216 320 L209 316 L209 324 Z" class="head"/>
+<path d="M152 320 L159 324 L159 316 Z" class="head"/>
+<text x="177" y="314" class="iid" text-anchor="middle">I-08</text>
+<path d="M152 370 L216 370" class="wire"/>
+<path d="M216 370 L209 366 L209 374 Z" class="head"/>
+<path d="M152 370 L159 374 L159 366 Z" class="head"/>
+<text x="177" y="364" class="iid" text-anchor="middle">I-09</text>
+<path d="M152 270 L216 270" class="wire"/>
+<path d="M216 270 L209 266 L209 274 Z" class="head"/>
+<text x="177" y="264" class="iid" text-anchor="middle">I-10</text>
+<path d="M545 250 L545 142" class="wire"/>
+<path d="M545 142 L541 149 L549 149 Z" class="head"/>
+<text x="553" y="200" class="iid">I-11</text>
+<path d="M474 550 L320 550 L320 492" class="wire"/>
+<path d="M320 492 L316 499 L324 499 Z" class="head"/>
+<text x="328" y="540" class="iid">I-12</text>
+<rect x="216" y="96" width="208" height="46" rx="7" class="in"/>
+<text x="320" y="123" class="tb" text-anchor="middle">Sensors</text>
+<rect x="216" y="196" width="208" height="196" rx="7" class="in"/>
+<text x="320" y="298" class="tb" text-anchor="middle">Autoware computer</text>
+<rect x="216" y="446" width="208" height="46" rx="7" class="todo"/>
+<text x="320" y="473" class="tb" text-anchor="middle">Safety monitor</text>
+<rect x="24" y="200" width="128" height="40" rx="7" class="out"/>
+<text x="88" y="224" class="ts" text-anchor="middle">HD map data</text>
+<rect x="24" y="250" width="128" height="40" rx="7" class="out"/>
+<text x="88" y="274" class="ts" text-anchor="middle">Update backend</text>
+<rect x="24" y="300" width="128" height="40" rx="7" class="out"/>
+<text x="88" y="316.5" class="ts" text-anchor="middle">Remote operations</text>
+<text x="88" y="331.5" class="ts" text-anchor="middle">centre</text>
+<rect x="24" y="350" width="128" height="40" rx="7" class="out"/>
+<text x="88" y="374" class="ts" text-anchor="middle">Passengers</text>
+<rect x="474" y="96" width="142" height="46" rx="7" class="out"/>
+<text x="545" y="123" class="ts" text-anchor="middle">Other road users</text>
+<rect x="474" y="250" width="142" height="242" rx="7" class="out"/>
+<text x="545" y="375" class="ts" text-anchor="middle">Vehicle platform</text>
+<rect x="474" y="530" width="142" height="40" rx="7" class="out"/>
+<text x="545" y="554" class="ts" text-anchor="middle">Power supply</text>
+<rect x="24" y="588" width="22" height="16" rx="4" class="in"/>
+<text x="54" y="600" class="t">Inside the item</text>
+<rect x="173.5" y="588" width="22" height="16" rx="4" class="todo"/>
+<text x="203.5" y="600" class="t">Inside, not yet built</text>
+<rect x="362.0" y="588" width="22" height="16" rx="4" class="out"/>
+<text x="392" y="600" class="t">Outside the item</text>
+</svg>

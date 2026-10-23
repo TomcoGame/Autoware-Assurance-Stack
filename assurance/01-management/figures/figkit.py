@@ -136,8 +136,8 @@ STATUS_NAME = {
 }
 
 # Approximate advance width per character, as a fraction of the font size.
-CHAR = {"h": 0.56, "tb": 0.58, "t": 0.5, "s": 0.5, "m": 0.62}
-SIZE = {"h": 20, "tb": 13, "t": 13, "s": 11.5, "m": 12}
+CHAR = {"h": 0.56, "tb": 0.58, "ts": 0.58, "t": 0.5, "s": 0.5, "m": 0.62}
+SIZE = {"h": 20, "tb": 13, "ts": 12, "t": 13, "s": 11.5, "m": 12}
 
 
 def style(extra: str = "") -> str:
