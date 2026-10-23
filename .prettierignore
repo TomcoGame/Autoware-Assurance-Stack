@@ -12,3 +12,6 @@ CLAUDE.md
 
 # The wiki pages keep the same Markdown style as assurance/; build_wiki.py checks them.
 wiki/
+
+# Generated README figures are checked byte for byte by tools/readme/figures.py --check.
+tools/readme/figures/
