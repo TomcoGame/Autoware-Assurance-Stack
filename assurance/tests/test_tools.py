@@ -32,6 +32,7 @@ for sub in (
     "03-system/tsc",
     "03-system/timing",
     "03-system/tsr",
+    "03-system/hsi",
     "06-validation/scenarios",
     "06-validation/simenv",
     "case/tools",
@@ -57,6 +58,7 @@ import figkit  # noqa: E402
 import folder_index  # noqa: E402
 import fsc  # noqa: E402
 import hara  # noqa: E402
+import hsi  # noqa: E402
 import misuse  # noqa: E402
 import modifications  # noqa: E402
 import scenarios  # noqa: E402
@@ -764,6 +766,47 @@ class Tsr(unittest.TestCase):
             self.assertTrue(any(needle in x for x in tsr.check(model, k)), needle)
 
 
+class Hsi(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(hsi.check(hsi.load(), hsi.known()), [])
+
+    def test_timeout_is_the_receivers_detection_budget(self):
+        m, k = hsi.load(), hsi.known()
+        by = {s["id"]: s for s in m["signals"]}
+        to, sm = hsi.tmo(m, by["SIG-03"], k)
+        lo = timing.bound(k["timing"], k["timed"]["SM-05"])[0]
+        self.assertEqual(sm, "SM-05")
+        self.assertAlmostEqual(to, lo * k["timing"]["allocation"]["detect"])
+        self.assertIsNone(hsi.tmo(m, by["SIG-06"], k))
+        self.assertEqual(hsi.asils(by["SIG-03"], k, "CMP-01"), "QM")
+        self.assertEqual(hsi.asils(by["SIG-07"], k, "CMP-04"), "C, B(D)")
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = hsi.load(), hsi.known()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["interfaces"] = [f for f in bad["interfaces"] if f["id"] != "IF-09"]
+        bad["signals"] = [s for s in bad["signals"] if s["interface"] != "IF-09"]
+        cases.append((bad, "link CMP-09→CMP-02 of WP-S-03 needs exactly one interface"))
+        bad = copy.deepcopy(m)
+        next(s for s in bad["signals"] if s["id"] == "SIG-01")["protection"] = "e2e"
+        cases.append((bad, "SIG-01: crosses the untrusted IF-01, so it must be signed"))
+        bad = copy.deepcopy(m)
+        next(s for s in bad["signals"] if s["id"] == "SIG-03")["protection"] = "none"
+        cases.append((bad, "SIG-03: serves a rated requirement but is unprotected"))
+        bad = copy.deepcopy(m)
+        next(s for s in bad["signals"] if s["id"] == "SIG-19")["serves"] = ["TSR-16.01"]
+        cases.append((bad, "SIG-19: serves TSR-16.01 on CMP-08, which is on neither end of IF-09"))
+        bad = copy.deepcopy(m)
+        bad["internal"] = [x for x in bad["internal"] if x["tsr"] != "TSR-13.01"]
+        cases.append((bad, "TSR-13.01: on a supplier component, but crosses no interface"))
+        bad = copy.deepcopy(m)
+        bad["diagnostics"][0]["component"] = "CMP-06"
+        cases.append((bad, "HD-01: CMP-06 is outside the item"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in hsi.check(model, k)), needle)
+
+
 class Scenarios(unittest.TestCase):
     def test_real_model_passes(self):
         self.assertEqual(scenarios.check(scenarios.load(), scenarios.known()), [])
@@ -940,6 +983,7 @@ class Generators(unittest.TestCase):
             tsc,
             timing,
             tsr,
+            hsi,
             scenarios,
             simenv,
         ):

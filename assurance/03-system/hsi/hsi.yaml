@@ -1,0 +1,251 @@
+# Hardware-software interface model for WP-S-05: the interfaces between the components of WP-S-03, the signals that
+# cross them, the clocks they are time-stamped against, and the hardware safety features the monitor's software uses.
+# hsi.py checks it against the technical safety concept (one interface per link), the technical safety requirements
+# (every signal serves requirements on one of its two ends; every supplier requirement crosses an interface or is
+# internal to the supplier), the item definition and the timing budget, derives each signal's ASIL, receive timeout
+# and maximum period, and writes the WP-S-05 tables and Figure 1-1.
+# `dir` is forward (the link's direction in WP-S-03) or back. `serves` lists the requirements (TSR), assumptions of
+# use (AOU) and fallback triggers (TR) a signal is needed for. `medium` is a proposal unless it says the vehicle sets it.
+# Every entry is a draft by Claude (I0). No period, timeout or medium is measured or selected yet.
+
+# Each signal consumed by a time-critical mechanism must be received within that mechanism's detection budget
+# (WP-S-04 §4); it is sent at least this many times per timeout, so that one lost frame is not yet a fault.
+frames_per_timeout: 3
+
+interfaces:
+  - id: IF-01
+    link: [CMP-11, CMP-02]
+    item: I-08
+    medium: Cellular link to the vehicle, then through the Autoware computer's network to the monitor
+    untrusted: true
+  - id: IF-02
+    link: [CMP-01, CMP-02]
+    item: I-03
+    medium: Dedicated point-to-point Automotive Ethernet, not shared with Autoware's other traffic (proposed)
+  - id: IF-03
+    link: [CMP-04, CMP-03]
+    item: I-13
+    medium: Automotive Ethernet from the LiDAR, as the sensor offers (WP-H-02)
+  - id: IF-04
+    link: [CMP-05, CMP-03]
+    item: I-13
+    medium: CAN FD or Automotive Ethernet from the radar, as the sensor offers (WP-H-02)
+  - id: IF-05
+    link: [CMP-03, CMP-02]
+    item: I-13
+    medium: Dedicated point-to-point link between the two processors, inside the monitor's enclosure (proposed)
+  - id: IF-06
+    link: [CMP-02, CMP-06]
+    item: I-04
+    medium: The vehicle's by-wire bus, set by the vehicle (DQ-008); the only command path into the drive-by-wire
+  - id: IF-07
+    link: [CMP-07, CMP-02]
+    item: I-05
+    medium: A vehicle bus segment the Autoware computer is not connected to (AOU-03), set by the vehicle (DQ-008)
+  - id: IF-08
+    link: [CMP-02, CMP-08]
+    item: I-04
+    medium: The vehicle's by-wire bus, set by the vehicle (DQ-008)
+  - id: IF-09
+    link: [CMP-09, CMP-02]
+    item: I-05
+    medium: The vehicle's by-wire bus, set by the vehicle (DQ-008)
+
+signals:
+  # IF-01 Remote operations station to the monitor
+  - id: SIG-01
+    interface: IF-01
+    name: Remote driving command
+    content: Acceleration, steering angle and rate, gear; time stamp, sequence number and signature (CSR-01)
+    serves: [TSR-05.02, TSR-01.06, TSR-19.01]
+    protection: signature
+  - id: SIG-02
+    interface: IF-01
+    name: Release after a minimal risk condition
+    content: Release request for one vehicle; time stamp, sequence number and signature (CSR-01)
+    serves: [TSR-06.05, TSR-19.01]
+    protection: signature
+
+  # IF-02 Autoware computer and the monitor
+  - id: SIG-03
+    interface: IF-02
+    name: Control command
+    content: Longitudinal acceleration (negative for braking), steering angle and steering rate, gear, motion request; sequence counter
+    serves: [TSR-05.01, TSR-01.02, TSR-01.03, TSR-02.01, TSR-02.02, TSR-04.01, TSR-06.02, TSR-06.04]
+    protection: e2e
+  - id: SIG-04
+    interface: IF-02
+    name: Lamp command
+    content: Turn indicator left, right or off; hazard lights
+    serves: [TSR-07.01]
+    protection: e2e
+  - id: SIG-05
+    interface: IF-02
+    name: Autoware heartbeat and state
+    content: Alive counter, operation mode, Autoware's own MRM state
+    serves: [TSR-05.01, TSR-03.04]
+    protection: e2e
+  - id: SIG-06
+    interface: IF-02
+    dir: back
+    name: Monitor status to Autoware
+    content: Whether the monitor is limiting the command, the safety channel has failed (Autoware is to stop comfortably), MRM-4 is active, or the vehicle is held
+    serves: [TSR-03.04]
+    protection: e2e
+
+  # IF-03 and IF-04 Safety sensors to the safety channel processor
+  - id: SIG-07
+    interface: IF-03
+    name: LiDAR point cloud
+    content: Points with range, angle and intensity, time-stamped against CK-01; sensor fault and blockage flags
+    serves: [TSR-09.02, TSR-09.04, TSR-09.01, TSR-10.01]
+    protection: e2e
+  - id: SIG-08
+    interface: IF-04
+    name: Radar detections
+    content: Detections with range, angle and radial velocity, time-stamped against CK-01; sensor fault and blockage flags
+    serves: [TSR-09.03, TSR-09.05, TSR-09.01, TSR-10.01]
+    protection: e2e
+
+  # IF-05 Safety channel processor to the monitor
+  - id: SIG-09
+    interface: IF-05
+    name: Obstacle and free-space report
+    content: Road users and obstacles with position, velocity and extent; occluded zones beside the path; near field front and rear clear; whether braking above the firm level is confirmed; frame time stamp
+    serves: [TSR-09.01, TSR-04.02, TSR-01.01, TSR-01.04, TSR-01.05, TSR-02.02, TSR-04.01, TSR-06.02, TSR-06.04]
+    protection: e2e
+  - id: SIG-10
+    interface: IF-05
+    name: Safety channel status
+    content: Each sensor's state (available, degraded, blocked, lost) and the processor's own state, failed or not
+    serves: [TSR-10.01, TSR-09.07, TSR-03.04]
+    protection: e2e
+
+  # IF-06 Monitor and drive-by-wire
+  - id: SIG-11
+    interface: IF-06
+    name: Bounded motion command
+    content: Acceleration or deceleration, steering angle and rate, gear, lamps including hazard lights; alive counter that the vehicle watches for MRM-5
+    serves: [TSR-01.02, TSR-01.03, TSR-02.01, TSR-06.01, TSR-07.01, TSR-08.02, TSR-14.01]
+    protection: e2e
+  - id: SIG-12
+    interface: IF-06
+    name: Propulsion cut and brake switch
+    content: Propulsion cut; switch to the secondary brake path
+    serves: [TSR-11.01, TSR-03.01, TSR-03.02, TSR-03.05]
+    protection: e2e
+  - id: SIG-13
+    interface: IF-06
+    dir: back
+    name: Drive-by-wire status
+    content: Control mode, active brake path, propulsion cut acknowledged, by-wire faults
+    serves: [TSR-03.05, TSR-03.02]
+    protection: e2e
+
+  # IF-07 Vehicle state sensing to the monitor
+  - id: SIG-14
+    interface: IF-07
+    name: Longitudinal vehicle state
+    content: Speed, longitudinal acceleration, standstill; their fault flags
+    serves: [TSR-15.01, TSR-01.07, TSR-03.01, TSR-03.02, TSR-06.03]
+    protection: e2e
+  - id: SIG-15
+    interface: IF-07
+    name: Steering and gear state
+    content: Steering angle, gear engaged, turn indicator state; their fault flags
+    serves: [TSR-15.02, TSR-03.03, TSR-07.01]
+    protection: e2e
+  - id: SIG-16
+    interface: IF-07
+    name: Collision detected
+    content: Collision flag from the vehicle's crash detection, for example the airbag control unit
+    serves: [AOU-12, TR-15]
+    protection: e2e
+
+  # IF-08 Monitor and park brake
+  - id: SIG-17
+    interface: IF-08
+    name: Park brake command
+    content: Apply or release
+    serves: [TSR-16.01, TSR-06.03]
+    protection: e2e
+  - id: SIG-18
+    interface: IF-08
+    dir: back
+    name: Park brake state
+    content: Applied, released or fault
+    serves: [TSR-16.01, TSR-06.02]
+    protection: e2e
+
+  # IF-09 Door system to the monitor
+  - id: SIG-19
+    interface: IF-09
+    name: Door state
+    content: Each door open or closed and locked; fault flag
+    serves: [TSR-17.01, TSR-06.02, AOU-06]
+    protection: e2e
+
+# Requirements on supplier components that cross no interface: properties the supplier shows inside its element.
+internal:
+  - {tsr: TSR-12.01, why: The secondary brake path is inside the drive-by-wire; the monitor only selects it (SIG-12) and sees which is active (SIG-13)}
+  - {tsr: TSR-13.01, why: Fault-tolerant steering is inside the drive-by-wire}
+  - {tsr: TSR-18.01, why: Power is a supply, not a signal; the monitor watches its own supply (HD-07)}
+
+clocks:
+  - id: CK-01
+    name: Safety channel time
+    master: CMP-03
+    clients: [CMP-04, CMP-05]
+    method: Generalised precision time protocol (IEEE 802.1AS) from the safety channel processor (proposed)
+    serves: [TSR-09.01]
+    bound: Set with the sensors (WP-H-02) so that fusing LiDAR and radar frames misplaces no road user by more than the detection needs
+  - id: CK-02
+    name: Remote command time
+    master: CMP-11
+    clients: [CMP-02]
+    method: Both sides disciplined to GNSS time, with a monitored holdover on the vehicle (proposed)
+    serves: [TSR-05.03, TSR-19.01]
+    bound: Its error counts against the age bound P-09, so it is kept a small part of it
+
+# Hardware safety features on the item's own processors that their software relies on.
+diagnostics:
+  - id: HD-01
+    component: CMP-02
+    name: Lockstep cores
+    use: A lockstep mismatch raises a fault the software cannot mask; the fault handler drives the output disable (HD-06)
+    serves: [TSR-08.01, TSR-08.02]
+  - id: HD-02
+    component: CMP-02
+    name: ECC on RAM and flash
+    use: Corrected errors are counted and reported; an uncorrectable error is handled as HD-01
+    serves: [TSR-08.01]
+  - id: HD-03
+    component: CMP-02
+    name: Memory protection unit
+    use: Keeps the communication stacks from writing the envelope software's memory; a violation is handled as HD-01
+    serves: [TSR-08.01]
+  - id: HD-04
+    component: CMP-02
+    name: External window watchdog
+    use: Serviced by the envelope task in a fixed window each cycle; a missed or early service drives the output disable
+    serves: [TSR-08.01, TSR-08.02]
+  - id: HD-05
+    component: CMP-02
+    name: Independent clock monitor
+    use: Compares the core clock with a second oscillator; a deviation is handled as HD-01, and the clock of CK-02 is checked against it
+    serves: [TSR-08.01, TSR-05.03]
+  - id: HD-06
+    component: CMP-02
+    name: Output disable
+    use: A hardware path that silences the transmitters to the drive-by-wire and park brake, so the vehicle's own stop takes over (MRM-5)
+    serves: [TSR-08.02, TSR-14.01]
+  - id: HD-07
+    component: CMP-02
+    name: Supply voltage monitor
+    use: Under- and over-voltage drive the output disable; a supply warning is reported in SIG-06
+    serves: [TSR-08.01, TSR-18.01]
+  - id: HD-08
+    component: CMP-03
+    name: Safety island with lockstep, ECC and watchdog
+    use: The safety island checks the perception cores and itself; a fault sets the processor failed in SIG-10 or stops SIG-10, which the monitor treats alike
+    serves: [TSR-09.07]

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="398" viewBox="0 0 640 398" role="img" aria-labelledby="t d">
 <title id="t">WP-S-02 Figure 4-1: requirements per component</title>
-<desc id="d">Technical safety requirements per component, by ASIL: CMP-02 Safety monitor controller: 19 at D, 5 at C; CMP-03 Safety channel processor: 2 at D, 2 at C; CMP-04 Safety LiDAR: 1 at C, 1 at B(D); CMP-05 Safety radar: 1 at C, 1 at B(D); CMP-06 Drive-by-wire (supplier): 5 at D; CMP-07 Vehicle state sensing (supplier): 3 at D; CMP-08 Park brake (supplier): 1 at D; CMP-09 Door system (supplier): 1 at D; CMP-10 Monitor power supply (supplier): 1 at D; CMP-11 Remote operations station (supplier): 1 at C.</desc>
+<desc id="d">Technical safety requirements per component, by ASIL: CMP-02 Safety monitor controller: 19 at D, 5 at C; CMP-03 Safety channel processor: 3 at D, 2 at C; CMP-04 Safety LiDAR: 1 at C, 1 at B(D); CMP-05 Safety radar: 1 at C, 1 at B(D); CMP-06 Drive-by-wire (supplier): 5 at D; CMP-07 Vehicle state sensing (supplier): 3 at D; CMP-08 Park brake (supplier): 1 at D; CMP-09 Door system (supplier): 1 at D; CMP-10 Monitor power supply (supplier): 1 at D; CMP-11 Remote operations station (supplier): 1 at C.</desc>
 <style>
 svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
 @media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
@@ -29,9 +29,9 @@ svg .sup { fill:none; stroke:var(--ink3); stroke-width:1; stroke-dasharray:4 3; 
 <rect x="530.4" y="100" width="67.6" height="14" rx="3" class="a-c"/>
 <text x="606" y="113" class="s">24</text>
 <text x="28" y="139" class="t">CMP-03 Safety channel processor</text>
-<rect x="266" y="126" width="25.8" height="14" rx="3" class="a-d"/>
-<rect x="293.8" y="126" width="25.8" height="14" rx="3" class="a-c"/>
-<text x="327.7" y="139" class="s">4</text>
+<rect x="266" y="126" width="39.8" height="14" rx="3" class="a-d"/>
+<rect x="307.8" y="126" width="25.8" height="14" rx="3" class="a-c"/>
+<text x="341.6" y="139" class="s">5</text>
 <text x="28" y="165" class="t">CMP-04 Safety LiDAR</text>
 <rect x="266" y="152" width="11.9" height="14" rx="3" class="a-c"/>
 <rect x="279.9" y="152" width="11.9" height="14" rx="3" class="a-bd"/>

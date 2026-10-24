@@ -48,8 +48,8 @@ svg .big { font:600 30px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fi
 <text x="495.1" y="264" class="tb">15</text>
 <text x="24" y="294" class="tb">G2</text>
 <text x="52" y="294" class="t">System design</text>
-<rect x="252" y="282" width="77" height="16" rx="3" class="st-d"/>
-<rect x="331" y="282" width="187.7" height="16" rx="3" class="st-s"/>
+<rect x="252" y="282" width="92.9" height="16" rx="3" class="st-d"/>
+<rect x="346.9" y="282" width="171.9" height="16" rx="3" class="st-s"/>
 <text x="526.8" y="294" class="tb">17</text>
 <text x="24" y="324" class="tb">G3</text>
 <text x="52" y="324" class="t">HW/SW development</text>
@@ -69,7 +69,7 @@ svg .big { font:600 30px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fi
 <rect x="252" y="402" width="45.4" height="16" rx="3" class="st-s"/>
 <text x="305.4" y="414" class="tb">3</text>
 <rect x="24" y="437" width="22" height="14" rx="3" class="st-d"/>
-<text x="52" y="448" class="t">Draft (20)</text>
+<text x="52" y="448" class="t">Draft (21)</text>
 <rect x="135.0" y="437" width="22" height="14" rx="3" class="st-s"/>
-<text x="163" y="448" class="t">Skeleton (71)</text>
+<text x="163" y="448" class="t">Skeleton (70)</text>
 </svg>
