@@ -1212,3 +1212,36 @@
   status: applied
   answer: {choice: A, via: inbox, at: 2026-10-24, by: u_X1u501HWo3YGVNlzcvkvmg}
   applied: {ref: "#36", record: "WP-S-07 v0.3 §4, EX-07", at: 2026-10-24}
+
+- id: DQ-038
+  question: Up to what speed may faults be injected on the real vehicle on a closed track?
+  context: >-
+    Integration tests cut propulsion, fail a brake path, silence the safety monitor and send unsafe steering, to show
+    the vehicle stops in time. These faults matter most at the top of the speed range, 50 km/h, where stopping takes
+    longest. **Injecting them on the real vehicle puts the test crew and the vehicle at risk; not injecting them
+    leaves the vehicle's own reaction shown only on the bench.**
+  reversibility: revisit
+  blocks: WP-S-08 ENV-4 and IT-13, IT-14, IT-17; the test safety plan (WP-V-07); track booking
+  gate: G3
+  asked: 2026-10-24
+  batch: 12
+  options:
+    - key: A
+      recommended: true
+      title: Up to 50 km/h, the full speed range, on a closed track
+      detail: >-
+        Every fault is shown on the real vehicle where it is worst, with an independent stop the test crew holds, no
+        one inside the run-off area, and a test safety plan reviewed before the first run. Cost: track time, the stop
+        system, and the residual risk to the vehicle.
+    - key: B
+      title: Up to 30 km/h on the track; faster only on the bench
+      detail: >-
+        Lower energy if a test goes wrong. Cost: the vehicle's reaction at the top speeds rests on the bench and on
+        extrapolation, which an assessor may not accept for the brakes and steering.
+    - key: C
+      title: Bench only, no fault injection on the vehicle
+      detail: >-
+        No risk on the track. Cost: the vehicle's own stop when the monitor falls silent (MRM-5) and the secondary
+        brake path are never shown on the real vehicle; the supplier's evidence must carry them alone.
+  sources: [WP-S-08 §3, ISO 26262-4 §7, WP-S-04 §6, WP-V-07, UL 4600 §12]
+  status: open
