@@ -65,6 +65,7 @@ import integ  # noqa: E402
 import misuse  # noqa: E402
 import modifications  # noqa: E402
 import scenarios  # noqa: E402
+import scenes  # noqa: E402
 import secarch  # noqa: E402
 import simenv  # noqa: E402
 import sotif  # noqa: E402
@@ -254,6 +255,101 @@ class Case(unittest.TestCase):
 
     def test_real_records_pass(self):
         self.assertEqual(caselib.check(caselib.load()), [])
+
+
+class HaraRows(unittest.TestCase):
+    def test_rows_cover_every_rated_pair_in_every_situation_and_condition(self):
+        m, a = hara.load(), hara.load_analysis()
+        rs = hara.analysis_rows(m, a)
+        self.assertEqual(
+            len(rs), len(hara.expanded(a)) * len(m["situations"]) * len(a["conditions"])
+        )
+        self.assertEqual(len({r["key"] for r in rs}), len(rs))
+        r = next(r for r in rs if r["key"] == "F-06/M07/OS-16/W02")
+        self.assertEqual((r["s"], r["e"], r["c"], r["asil"]), ("S3", "E3", "C3", "C"))
+        self.assertTrue(all(r["asil"] == "QM" for r in rs if r["s"] == "S0"))
+
+    def test_readme_states_the_row_count(self):
+        m, a = hara.load(), hara.load_analysis()
+        n = len(hara.analysis_rows(m, a))
+        readme = (ASSURANCE.parent / "README.md").read_text(encoding="utf-8")
+        self.assertIn(f"{n:,}".replace(",", " ") + " rows", readme)
+
+    def test_analysis_breaking_a_rule_is_refused(self):
+        m, a = hara.load(), hara.load_analysis()
+
+        def fn(model, fid):
+            return next(f for f in model["functions"] if f["id"] == fid)
+
+        cases = []
+        bad = copy.deepcopy(a)
+        fn(bad, "F-02")["class"]["M02"] = ["SC", "H-02", "M07", "x"]
+        cases.append((bad, "F-02/M02: folded into M07, which is not an SC pair rated itself"))
+        bad = copy.deepcopy(a)
+        fn(bad, "F-02")["class"]["M02"] = ["SC", "H-03", "M01", "x"]
+        cases.append((bad, "F-02/M02: folded into M01, which leads to H-02, not H-03"))
+        bad = copy.deepcopy(a)
+        del fn(bad, "F-03")["class"]["M05"]
+        cases.append((bad, "F-03/M05: needs [class, hazard, folded into, reason]"))
+        bad = copy.deepcopy(a)
+        bad["severity"]["H-02"]["OS-09"] = ["S3", "split", "by a comma"]
+        cases.append((bad, "H-02 in OS-09: needs [severity, reason]"))
+        bad = copy.deepcopy(a)
+        bad["none"]["H-06"] = {}
+        cases.append((bad, "H-06 in OS-01: neither a severity nor a reason for S0"))
+        bad = copy.deepcopy(a)
+        bad["severity"]["H-01"]["OS-06"] = ["S2", "x"]
+        cases.append((bad, "HE-01.1: rated S3, more severe than S2 for H-01 in OS-06"))
+        bad = copy.deepcopy(a)
+        bad["severity"]["H-03"]["OS-02"] = ["S3", "x"]
+        bad["conditions"][0]["exposure"] = "E4"
+        bad["severity"]["H-03"]["OS-01"] = ["S3", "x"]
+        cases.append((bad, "exceeds SG-03's C"))
+        bad = copy.deepcopy(a)
+        bad["guidewords"]["M02"] = {
+            "name": "Stops functioning",
+            "means": "Acts at first",
+            "then": None,
+        }
+        cases.append((bad, "M02: needs only a name and a means"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in hara.check_analysis(m, model)), needle)
+
+
+class HaraFolder(unittest.TestCase):
+    def test_hazop_has_every_pair_with_its_full_deviation(self):
+        m, a = hara.load(), hara.load_analysis()
+        rs = hara.hazop_rows(m, a)
+        self.assertEqual(len(rs), len(a["functions"]) * len(a["guidewords"]))
+        r = next(r for r in rs if r["key"] == "F-01/M02")
+        self.assertEqual(r["deviation"], "Acts at first, then stops while still needed")
+
+    def test_every_safety_related_guide_word_has_a_scene_card(self):
+        m, a = hara.load(), hara.load_analysis()
+        self.assertEqual(scenes.check(a, {h["id"] for h in m["hazards"]}), [])
+        figs = hara.scene_files(m, a)
+        for f in a["functions"]:
+            sc = sorted(g for g, c in f["class"].items() if c[0] == "SC")
+            path = hara.scene_file(f)
+            if not sc:
+                self.assertNotIn(path, figs, f["id"])
+                continue
+            cards = re.findall(r'class="gid">(M\d\d)<', figs[path][1])
+            self.assertEqual(sorted(cards), sc, f["id"])
+
+    def test_scene_starts_where_the_chart_does(self):
+        self.assertEqual(scenes.onset("M01"), 20)
+        self.assertEqual(scenes.onset("M02"), 55)
+        self.assertEqual(scenes.onset("M07"), 20)
+        self.assertEqual(scenes.onset("M10"), 55)
+
+    def test_folder_page_links_every_file_in_the_folder(self):
+        page = hara.build()[hara.README]
+        for p in hara.HERE.iterdir():
+            if p.suffix in (".csv", ".svg", ".yaml"):
+                self.assertIn(f"]({p.name})", page, p.name)
+        self.assertIn("../figures/fig-c01-5-1-boundary.svg", page)
+        self.assertNotIn("](hara/", page)
 
 
 class Hara(unittest.TestCase):

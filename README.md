@@ -64,6 +64,15 @@ _Generated from the work-product register, the decision register and the safety 
 | [WP-C-04 Functional safety concept](assurance/02-concept/WP-C-04-functional-safety-concept.md)           | How the safety goals are met: functional safety requirements and their allocation            |
 | [Decision register](assurance/01-management/decisions/README.md)                                         | The questions only the safety authority can answer, and how they are asked and recorded      |
 
+## Browse the hazard analysis
+
+The HARA rates every malfunction of every function of the item in every operational situation and road condition:
+5 400 rows, each with its severity, exposure and controllability, the reason for each, its ASIL and its safety goal.
+Everything is on one page in [`assurance/02-concept/hara/`](assurance/02-concept/hara/): the item and its
+functions, what each malfunction of each function leads to (a HAZOP sheet, and a scene for each safety-related one), every rated row,
+one file per hazard that GitHub shows as a searchable table, the named hazardous events and the safety goals.
+Nothing needs to be downloaded.
+
 ## Wiki
 
 The [wiki](https://github.com/TomcoGame/Autoware-Assurance-Stack/wiki) explains the project for newcomers,
