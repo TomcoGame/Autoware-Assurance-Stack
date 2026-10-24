@@ -17,8 +17,7 @@ environments:
     what: The safety LiDAR and radar with reference targets at measured positions, in the light and weather the ODD allows, indoors and on a closed track
   - id: ENV-4
     name: Vehicle on a closed track
-    what: The item in the chosen vehicle on a closed track, with an independent stop the test crew holds, measuring equipment for speed, acceleration, brake pressure and steering, and fault injection at the bus and the actuators
-    pending: DQ-038
+    what: The item in the chosen vehicle on a closed track, with an independent stop the test crew holds, no one in the run-off area, measuring equipment for speed, acceleration, brake pressure and steering, and fault injection at the bus and the actuators over the full speed range up to 50 km/h (DQ-038 A), under a test safety plan reviewed before the first run (WP-V-07)
 
 # Integration steps, in order. Each adds components and the interfaces of WP-S-05 between them.
 steps:
