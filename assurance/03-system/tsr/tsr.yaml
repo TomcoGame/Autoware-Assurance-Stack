@@ -5,7 +5,8 @@
 # tables and Figure 4-1.
 # `timing` names the share of the mechanism's binding FTTI (WP-S-04 §4) the requirement must meet: detect or react.
 # `params` names the parameters below that the requirement uses. A parameter takes its value from the timing model
-# (`margin` of a safety goal, or the `budget` of a mechanism), from a decision (`pending`), or from what `source` says.
+# (`margin` of a safety goal, or the `budget` of a mechanism), from a decision of the lead (`value` with its `decision`),
+# waits on one (`pending`), or follows what `source` says.
 # `pending` names a decision a requirement waits on beyond those of its parameters.
 # Every entry is a draft by Claude (I0). No value here is measured.
 
@@ -24,13 +25,16 @@ parameters:
     margin: SG-08
   - id: P-05
     name: Firm deceleration level for unconfirmed braking, and for the monitor's own stop
-    pending: DQ-033
+    value: 3 m/s²
+    decision: DQ-033
   - id: P-06
     name: Assumptions of the safe longitudinal distance (response time, own guaranteed braking, braking of the vehicle ahead)
-    pending: DQ-034
+    value: The item responds within 0.5 s and can always brake at 4 m/s²; the vehicle ahead may brake at up to 8 m/s², which keeps 19.5 m at 50 km/h
+    decision: DQ-034
   - id: P-07
     name: Bounds on other road users' speed and acceleration, for crossing paths and occlusions (DQ-017 A)
-    pending: DQ-034
+    value: Pedestrians may run at up to 3 m/s and cyclists ride at up to 8 m/s, including out of an occlusion
+    decision: DQ-034
   - id: P-08
     name: Silence after which the vehicle stops on its own
     budget: SM-14
@@ -321,7 +325,6 @@ tsrs:
     text: Keep false detections in the swept path from the LiDAR below its share P-13
     fsrs: [FSR-03.01]
     params: [P-13]
-    pending: DQ-035
     verify: False-detection rate from field and replay data, per sensor
   - id: TSR-09.05
     mechanism: SM-09
@@ -330,7 +333,6 @@ tsrs:
     text: Keep false detections in the swept path from the radar below its share P-13
     fsrs: [FSR-03.01]
     params: [P-13]
-    pending: DQ-035
     verify: False-detection rate from field and replay data, per sensor
   - id: TSR-09.06
     mechanism: SM-09
