@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-S-04 Timing: FTTI, detection and reaction budget, fallback timing |
 | Standard reference | UL 4600 §10; ISO 26262-4 §6; ASPICE 4.0 SYS.3 |
-| Version | 0.2 (first content: FTTIs computed per safety goal from proposed margins and fault ranges, the share of each FTTI given to detection and reaction, budgets of the time-critical mechanisms, the sensing-to-actuation chain, fallback timing and the measurement method, generated from `timing/timing.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.3 (remote driving up to 10 km/h (DQ-032 A); 2026-10-23). 0.2 (first content: FTTIs computed per safety goal from proposed margins and fault ranges, the share of each FTTI given to detection and reaction, budgets of the time-critical mechanisms, the sensing-to-actuation chain, fallback timing and the measurement method, generated from `timing/timing.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | ASIL D |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -20,7 +20,7 @@ Needed at gate G2 ([WP-M-00](../01-management/WP-M-00-work-product-register.md))
 
 <!-- BEGIN GENERATED: timing-summary (assurance/03-system/timing/timing.py) -->
 
-FTTIs for 7 of 9 safety goals, computed from proposed margins and the range of faults the candidate vehicles can produce; the other 2 are met by limits, not by time. The shortest is SG-08 at 179 ms in the worst case. 10 time-critical mechanisms get 40% of their binding FTTI to detect a fault and 40% to react. No value is measured yet.
+FTTIs for 7 of 9 safety goals, computed from proposed margins and the range of faults the candidate vehicles can produce; the other 2 are met by limits, not by time. The shortest is SG-08 at 357 ms in the worst case. 10 time-critical mechanisms get 40% of their binding FTTI to detect a fault and 40% to react. No value is measured yet.
 
 <!-- END GENERATED: timing-summary -->
 
@@ -47,16 +47,16 @@ A goal of kind *deviation* is violated when a fault's acceleration has moved the
 | SG-05 Avoid unintended motion from standstill, forward or backward | deviation | 0.2 m (proposed) | 0.5 to 1.5 m/s² | 516 ms to 894 ms | Motion from standstill must be stopped within a short creep distance (proposed), for example before reaching a pedestrian at the bumper |
 | SG-06 Do not enter an intersection, roundabout or crosswalk against right of way | derived from SG-02 | — | — | 500 ms to 707 ms | Entering a conflict area against right of way is prevented by the same braking as SG-02 |
 | SG-07 Reach a minimal risk condition whenever the item can no longer drive safely | derived from SG-01, SG-02, SG-04 | — | — | 447 ms to 707 ms | The loss of Autoware must be caught before any of its possible consequences violates a goal |
-| SG-08 Do not act on remote driving commands that are stale, corrupted or not the operator's | drift | 1 m (proposed) | 2.8 to 5.6 m/s | 179 ms to 357 ms | A stale remote command acts on a scene that has moved on; at remote driving speed, the vehicle may drift this far (proposed) from where the operator saw it |
+| SG-08 Do not act on remote driving commands that are stale, corrupted or not the operator's | drift | 1 m (proposed) | 2.8 to 2.8 m/s | 357 ms | A stale remote command acts on a scene that has moved on; at remote driving speed, the vehicle may drift this far (proposed) from where the operator saw it |
 | SG-09 Avoid signalling a manoeuvre other than the one performed | limit | — | — | — | A wrong indicator misleads others only while it is shown; FSR-09.01 switches to hazard lights, and the time it may take is set in WP-S-02 with the indicator's own timing |
 
 <!-- END GENERATED: timing-ftti -->
 
-**Remote driving is the tightest.** SG-08 allows a remote command only as old as the time the vehicle needs to move by its drift margin at remote driving speed. At 20 km/h that is under 200 ms for the whole path, of which the detection share is about 70 ms, before the video delay to the operator is counted. Remote driving at that speed over a cellular link is unlikely to fit. How fast a remote operator may drive is a vehicle behaviour default for the lead (DQ-032).
+**Remote driving is the tightest.** SG-08 allows a remote command only as old as the time the vehicle needs to move by its drift margin at remote driving speed. At 20 km/h that would have been under 200 ms for the whole path, which a cellular link is unlikely to hold. The lead limited remote driving to walking pace, up to 10 km/h (DQ-032 A, 2026-10-23), which doubles the time; the video delay to the operator still counts against it, and the measurement of §6 must show the link holds it in its worst hours.
 
 ## 3. Latency budget: sensing to actuation
 
-The safety monitor's envelope assumes a response time for the item itself: the time from a road user appearing to the brakes acting. The stages of that chain, along the monitor's path, are below. Each will be measured (§6), and their sum must fit inside the response time the envelope assumes (WP-S-02). None has a budget yet: setting one before the monitor hardware is chosen (DQ-030) would be a guess.
+The safety monitor's envelope assumes a response time for the item itself: the time from a road user appearing to the brakes acting. The stages of that chain, along the monitor's path, are below. Each will be measured (§6), and their sum must fit inside the response time the envelope assumes (WP-S-02). None has a budget yet: the kind of hardware is decided (DQ-030 A), but setting a budget before the parts are selected would be a guess.
 
 <!-- BEGIN GENERATED: timing-chain (assurance/03-system/timing/timing.py) -->
 
@@ -82,7 +82,7 @@ Each time-critical mechanism is bound by the shortest FTTI of the goals it serve
 | SM-01 Longitudinal envelope | SG-01 (of SG-01, SG-02, SG-06) | 500 ms to 707 ms | 200 ms to 283 ms | 200 ms to 283 ms |
 | SM-02 Lateral envelope | SG-04 (of SG-04) | 447 ms to 775 ms | 179 ms to 310 ms | 179 ms to 310 ms |
 | SM-03 Achieved-against-commanded monitor | SG-04 (of SG-01, SG-02, SG-04) | 447 ms to 707 ms | 179 ms to 283 ms | 179 ms to 283 ms |
-| SM-05 Command stream watchdog | SG-08 (of SG-07, SG-08) | 179 ms to 357 ms | 71 ms to 143 ms | 71 ms to 143 ms |
+| SM-05 Command stream watchdog | SG-08 (of SG-07, SG-08) | 357 ms | 143 ms | 143 ms |
 | SM-06 Stop, hold and release | SG-05 (of SG-05) | 516 ms to 894 ms | 207 ms to 358 ms | 207 ms to 358 ms |
 | SM-08 Monitor self-diagnostics and fail-silent output | SG-07 (of SG-07) | 447 ms to 707 ms | 179 ms to 283 ms | 179 ms to 283 ms |
 | SM-09 Geometric obstacle detection | SG-02 (of SG-02) | 500 ms to 707 ms | 200 ms to 283 ms | 200 ms to 283 ms |
@@ -103,7 +103,7 @@ The rated manoeuvres start when their mechanism detects the fault; Autoware's ow
 | MRM-1 Pull over to a mapped safe stopping place | Autoware (QM, not budgeted) | — | — | — |
 | MRM-2 Comfortable stop in lane | Autoware (QM, not budgeted) | — | 15.6 s | — |
 | MRM-3 Emergency stop in lane | Autoware (QM, not budgeted) | — | 6.4 s | — |
-| MRM-4 Safety monitor stop in lane | SM-05 | 71 ms to 143 ms | Set in WP-S-02 | — |
+| MRM-4 Safety monitor stop in lane | SM-05 | 143 ms | Set in WP-S-02 | — |
 | MRM-5 Vehicle's own stop on loss of the monitor | SM-14 | 179 ms to 283 ms | Set in WP-S-02 | — |
 
 <!-- END GENERATED: timing-fallback -->
@@ -127,6 +127,6 @@ Results are recorded as evidence in the safety case; a budget that a measurement
 |---|---|---|
 | OI-1 | Set the margins with the envelope parameters (WP-S-02) | G2 |
 | OI-2 | Replace the fault ranges with the chosen vehicle's values (DQ-008) | G2 |
-| OI-3 | Decide the remote driving speed (DQ-032) | G2 |
-| OI-4 | Set the stage budgets of §3 once the monitor hardware is chosen (DQ-030) | G2 |
+| OI-3 | Measure the remote command age over the geofence's cellular links against the SG-08 budget at 10 km/h (DQ-032 A) | G3 |
+| OI-4 | Set the stage budgets of §3 once the monitor's parts are selected (DQ-030 A) | G2 |
 | OI-5 | Measure every budget as §6 describes | G3 |
