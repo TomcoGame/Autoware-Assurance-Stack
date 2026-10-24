@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-04 Functional safety concept (FSRs, allocation, assumptions) |
 | Standard reference | UL 4600 §10; ISO 26262-3 §7; ASPICE 4.0 SYS.2; IEEE 2846-2022 (informative, assumptions in safety-related models) |
-| Version | 0.5 (FSR-07.08: the monitor checks Autoware's stop after its own sensors fail (DQ-021 A); 2026-10-23). 0.4 (FSR-07.06 and FSR-07.07: the vehicle stops when the monitor falls silent, from the fallback concept (WP-C-12); 2026-10-23). 0.3 (collision avoidance carries SG-06 (DQ-017 A); the safety channel has its own sensors (DQ-018 A); the monitor softens unconfirmed hard braking (DQ-019 A); 2026-10-23). 0.2 (first content: the envelope concept, nine elements, functional safety requirements for the nine safety goals, generated from `fsc/fsc.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.6 (FSR-03.02: the firm level is 3 m/s² (DQ-033 A); 2026-10-24). 0.5 (FSR-07.08: the monitor checks Autoware's stop after its own sensors fail (DQ-021 A); 2026-10-23). 0.4 (FSR-07.06 and FSR-07.07: the vehicle stops when the monitor falls silent, from the fallback concept (WP-C-12); 2026-10-23). 0.3 (collision avoidance carries SG-06 (DQ-017 A); the safety channel has its own sensors (DQ-018 A); the monitor softens unconfirmed hard braking (DQ-019 A); 2026-10-23). 0.2 (first content: the envelope concept, nine elements, functional safety requirements for the nine safety goals, generated from `fsc/fsc.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | Up to ASIL D |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -111,7 +111,7 @@ Requirements that depended on a decision of the safety authority name it.
 | FSR-02.04 | Provide a secondary braking path that can still stop the vehicle after any single fault in the primary one | D | EL-04 Vehicle drive-by-wire | Supplier evidence under the DIA |
 | FSR-02.05 | Plan and control to keep a safe distance and stop for road users and obstacles (nominal function) | QM | EL-01 Autoware computer | Simulation and vehicle test |
 | FSR-03.01 | Keep false detections in the swept path below the rate the SOTIF acceptance criteria allow, so that monitor interventions are rarely unjustified | C | EL-03 Safety perception channel | Field and replay data over the ODD; false-positive rate estimation |
-| FSR-03.02 | Limit decelerations from Autoware above the comfortable level that EL-03 does not confirm with a road user or obstacle to a firm, non-emergency level set in WP-S-04 (DQ-019 A) | C | EL-02 Safety monitor | Fault injection of spurious braking commands; scenario tests |
+| FSR-03.02 | Limit decelerations from Autoware above the comfortable level that EL-03 does not confirm with a road user or obstacle to a firm, non-emergency level of 3 m/s² (DQ-019 A, DQ-033 A) | C | EL-02 Safety monitor | Fault injection of spurious braking commands; scenario tests |
 | FSR-03.03 | Apply emergency-level deceleration on the monitor's own initiative only when FSR-02.02 requires it | C | EL-02 Safety monitor | Review of the intervention logic; replay tests |
 | FSR-04.01 | Reject steering commands whose predicted swept path, over the stopping time, comes within the safe lateral distance of a road user, obstacle or kerb detected by EL-03, and stop in lane instead | D | EL-02 Safety monitor | Fault injection of steering commands; scenario tests with oncoming traffic and cyclists |
 | FSR-04.02 | Limit commanded steering angle and rate to the envelope for the current speed | D | EL-02 Safety monitor | Fault injection; HIL |
