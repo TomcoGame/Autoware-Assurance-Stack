@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-S-07 Cybersecurity requirements and architectural design |
 | Standard reference | UL 4600 §11; ISO/SAE 21434 §10; ASPICE 4.0 SEC.1, SYS.3 |
-| Version | 0.2 (first content: technical cybersecurity requirements refined from WP-C-10 with their CAL, trust zones and conduits over the WP-S-05 interfaces, and the interfaces exposed outside the vehicle, generated from `secarch/secarch.yaml`; 2026-10-24). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.3 (no short-range wireless on the vehicle (DQ-037 A); 2026-10-24). 0.2 (first content: technical cybersecurity requirements refined from WP-C-10 with their CAL, trust zones and conduits over the WP-S-05 interfaces, and the interfaces exposed outside the vehicle, generated from `secarch/secarch.yaml`; 2026-10-24). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | CS (up to CAL4) |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -133,7 +133,7 @@ Every way the item can be reached from outside the vehicle, with the attack vect
 
 <!-- BEGIN GENERATED: secarch-external (assurance/03-system/secarch/secarch.py) -->
 
-| ID | Exposed interface | Zone | Attack vector | Threats | Controls | Waits on |
+| ID | Exposed interface | Zone | Attack vector | Threats | Controls | Decision |
 |---|---|---|---|---|---|---|
 | EX-01 | Cellular links to remote operations and the fleet backend | SZ-2 | network | TS-01, TS-02, TS-04, TS-06 (claim), TS-13 (claim), TS-14 | CSTR-01.01, CSTR-01.02, CSTR-03.01, CSTR-03.02, CSTR-05.03, CSTR-11.01, CSR-04, CSR-10 | — |
 | EX-02 | GNSS antenna and receiver | SZ-2 | adjacent | TS-09 | CSTR-08.01 | — |
@@ -141,17 +141,17 @@ Every way the item can be reached from outside the vehicle, with the attack vect
 | EX-04 | Passenger interface (cabin screen, stop button) and the passenger app through the backend | SZ-2 | local | TS-14, TS-15 | CSTR-11.01, CSTR-12.01, CSTR-12.02 | — |
 | EX-05 | Service and debug ports (safety monitor, Autoware computer, vehicle diagnostic connector) | SZ-3 | physical | TS-05 (claim), TS-11 (claim), TS-16 (claim) | CR-03, CSTR-05.01, CSTR-05.02, CSTR-05.05, CSTR-03.03, CSTR-05.07 | — |
 | EX-06 | Remote operations centre and fleet backend, off-board | SZ-1 | network | TS-03, TS-07, TS-12 | CSR-02, CSR-06, CSR-10 | — |
-| EX-07 | Short-range wireless on the vehicle (Wi-Fi, Bluetooth) | SZ-2 | adjacent | None in the TARA | — | DQ-037 |
+| EX-07 | Short-range wireless on the vehicle (Wi-Fi, Bluetooth); none is fitted | SZ-2 | adjacent | None in the TARA | — | DQ-037 A |
 
 <!-- END GENERATED: secarch-external -->
 
-**Short-range wireless.** The design has none (EX-07), so the TARA has no threat through it. Whether the vehicle should have Wi-Fi or Bluetooth is a product choice for the lead (DQ-037, recommended: none). If one is added, its threats go into the TARA and its stack stays out of the safety and vehicle zones.
+**Short-range wireless.** The lead decided that the vehicle has none (DQ-037 A, 2026-10-24): passengers use the app through the fleet backend, which reaches the vehicle over the signed cellular path. The TARA therefore has no threat through it (EX-07), and a radio scan of the vehicle is part of its verification (WP-S-09). Adding one later is a change under the impact analysis, with its threats added to the TARA and its stack kept out of the safety and vehicle zones.
 
 ## 5. Open items
 
 | ID | Open item | Closes at |
 |---|---|---|
-| OI-1 | Settle short-range wireless (DQ-037), and add its threats to the TARA if any is fitted | G2 |
+| OI-1 | Confirm by a radio scan of the chosen vehicle that it has no short-range wireless reaching the item, or isolate what it has (DQ-037 A, DQ-008) | G2 |
 | OI-2 | Confirm that the parts chosen for CMP-02 and CMP-03 provide a hardware security module, secure boot and a monotonic counter (DQ-030 A, WP-H-01) | G2 |
 | OI-3 | Take CR-09 into the vehicle's development interface agreement: the by-wire bus reachable only from the monitor (DQ-008, WP-M-11) | G2 |
 | OI-4 | Define the key management: who holds the release and station keys, how they are generated, rotated and revoked (WP-P-02, WP-O-05) | G3 |

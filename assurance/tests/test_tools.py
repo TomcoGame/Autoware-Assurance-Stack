@@ -956,6 +956,9 @@ class Secarch(unittest.TestCase):
         bad = copy.deepcopy(m)
         bad["external"][6]["pending"] = "DQ-031"
         cases.append((bad, "pending on DQ-031, which is applied"))
+        bad = copy.deepcopy(m)
+        bad["external"][6].pop("decision")
+        cases.append((bad, "EX-07: no threat in the TARA, and no decision says why"))
         for model, needle in cases:
             self.assertTrue(any(needle in x for x in secarch.check(model, k)), needle)
 

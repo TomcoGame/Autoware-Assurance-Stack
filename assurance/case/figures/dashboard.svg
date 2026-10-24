@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="472" viewBox="0 0 640 472" role="img" aria-labelledby="t d">
 <title id="t">Assurance status dashboard</title>
-<desc id="d">Before G0: hazard analysis draft. Work products: 91 (0 approved); Decisions for you: 2 (2 not easy to undo); Safety case claims: 0 (0 accepted); Open defeaters: 0 (0 evidence items). Work products needed per gate: G0 Governance 20; G1 Concept 15; G2 System design 17; G3 HW/SW development 21; G4 Integration and verification 9; G5 Validation and release 15; G6 Operation 3.</desc>
+<desc id="d">Before G0: hazard analysis draft. Work products: 91 (0 approved); Decisions for you: 0 (0 not easy to undo); Safety case claims: 0 (0 accepted); Open defeaters: 0 (0 evidence items). Work products needed per gate: G0 Governance 20; G1 Concept 15; G2 System design 17; G3 HW/SW development 21; G4 Integration and verification 9; G5 Validation and release 15; G6 Operation 3.</desc>
 <style>
 svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
 @media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
@@ -25,8 +25,8 @@ svg .big { font:600 30px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fi
 <text x="36" y="148" class="s">0 approved</text>
 <rect x="174.5" y="72" width="140.5" height="88" rx="6" class="card"/>
 <text x="186.5" y="94" class="s">Decisions for you</text>
-<text x="186.5" y="128" class="big">2</text>
-<text x="186.5" y="148" class="s">2 not easy to undo</text>
+<text x="186.5" y="128" class="big">0</text>
+<text x="186.5" y="148" class="s">0 not easy to undo</text>
 <rect x="325" y="72" width="140.5" height="88" rx="6" class="card"/>
 <text x="337" y="94" class="s">Safety case claims</text>
 <text x="337" y="128" class="big">0</text>

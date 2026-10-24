@@ -6,7 +6,7 @@
 # Figure 3-1.
 # `controls` name technical cybersecurity requirements (CSTR), requirements on the environment (CSR of scope
 # environment), controls the TARA proposed (CR) or safety mechanisms (SM).
-# Every entry is a draft by Claude (I0). `pending` names a decision an entry waits on.
+# Every entry is a draft by Claude (I0). `pending` names a decision an entry waits on, `decision` one it rests on.
 
 # Trust zones: each component of WP-S-03 belongs to exactly one. `box` places the zone in Figure 3-1.
 zones:
@@ -89,12 +89,12 @@ external:
     threats: [TS-03, TS-07, TS-12]
     controls: [CSR-02, CSR-06, CSR-10]
   - id: EX-07
-    name: Short-range wireless on the vehicle (Wi-Fi, Bluetooth)
+    name: Short-range wireless on the vehicle (Wi-Fi, Bluetooth); none is fitted
     zone: SZ-2
     vector: adjacent
     threats: []
     controls: []
-    pending: DQ-037
+    decision: DQ-037
 
 # Technical cybersecurity requirements, each refining an item-level requirement of WP-C-10.
 # Those that come from the architecture itself (zones and conduits) refine the requirement whose goal the zone protects.
