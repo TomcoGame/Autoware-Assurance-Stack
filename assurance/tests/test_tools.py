@@ -35,6 +35,7 @@ for sub in (
     "03-system/hsi",
     "03-system/secarch",
     "03-system/integ",
+    "03-system/verif",
     "06-validation/scenarios",
     "06-validation/simenv",
     "case/tools",
@@ -75,6 +76,7 @@ import timing  # noqa: E402
 import triggering  # noqa: E402
 import tsc  # noqa: E402
 import tsr  # noqa: E402
+import verif  # noqa: E402
 import wpregister  # noqa: E402
 
 GOOD = {
@@ -1105,6 +1107,59 @@ class Integ(unittest.TestCase):
         cases.append((bad, "IT-13: environment ENV-1 is not one of IS-4's"))
         for model, needle in cases:
             self.assertTrue(any(needle in x for x in integ.check(model, k)), needle)
+
+
+class Verif(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(verif.check(verif.load(), verif.known()), [])
+
+    def test_scenarios_carry_their_requirements_and_conditions(self):
+        m, k = verif.load(), verif.known()
+        case = next(c for c in m["cases"] if c["id"] == "VC-12")
+        cov = verif.covered(case, k)
+        self.assertIn("FSR-06.01", cov)
+        self.assertIn("TC-12", cov)
+        self.assertEqual(verif.asil(case, k), "D")
+
+    def test_shadow_mode_does_not_verify_the_monitor(self):
+        m, k = verif.load(), verif.known()
+        case = next(c for c in m["cases"] if c["id"] == "VC-01")
+        cov = verif.covered(case, k)
+        self.assertNotIn("FSR-02.02", cov)
+        self.assertIn("FSR-02.05", cov)
+        self.assertEqual(verif.asil(case, k), "QM")
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = verif.load(), verif.known()
+
+        def case(model, cid):
+            return next(c for c in model["cases"] if c["id"] == cid)
+
+        cases = []
+        bad = copy.deepcopy(m)
+        case(bad, "VC-15")["methods"] = ["scenario", "interface"]
+        cases.append((bad, "FSR-08.01: WP-C-04 verifies it by fault injection"))
+        bad = copy.deepcopy(m)
+        case(bad, "VC-17")["covers"].remove("FSR-07.03")
+        cases.append((bad, "FSR-07.03: requirement verified by no case"))
+        bad = copy.deepcopy(m)
+        case(bad, "VC-20")["covers"] = ["FM-01"]
+        cases.append((bad, "FM-08: functional modification verified by no case"))
+        bad = copy.deepcopy(m)
+        case(bad, "VC-05")["scenarios"].append("SC-09")
+        cases.append((bad, "VC-05: ENV-4 cannot run SC-09"))
+        bad = copy.deepcopy(m)
+        case(bad, "VC-01")["covers"].append("FSR-02.02")
+        cases.append((bad, "VC-01: covers FSR-02.02, but its element EL-02 does not act in it"))
+        bad = copy.deepcopy(m)
+        for c in bad["cases"]:
+            c["scenarios"] = [x for x in c["scenarios"] if x != "SC-22"]
+        cases.append((bad, "SC-22: can be run in sim, xil but no case runs it"))
+        bad = copy.deepcopy(m)
+        del case(bad, "VC-04")["env"]
+        cases.append((bad, "VC-04: tests, so needs an environment"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in verif.check(model, k)), needle)
 
 
 class TreeChecks(unittest.TestCase):

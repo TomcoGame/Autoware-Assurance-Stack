@@ -1,0 +1,426 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="794" height="706" viewBox="0 0 794 706" role="img" aria-labelledby="t d">
+<title id="t">WP-S-09 Figure 2-1: verification coverage</title>
+<desc id="d">Verification cases: VC-01 Nominal driving with the monitor in shadow mode covers FM-03, FM-04, FM-05, FM-06, FM-07, FM-09, FM-10, FM-12, FM-13, FM-15, FM-16, FM-17, FM-18, FM-19, FSR-01.04, FSR-02.05, FSR-04.05, FSR-06.03, FSR-07.05, TC-01, TC-02, TC-03, TC-04, TC-05, TC-06, TC-07, TC-08, TC-09, TC-10, TC-11, TC-12, TC-13, TC-14, TC-15, TC-16, TC-17, TC-18, TC-19, TC-20, TC-21, TC-22, TC-23, TC-24, TC-25, TC-28; VC-02 The integrated item over the known scenarios in simulation covers FM-02, FM-03, FM-05, FM-06, FM-07, FM-09, FM-10, FM-11, FM-13, FM-15, FM-16, FM-17, FM-19, FM-20, FSR-01.01, FSR-01.02, FSR-02.01, FSR-02.02, FSR-02.03, FSR-02.05, FSR-03.01, FSR-03.02, FSR-03.03, FSR-04.01, FSR-04.02, FSR-04.03, FSR-04.05, FSR-05.01, FSR-05.03, FSR-05.05, FSR-06.01, FSR-06.02, FSR-06.03, FSR-07.01, FSR-07.02, FSR-07.04, FSR-07.05, FSR-07.08, FSR-08.01, FSR-08.02, FSR-08.03, FSR-09.01, TC-01, TC-02, TC-03, TC-04, TC-05, TC-06, TC-07, TC-08, TC-09, TC-10, TC-11, TC-12, TC-13, TC-14, TC-15, TC-16, TC-17, TC-18, TC-19, TC-20, TC-21, TC-22, TC-23, TC-24, TC-25, TC-26, TC-27, TC-28, TC-29; VC-03 The known scenarios on the closed track covers FM-03, FM-05, FM-06, FM-07, FM-10, FM-12, FM-13, FM-15, FM-16, FM-19, FSR-01.01, FSR-01.02, FSR-01.04, FSR-02.01, FSR-02.02, FSR-02.03, FSR-02.05, FSR-03.01, FSR-03.02, FSR-03.03, FSR-04.01, FSR-04.05, FSR-05.01, FSR-05.02, FSR-05.03, FSR-05.04, FSR-05.05, FSR-06.01, FSR-06.02, FSR-06.03, FSR-07.01, FSR-07.02, FSR-07.04, FSR-07.05, FSR-07.06, FSR-07.07, FSR-07.08, TC-01, TC-02, TC-03, TC-04, TC-06, TC-07, TC-09, TC-10, TC-11, TC-12, TC-13, TC-14, TC-15, TC-16, TC-17, TC-18, TC-19, TC-20, TC-21, TC-22, TC-24, TC-25; VC-04 The envelope over its whole range on the HIL bench covers FSR-01.01, FSR-02.02, FSR-04.02; VC-05 Acceleration bounded and propulsion cut in the vehicle covers FSR-01.01, FSR-01.02, FSR-02.02, FSR-02.03, FSR-02.05, FSR-03.02, FSR-04.05, FSR-05.01, FSR-05.02, FSR-05.04, FSR-06.01, TC-11, TC-25; VC-06 Deceleration and the secondary brake path in the vehicle covers FM-03, FSR-01.01, FSR-01.02, FSR-02.01, FSR-02.02, FSR-02.03, FSR-02.05, FSR-03.01, FSR-03.02, FSR-04.05, FSR-06.01, FSR-06.03, TC-02, TC-03, TC-11, TC-15, TC-16, TC-25; VC-07 Detection performance of the safety channel across the ODD covers FM-10, FSR-02.01, TC-01, TC-02, TC-03, TC-04, TC-05, TC-24; VC-08 False detections of the safety channel over recorded data covers FSR-03.01, FSR-03.03; VC-09 Spurious braking with a road user following covers FM-10, FSR-02.01, FSR-03.01, FSR-03.02, FSR-03.03, FSR-07.08, TC-03, TC-04, TC-24; VC-10 Steering envelope and lateral monitoring in the vehicle covers FM-06, FSR-02.02, FSR-03.01, FSR-04.01, FSR-04.02, FSR-04.03, FSR-04.05, FSR-06.01, TC-18; VC-11 Hold, release and reverse at standstill covers FSR-01.01, FSR-01.02, FSR-05.01, FSR-05.02, FSR-05.03, FSR-05.04, FSR-05.05, FSR-07.04; VC-12 Right of way and speed near occlusions covers FM-05, FM-07, FSR-02.01, FSR-02.02, FSR-03.01, FSR-04.01, FSR-04.05, FSR-06.01, FSR-06.02, FSR-06.03, TC-01, TC-06, TC-07, TC-10, TC-12, TC-13, TC-17, TC-19, TC-20; VC-13 The right-of-way and envelope rules against their formal model covers FSR-01.01, FSR-04.01, FSR-06.01; VC-14 Loss of Autoware and the minimal risk manoeuvre covers FM-19, FSR-01.01, FSR-02.02, FSR-04.01, FSR-07.01, FSR-07.02, FSR-07.05, FSR-07.06, FSR-07.07, FSR-07.08, TC-14; VC-15 Remote driving, bounded and aged covers FM-11, FSR-01.01, FSR-02.02, FSR-03.01, FSR-04.01, FSR-05.01, FSR-06.01, FSR-07.01, FSR-07.04, FSR-07.05, FSR-08.01, FSR-08.02, FSR-08.03, TC-26, TC-27; VC-16 Turn indicators against the manoeuvre covers FSR-04.01, FSR-09.01; VC-17 Vehicle elements against the development interface agreement covers FSR-01.03, FSR-01.05, FSR-02.04, FSR-04.04, FSR-04.06, FSR-05.04, FSR-05.05, FSR-07.03, FSR-07.06; VC-18 ODD monitors at the boundary covers FM-13, FM-14, FM-16, FSR-02.01, FSR-02.02, FSR-03.01, FSR-04.01, FSR-06.01, FSR-06.03, FSR-07.05, TC-05, TC-09, TC-22, TC-28; VC-19 Review of the monitor's restart and its own diagnostics covers FSR-07.04, FSR-07.07; VC-20 Modifications that are verified by review covers FM-01, FM-08.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg { --a1:#f5dcd3; --a3:#d4644a; --a4:#9e2f1c; --t1:#3b140b; --t4:#ffffff; }
+@media (prefers-color-scheme: dark) { svg { --a1:#4a2820; --a3:#bb4f34; --a4:#f07656; --t1:#f6e3dd; --t4:#1b0a05; } }
+svg .qm { fill:var(--card); stroke:var(--ink3); stroke-width:1; }
+svg .ac { fill:var(--a3); } svg .ad { fill:var(--a4); } svg .so { fill:var(--accsoft); stroke:var(--acc); stroke-width:1; }
+svg .empty { fill:none; stroke:var(--grid); stroke-width:1; }
+svg .n4 { font:700 11px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--t4); }
+svg .nq { font:600 11px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .ns { font:600 11px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--acc); }
+svg .col { font:600 11px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink2); }
+</style>
+<rect class="bg" width="794" height="706"/>
+<text x="24" y="32" class="h">What each verification case verifies</text>
+<text x="24" y="54" class="t">WP-S-09 §2: the functional safety requirements of each safety goal</text>
+<text x="24" y="71" class="t">it covers, by ASIL, and the triggering conditions and modifications</text>
+<text x="350" y="94" class="col" text-anchor="middle">SG1</text>
+<text x="350" y="108" class="s" text-anchor="middle">D</text>
+<text x="390" y="94" class="col" text-anchor="middle">SG2</text>
+<text x="390" y="108" class="s" text-anchor="middle">D</text>
+<text x="430" y="94" class="col" text-anchor="middle">SG3</text>
+<text x="430" y="108" class="s" text-anchor="middle">C</text>
+<text x="470" y="94" class="col" text-anchor="middle">SG4</text>
+<text x="470" y="108" class="s" text-anchor="middle">D</text>
+<text x="510" y="94" class="col" text-anchor="middle">SG5</text>
+<text x="510" y="108" class="s" text-anchor="middle">D</text>
+<text x="550" y="94" class="col" text-anchor="middle">SG6</text>
+<text x="550" y="108" class="s" text-anchor="middle">D</text>
+<text x="590" y="94" class="col" text-anchor="middle">SG7</text>
+<text x="590" y="108" class="s" text-anchor="middle">D</text>
+<text x="630" y="94" class="col" text-anchor="middle">SG8</text>
+<text x="630" y="108" class="s" text-anchor="middle">C</text>
+<text x="670" y="94" class="col" text-anchor="middle">SG9</text>
+<text x="670" y="108" class="s" text-anchor="middle">C</text>
+<text x="710" y="94" class="col" text-anchor="middle">TC</text>
+<text x="710" y="108" class="s" text-anchor="middle">SOTIF</text>
+<text x="750" y="94" class="col" text-anchor="middle">FM</text>
+<text x="750" y="108" class="s" text-anchor="middle">SOTIF</text>
+<text x="24" y="137" class="tb">VC-01</text>
+<text x="76" y="137" class="s">Nominal driving with the monitor in shado…</text>
+<rect x="332" y="122" width="36" height="22" rx="3" class="qm"/>
+<text x="350" y="137.5" class="nq" text-anchor="middle">1</text>
+<rect x="372" y="122" width="36" height="22" rx="3" class="qm"/>
+<text x="390" y="137.5" class="nq" text-anchor="middle">1</text>
+<rect x="412" y="122" width="36" height="22" rx="3" class="empty"/>
+<rect x="452" y="122" width="36" height="22" rx="3" class="qm"/>
+<text x="470" y="137.5" class="nq" text-anchor="middle">1</text>
+<rect x="492" y="122" width="36" height="22" rx="3" class="empty"/>
+<rect x="532" y="122" width="36" height="22" rx="3" class="qm"/>
+<text x="550" y="137.5" class="nq" text-anchor="middle">1</text>
+<rect x="572" y="122" width="36" height="22" rx="3" class="qm"/>
+<text x="590" y="137.5" class="nq" text-anchor="middle">1</text>
+<rect x="612" y="122" width="36" height="22" rx="3" class="empty"/>
+<rect x="652" y="122" width="36" height="22" rx="3" class="empty"/>
+<rect x="692" y="122" width="36" height="22" rx="3" class="so"/>
+<text x="710" y="137.5" class="ns" text-anchor="middle">26</text>
+<rect x="732" y="122" width="36" height="22" rx="3" class="so"/>
+<text x="750" y="137.5" class="ns" text-anchor="middle">14</text>
+<text x="24" y="163" class="tb">VC-02</text>
+<text x="76" y="163" class="s">The integrated item over the known scenar…</text>
+<rect x="332" y="148" width="36" height="22" rx="3" class="ad"/>
+<text x="350" y="163.5" class="n4" text-anchor="middle">2</text>
+<rect x="372" y="148" width="36" height="22" rx="3" class="ad"/>
+<text x="390" y="163.5" class="n4" text-anchor="middle">4</text>
+<rect x="412" y="148" width="36" height="22" rx="3" class="ac"/>
+<text x="430" y="163.5" class="n4" text-anchor="middle">3</text>
+<rect x="452" y="148" width="36" height="22" rx="3" class="ad"/>
+<text x="470" y="163.5" class="n4" text-anchor="middle">4</text>
+<rect x="492" y="148" width="36" height="22" rx="3" class="ad"/>
+<text x="510" y="163.5" class="n4" text-anchor="middle">3</text>
+<rect x="532" y="148" width="36" height="22" rx="3" class="ad"/>
+<text x="550" y="163.5" class="n4" text-anchor="middle">3</text>
+<rect x="572" y="148" width="36" height="22" rx="3" class="ad"/>
+<text x="590" y="163.5" class="n4" text-anchor="middle">5</text>
+<rect x="612" y="148" width="36" height="22" rx="3" class="ac"/>
+<text x="630" y="163.5" class="n4" text-anchor="middle">3</text>
+<rect x="652" y="148" width="36" height="22" rx="3" class="ac"/>
+<text x="670" y="163.5" class="n4" text-anchor="middle">1</text>
+<rect x="692" y="148" width="36" height="22" rx="3" class="so"/>
+<text x="710" y="163.5" class="ns" text-anchor="middle">29</text>
+<rect x="732" y="148" width="36" height="22" rx="3" class="so"/>
+<text x="750" y="163.5" class="ns" text-anchor="middle">14</text>
+<text x="24" y="189" class="tb">VC-03</text>
+<text x="76" y="189" class="s">The known scenarios on the closed track</text>
+<rect x="332" y="174" width="36" height="22" rx="3" class="ad"/>
+<text x="350" y="189.5" class="n4" text-anchor="middle">3</text>
+<rect x="372" y="174" width="36" height="22" rx="3" class="ad"/>
+<text x="390" y="189.5" class="n4" text-anchor="middle">4</text>
+<rect x="412" y="174" width="36" height="22" rx="3" class="ac"/>
+<text x="430" y="189.5" class="n4" text-anchor="middle">3</text>
+<rect x="452" y="174" width="36" height="22" rx="3" class="ad"/>
+<text x="470" y="189.5" class="n4" text-anchor="middle">2</text>
+<rect x="492" y="174" width="36" height="22" rx="3" class="ad"/>
+<text x="510" y="189.5" class="n4" text-anchor="middle">5</text>
+<rect x="532" y="174" width="36" height="22" rx="3" class="ad"/>
+<text x="550" y="189.5" class="n4" text-anchor="middle">3</text>
+<rect x="572" y="174" width="36" height="22" rx="3" class="ad"/>
+<text x="590" y="189.5" class="n4" text-anchor="middle">7</text>
+<rect x="612" y="174" width="36" height="22" rx="3" class="empty"/>
+<rect x="652" y="174" width="36" height="22" rx="3" class="empty"/>
+<rect x="692" y="174" width="36" height="22" rx="3" class="so"/>
+<text x="710" y="189.5" class="ns" text-anchor="middle">22</text>
+<rect x="732" y="174" width="36" height="22" rx="3" class="so"/>
+<text x="750" y="189.5" class="ns" text-anchor="middle">10</text>
+<text x="24" y="215" class="tb">VC-04</text>
+<text x="76" y="215" class="s">The envelope over its whole range on the…</text>
+<rect x="332" y="200" width="36" height="22" rx="3" class="ad"/>
+<text x="350" y="215.5" class="n4" text-anchor="middle">1</text>
+<rect x="372" y="200" width="36" height="22" rx="3" class="ad"/>
+<text x="390" y="215.5" class="n4" text-anchor="middle">1</text>
+<rect x="412" y="200" width="36" height="22" rx="3" class="empty"/>
+<rect x="452" y="200" width="36" height="22" rx="3" class="ad"/>
+<text x="470" y="215.5" class="n4" text-anchor="middle">1</text>
+<rect x="492" y="200" width="36" height="22" rx="3" class="empty"/>
+<rect x="532" y="200" width="36" height="22" rx="3" class="empty"/>
+<rect x="572" y="200" width="36" height="22" rx="3" class="empty"/>
+<rect x="612" y="200" width="36" height="22" rx="3" class="empty"/>
+<rect x="652" y="200" width="36" height="22" rx="3" class="empty"/>
+<rect x="692" y="200" width="36" height="22" rx="3" class="empty"/>
+<rect x="732" y="200" width="36" height="22" rx="3" class="empty"/>
+<text x="24" y="241" class="tb">VC-05</text>
+<text x="76" y="241" class="s">Acceleration bounded and propulsion cut i…</text>
+<rect x="332" y="226" width="36" height="22" rx="3" class="ad"/>
+<text x="350" y="241.5" class="n4" text-anchor="middle">2</text>
+<rect x="372" y="226" width="36" height="22" rx="3" class="ad"/>
+<text x="390" y="241.5" class="n4" text-anchor="middle">3</text>
+<rect x="412" y="226" width="36" height="22" rx="3" class="ac"/>
+<text x="430" y="241.5" class="n4" text-anchor="middle">1</text>
+<rect x="452" y="226" width="36" height="22" rx="3" class="qm"/>
+<text x="470" y="241.5" class="nq" text-anchor="middle">1</text>
+<rect x="492" y="226" width="36" height="22" rx="3" class="ad"/>
+<text x="510" y="241.5" class="n4" text-anchor="middle">3</text>
+<rect x="532" y="226" width="36" height="22" rx="3" class="ad"/>
+<text x="550" y="241.5" class="n4" text-anchor="middle">1</text>
+<rect x="572" y="226" width="36" height="22" rx="3" class="empty"/>
+<rect x="612" y="226" width="36" height="22" rx="3" class="empty"/>
+<rect x="652" y="226" width="36" height="22" rx="3" class="empty"/>
+<rect x="692" y="226" width="36" height="22" rx="3" class="so"/>
+<text x="710" y="241.5" class="ns" text-anchor="middle">2</text>
+<rect x="732" y="226" width="36" height="22" rx="3" class="empty"/>
+<text x="24" y="267" class="tb">VC-06</text>
+<text x="76" y="267" class="s">Deceleration and the secondary brake path…</text>
+<rect x="332" y="252" width="36" height="22" rx="3" class="ad"/>
+<text x="350" y="267.5" class="n4" text-anchor="middle">2</text>
+<rect x="372" y="252" width="36" height="22" rx="3" class="ad"/>
+<text x="390" y="267.5" class="n4" text-anchor="middle">4</text>
+<rect x="412" y="252" width="36" height="22" rx="3" class="ac"/>
+<text x="430" y="267.5" class="n4" text-anchor="middle">2</text>
+<rect x="452" y="252" width="36" height="22" rx="3" class="qm"/>
+<text x="470" y="267.5" class="nq" text-anchor="middle">1</text>
+<rect x="492" y="252" width="36" height="22" rx="3" class="empty"/>
+<rect x="532" y="252" width="36" height="22" rx="3" class="ad"/>
+<text x="550" y="267.5" class="n4" text-anchor="middle">2</text>
+<rect x="572" y="252" width="36" height="22" rx="3" class="empty"/>
+<rect x="612" y="252" width="36" height="22" rx="3" class="empty"/>
+<rect x="652" y="252" width="36" height="22" rx="3" class="empty"/>
+<rect x="692" y="252" width="36" height="22" rx="3" class="so"/>
+<text x="710" y="267.5" class="ns" text-anchor="middle">6</text>
+<rect x="732" y="252" width="36" height="22" rx="3" class="so"/>
+<text x="750" y="267.5" class="ns" text-anchor="middle">1</text>
+<text x="24" y="293" class="tb">VC-07</text>
+<text x="76" y="293" class="s">Detection performance of the safety chann…</text>
+<rect x="332" y="278" width="36" height="22" rx="3" class="empty"/>
+<rect x="372" y="278" width="36" height="22" rx="3" class="ad"/>
+<text x="390" y="293.5" class="n4" text-anchor="middle">1</text>
+<rect x="412" y="278" width="36" height="22" rx="3" class="empty"/>
+<rect x="452" y="278" width="36" height="22" rx="3" class="empty"/>
+<rect x="492" y="278" width="36" height="22" rx="3" class="empty"/>
+<rect x="532" y="278" width="36" height="22" rx="3" class="empty"/>
+<rect x="572" y="278" width="36" height="22" rx="3" class="empty"/>
+<rect x="612" y="278" width="36" height="22" rx="3" class="empty"/>
+<rect x="652" y="278" width="36" height="22" rx="3" class="empty"/>
+<rect x="692" y="278" width="36" height="22" rx="3" class="so"/>
+<text x="710" y="293.5" class="ns" text-anchor="middle">6</text>
+<rect x="732" y="278" width="36" height="22" rx="3" class="so"/>
+<text x="750" y="293.5" class="ns" text-anchor="middle">1</text>
+<text x="24" y="319" class="tb">VC-08</text>
+<text x="76" y="319" class="s">False detections of the safety channel ov…</text>
+<rect x="332" y="304" width="36" height="22" rx="3" class="empty"/>
+<rect x="372" y="304" width="36" height="22" rx="3" class="empty"/>
+<rect x="412" y="304" width="36" height="22" rx="3" class="ac"/>
+<text x="430" y="319.5" class="n4" text-anchor="middle">2</text>
+<rect x="452" y="304" width="36" height="22" rx="3" class="empty"/>
+<rect x="492" y="304" width="36" height="22" rx="3" class="empty"/>
+<rect x="532" y="304" width="36" height="22" rx="3" class="empty"/>
+<rect x="572" y="304" width="36" height="22" rx="3" class="empty"/>
+<rect x="612" y="304" width="36" height="22" rx="3" class="empty"/>
+<rect x="652" y="304" width="36" height="22" rx="3" class="empty"/>
+<rect x="692" y="304" width="36" height="22" rx="3" class="empty"/>
+<rect x="732" y="304" width="36" height="22" rx="3" class="empty"/>
+<text x="24" y="345" class="tb">VC-09</text>
+<text x="76" y="345" class="s">Spurious braking with a road user followi…</text>
+<rect x="332" y="330" width="36" height="22" rx="3" class="empty"/>
+<rect x="372" y="330" width="36" height="22" rx="3" class="ad"/>
+<text x="390" y="345.5" class="n4" text-anchor="middle">1</text>
+<rect x="412" y="330" width="36" height="22" rx="3" class="ac"/>
+<text x="430" y="345.5" class="n4" text-anchor="middle">3</text>
+<rect x="452" y="330" width="36" height="22" rx="3" class="empty"/>
+<rect x="492" y="330" width="36" height="22" rx="3" class="empty"/>
+<rect x="532" y="330" width="36" height="22" rx="3" class="empty"/>
+<rect x="572" y="330" width="36" height="22" rx="3" class="ad"/>
+<text x="590" y="345.5" class="n4" text-anchor="middle">1</text>
+<rect x="612" y="330" width="36" height="22" rx="3" class="empty"/>
+<rect x="652" y="330" width="36" height="22" rx="3" class="empty"/>
+<rect x="692" y="330" width="36" height="22" rx="3" class="so"/>
+<text x="710" y="345.5" class="ns" text-anchor="middle">3</text>
+<rect x="732" y="330" width="36" height="22" rx="3" class="so"/>
+<text x="750" y="345.5" class="ns" text-anchor="middle">1</text>
+<text x="24" y="371" class="tb">VC-10</text>
+<text x="76" y="371" class="s">Steering envelope and lateral monitoring…</text>
+<rect x="332" y="356" width="36" height="22" rx="3" class="empty"/>
+<rect x="372" y="356" width="36" height="22" rx="3" class="ad"/>
+<text x="390" y="371.5" class="n4" text-anchor="middle">1</text>
+<rect x="412" y="356" width="36" height="22" rx="3" class="ac"/>
+<text x="430" y="371.5" class="n4" text-anchor="middle">1</text>
+<rect x="452" y="356" width="36" height="22" rx="3" class="ad"/>
+<text x="470" y="371.5" class="n4" text-anchor="middle">4</text>
+<rect x="492" y="356" width="36" height="22" rx="3" class="empty"/>
+<rect x="532" y="356" width="36" height="22" rx="3" class="ad"/>
+<text x="550" y="371.5" class="n4" text-anchor="middle">1</text>
+<rect x="572" y="356" width="36" height="22" rx="3" class="empty"/>
+<rect x="612" y="356" width="36" height="22" rx="3" class="empty"/>
+<rect x="652" y="356" width="36" height="22" rx="3" class="empty"/>
+<rect x="692" y="356" width="36" height="22" rx="3" class="so"/>
+<text x="710" y="371.5" class="ns" text-anchor="middle">1</text>
+<rect x="732" y="356" width="36" height="22" rx="3" class="so"/>
+<text x="750" y="371.5" class="ns" text-anchor="middle">1</text>
+<text x="24" y="397" class="tb">VC-11</text>
+<text x="76" y="397" class="s">Hold, release and reverse at standstill</text>
+<rect x="332" y="382" width="36" height="22" rx="3" class="ad"/>
+<text x="350" y="397.5" class="n4" text-anchor="middle">2</text>
+<rect x="372" y="382" width="36" height="22" rx="3" class="empty"/>
+<rect x="412" y="382" width="36" height="22" rx="3" class="empty"/>
+<rect x="452" y="382" width="36" height="22" rx="3" class="empty"/>
+<rect x="492" y="382" width="36" height="22" rx="3" class="ad"/>
+<text x="510" y="397.5" class="n4" text-anchor="middle">5</text>
+<rect x="532" y="382" width="36" height="22" rx="3" class="empty"/>
+<rect x="572" y="382" width="36" height="22" rx="3" class="ad"/>
+<text x="590" y="397.5" class="n4" text-anchor="middle">1</text>
+<rect x="612" y="382" width="36" height="22" rx="3" class="empty"/>
+<rect x="652" y="382" width="36" height="22" rx="3" class="empty"/>
+<rect x="692" y="382" width="36" height="22" rx="3" class="empty"/>
+<rect x="732" y="382" width="36" height="22" rx="3" class="empty"/>
+<text x="24" y="423" class="tb">VC-12</text>
+<text x="76" y="423" class="s">Right of way and speed near occlusions</text>
+<rect x="332" y="408" width="36" height="22" rx="3" class="empty"/>
+<rect x="372" y="408" width="36" height="22" rx="3" class="ad"/>
+<text x="390" y="423.5" class="n4" text-anchor="middle">2</text>
+<rect x="412" y="408" width="36" height="22" rx="3" class="ac"/>
+<text x="430" y="423.5" class="n4" text-anchor="middle">1</text>
+<rect x="452" y="408" width="36" height="22" rx="3" class="ad"/>
+<text x="470" y="423.5" class="n4" text-anchor="middle">2</text>
+<rect x="492" y="408" width="36" height="22" rx="3" class="empty"/>
+<rect x="532" y="408" width="36" height="22" rx="3" class="ad"/>
+<text x="550" y="423.5" class="n4" text-anchor="middle">3</text>
+<rect x="572" y="408" width="36" height="22" rx="3" class="empty"/>
+<rect x="612" y="408" width="36" height="22" rx="3" class="empty"/>
+<rect x="652" y="408" width="36" height="22" rx="3" class="empty"/>
+<rect x="692" y="408" width="36" height="22" rx="3" class="so"/>
+<text x="710" y="423.5" class="ns" text-anchor="middle">9</text>
+<rect x="732" y="408" width="36" height="22" rx="3" class="so"/>
+<text x="750" y="423.5" class="ns" text-anchor="middle">2</text>
+<text x="24" y="449" class="tb">VC-13</text>
+<text x="76" y="449" class="s">The right-of-way and envelope rules again…</text>
+<rect x="332" y="434" width="36" height="22" rx="3" class="ad"/>
+<text x="350" y="449.5" class="n4" text-anchor="middle">1</text>
+<rect x="372" y="434" width="36" height="22" rx="3" class="empty"/>
+<rect x="412" y="434" width="36" height="22" rx="3" class="empty"/>
+<rect x="452" y="434" width="36" height="22" rx="3" class="ad"/>
+<text x="470" y="449.5" class="n4" text-anchor="middle">1</text>
+<rect x="492" y="434" width="36" height="22" rx="3" class="empty"/>
+<rect x="532" y="434" width="36" height="22" rx="3" class="ad"/>
+<text x="550" y="449.5" class="n4" text-anchor="middle">1</text>
+<rect x="572" y="434" width="36" height="22" rx="3" class="empty"/>
+<rect x="612" y="434" width="36" height="22" rx="3" class="empty"/>
+<rect x="652" y="434" width="36" height="22" rx="3" class="empty"/>
+<rect x="692" y="434" width="36" height="22" rx="3" class="empty"/>
+<rect x="732" y="434" width="36" height="22" rx="3" class="empty"/>
+<text x="24" y="475" class="tb">VC-14</text>
+<text x="76" y="475" class="s">Loss of Autoware and the minimal risk man…</text>
+<rect x="332" y="460" width="36" height="22" rx="3" class="ad"/>
+<text x="350" y="475.5" class="n4" text-anchor="middle">1</text>
+<rect x="372" y="460" width="36" height="22" rx="3" class="ad"/>
+<text x="390" y="475.5" class="n4" text-anchor="middle">1</text>
+<rect x="412" y="460" width="36" height="22" rx="3" class="empty"/>
+<rect x="452" y="460" width="36" height="22" rx="3" class="ad"/>
+<text x="470" y="475.5" class="n4" text-anchor="middle">1</text>
+<rect x="492" y="460" width="36" height="22" rx="3" class="empty"/>
+<rect x="532" y="460" width="36" height="22" rx="3" class="empty"/>
+<rect x="572" y="460" width="36" height="22" rx="3" class="ad"/>
+<text x="590" y="475.5" class="n4" text-anchor="middle">6</text>
+<rect x="612" y="460" width="36" height="22" rx="3" class="empty"/>
+<rect x="652" y="460" width="36" height="22" rx="3" class="empty"/>
+<rect x="692" y="460" width="36" height="22" rx="3" class="so"/>
+<text x="710" y="475.5" class="ns" text-anchor="middle">1</text>
+<rect x="732" y="460" width="36" height="22" rx="3" class="so"/>
+<text x="750" y="475.5" class="ns" text-anchor="middle">1</text>
+<text x="24" y="501" class="tb">VC-15</text>
+<text x="76" y="501" class="s">Remote driving, bounded and aged</text>
+<rect x="332" y="486" width="36" height="22" rx="3" class="ad"/>
+<text x="350" y="501.5" class="n4" text-anchor="middle">1</text>
+<rect x="372" y="486" width="36" height="22" rx="3" class="ad"/>
+<text x="390" y="501.5" class="n4" text-anchor="middle">1</text>
+<rect x="412" y="486" width="36" height="22" rx="3" class="ac"/>
+<text x="430" y="501.5" class="n4" text-anchor="middle">1</text>
+<rect x="452" y="486" width="36" height="22" rx="3" class="ad"/>
+<text x="470" y="501.5" class="n4" text-anchor="middle">1</text>
+<rect x="492" y="486" width="36" height="22" rx="3" class="ad"/>
+<text x="510" y="501.5" class="n4" text-anchor="middle">1</text>
+<rect x="532" y="486" width="36" height="22" rx="3" class="ad"/>
+<text x="550" y="501.5" class="n4" text-anchor="middle">1</text>
+<rect x="572" y="486" width="36" height="22" rx="3" class="ad"/>
+<text x="590" y="501.5" class="n4" text-anchor="middle">3</text>
+<rect x="612" y="486" width="36" height="22" rx="3" class="ac"/>
+<text x="630" y="501.5" class="n4" text-anchor="middle">3</text>
+<rect x="652" y="486" width="36" height="22" rx="3" class="empty"/>
+<rect x="692" y="486" width="36" height="22" rx="3" class="so"/>
+<text x="710" y="501.5" class="ns" text-anchor="middle">2</text>
+<rect x="732" y="486" width="36" height="22" rx="3" class="so"/>
+<text x="750" y="501.5" class="ns" text-anchor="middle">1</text>
+<text x="24" y="527" class="tb">VC-16</text>
+<text x="76" y="527" class="s">Turn indicators against the manoeuvre</text>
+<rect x="332" y="512" width="36" height="22" rx="3" class="empty"/>
+<rect x="372" y="512" width="36" height="22" rx="3" class="empty"/>
+<rect x="412" y="512" width="36" height="22" rx="3" class="empty"/>
+<rect x="452" y="512" width="36" height="22" rx="3" class="ad"/>
+<text x="470" y="527.5" class="n4" text-anchor="middle">1</text>
+<rect x="492" y="512" width="36" height="22" rx="3" class="empty"/>
+<rect x="532" y="512" width="36" height="22" rx="3" class="empty"/>
+<rect x="572" y="512" width="36" height="22" rx="3" class="empty"/>
+<rect x="612" y="512" width="36" height="22" rx="3" class="empty"/>
+<rect x="652" y="512" width="36" height="22" rx="3" class="ac"/>
+<text x="670" y="527.5" class="n4" text-anchor="middle">1</text>
+<rect x="692" y="512" width="36" height="22" rx="3" class="empty"/>
+<rect x="732" y="512" width="36" height="22" rx="3" class="empty"/>
+<text x="24" y="553" class="tb">VC-17</text>
+<text x="76" y="553" class="s">Vehicle elements against the development…</text>
+<rect x="332" y="538" width="36" height="22" rx="3" class="ad"/>
+<text x="350" y="553.5" class="n4" text-anchor="middle">2</text>
+<rect x="372" y="538" width="36" height="22" rx="3" class="ad"/>
+<text x="390" y="553.5" class="n4" text-anchor="middle">1</text>
+<rect x="412" y="538" width="36" height="22" rx="3" class="empty"/>
+<rect x="452" y="538" width="36" height="22" rx="3" class="ad"/>
+<text x="470" y="553.5" class="n4" text-anchor="middle">2</text>
+<rect x="492" y="538" width="36" height="22" rx="3" class="ad"/>
+<text x="510" y="553.5" class="n4" text-anchor="middle">2</text>
+<rect x="532" y="538" width="36" height="22" rx="3" class="empty"/>
+<rect x="572" y="538" width="36" height="22" rx="3" class="ad"/>
+<text x="590" y="553.5" class="n4" text-anchor="middle">2</text>
+<rect x="612" y="538" width="36" height="22" rx="3" class="empty"/>
+<rect x="652" y="538" width="36" height="22" rx="3" class="empty"/>
+<rect x="692" y="538" width="36" height="22" rx="3" class="empty"/>
+<rect x="732" y="538" width="36" height="22" rx="3" class="empty"/>
+<text x="24" y="579" class="tb">VC-18</text>
+<text x="76" y="579" class="s">ODD monitors at the boundary</text>
+<rect x="332" y="564" width="36" height="22" rx="3" class="empty"/>
+<rect x="372" y="564" width="36" height="22" rx="3" class="ad"/>
+<text x="390" y="579.5" class="n4" text-anchor="middle">2</text>
+<rect x="412" y="564" width="36" height="22" rx="3" class="ac"/>
+<text x="430" y="579.5" class="n4" text-anchor="middle">1</text>
+<rect x="452" y="564" width="36" height="22" rx="3" class="ad"/>
+<text x="470" y="579.5" class="n4" text-anchor="middle">1</text>
+<rect x="492" y="564" width="36" height="22" rx="3" class="empty"/>
+<rect x="532" y="564" width="36" height="22" rx="3" class="ad"/>
+<text x="550" y="579.5" class="n4" text-anchor="middle">2</text>
+<rect x="572" y="564" width="36" height="22" rx="3" class="qm"/>
+<text x="590" y="579.5" class="nq" text-anchor="middle">1</text>
+<rect x="612" y="564" width="36" height="22" rx="3" class="empty"/>
+<rect x="652" y="564" width="36" height="22" rx="3" class="empty"/>
+<rect x="692" y="564" width="36" height="22" rx="3" class="so"/>
+<text x="710" y="579.5" class="ns" text-anchor="middle">4</text>
+<rect x="732" y="564" width="36" height="22" rx="3" class="so"/>
+<text x="750" y="579.5" class="ns" text-anchor="middle">3</text>
+<text x="24" y="605" class="tb">VC-19</text>
+<text x="76" y="605" class="s">Review of the monitor's restart and its o…</text>
+<rect x="332" y="590" width="36" height="22" rx="3" class="empty"/>
+<rect x="372" y="590" width="36" height="22" rx="3" class="empty"/>
+<rect x="412" y="590" width="36" height="22" rx="3" class="empty"/>
+<rect x="452" y="590" width="36" height="22" rx="3" class="empty"/>
+<rect x="492" y="590" width="36" height="22" rx="3" class="empty"/>
+<rect x="532" y="590" width="36" height="22" rx="3" class="empty"/>
+<rect x="572" y="590" width="36" height="22" rx="3" class="ad"/>
+<text x="590" y="605.5" class="n4" text-anchor="middle">2</text>
+<rect x="612" y="590" width="36" height="22" rx="3" class="empty"/>
+<rect x="652" y="590" width="36" height="22" rx="3" class="empty"/>
+<rect x="692" y="590" width="36" height="22" rx="3" class="empty"/>
+<rect x="732" y="590" width="36" height="22" rx="3" class="empty"/>
+<text x="24" y="631" class="tb">VC-20</text>
+<text x="76" y="631" class="s">Modifications that are verified by review</text>
+<rect x="332" y="616" width="36" height="22" rx="3" class="empty"/>
+<rect x="372" y="616" width="36" height="22" rx="3" class="empty"/>
+<rect x="412" y="616" width="36" height="22" rx="3" class="empty"/>
+<rect x="452" y="616" width="36" height="22" rx="3" class="empty"/>
+<rect x="492" y="616" width="36" height="22" rx="3" class="empty"/>
+<rect x="532" y="616" width="36" height="22" rx="3" class="empty"/>
+<rect x="572" y="616" width="36" height="22" rx="3" class="empty"/>
+<rect x="612" y="616" width="36" height="22" rx="3" class="empty"/>
+<rect x="652" y="616" width="36" height="22" rx="3" class="empty"/>
+<rect x="692" y="616" width="36" height="22" rx="3" class="empty"/>
+<rect x="732" y="616" width="36" height="22" rx="3" class="so"/>
+<text x="750" y="631.5" class="ns" text-anchor="middle">2</text>
+<rect x="24" y="654" width="16" height="16" rx="3" class="ad"/>
+<text x="46" y="667" class="s">ASIL D requirements</text>
+<rect x="175.25" y="654" width="16" height="16" rx="3" class="ac"/>
+<text x="197.2" y="667" class="s">ASIL C</text>
+<rect x="251.75" y="654" width="16" height="16" rx="3" class="qm"/>
+<text x="273.8" y="667" class="s">QM (nominal function)</text>
+<rect x="414.5" y="654" width="16" height="16" rx="3" class="so"/>
+<text x="436.5" y="667" class="s">SOTIF: conditions, modifications</text>
+<text x="24" y="688" class="s">The number in a cell counts what the case covers in that column.</text>
+</svg>
