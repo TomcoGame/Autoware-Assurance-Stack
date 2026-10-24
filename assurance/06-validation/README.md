@@ -6,7 +6,7 @@ Safety validation, SOTIF scenario evaluation, fault injection, penetration testi
 
 Standard clauses: UL 4600 §12; 26262-4 §8; 21448 §9–11; 21434 §11; VAL.1.
 
-![The 8 work products of this folder, one row each, with a chip at each gate it is needed for, coloured by its status in the WP-M-00 register: 1 at G1, 2 at G2, 2 at G4, 3 at G5; 8 skeleton](index-status.svg)
+![The 8 work products of this folder, one row each, with a chip at each gate it is needed for, coloured by its status in the WP-M-00 register: 1 at G1, 2 at G2, 2 at G4, 3 at G5; 6 skeleton, 2 draft](index-status.svg)
 
 *Drawn from [WP-M-00](../01-management/WP-M-00-work-product-register.md#3-register) §3.6, which also has the clauses of each work product.*
 
@@ -16,9 +16,16 @@ Standard clauses: UL 4600 §12; 26262-4 §8; 21448 §9–11; 21434 §11; VAL.1.
 |---|---|---|---|
 | [WP-V-01](WP-V-01-safety-validation.md) | Safety validation plan, specification and report | G5 | Skeleton |
 | [WP-V-02](WP-V-02-sotif-vv-strategy.md) | SOTIF verification and validation strategy, validation targets | G2 | Skeleton |
-| [WP-V-03](WP-V-03-sotif-known-scenarios.md) | Evaluation of known hazardous scenarios | G4 | Skeleton |
+| [WP-V-03](WP-V-03-sotif-known-scenarios.md) | Evaluation of known hazardous scenarios | G4 | Draft |
 | [WP-V-04](WP-V-04-sotif-unknown-scenarios.md) | Evaluation of unknown hazardous scenarios | G5 | Skeleton |
 | [WP-V-05](WP-V-05-fault-injection.md) | Fault injection test specification and report | G4 | Skeleton |
 | [WP-V-06](WP-V-06-cybersecurity-validation.md) | Cybersecurity validation and penetration testing | G5 | Skeleton |
 | [WP-V-07](WP-V-07-test-operations.md) | Test operations: safety drivers, remote supervisors, test sites | G1 | Skeleton |
-| [WP-V-08](WP-V-08-simulation-credibility.md) | Simulation credibility and scenario coverage | G2 | Skeleton |
+| [WP-V-08](WP-V-08-simulation-credibility.md) | Simulation credibility and scenario coverage | G2 | Draft |
+
+## Subfolders
+
+| Folder | What it holds |
+|---|---|
+| [`scenarios/`](scenarios/) | — |
+| [`simenv/`](simenv/) | — |
