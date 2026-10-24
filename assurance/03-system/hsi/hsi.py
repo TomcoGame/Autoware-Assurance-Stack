@@ -111,7 +111,7 @@ def timeout(s: dict, k: dict, f: dict) -> tuple[float, str] | None:
         for x in s["serves"]
         if x in k["tsrs"] and k["tsrs"][x].get("timing") and k["tsrs"][x]["component"] == rx
     }
-    sms = [x for x in sms if x in k["timed"]]
+    sms = sorted(x for x in sms if x in k["timed"])  # sorted, so a tie is broken the same way
     if not sms:
         return None
     share = k["timing"]["allocation"]["detect"]
