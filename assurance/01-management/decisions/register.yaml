@@ -1063,7 +1063,9 @@
         More of Autoware's braking passes and the monitor's stop is shortest. Cost: a spurious stop at 4 m/s² is more
         likely to be hit from behind, which is the hazard SG-03 (ASIL C) guards against.
   sources: [DQ-019, FSR-03.02, WP-C-12 §3.2, WP-S-04 §5, WP-S-02 §2.1]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-24, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#32", record: WP-S-02 v0.3 P-05; FSR-03.02 (WP-C-04 v0.6); MRM-4 (WP-C-12 v0.4); WP-S-04 v0.4 SG-03, at: 2026-10-24}
 
 - id: DQ-034
   question: How cautious should the safety monitor's assumptions about other road users be?
@@ -1100,7 +1102,9 @@
         At 50 km/h the monitor keeps 7.4 m (0.5 s). Cost: the monitor protects only against our own response time; a
         vehicle ahead braking harder than ours can be hit, and the rated argument barely covers following.
   sources: [FSR-01.01, FSR-02.02, FSR-06.01, FSR-06.02, DQ-017, WP-S-02 §2.1, WP-S-04 §2]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-24, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#32", record: "WP-S-02 v0.3 P-06, P-07", at: 2026-10-24}
 
 - id: DQ-035
   question: Must each safety sensor also avoid false alarms to ASIL C, or should the monitor brake hard only when both agree?
@@ -1133,4 +1137,6 @@
         Wait for the candidate sensors' false-alarm data (DQ-008). Cost: the sensor requirements of WP-S-02 stay
         provisional, and the sensor choice cannot use them.
   sources: [DQ-031, FSR-03.01, FSR-02.01, WP-S-03 RD-02, ISO 26262-9 §5, WP-S-02 §2]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-24, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#32", record: "WP-S-02 v0.3 TSR-09.04, TSR-09.05; WP-S-03 v0.4 CMP-04, CMP-05", at: 2026-10-24}

@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-12 Fallback, minimal risk manoeuvres and minimal risk conditions |
 | Standard reference | UL 4600 §8, §10; ISO 26262-3 §7; ISO 21448 §5, §8; ASPICE 4.0 SYS.2 |
-| Version | 0.3 (the monitor's sensors failing ends in Autoware's comfortable stop under the monitor's check (DQ-021 A); every MRM runs to a stop (DQ-022 A); doors unlock at standstill (DQ-023 C); 2026-10-23). 0.2 (first content: triggers, the chain of minimal risk manoeuvres, minimal risk conditions, what the pinned Autoware does today, stopping times, the remote operations role, generated from `fallback/fallback.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.4 (MRM-4 brakes at the firm level of 3 m/s², above MRM-3's 2.5 m/s² (DQ-033 A); 2026-10-24). 0.3 (the monitor's sensors failing ends in Autoware's comfortable stop under the monitor's check (DQ-021 A); every MRM runs to a stop (DQ-022 A); doors unlock at standstill (DQ-023 C); 2026-10-23). 0.2 (first content: triggers, the chain of minimal risk manoeuvres, minimal risk conditions, what the pinned Autoware does today, stopping times, the remote operations role, generated from `fallback/fallback.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | ASIL D (SG-07) |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -109,7 +109,7 @@ These are proposals for the configuration managed under WP-W-03; the safety moni
 
 - A manoeuvre runs to a stop once started, even if its fault clears, and the vehicle then waits for the remote operations centre (DQ-022 A, 2026-10-23).
 - The safety monitor checks every Autoware manoeuvre like any other driving: its envelope still applies (FSR-01.01, FSR-02.02, FSR-04.01, FSR-06.01).
-- The monitor softens hard braking it cannot match to a road user or obstacle (FSR-03.02, DQ-019 A). If WP-S-04 sets that firm level below the 2.5 m/s² of Autoware's emergency stop, an unconfirmed MRM-3 becomes a firm stop and takes longer; WP-S-04 sets the two together.
+- The monitor softens hard braking it cannot match to a road user or obstacle (FSR-03.02, DQ-019 A) to a firm level of 3 m/s² (DQ-033 A, 2026-10-24). That is above the 2.5 m/s² of Autoware's emergency stop, so MRM-3 passes unchanged; the same level is MRM-4's stop.
 - Hazard lights are on from the start of every MRM (F-12, FSR-09.01).
 
 ## 4. Minimal risk conditions and their safety
@@ -152,7 +152,7 @@ How long each manoeuvre takes, and how far it travels, from the top of the speed
 | MRM-1 Pull over to a mapped safe stopping place | — | — | — | — | Comfortable deceleration, set with the operator |
 | MRM-2 Comfortable stop in lane | 1 | 0.3 | 15.6 s | 119 m | Default parameters of `autoware_mrm_comfortable_stop_operator` (0.52.1) |
 | MRM-3 Emergency stop in lane | 2.5 | 1.5 | 6.4 s | 50 m | Default parameters of `autoware_mrm_emergency_stop_operator` (0.52.1) |
-| MRM-4 Safety monitor stop in lane | — | — | — | — | Firm level of FSR-03.02, raised to emergency braking only when FSR-02.02 requires it; set in WP-S-04 |
+| MRM-4 Safety monitor stop in lane | — | — | — | — | Firm level of FSR-03.02, 3 m/s² (DQ-033 A), raised to emergency braking only when FSR-02.02 requires it; jerk set with the vehicle (DQ-008) |
 | MRM-5 Vehicle's own stop on loss of the monitor | — | — | — | — | Set by the vehicle supplier within the limits WP-S-04 gives |
 
 <!-- END GENERATED: fallback-timing -->
