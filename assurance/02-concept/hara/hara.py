@@ -959,11 +959,7 @@ def readme(m: dict, a: dict, t: dict[str, str], figs: dict[Path, str]) -> str:
     for f in a["functions"]:
         sc = [c for c in f["class"].values() if c[0] == "SC"]
         rated_ = sum(not c[2] for c in sc)
-        scene = (
-            f"[Figure 6-4 ({f['id']})](#{f['id'].lower()}-{slug(f['name'])})"
-            if f["id"] in sheets
-            else "—"
-        )
+        scene = f"[Scenes](#{f['id'].lower()}-{slug(f['name'])})" if f["id"] in sheets else "—"
         funcs.append(
             f"| {f['id']} | {cell(f['name'])} | {rb[f['id']]} | {cell(f['output'])} "
             f"| {len(sc)} ({rated_} rated, {len(sc) - rated_} folded) "
