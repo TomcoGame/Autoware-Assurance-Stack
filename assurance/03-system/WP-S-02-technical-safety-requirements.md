@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-S-02 Technical safety requirements specification |
 | Standard reference | UL 4600 §10; ISO 26262-4 §6; ASPICE 4.0 SYS.2 |
-| Version | 0.3 (firm braking level 3 m/s² (DQ-033 A); cautious assumptions about other road users (DQ-034 A); each safety sensor carries ASIL C for false detections (DQ-035 A); 2026-10-24). 0.2 (first content: technical safety requirements per safety mechanism, the envelope parameters, allocation to components and to hardware or software, and verification criteria, generated from `tsr/tsr.yaml`; 2026-10-24). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.4 (TSR-09.07: the safety channel processor detects its own faults, found while writing WP-S-05; 2026-10-24). 0.3 (firm braking level 3 m/s² (DQ-033 A); cautious assumptions about other road users (DQ-034 A); each safety sensor carries ASIL C for false detections (DQ-035 A); 2026-10-24). 0.2 (first content: technical safety requirements per safety mechanism, the envelope parameters, allocation to components and to hardware or software, and verification criteria, generated from `tsr/tsr.yaml`; 2026-10-24). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | ASIL D |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -20,7 +20,7 @@ Needed at gate G2 ([WP-M-00](../01-management/WP-M-00-work-product-register.md))
 
 <!-- BEGIN GENERATED: tsr-summary (assurance/03-system/tsr/tsr.py) -->
 
-44 technical safety requirements refine the 34 rated FSRs through the 19 safety mechanisms of WP-S-03, on 10 components; 12 of them fall to suppliers under the DIA. 20 carry a detection or reaction budget from WP-S-04. 13 parameters set the envelope, 3 of them decided by the lead; no requirement waits on an open decision.
+45 technical safety requirements refine the 34 rated FSRs through the 19 safety mechanisms of WP-S-03, on 10 components; 12 of them fall to suppliers under the DIA. 21 carry a detection or reaction budget from WP-S-04. 13 parameters set the envelope, 3 of them decided by the lead; no requirement waits on an open decision.
 
 <!-- END GENERATED: tsr-summary -->
 
@@ -99,6 +99,7 @@ Two of these set how the vehicle behaves and were decided by the lead on 2026-10
 | TSR-09.04 | Keep false detections in the swept path from the LiDAR below its share P-13 | CMP-04 Safety LiDAR | C | FSR-03.01 | — | — |
 | TSR-09.05 | Keep false detections in the swept path from the radar below its share P-13 | CMP-05 Safety radar | C | FSR-03.01 | — | — |
 | TSR-09.06 | Keep false detections in the swept path, after fusing both sensors, below the rate P-13 allows for the channel | CMP-03 Safety channel processor | C | FSR-03.01 | — | — |
+| TSR-09.07 | Detect faults of the safety channel processor itself (lockstep, ECC and watchdog on its safety island), and report itself failed to the monitor or fall silent, so that the monitor follows TSR-03.04 | CMP-03 Safety channel processor | D | FSR-02.01 | Detect within 200 ms to 283 ms | — |
 | TSR-10.01 | Detect blockage, misalignment, loss and degradation of each safety channel sensor and report it to the monitor, which starts TR-05 | CMP-03 Safety channel processor | D | FSR-02.01 | Detect within 200 ms to 283 ms | — |
 | TSR-11.01 | Cut propulsion on the monitor's command, whatever else is commanded | CMP-06 Drive-by-wire | D | FSR-01.03 | — | — |
 | TSR-12.01 | Keep a braking path that can stop the vehicle at no less than the braking P-06 assumes after any single fault in the primary one | CMP-06 Drive-by-wire | D | FSR-02.04 | — | — |
@@ -131,7 +132,7 @@ Each mechanism with its requirements, the share of its binding FTTI it has to de
 | SM-06 Stop, hold and release | TSR-06.01, TSR-06.02, TSR-06.03, TSR-06.04, TSR-06.05 | 207 ms to 358 ms | 207 ms to 358 ms | MRM-4 |
 | SM-07 Indicator cross-check | TSR-07.01 | — | — | Prevents; no reaction of its own |
 | SM-08 Monitor self-diagnostics and fail-silent output | TSR-08.01, TSR-08.02 | 179 ms to 283 ms | 179 ms to 283 ms | MRM-5 |
-| SM-09 Geometric obstacle detection | TSR-09.01, TSR-09.02, TSR-09.03, TSR-09.04, TSR-09.05, TSR-09.06 | 200 ms to 283 ms | 200 ms to 283 ms | Prevents; no reaction of its own |
+| SM-09 Geometric obstacle detection | TSR-09.01, TSR-09.02, TSR-09.03, TSR-09.04, TSR-09.05, TSR-09.06, TSR-09.07 | 200 ms to 283 ms | 200 ms to 283 ms | Prevents; no reaction of its own |
 | SM-10 Safety channel sensor diagnostics | TSR-10.01 | 200 ms to 283 ms | 200 ms to 283 ms | TR-05 |
 | SM-11 Propulsion cut | TSR-11.01 | — | — | Prevents; no reaction of its own |
 | SM-12 Secondary brake path | TSR-12.01 | — | — | Prevents; no reaction of its own |
@@ -156,7 +157,7 @@ Each mechanism with its requirements, the share of its binding FTTI it has to de
 | Component | Element | Developed by | Software | Hardware | Both | ASILs |
 |---|---|---|---|---|---|---|
 | CMP-02 Safety monitor controller | EL-02 | The project | 21 | 2 | 1 | D, C |
-| CMP-03 Safety channel processor | EL-03 | The project | 4 | — | — | D, C |
+| CMP-03 Safety channel processor | EL-03 | The project | 4 | 1 | — | D, C |
 | CMP-04 Safety LiDAR | EL-03 | The project | — | 2 | — | C, B(D) |
 | CMP-05 Safety radar | EL-03 | The project | — | 2 | — | C, B(D) |
 | CMP-06 Drive-by-wire | EL-04 | Supplier, under the DIA | — | 4 | 1 | D |
@@ -211,6 +212,7 @@ Each requirement is verified at system level ([WP-S-08](WP-S-08-system-integrati
 | TSR-09.04 | False-detection rate from field and replay data, per sensor | System (WP-S-08, WP-S-09) |
 | TSR-09.05 | False-detection rate from field and replay data, per sensor | System (WP-S-08, WP-S-09) |
 | TSR-09.06 | False-detection rate from field and replay data, for the channel | System (WP-S-08, WP-S-09) |
+| TSR-09.07 | Hardware fault injection on the safety channel processor; diagnostic coverage analysis (WP-H-04); timing measurement | System (WP-S-08, WP-S-09) |
 | TSR-10.01 | Fault injection of sensor faults; blockage tests with dirt, water and snow; timing measurement | System (WP-S-08, WP-S-09) |
 | TSR-11.01 | Supplier evidence under the DIA; vehicle test | Supplier evidence, then system |
 | TSR-12.01 | Supplier evidence under the DIA; vehicle test with the primary path disabled | Supplier evidence, then system |
