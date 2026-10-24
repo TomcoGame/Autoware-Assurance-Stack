@@ -7,6 +7,7 @@ python3 -m unittest discover -s assurance/tests -p 'test_*.py' -v
 from __future__ import annotations
 
 import copy
+import io
 from pathlib import Path
 import re
 import sys
@@ -421,6 +422,30 @@ class Fsc(unittest.TestCase):
             self.assertTrue(
                 any(f["goal"] == g and f["asil"] == d["asil"] for f in self.m["fsrs"]), g
             )
+
+    def test_every_goal_has_a_scene_card(self):
+        self.assertEqual(fsc.envelope.check(self.sg), [])
+        svg = fsc.envelope.sheet(self.m, self.sg, {e["id"]: e for e in self.m["elements"]})
+        self.assertEqual(sorted(re.findall(r'class="gid">(SG-\d\d)<', svg)), sorted(self.sg))
+        self.assertIn("SG-99: no scene", fsc.envelope.check({**self.sg, "SG-99": {}})[0])
+
+    def test_fsrs_csv_traces_every_requirement(self):
+        import csv
+
+        rows = list(csv.DictReader(io.StringIO(fsc.fsrs_csv(self.m, self.sg))))
+        self.assertEqual([r["ID"] for r in rows], [f["id"] for f in self.m["fsrs"]])
+        self.assertTrue(all(r["Verification cases (WP-S-09)"] != "—" for r in rows))
+        r = next(r for r in rows if r["ID"] == "FSR-01.01")
+        self.assertIn("SM-01", r["Safety mechanisms (WP-S-03)"])
+        self.assertIn("TSR-01.02", r["Technical safety requirements (WP-S-02)"])
+
+    def test_folder_page_links_every_file_in_the_folder(self):
+        page = fsc.build()[fsc.README]
+        for p in fsc.HERE.iterdir():
+            if p.suffix in (".csv", ".svg", ".yaml", ".py"):
+                self.assertIn(f"]({p.name})", page, p.name)
+        self.assertIn("../figures/fig-c01-5-1-boundary.svg", page)
+        self.assertNotIn("](fsc/", page)
 
     def test_element_asil_is_the_highest_of_its_requirements(self):
         ea = fsc.element_asil(self.m)
