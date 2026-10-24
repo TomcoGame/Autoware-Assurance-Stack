@@ -6,7 +6,7 @@ Technical safety requirements and concept, system architecture, timing, HSI, sys
 
 Standard clauses: UL 4600 §9–10; 26262-4; SYS.1–5.
 
-![The 9 work products of this folder, one row each, with a chip at each gate it is needed for, coloured by its status in the WP-M-00 register: 7 at G2, 2 at G4; 3 skeleton, 6 draft](index-status.svg)
+![The 9 work products of this folder, one row each, with a chip at each gate it is needed for, coloured by its status in the WP-M-00 register: 7 at G2, 2 at G4; 2 skeleton, 7 draft](index-status.svg)
 
 *Drawn from [WP-M-00](../01-management/WP-M-00-work-product-register.md#3-register) §3.3, which also has the clauses of each work product.*
 
@@ -22,7 +22,7 @@ Standard clauses: UL 4600 §9–10; 26262-4; SYS.1–5.
 | [WP-S-06](WP-S-06-requirements-production-operation.md) | Requirements for production, operation, service and decommissioning | G2 | Skeleton |
 | [WP-S-07](WP-S-07-cybersecurity-requirements-architecture.md) | Cybersecurity requirements and architectural design | G2 | Draft |
 | [WP-S-08](WP-S-08-system-integration-test.md) | System integration and test strategy, specification and report | G4 | Draft |
-| [WP-S-09](WP-S-09-system-verification.md) | System verification specification and report | G4 | Skeleton |
+| [WP-S-09](WP-S-09-system-verification.md) | System verification specification and report | G4 | Draft |
 
 ## Subfolders
 
@@ -34,3 +34,4 @@ Standard clauses: UL 4600 §9–10; 26262-4; SYS.1–5.
 | [`timing/`](timing/) | — |
 | [`tsc/`](tsc/) | — |
 | [`tsr/`](tsr/) | — |
+| [`verif/`](verif/) | — |

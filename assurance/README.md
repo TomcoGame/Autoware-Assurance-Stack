@@ -29,7 +29,7 @@ across the whole operational design domain. The other standards supply the metho
 | Indicator | Value |
 |---|---|
 | Assurance state | Before G0: hazard analysis draft |
-| Work products in the register | 91 (23 draft, 68 skeleton) |
+| Work products in the register | 91 (24 draft, 67 skeleton) |
 | Work products approved or baselined | 0 |
 | Decisions waiting on the safety authority | 0 open |
 | Decisions applied | 33 |
@@ -155,6 +155,7 @@ and commit the result.
 | `python3 assurance/03-system/hsi/hsi.py` | WP-S-05 §1 to §5 tables and Figure 1-1 | `03-system/hsi/hsi.yaml`, `tsr/tsr.yaml`, `tsc/tsc.yaml`, `timing/timing.yaml`, WP-C-01 §5.2 and §8, `fallback/fallback.yaml` |
 | `python3 assurance/03-system/secarch/secarch.py` | WP-S-07 §1 to §4 tables and Figure 3-1 | `03-system/secarch/secarch.yaml`, `cybersecurity/cybersecurity.yaml`, `tara/tara.yaml`, `tsc/tsc.yaml`, `hsi/hsi.yaml`, decision register |
 | `python3 assurance/03-system/integ/integ.py` | WP-S-08 §1 to §4 tables and Figure 2-1 | `03-system/integ/integ.yaml`, `tsr/tsr.yaml`, `hsi/hsi.yaml`, `secarch/secarch.yaml`, `timing/timing.yaml`, decision register |
+| `python3 assurance/03-system/verif/verif.py` | WP-S-09 §1 to §3 tables and Figure 2-1 | `03-system/verif/verif.yaml`, `02-concept/fsc/fsc.yaml`, `triggering/triggering.yaml`, `modifications/modifications.yaml`, `06-validation/scenarios/scenarios.yaml`, `03-system/integ/integ.yaml` |
 | `python3 assurance/06-validation/scenarios/scenarios.py` | WP-V-03 §1 summary and §2 tables, WP-V-08 §4 tables and Figure 4-1 | `06-validation/scenarios/scenarios.yaml`, WP-C-02 §3 and §5, `hara/hara.yaml`, `sotif/sotif.yaml`, `triggering/triggering.yaml`, `misuse/misuse.yaml`, `stpa/stpa.yaml`, `fsc/fsc.yaml` and the references `misuse.py` checks |
 | `python3 assurance/06-validation/simenv/simenv.py` | WP-V-08 §1 summary and §2 tables, WP-P-07 §4 table | `06-validation/simenv/simenv.yaml`, `scenarios/scenarios.yaml`, WP-C-01 §5.1 and §6, `tsc/tsc.yaml`, `repositories/*.repos`, decision register |
 | `python3 assurance/case/tools/dashboard.py` | `case/figures/dashboard.svg`, the summary block above | WP-M-00, `register.yaml`, `case/records/` |
