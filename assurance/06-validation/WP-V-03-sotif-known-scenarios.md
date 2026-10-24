@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-V-03 Evaluation of known hazardous scenarios |
 | Standard reference | UL 4600 §12; ISO 21448 §10; ASPICE 4.0 SYS.5, VAL.1 |
-| Version | 0.2 (first content: the scenario catalogue, its logical parameters and pass criteria, generated from `scenarios/scenarios.yaml`; evaluation method; 2026-10-24). 0.1 (skeleton: structure and clause mapping; 2026-10-22) |
+| Version | 0.3 (simulation takes credit only where checked against the real vehicle (DQ-036 A); 2026-10-24). 0.2 (first content: the scenario catalogue, its logical parameters and pass criteria, generated from `scenarios/scenarios.yaml`; evaluation method; 2026-10-24). 0.1 (skeleton: structure and clause mapping; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | SOTIF |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -246,7 +246,7 @@ A pass criterion says what must hold in every concrete scenario, in the words of
 | Judge | The pass criterion is applied to each run. A failed run is a problem report and, if it shows a new insufficiency or triggering condition, an update to WP-C-06 | [WP-P-03](../07-supporting/WP-P-03-problem-resolution.md) |
 | Count | Residual hazardous behaviour per SOTIF hazard is counted against its share of AC-01 (AC-02), with the exposure from road driving | WP-V-02 |
 
-Simulation results count as evidence only as far as [WP-V-08](WP-V-08-simulation-credibility.md) shows the simulator credible for the scenario; how much credit simulation may take at all is a question for the lead, asked in the decision register (DQ-036).
+Simulation results count as evidence only as far as [WP-V-08](WP-V-08-simulation-credibility.md) shows the simulator credible for the scenario; the lead decided that simulation takes credit only where it has been checked against the real vehicle (DQ-036 A, 2026-10-24), so the corners of each logical scenario are also run on the track.
 
 ## 4. Results
 

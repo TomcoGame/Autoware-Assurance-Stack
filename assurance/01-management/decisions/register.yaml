@@ -1174,7 +1174,9 @@
         Cheapest in track time. Cost: an assessor is unlikely to accept it for sensor-level effects such as rain and
         glare, which simulators reproduce least well; a mistake in the simulator spreads to every result.
   sources: [WP-V-03 §3, WP-V-08 §3 and §5, WP-P-07 §4, WP-V-02, UL 4600 §12 and §13, ISO 26262-8 §11, ISO 21448 §9]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-24, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#36", record: "WP-V-08 v0.3 §1, §3, §5; WP-V-03 v0.3; WP-P-07 v0.3 §4", at: 2026-10-24}
 
 - id: DQ-037
   question: Should the vehicle have any short-range wireless, such as Wi-Fi or Bluetooth?
@@ -1207,4 +1209,6 @@
         Internet access for passengers. Cost: the largest exposure of the three; it must be a separate network with no
         path to the Autoware computer, shown by test.
   sources: [WP-S-07 §4, WP-C-09, WP-C-10, CSR-12, ISO/SAE 21434 §15]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-24, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#36", record: "WP-S-07 v0.3 §4, EX-07", at: 2026-10-24}

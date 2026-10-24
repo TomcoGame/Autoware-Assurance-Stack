@@ -31,8 +31,7 @@ simulators:
     impact: TI2
     impact_basis: Its verdicts are evidence for the pass criteria of WP-V-03; a wrong verdict, or a scene that differs from the one specified, could hide a failure of the item
     detection: TD2
-    detection_basis: The corners of each logical scenario are repeated on the track and the results compared (WP-V-08 §3); errors that change a verdict only between the corners are not caught
-    pending: DQ-036
+    detection_basis: The corners of each logical scenario are repeated on the track and the results compared (WP-V-08 §3), and only those that agree count (DQ-036 A); errors that change a verdict only between the corners are not caught
   - id: SIM-03
     name: AWSIM
     level: sensor
@@ -40,8 +39,7 @@ simulators:
     impact: TI2
     impact_basis: Its sensor data are evidence for the perception requirements under the triggering conditions; data that are too clean would hide insufficiencies
     detection: TD2
-    detection_basis: Recorded vehicle data under the same conditions are replayed through the same perception and the results compared (WP-V-08 §3), once the vehicle and its sensors exist
-    pending: DQ-036
+    detection_basis: Recorded vehicle data under the same conditions are replayed through the same perception and the results compared (WP-V-08 §3), once the vehicle and its sensors exist, and only conditions that agree count (DQ-036 A)
 
 represent:
   ODD-01: {level: map, sims: [SIM-01, SIM-02, SIM-03], needs: The Lanelet2 and point cloud maps of the geofence, the same versions the vehicle uses (WP-W-12); a simulated route never leaves them}
