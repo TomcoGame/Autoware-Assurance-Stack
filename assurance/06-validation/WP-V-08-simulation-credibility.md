@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-V-08 Simulation credibility and scenario coverage |
 | Standard reference | UL 4600 §12, §13; ISO 26262-8 §11; ISO 21448 §9; ISO/PAS 8800:2024 (AI V&V); ASPICE 4.0 VAL.1 |
-| Version | 0.2 (first content: the simulators and their roles, the ODD simulation environment with a parametric vehicle and sensor stand-ins, generated from `simenv/simenv.yaml`; scenario coverage of the ODD and the analyses, generated from `scenarios/scenarios.yaml`; validation method; 2026-10-24). 0.1 (skeleton: structure and clause mapping; 2026-10-22) |
+| Version | 0.3 (simulation counts as evidence only where checked against the real vehicle (DQ-036 A); 2026-10-24). 0.2 (first content: the simulators and their roles, the ODD simulation environment with a parametric vehicle and sensor stand-ins, generated from `simenv/simenv.yaml`; scenario coverage of the ODD and the analyses, generated from `scenarios/scenarios.yaml`; validation method; 2026-10-24). 0.1 (skeleton: structure and clause mapping; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -24,7 +24,7 @@ Needed at gate G2 ([WP-M-00](../01-management/WP-M-00-work-product-register.md))
 
 <!-- END GENERATED: simenv-summary -->
 
-**This describes what the simulation must represent, not what a simulator is known to do.** Whether a simulator represents an attribute credibly is shown by validation against vehicle data (§3), which needs the vehicle (DQ-008). Until then no simulation result counts as evidence. How much credit simulation may take at all is the lead's decision (DQ-036).
+**This describes what the simulation must represent, not what a simulator is known to do.** Whether a simulator represents an attribute credibly is shown by validation against vehicle data (§3), which needs the vehicle (DQ-008). Until then no simulation result counts as evidence. The lead decided (DQ-036 A, 2026-10-24) that afterwards too a simulation result counts only where it has been checked against the real vehicle: a scenario whose corners have been repeated on the track and agreed, or a sensor condition whose rendered data have been compared with recordings and agreed. Everywhere else simulation is for exploring and for regression; it can find failures but not show their absence.
 
 The environment is kept in `simenv/simenv.yaml` and written into §2 and [WP-P-07](../07-supporting/WP-P-07-tool-classification-qualification.md) by `simenv/simenv.py`; the scenario coverage of §4 comes from the scenario model of [WP-V-03](WP-V-03-sotif-known-scenarios.md) through `scenarios/scenarios.py`. Both read the ODD of [WP-C-02](../02-concept/WP-C-02-odd-and-intended-functionality.md) through the same structured reading, which is checked against WP-C-02's own text.
 
@@ -152,7 +152,7 @@ Nothing is validated yet: there is no vehicle. The method, for review:
 | Correlate scenarios | The corners of each logical scenario run in simulation are repeated on the track with the real vehicle, and the outcomes compared against the pass criterion and the measured kinematics | SIM-02 |
 | Correlate sensor data | Vehicle recordings under each sensor-level condition of §2.2 are replayed through the same perception as the rendered data, and the detection results compared | SIM-03 |
 | Correlate the vehicle model | Braking, steering and their delays in the vehicle model are compared with measurements of the chosen vehicle | SIM-01, SIM-02, SIM-03 |
-| Bound the claim | A simulator counts as evidence only for the levels and attribute ranges where the comparison holds; outside them, its results are exploration | All |
+| Bound the claim | A simulator counts as evidence only for the levels and attribute ranges where the comparison holds; outside them, its results are exploration (DQ-036 A) | All |
 
 The acceptance thresholds for each comparison are to be set with the validation targets of [WP-V-02](WP-V-02-sotif-vv-strategy.md) and are not stated here.
 
@@ -209,7 +209,7 @@ These are counts of what the catalogue *exercises*, not of what has been shown. 
 
 ## 5. Tool confidence (link to WP-P-07)
 
-The simulators that produce evidence are software tools in the sense of ISO 26262-8 §11 and UL 4600 §13. Their proposed classification, with the tool confidence level computed from tool impact and tool error detection, is in [WP-P-07 §4](../07-supporting/WP-P-07-tool-classification-qualification.md#4-tool-confidence-levels). The error detection rating of SIM-02 and SIM-03 rests on the correlation of §3, so it waits on DQ-036.
+The simulators that produce evidence are software tools in the sense of ISO 26262-8 §11 and UL 4600 §13. Their proposed classification, with the tool confidence level computed from tool impact and tool error detection, is in [WP-P-07 §4](../07-supporting/WP-P-07-tool-classification-qualification.md#4-tool-confidence-levels). The error detection rating of SIM-02 and SIM-03 rests on the correlation of §3, which the lead made the condition for any simulation credit (DQ-036 A); they are therefore TD2 and TCL2, and need qualification at that level (WP-P-07 OI-3).
 
 ## 6. Open items
 
@@ -219,5 +219,5 @@ The simulators that produce evidence are software tools in the sense of ISO 2626
 | OI-2 | Confirm, by test, which attributes of §2 each simulator can represent at the level the table asks for, and correct the table where it cannot | G2 |
 | OI-3 | Replace the vehicle and sensor parameters with the chosen vehicle's values, and correlate the vehicle model (DQ-008) | G2 |
 | OI-4 | Set the acceptance thresholds of each comparison in §3 with WP-V-02 | G2 |
-| OI-5 | Apply the lead's decision on simulation credit (DQ-036) to §3, §5 and WP-P-07 | G2 |
+| OI-5 | Plan the track time for the corners of every logical scenario, and the recordings for every sensor-level condition, that DQ-036 A requires, with WP-V-02 | G2 |
 | OI-6 | Run the validation of §3 and record the results | G3 |
