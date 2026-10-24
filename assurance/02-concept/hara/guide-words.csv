@@ -1,0 +1,169 @@
+Key,Function,Guide word,Class,Hazard,Rated as,Reason
+F-01/M01,F-01 Localise the vehicle on the HD map,M01 No function,SC,H-04,,Pose lost without detection; control continues on dead reckoning and the vehicle drifts out of its lane
+F-01/M02,F-01 Localise the vehicle on the HD map,M02 Stops functioning,SC,H-04,M01 No function,Localisation stops mid-trip; same as no function
+F-01/M03,F-01 Localise the vehicle on the HD map,M03 Unrequested function,NA,,,Localisation runs continuously; it is never requested
+F-01/M04,F-01 Localise the vehicle on the HD map,M04 Function stuck,SC,H-04,,Pose frozen while the vehicle moves; the controller steers for a road it has already left
+F-01/M05,F-01 Localise the vehicle on the HD map,M05 Excessive function,SC,H-04,,Lateral pose error beyond the lane margin; the vehicle drives off its lane
+F-01/M06,F-01 Localise the vehicle on the HD map,M06 Partial function,SC,H-04,M05 Excessive function,A smaller pose error; bounded by M05
+F-01/M07,F-01 Localise the vehicle on the HD map,M07 Functions early,NSC,,,"Pose ahead of the true position along the road makes the vehicle stop short of stop lines, not past them"
+F-01/M08,F-01 Localise the vehicle on the HD map,M08 Functions late,SC,H-06,,Pose behind the true position along the road; the vehicle stops past the stop line or crosswalk edge
+F-01/M09,F-01 Localise the vehicle on the HD map,M09 Applies too short,NA,,,Continuous output; no duration
+F-01/M10,F-01 Localise the vehicle on the HD map,M10 Applies too long,NA,,,Continuous output; no duration
+F-01/M11,F-01 Localise the vehicle on the HD map,M11 Delayed,SC,H-06,M08 Functions late,Latency makes the pose lag; same as functions late
+F-01/M12,F-01 Localise the vehicle on the HD map,M12 Inverse function,SC,H-04,M05 Excessive function,"Heading mirrored or reversed; a gross pose error, rated as M05"
+F-01/M13,F-01 Localise the vehicle on the HD map,M13 Erratic or intermittent,SC,H-04,M05 Excessive function,Pose jumps between estimates; at its largest jump the same as M05
+F-01/M14,F-01 Localise the vehicle on the HD map,M14 Uneven,NA,,,No asymmetric output
+F-02/M01,F-02 Detect and track objects,M01 No function,SC,H-02,,A road user or obstacle in the path is not detected; no deceleration is planned for it
+F-02/M02,F-02 Detect and track objects,M02 Stops functioning,SC,H-02,M01 No function,Detection stops mid-trip; same as no function
+F-02/M03,F-02 Detect and track objects,M03 Unrequested function,SC,H-03,,A phantom object in the path; the vehicle brakes hard for nothing
+F-02/M04,F-02 Detect and track objects,M04 Function stuck,SC,H-02,M01 No function,Object list frozen; new road users are missed as in M01
+F-02/M05,F-02 Detect and track objects,M05 Excessive function,SC,H-03,M03 Unrequested function,Objects larger or closer than they are; unneeded braking as in M03
+F-02/M06,F-02 Detect and track objects,M06 Partial function,SC,H-02,M01 No function,Some objects missed or too small; bounded by M01
+F-02/M07,F-02 Detect and track objects,M07 Functions early,NA,,,Detection has no trigger
+F-02/M08,F-02 Detect and track objects,M08 Functions late,SC,H-02,M11 Delayed,Detection late; same as delayed
+F-02/M09,F-02 Detect and track objects,M09 Applies too short,NA,,,Continuous output; no duration
+F-02/M10,F-02 Detect and track objects,M10 Applies too long,NA,,,Continuous output; no duration
+F-02/M11,F-02 Detect and track objects,M11 Delayed,SC,H-02,,Detection latency beyond specification; braking starts too late for a road user entering the path
+F-02/M12,F-02 Detect and track objects,M12 Inverse function,SC,H-02,M01 No function,"Velocity direction reversed; a road user moving into the path is taken as leaving it, as in M01"
+F-02/M13,F-02 Detect and track objects,M13 Erratic or intermittent,SC,H-03,M03 Unrequested function,Objects flicker in and out; each false appearance acts as M03
+F-02/M14,F-02 Detect and track objects,M14 Uneven,NA,,,No asymmetric output
+F-03/M01,F-03 Recognise traffic lights,M01 No function,NSC,,,No recognition result is treated as red (WP-C-07 FM-05); the vehicle stops at the light
+F-03/M02,F-03 Recognise traffic lights,M02 Stops functioning,NSC,,,Recognition stops; treated as M01
+F-03/M03,F-03 Recognise traffic lights,M03 Unrequested function,NA,,,Recognition runs where the map has a signal; it is never requested
+F-03/M04,F-03 Recognise traffic lights,M04 Function stuck,SC,H-06,M12 Inverse function,State frozen at green while the light turns red; same response as M12
+F-03/M05,F-03 Recognise traffic lights,M05 Excessive function,NA,,,A signal state has no magnitude
+F-03/M06,F-03 Recognise traffic lights,M06 Partial function,NA,,,A signal state has no magnitude
+F-03/M07,F-03 Recognise traffic lights,M07 Functions early,SC,H-06,M12 Inverse function,Green reported before it shows; same as M12
+F-03/M08,F-03 Recognise traffic lights,M08 Functions late,SC,H-06,M12 Inverse function,Red reported after it shows; the vehicle proceeds on a stale green as in M12
+F-03/M09,F-03 Recognise traffic lights,M09 Applies too short,NA,,,No duration
+F-03/M10,F-03 Recognise traffic lights,M10 Applies too long,NA,,,No duration
+F-03/M11,F-03 Recognise traffic lights,M11 Delayed,SC,H-06,M12 Inverse function,Latency; a stale green as in M12
+F-03/M12,F-03 Recognise traffic lights,M12 Inverse function,SC,H-06,,Red or amber read as green; the vehicle enters the intersection against the signal
+F-03/M13,F-03 Recognise traffic lights,M13 Erratic or intermittent,SC,H-06,M12 Inverse function,State flickers between colours; at its worst a green on red as in M12
+F-03/M14,F-03 Recognise traffic lights,M14 Uneven,NA,,,No asymmetric output
+F-04/M01,F-04 Predict the motion of other road users,M01 No function,SC,H-02,,No prediction; road users are taken as standing still and the vehicle does not slow for one moving into its path
+F-04/M02,F-04 Predict the motion of other road users,M02 Stops functioning,SC,H-02,M01 No function,Prediction stops; same as no function
+F-04/M03,F-04 Predict the motion of other road users,M03 Unrequested function,NA,,,Prediction runs continuously
+F-04/M04,F-04 Predict the motion of other road users,M04 Function stuck,SC,H-02,M01 No function,Predictions frozen; road users that change course are missed as in M01
+F-04/M05,F-04 Predict the motion of other road users,M05 Excessive function,SC,H-03,,Predicted conflict larger than real; the vehicle brakes hard for a road user that would not have crossed
+F-04/M06,F-04 Predict the motion of other road users,M06 Partial function,SC,H-06,,Predicted conflict smaller than real; the vehicle enters a conflict area a crossing road user has the right of way to
+F-04/M07,F-04 Predict the motion of other road users,M07 Functions early,NA,,,Prediction has no trigger
+F-04/M08,F-04 Predict the motion of other road users,M08 Functions late,SC,H-02,M01 No function,Prediction late; as no prediction for the moment that matters
+F-04/M09,F-04 Predict the motion of other road users,M09 Applies too short,NA,,,No duration
+F-04/M10,F-04 Predict the motion of other road users,M10 Applies too long,NA,,,No duration
+F-04/M11,F-04 Predict the motion of other road users,M11 Delayed,SC,H-02,M01 No function,Latency; as M08
+F-04/M12,F-04 Predict the motion of other road users,M12 Inverse function,SC,H-06,M06 Partial function,Direction of a road user reversed; its conflict is missed as in M06
+F-04/M13,F-04 Predict the motion of other road users,M13 Erratic or intermittent,SC,H-03,M05 Excessive function,Predictions jump; each spurious conflict acts as M05
+F-04/M14,F-04 Predict the motion of other road users,M14 Uneven,NA,,,No asymmetric output
+F-05/M01,F-05 Plan the route to the destination,M01 No function,NSC,,,No route; the vehicle does not set off
+F-05/M02,F-05 Plan the route to the destination,M02 Stops functioning,NSC,,,Route lost mid-trip; Autoware stops and asks for assistance
+F-05/M03,F-05 Plan the route to the destination,M03 Unrequested function,NSC,,,A route the passenger did not ask for; a mission and security matter (WP-C-10 CG-06); a route outside the geofence is caught by MON-01
+F-05/M04,F-05 Plan the route to the destination,M04 Function stuck,NSC,,,Route frozen; the vehicle reaches the old destination
+F-05/M05,F-05 Plan the route to the destination,M05 Excessive function,NA,,,A route has no magnitude
+F-05/M06,F-05 Plan the route to the destination,M06 Partial function,NA,,,A route has no magnitude
+F-05/M07,F-05 Plan the route to the destination,M07 Functions early,NA,,,Routing has no trigger
+F-05/M08,F-05 Plan the route to the destination,M08 Functions late,NSC,,,A late route delays the trip
+F-05/M09,F-05 Plan the route to the destination,M09 Applies too short,NA,,,No duration
+F-05/M10,F-05 Plan the route to the destination,M10 Applies too long,NA,,,No duration
+F-05/M11,F-05 Plan the route to the destination,M11 Delayed,NSC,,,A delayed route delays the trip
+F-05/M12,F-05 Plan the route to the destination,M12 Inverse function,NSC,,,A route in the wrong direction is a longer trip on lanes the planner still drives correctly
+F-05/M13,F-05 Plan the route to the destination,M13 Erratic or intermittent,NSC,,,Re-routing back and forth delays the trip
+F-05/M14,F-05 Plan the route to the destination,M14 Uneven,NA,,,No asymmetric output
+F-06/M01,F-06 Plan behaviour and motion,M01 No function,SC,H-07,,No trajectory; the vehicle continues without a plan instead of stopping
+F-06/M02,F-06 Plan behaviour and motion,M02 Stops functioning,SC,H-07,M01 No function,Planning stops mid-trip; same as no function
+F-06/M03,F-06 Plan behaviour and motion,M03 Unrequested function,SC,H-05,,A departure planned while the vehicle should be held; the vehicle moves off
+F-06/M04,F-06 Plan behaviour and motion,M04 Function stuck,SC,H-02,M06 Partial function,"Trajectory frozen; the vehicle keeps going where it should slow, as in M06"
+F-06/M05,F-06 Plan behaviour and motion,M05 Excessive function,SC,H-01,,Speed or acceleration planned above the intended value
+F-06/M06,F-06 Plan behaviour and motion,M06 Partial function,SC,H-02,,Deceleration planned below what the situation needs
+F-06/M07,F-06 Plan behaviour and motion,M07 Functions early,SC,H-06,,"Proceeds before its turn at a junction, roundabout or crosswalk; enters a conflict area against right of way"
+F-06/M08,F-06 Plan behaviour and motion,M08 Functions late,SC,H-02,M11 Delayed,Plans the stop late; as M11
+F-06/M09,F-06 Plan behaviour and motion,M09 Applies too short,SC,H-05,M03 Unrequested function,Holds a stop for too short a time and moves off as in M03
+F-06/M10,F-06 Plan behaviour and motion,M10 Applies too long,SC,H-03,M13 Erratic or intermittent,"Brakes for longer than needed; slows unexpectedly for following traffic, as in M13"
+F-06/M11,F-06 Plan behaviour and motion,M11 Delayed,SC,H-02,,Planning latency beyond specification; braking starts too late
+F-06/M12,F-06 Plan behaviour and motion,M12 Inverse function,SC,H-04,,Path to the wrong side; the vehicle leaves its lane
+F-06/M13,F-06 Plan behaviour and motion,M13 Erratic or intermittent,SC,H-03,,Speed plan surges and brakes; unexpected hard decelerations for following traffic
+F-06/M14,F-06 Plan behaviour and motion,M14 Uneven,SC,H-04,M12 Inverse function,An uneven path swerves out of the lane as in M12
+F-07/M01,F-07 Follow the planned trajectory,M01 No function,SC,H-02,,No control output while braking is needed; the vehicle does not slow
+F-07/M02,F-07 Follow the planned trajectory,M02 Stops functioning,SC,H-02,M01 No function,Control stops; same as no function
+F-07/M03,F-07 Follow the planned trajectory,M03 Unrequested function,SC,H-05,,Drive command while the vehicle should be held
+F-07/M04,F-07 Follow the planned trajectory,M04 Function stuck,SC,H-01,M05 Excessive function,Command frozen at a positive acceleration; as M05
+F-07/M05,F-07 Follow the planned trajectory,M05 Excessive function,SC,H-01,,Acceleration command above the planned value
+F-07/M06,F-07 Follow the planned trajectory,M06 Partial function,SC,H-02,M01 No function,Braking command below the planned value; bounded by M01
+F-07/M07,F-07 Follow the planned trajectory,M07 Functions early,NSC,,,The controller tracks the trajectory continuously; it has no trigger to act early on
+F-07/M08,F-07 Follow the planned trajectory,M08 Functions late,SC,H-04,M11 Delayed,Steering correction late; as M11
+F-07/M09,F-07 Follow the planned trajectory,M09 Applies too short,NA,,,Continuous output; no duration
+F-07/M10,F-07 Follow the planned trajectory,M10 Applies too long,NA,,,Continuous output; no duration
+F-07/M11,F-07 Follow the planned trajectory,M11 Delayed,SC,H-04,,Control latency beyond specification; the vehicle overshoots its path in curves and turns
+F-07/M12,F-07 Follow the planned trajectory,M12 Inverse function,SC,H-01,,Acceleration where braking is commanded (sign error)
+F-07/M13,F-07 Follow the planned trajectory,M13 Erratic or intermittent,SC,H-04,,Steering oscillates; the vehicle weaves out of its lane
+F-07/M14,F-07 Follow the planned trajectory,M14 Uneven,SC,H-04,M13 Erratic or intermittent,Steering asymmetric left and right; the excess side leaves the lane as in M13
+F-08/M01,F-08 Select and limit the command sent on,M01 No function,SC,H-07,,No command passed on and the loss not detected; the vehicle continues on its last command instead of stopping
+F-08/M02,F-08 Select and limit the command sent on,M02 Stops functioning,SC,H-07,M01 No function,Stops passing commands; same as no function
+F-08/M03,F-08 Select and limit the command sent on,M03 Unrequested function,SC,H-03,,Emergency source selected without a request; the vehicle brakes hard
+F-08/M04,F-08 Select and limit the command sent on,M04 Function stuck,SC,H-02,,A stale command passed on; the vehicle does not slow when the new command does
+F-08/M05,F-08 Select and limit the command sent on,M05 Excessive function,SC,H-01,,Command limits not applied; excessive acceleration reaches the vehicle
+F-08/M06,F-08 Select and limit the command sent on,M06 Partial function,SC,H-01,M05 Excessive function,Limits applied only in part; bounded by M05
+F-08/M07,F-08 Select and limit the command sent on,M07 Functions early,SC,H-08,,Remote source selected before the operator's link is valid; the vehicle acts on commands that are not the operator's
+F-08/M08,F-08 Select and limit the command sent on,M08 Functions late,SC,H-08,M11 Delayed,Leaves the remote source late; as M11
+F-08/M09,F-08 Select and limit the command sent on,M09 Applies too short,NA,,,No duration
+F-08/M10,F-08 Select and limit the command sent on,M10 Applies too long,SC,H-08,M11 Delayed,Keeps the remote source after the operator has released it; stale commands as in M11
+F-08/M11,F-08 Select and limit the command sent on,M11 Delayed,SC,H-08,,Remote commands passed on with latency beyond the bound; they are stale when they act
+F-08/M12,F-08 Select and limit the command sent on,M12 Inverse function,SC,H-10,,Reverse gear passed on where forward is commanded
+F-08/M13,F-08 Select and limit the command sent on,M13 Erratic or intermittent,SC,H-03,M03 Unrequested function,Switches between sources; each switch to emergency acts as M03
+F-08/M14,F-08 Select and limit the command sent on,M14 Uneven,NA,,,No asymmetric output
+F-09/M01,F-09 Monitor the system and carry out a minimal risk manoeuvre,M01 No function,SC,H-07,,"A fault is not detected, or no manoeuvre follows; the vehicle keeps driving without control"
+F-09/M02,F-09 Monitor the system and carry out a minimal risk manoeuvre,M02 Stops functioning,SC,H-07,M01 No function,The manoeuvre is abandoned midway; same as no function
+F-09/M03,F-09 Monitor the system and carry out a minimal risk manoeuvre,M03 Unrequested function,SC,H-03,,An emergency stop without a fault; hard braking for nothing
+F-09/M04,F-09 Monitor the system and carry out a minimal risk manoeuvre,M04 Function stuck,SC,H-07,M01 No function,Monitor stuck at no fault; as M01
+F-09/M05,F-09 Monitor the system and carry out a minimal risk manoeuvre,M05 Excessive function,SC,H-03,M03 Unrequested function,An emergency stop where a comfortable one was enough; as M03
+F-09/M06,F-09 Monitor the system and carry out a minimal risk manoeuvre,M06 Partial function,SC,H-07,M01 No function,A manoeuvre too weak to stop the vehicle in time; bounded by M01
+F-09/M07,F-09 Monitor the system and carry out a minimal risk manoeuvre,M07 Functions early,SC,H-03,M03 Unrequested function,An emergency stop before the fault is confirmed; as M03
+F-09/M08,F-09 Monitor the system and carry out a minimal risk manoeuvre,M08 Functions late,SC,H-07,M11 Delayed,The manoeuvre starts late; as M11
+F-09/M09,F-09 Monitor the system and carry out a minimal risk manoeuvre,M09 Applies too short,SC,H-05,,The hold after the stop is released too early; the vehicle moves off
+F-09/M10,F-09 Monitor the system and carry out a minimal risk manoeuvre,M10 Applies too long,NSC,,,Holding longer than needed keeps the vehicle stopped until remote release
+F-09/M11,F-09 Monitor the system and carry out a minimal risk manoeuvre,M11 Delayed,SC,H-07,,Detection or manoeuvre latency beyond specification; the vehicle drives on a fault for too long
+F-09/M12,F-09 Monitor the system and carry out a minimal risk manoeuvre,M12 Inverse function,NA,,,A manoeuvre has no opposite direction
+F-09/M13,F-09 Monitor the system and carry out a minimal risk manoeuvre,M13 Erratic or intermittent,SC,H-03,M03 Unrequested function,Manoeuvre starts and stops repeatedly; each start acts as M03
+F-09/M14,F-09 Monitor the system and carry out a minimal risk manoeuvre,M14 Uneven,NA,,,No asymmetric output
+F-10/M01,F-10 Bound every command to a safety envelope and stop the vehicle independently,M01 No function,NSC,,,"A monitor that does not bound causes no hazard while Autoware works; a latent fault, counted in the hardware metrics (WP-H-04)"
+F-10/M02,F-10 Bound every command to a safety envelope and stop the vehicle independently,M02 Stops functioning,SC,H-07,,The monitor stops passing commands; the vehicle's own stop must take over (AOU-11) or it keeps going
+F-10/M03,F-10 Bound every command to a safety envelope and stop the vehicle independently,M03 Unrequested function,SC,H-03,,An intervention without reason; hard braking for nothing
+F-10/M04,F-10 Bound every command to a safety envelope and stop the vehicle independently,M04 Function stuck,SC,H-02,,A stale bounded command passed on; the vehicle does not slow
+F-10/M05,F-10 Bound every command to a safety envelope and stop the vehicle independently,M05 Excessive function,SC,H-03,M03 Unrequested function,Limits tighter than intended; unneeded hard braking as in M03
+F-10/M06,F-10 Bound every command to a safety envelope and stop the vehicle independently,M06 Partial function,NSC,,,"Limits looser than intended; latent, as M01"
+F-10/M07,F-10 Bound every command to a safety envelope and stop the vehicle independently,M07 Functions early,SC,H-03,M03 Unrequested function,An early intervention; as M03
+F-10/M08,F-10 Bound every command to a safety envelope and stop the vehicle independently,M08 Functions late,NSC,,,"A late intervention; latent while Autoware works, as M01"
+F-10/M09,F-10 Bound every command to a safety envelope and stop the vehicle independently,M09 Applies too short,SC,H-05,,The hold is released too early; the vehicle moves off
+F-10/M10,F-10 Bound every command to a safety envelope and stop the vehicle independently,M10 Applies too long,NSC,,,Holding longer than needed keeps the vehicle stopped
+F-10/M11,F-10 Bound every command to a safety envelope and stop the vehicle independently,M11 Delayed,NSC,,,"Latency in the monitor's own checks; latent while Autoware works, as M08"
+F-10/M12,F-10 Bound every command to a safety envelope and stop the vehicle independently,M12 Inverse function,SC,H-01,,"The monitor commands acceleration where it should brake, or releases where it should hold"
+F-10/M13,F-10 Bound every command to a safety envelope and stop the vehicle independently,M13 Erratic or intermittent,SC,H-03,M03 Unrequested function,Interventions come and go; each acts as M03
+F-10/M14,F-10 Bound every command to a safety envelope and stop the vehicle independently,M14 Uneven,NA,,,No asymmetric output
+F-11/M01,"F-11 Accept trips, mode changes and requests",M01 No function,NSC,,,Requests ignored; trips do not start and the stop request is answered by remote operations
+F-11/M02,"F-11 Accept trips, mode changes and requests",M02 Stops functioning,NSC,,,As M01
+F-11/M03,"F-11 Accept trips, mode changes and requests",M03 Unrequested function,SC,H-05,,A release or departure nobody asked for; the vehicle moves off from a stop
+F-11/M04,"F-11 Accept trips, mode changes and requests",M04 Function stuck,NSC,,,Mode stuck; the vehicle stays in its mode
+F-11/M05,"F-11 Accept trips, mode changes and requests",M05 Excessive function,NA,,,Requests have no magnitude
+F-11/M06,"F-11 Accept trips, mode changes and requests",M06 Partial function,NA,,,Requests have no magnitude
+F-11/M07,"F-11 Accept trips, mode changes and requests",M07 Functions early,SC,H-05,M03 Unrequested function,Departure before boarding is complete; as M03
+F-11/M08,"F-11 Accept trips, mode changes and requests",M08 Functions late,NSC,,,A late request delays the trip
+F-11/M09,"F-11 Accept trips, mode changes and requests",M09 Applies too short,NA,,,No duration
+F-11/M10,"F-11 Accept trips, mode changes and requests",M10 Applies too long,NA,,,No duration
+F-11/M11,"F-11 Accept trips, mode changes and requests",M11 Delayed,NSC,,,A delayed request delays the trip
+F-11/M12,"F-11 Accept trips, mode changes and requests",M12 Inverse function,SC,H-05,M03 Unrequested function,A stop request taken as a start; as M03
+F-11/M13,"F-11 Accept trips, mode changes and requests",M13 Erratic or intermittent,NSC,,,Requests come and go; the planner acts on the last
+F-11/M14,"F-11 Accept trips, mode changes and requests",M14 Uneven,NA,,,No asymmetric output
+F-12/M01,F-12 Signal intent to other road users,M01 No function,SC,H-09,,"No indicator before a turn or lane change, or no hazard lights at a stop in lane; others are not warned"
+F-12/M02,F-12 Signal intent to other road users,M02 Stops functioning,SC,H-09,M01 No function,Indicator stops before the manoeuvre ends; as M01
+F-12/M03,F-12 Signal intent to other road users,M03 Unrequested function,SC,H-09,,An indicator with no manoeuvre; others yield or move for a turn that does not come
+F-12/M04,F-12 Signal intent to other road users,M04 Function stuck,SC,H-09,M03 Unrequested function,Indicator stays on after the manoeuvre; as M03
+F-12/M05,F-12 Signal intent to other road users,M05 Excessive function,NA,,,A lamp has no magnitude
+F-12/M06,F-12 Signal intent to other road users,M06 Partial function,NA,,,A lamp has no magnitude
+F-12/M07,F-12 Signal intent to other road users,M07 Functions early,NSC,,,Indicating early warns others sooner
+F-12/M08,F-12 Signal intent to other road users,M08 Functions late,SC,H-09,M01 No function,Indicator late; as no indicator for the moment that matters
+F-12/M09,F-12 Signal intent to other road users,M09 Applies too short,SC,H-09,M01 No function,Indicator too short; as M01
+F-12/M10,F-12 Signal intent to other road users,M10 Applies too long,SC,H-09,M03 Unrequested function,Indicator too long; as M03
+F-12/M11,F-12 Signal intent to other road users,M11 Delayed,SC,H-09,M01 No function,Indicator delayed; as M08
+F-12/M12,F-12 Signal intent to other road users,M12 Inverse function,SC,H-09,,The other side indicated; others move into the path the vehicle takes
+F-12/M13,F-12 Signal intent to other road users,M13 Erratic or intermittent,SC,H-09,M03 Unrequested function,Indicator flickers between sides; at its worst as M03
+F-12/M14,F-12 Signal intent to other road users,M14 Uneven,NA,,,No asymmetric output

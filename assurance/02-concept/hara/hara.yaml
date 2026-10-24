@@ -9,51 +9,122 @@ situations:
     description: 25–30 mph, mixed traffic, cyclists in or beside the lane, pedestrians on the sidewalks
     exposure: E4
     basis: Duration; most of the operating time in a 30 mph urban ODD
+    motion: moving
   - id: OS-02
     name: Driving slowly where pedestrians are dense
     description: Up to 15 mph downtown, near crosswalks and pick-up zones, pedestrians close to the kerb
     exposure: E3
     basis: Duration; part of most trips but under a tenth of operating time
+    motion: moving
   - id: OS-03
     name: At a signalised intersection with cross traffic
     description: Approaching, waiting at or crossing a signalised intersection while cross traffic moves at up to 30 mph
     exposure: E4
     basis: Frequency; several intersections on every trip
+    motion: moving
   - id: OS-04
     name: Turning left across oncoming traffic without a protected phase
     description: Permissive green or uncontrolled junction, oncoming traffic at up to 30 mph (DQ-011 C)
     exposure: E3
     basis: Frequency; several times a day per vehicle, not on every trip
+    motion: moving
   - id: OS-05
     name: Entering or circulating in a roundabout
     description: Single-lane or multi-lane roundabout, circulating traffic at up to 20 mph (DQ-011 C)
     exposure: E3
     basis: Frequency; the geofence is not known yet, so rated as a few times a day (to be confirmed with DQ-014)
+    motion: moving
   - id: OS-06
     name: Stopped in a queue or at a red light, pedestrians crossing in front
     description: Standstill with vehicles ahead and behind, pedestrians on the crosswalk in front
     exposure: E4
     basis: Frequency; at every red light and in every queue
+    motion: stopped
   - id: OS-07
     name: Stopped at a kerbside stop while passengers board or alight
     description: Standstill at a mapped stop, doors opening, passengers and pedestrians beside and behind the vehicle
     exposure: E4
     basis: Frequency; twice on every trip
+    motion: stopped
   - id: OS-08
     name: Following another vehicle in congested traffic
     description: 0–30 mph, short gaps, the lead vehicle braking often
     exposure: E4
     basis: Duration; a large share of urban operating time
+    motion: moving
   - id: OS-09
     name: Approaching a crosswalk with pedestrians crossing
     description: 25–30 mph towards a marked crosswalk with a pedestrian on it or stepping onto it
     exposure: E4
     basis: Frequency; many times on every downtown trip
+    motion: moving
   - id: OS-10
     name: Driven by a remote operator
     description: REMOTE mode in urban traffic at up to 30 mph (DQ-010 C)
     exposure: E3
     basis: Duration; remote driving in general is allowed and its share of operating time is not yet bounded, so rated above the rare-recovery case (E2)
+    motion: moving
+
+  - id: OS-11
+    name: Passing parked vehicles
+    description: 25–30 mph past a row of parked vehicles, doors may open and pedestrians step out between them
+    exposure: E4
+    basis: Duration; most urban streets in the geofence have kerbside parking
+    motion: moving
+  - id: OS-12
+    name: Near a school or playground at school times
+    description: Up to 20 mph in a school zone, children on the footway and at crossings
+    exposure: E3
+    basis: Duration; school zones on some routes, twice a day on school days
+    motion: moving
+  - id: OS-13
+    name: On a narrow street without a centre line
+    description: Up to 25 mph with oncoming traffic close, parked vehicles narrowing the road
+    exposure: E3
+    basis: Duration; residential and collector streets, 1–10 % of operating time
+    motion: moving
+  - id: OS-14
+    name: Changing lanes on a street with two lanes per direction
+    description: 25–30 mph, vehicles and cyclists in the target lane
+    exposure: E3
+    basis: Frequency; a few times on most trips
+    motion: moving
+  - id: OS-15
+    name: Pulling into or out of a kerbside stop across a cycle lane
+    description: Up to 15 mph across a cycle lane or bus stop to and from the kerb
+    exposure: E4
+    basis: Frequency; twice on every trip
+    motion: moving
+  - id: OS-16
+    name: At a stop- or yield-controlled junction
+    description: Stopping at the line, then pulling out across or into traffic at up to 30 mph, pedestrians crossing
+    exposure: E4
+    basis: Frequency; several junctions on every trip
+    motion: moving
+  - id: OS-17
+    name: Passing a work zone captured in the map
+    description: Up to 20 mph through a mapped work zone, workers and cones beside the lane
+    exposure: E2
+    basis: Duration; work zones are a small share of operating time
+    motion: moving
+  - id: OS-18
+    name: An emergency vehicle approaching with siren and lights
+    description: Making way for an emergency vehicle from behind or across a junction (OEDR-09)
+    exposure: E2
+    basis: Frequency; a few times a month per vehicle
+    motion: moving
+  - id: OS-19
+    name: Stopped in lane after a minimal risk manoeuvre
+    description: Standstill in the lane with hazard lights on (MRC-2), traffic passing, passengers may be leaving (DQ-023 C)
+    exposure: E2
+    basis: Frequency; only after faults or ODD exits, rarer than once a month per vehicle
+    motion: stopped
+  - id: OS-20
+    name: Stopped or starting on a gradient
+    description: Standstill and start on gradients up to 8 %, vehicles or pedestrians behind
+    exposure: E3
+    basis: Frequency; depends on the geofence (DQ-014), rated as some trips
+    motion: stopped
 
 hazards:
   - id: H-01

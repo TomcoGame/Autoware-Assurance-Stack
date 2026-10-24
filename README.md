@@ -64,6 +64,28 @@ _Generated from the work-product register, the decision register and the safety 
 | [WP-C-04 Functional safety concept](assurance/02-concept/WP-C-04-functional-safety-concept.md)           | How the safety goals are met: functional safety requirements and their allocation            |
 | [Decision register](assurance/01-management/decisions/README.md)                                         | The questions only the safety authority can answer, and how they are asked and recorded      |
 
+## Browse the hazard analysis
+
+The HARA rates every malfunction of every function of the item in every operational situation and road condition:
+5 400 rows, each with its severity, exposure and controllability, the reason for each, its ASIL and its safety goal.
+Open a hazard below and GitHub shows its rows as a searchable table in the browser; nothing needs to be downloaded.
+How the rows are built, and the safety goals they lead to, are in
+[WP-C-03 §6](assurance/02-concept/WP-C-03-hara.md#6-hazardous-events-and-ratings).
+
+| Hazard (opens as a table)                                                                                                                                             |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [H-01 Unintended acceleration](assurance/02-concept/hara/hazardous-events/H-01-unintended-acceleration.csv)                                                           |
+| [H-02 Insufficient deceleration](assurance/02-concept/hara/hazardous-events/H-02-insufficient-deceleration.csv)                                                       |
+| [H-03 Unintended hard deceleration](assurance/02-concept/hara/hazardous-events/H-03-unintended-hard-deceleration.csv)                                                 |
+| [H-04 Unintended lateral motion](assurance/02-concept/hara/hazardous-events/H-04-unintended-lateral-motion.csv)                                                       |
+| [H-05 Unintended motion from standstill](assurance/02-concept/hara/hazardous-events/H-05-unintended-motion-from-standstill.csv)                                       |
+| [H-06 Proceeding against right of way](assurance/02-concept/hara/hazardous-events/H-06-proceeding-against-right-of-way.csv)                                           |
+| [H-07 No minimal risk manoeuvre when one is needed](assurance/02-concept/hara/hazardous-events/H-07-no-minimal-risk-manoeuvre-when-one-is-needed.csv)                 |
+| [H-08 Acting on stale or corrupted remote driving commands](assurance/02-concept/hara/hazardous-events/H-08-acting-on-stale-or-corrupted-remote-driving-commands.csv) |
+| [H-09 Wrong signalling](assurance/02-concept/hara/hazardous-events/H-09-wrong-signalling.csv)                                                                         |
+| [H-10 Unintended reverse motion](assurance/02-concept/hara/hazardous-events/H-10-unintended-reverse-motion.csv)                                                       |
+| [Every function against the fourteen malfunction guide words, with its class and reason](assurance/02-concept/hara/guide-words.csv)                                   |
+
 ## Wiki
 
 The [wiki](https://github.com/TomcoGame/Autoware-Assurance-Stack/wiki) explains the project for newcomers,

@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-03 Hazard analysis and risk assessment, safety goals |
 | Standard reference | UL 4600 §6; ISO 26262-3 §6 |
-| Version | 0.3 (controllability C3 for every event (DQ-015 B), raising HE-03.1, HE-04.3, HE-05.2, HE-06.3 and HE-09.1 and with them SG-03 and SG-09 to ASIL C; SG-07 safe state set (DQ-016 A); 2026-10-23). 0.2 (first content: method, ten operational situations, ten hazards, nineteen hazardous events, nine safety goals, generated from `hara/hara.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.4 (every function of WP-C-01 against fourteen malfunction guide words, each safety-related pair rated in twenty operational situations under six road and light conditions: 5 400 rated rows, browsable as tables; ten situations added; the safety goals and their ASILs unchanged; 2026-10-24). 0.3 (controllability C3 for every event (DQ-015 B), raising HE-03.1, HE-04.3, HE-05.2, HE-06.3 and HE-09.1 and with them SG-03 and SG-09 to ASIL C; SG-07 safe state set (DQ-016 A); 2026-10-23). 0.2 (first content: method, ten operational situations, ten hazards, nineteen hazardous events, nine safety goals, generated from `hara/hara.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | Up to ASIL D (proposed, §7) |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -20,7 +20,7 @@ In summary:
 
 <!-- BEGIN GENERATED: hara-summary (assurance/02-concept/hara/hara.py) -->
 
-10 operational situations, 10 hazards, 19 hazardous events (3 B, 8 C, 8 D), 9 safety goals (3 ASIL C, 6 ASIL D).
+5400 rated rows (every safety-related function and malfunction pair in every situation and condition; 3828 hazardous, 3403 of them ASIL A or above), 20 operational situations, 10 hazards, 19 named hazardous events (3 B, 8 C, 8 D), 9 safety goals (3 ASIL C, 6 ASIL D).
 
 <!-- END GENERATED: hara-summary -->
 
@@ -42,14 +42,21 @@ The vehicle is not chosen (DQ-008), so severities assume a generic mid-size pass
 
 ### 3.1 Data and generation
 
-The situations, hazards, events and goals are kept in [`hara/hara.yaml`](hara/hara.yaml). [`hara/hara.py`](hara/hara.py) checks the model, computes every ASIL and writes the tables of §4 to §7 and Figure 6-1; CI runs it with `--check`. To change a rating, edit the YAML and run the generator. No ASIL is typed by hand.
+The analysis works through every malfunction of every function, in every situation, instead of starting from the events an analyst thinks of:
+
+1. Every function of the item (WP-C-01 §2) is taken against fourteen malfunction guide words (§6.1). Each pair is classed safety-related, not safety-related or not applicable, with the reason. A safety-related pair names the hazard it leads to; a pair with the same effect on the vehicle as another of the same function is folded into it and rated once.
+2. Every safety-related pair that is not folded is rated in every operational situation (§4) under every road and light condition (§4.1). Severity comes from the hazard and the situation, with its reason, or is S0 with the reason it cannot occur there. Exposure is the rarer of the situation's and the condition's. Controllability follows §3.3. Nothing is dropped: a row that is not hazardous is kept with S0 and its reason.
+3. The rows are written one file per hazard ([`hara/hazardous-events/`](hara/hazardous-events/)), which GitHub shows as a searchable table in the browser, so the analysis can be read row by row without downloading anything (§6.2).
+4. The named hazardous events of §6.3 are the representative events the rest of the safety case refers to. The generator refuses a named event more severe than its rows allow, and a row whose ASIL exceeds the ASIL its safety goal takes from the named events. Either would mean the named events no longer cover the analysis.
+
+The situations, hazards, named events and goals are kept in [`hara/hara.yaml`](hara/hara.yaml); the functions, guide-word classification, conditions and severity rules in [`hara/analysis.yaml`](hara/analysis.yaml). [`hara/hara.py`](hara/hara.py) checks both, computes every ASIL, and writes the tables of §4 to §7, Figures 6-1 and 6-2, and the row files; CI runs it with `--check`. To change a rating, edit the YAML and run the generator; the diff of the row files shows every row the change moves. No ASIL is typed by hand.
 
 ### 3.2 Ratings
 
 | Parameter | Classes | How they are applied here |
 |---|---|---|
 | Severity | S0 no injuries; S1 light and moderate; S2 severe and life-threatening, survival probable; S3 life-threatening, survival uncertain, or fatal | Rated for the most exposed person at risk. Pedestrians and cyclists struck at 40 km/h or more are S3; at walking pace to 25 km/h S2 |
-| Exposure | E0 incredible to E4 high probability | From the operational situation, by duration or by frequency as the situation's *Basis* says. Frequency is used where a situation is entered on every trip (stops, intersections) |
+| Exposure | E0 incredible to E4 high probability | From the operational situation, by duration or by frequency as the situation's *Basis* says. Frequency is used where a situation is entered on every trip (stops, intersections). In the rated rows, the rarer of the situation's and the condition's exposure (§4.1) |
 | Controllability | C0 controllable in general to C3 difficult to control or uncontrollable | See §3.3 |
 | ASIL | QM, A, B, C, D | ISO 26262-3:2018 Table 4, computed: any class 0 gives QM; otherwise S + E + C of 10 gives D, 9 C, 8 B, 7 A, lower QM |
 
@@ -79,8 +86,35 @@ The draft had credited those five cases with C2 or C1. Rating them C3 raises fou
 | OS-08 | Following another vehicle in congested traffic | 0–30 mph, short gaps, the lead vehicle braking often | E4 | Duration; a large share of urban operating time |
 | OS-09 | Approaching a crosswalk with pedestrians crossing | 25–30 mph towards a marked crosswalk with a pedestrian on it or stepping onto it | E4 | Frequency; many times on every downtown trip |
 | OS-10 | Driven by a remote operator | REMOTE mode in urban traffic at up to 30 mph (DQ-010 C) | E3 | Duration; remote driving in general is allowed and its share of operating time is not yet bounded, so rated above the rare-recovery case (E2) |
+| OS-11 | Passing parked vehicles | 25–30 mph past a row of parked vehicles, doors may open and pedestrians step out between them | E4 | Duration; most urban streets in the geofence have kerbside parking |
+| OS-12 | Near a school or playground at school times | Up to 20 mph in a school zone, children on the footway and at crossings | E3 | Duration; school zones on some routes, twice a day on school days |
+| OS-13 | On a narrow street without a centre line | Up to 25 mph with oncoming traffic close, parked vehicles narrowing the road | E3 | Duration; residential and collector streets, 1–10 % of operating time |
+| OS-14 | Changing lanes on a street with two lanes per direction | 25–30 mph, vehicles and cyclists in the target lane | E3 | Frequency; a few times on most trips |
+| OS-15 | Pulling into or out of a kerbside stop across a cycle lane | Up to 15 mph across a cycle lane or bus stop to and from the kerb | E4 | Frequency; twice on every trip |
+| OS-16 | At a stop- or yield-controlled junction | Stopping at the line, then pulling out across or into traffic at up to 30 mph, pedestrians crossing | E4 | Frequency; several junctions on every trip |
+| OS-17 | Passing a work zone captured in the map | Up to 20 mph through a mapped work zone, workers and cones beside the lane | E2 | Duration; work zones are a small share of operating time |
+| OS-18 | An emergency vehicle approaching with siren and lights | Making way for an emergency vehicle from behind or across a junction (OEDR-09) | E2 | Frequency; a few times a month per vehicle |
+| OS-19 | Stopped in lane after a minimal risk manoeuvre | Standstill in the lane with hazard lights on (MRC-2), traffic passing, passengers may be leaving (DQ-023 C) | E2 | Frequency; only after faults or ODD exits, rarer than once a month per vehicle |
+| OS-20 | Stopped or starting on a gradient | Standstill and start on gradients up to 8 %, vehicles or pedestrians behind | E3 | Frequency; depends on the geofence (DQ-014), rated as some trips |
 
 <!-- END GENERATED: hara-situations -->
+
+### 4.1 Road and light conditions
+
+Each row is rated under each condition across the ODD (WP-C-02 ODD-10 to ODD-13), and one beyond it that a vehicle can meet before the weather monitor ends the trip. Conditions change exposure, not severity: severities are rated at the ODD's speeds, which wet roads and darkness do not raise.
+
+<!-- BEGIN GENERATED: hara-conditions (assurance/02-concept/hara/hara.py) -->
+
+| ID | Condition | Exposure | Basis |
+|---|---|---|---|
+| W01 | Dry road in daylight | E4 | Most operating time |
+| W02 | Wet road or light rain | E3 | Inside the ODD up to 2.5 mm/h (DQ-012 A); 1–10 % of time |
+| W03 | Dry road at night under street lighting | E3 | Night service is inside the ODD; 1–10 % of time |
+| W04 | Wet road at night | E2 | Both together; under 1 % of time |
+| W05 | Visibility near the ODD bound of 200 m (mist | E2 | Under 1 % of time |
+| W06 | Heavy rain beyond the ODD before the weather monitor ends the trip | E1 | MON-03 ends the trip; the time spent there is short and rare |
+
+<!-- END GENERATED: hara-conditions -->
 
 ## 5. Hazards
 
@@ -105,7 +139,101 @@ Hazards are malfunctioning behaviours at vehicle level, independent of their cau
 
 ## 6. Hazardous events and ratings
 
-![Figure 6-1: a grid with the ten hazards H-01 to H-10 as rows and the ten operational situations OS-01 to OS-10 as columns; each cell shows the ASIL of the hazardous events rated there, shaded from light (A) to dark (D); where a cell holds two events it shows the higher ASIL and the count. The same ratings are listed in the table below.](hara/fig-c03-6-1-asil-matrix.svg)
+### 6.1 Functions and malfunction guide words
+
+The fourteen guide words, applied to every function:
+
+<!-- BEGIN GENERATED: hara-guidewords (assurance/02-concept/hara/hara.py) -->
+
+| ID | Guide word | Means |
+|---|---|---|
+| M01 | No function | Never acts when it should |
+| M02 | Stops functioning | Acts at first |
+| M03 | Unrequested function | Acts when it should not |
+| M04 | Function stuck | Holds its last output and ignores new input |
+| M05 | Excessive function | Output larger than intended |
+| M06 | Partial function | Output smaller than intended but not zero |
+| M07 | Functions early | Acts before its trigger |
+| M08 | Functions late | Acts after its trigger has passed |
+| M09 | Applies too short | Output lasts shorter than intended |
+| M10 | Applies too long | Output lasts longer than intended |
+| M11 | Delayed | Acts correctly but with latency beyond its specification |
+| M12 | Inverse function | Acts in the opposite direction or sense |
+| M13 | Erratic or intermittent | Output oscillates |
+| M14 | Uneven | Output asymmetric or non-monotonic |
+
+<!-- END GENERATED: hara-guidewords -->
+
+How each function's pairs were classed. The class, hazard and reason of every pair are in [`hara/guide-words.csv`](hara/guide-words.csv), which opens as a table in the browser.
+
+<!-- BEGIN GENERATED: hara-functions (assurance/02-concept/hara/hara.py) -->
+
+| ID | Function | Safety-related (rated) | Safety-related (folded) | Not safety-related | Not applicable | Hazards reached |
+|---|---|---|---|---|---|---|
+| F-01 | Localise the vehicle on the HD map | 4 | 5 | 1 | 4 | H-04, H-06 |
+| F-02 | Detect and track objects | 3 | 7 | 0 | 4 | H-02, H-03 |
+| F-03 | Recognise traffic lights | 1 | 5 | 2 | 6 | H-06 |
+| F-04 | Predict the motion of other road users | 3 | 6 | 0 | 5 | H-02, H-03, H-06 |
+| F-05 | Plan the route to the destination | 0 | 0 | 8 | 6 | — |
+| F-06 | Plan behaviour and motion | 8 | 6 | 0 | 0 | H-01, H-02, H-03, H-04, H-05, H-06, H-07 |
+| F-07 | Follow the planned trajectory | 6 | 5 | 1 | 2 | H-01, H-02, H-04, H-05 |
+| F-08 | Select and limit the command sent on | 7 | 5 | 0 | 2 | H-01, H-02, H-03, H-07, H-08, H-10 |
+| F-09 | Monitor the system and carry out a minimal risk manoeuvre | 4 | 7 | 1 | 2 | H-03, H-05, H-07 |
+| F-10 | Bound every command to a safety envelope and stop the vehicle independently | 5 | 3 | 5 | 1 | H-01, H-02, H-03, H-05, H-07 |
+| F-11 | Accept trips, mode changes and requests | 1 | 2 | 6 | 5 | H-05 |
+| F-12 | Signal intent to other road users | 3 | 7 | 1 | 3 | H-09 |
+
+<!-- END GENERATED: hara-functions -->
+
+Two choices shape the classes. The safety monitor (F-10) failing to bound a command causes no hazard while Autoware works. That is a latent fault, so it is not rated here; WP-H-04 counts it in the hardware metrics. The monitor intervening without reason, releasing a hold too early or commanding the wrong sense is rated. And a wrong route (F-05) is not a malfunction hazard: the planner still drives the route correctly, a route outside the geofence is caught by MON-01, and a route nobody asked for is a security goal (WP-C-10 CG-06).
+
+### 6.2 Every rated hazardous event
+
+<!-- BEGIN GENERATED: hara-counts (assurance/02-concept/hara/hara.py) -->
+
+| Step | Count |
+|---|---|
+| Functions × guide words (12 × 14) | 168 |
+| … safety-related | 103 (45 rated, 58 folded into another with the same effect) |
+| … not safety-related | 25 |
+| … not applicable | 40 |
+| Situations × conditions (20 × 6) | 120 |
+| Rated rows (45 × 120) | 5400 |
+| … not hazardous in that situation (S0, reason recorded) | 1572 |
+| … QM | 425 |
+| … ASIL A / B / C / D | 1000 / 1477 / 765 / 161 |
+| Distinct hazardous events (hazard × situation, S above S0) | 126 |
+
+<!-- END GENERATED: hara-counts -->
+
+![Figure 6-2: a grid with the ten hazards H-01 to H-10 as rows and the twenty operational situations OS-01 to OS-20 as columns; each filled cell shows the highest ASIL of that hazard in that situation over every function, guide word and condition, shaded from light (A) to dark (D); a cell is empty where the hazard cannot occur in that situation. The worst ASIL of each hazard is in the table below.](hara/fig-c03-6-2-all-events.svg)
+
+*Figure 6-2. Worst ASIL by hazard and situation over every rated row. Drawn by [`hara/hara.py`](hara/hara.py); CI fails if it is stale.*
+
+**To read the rows,** open a hazard's file below. GitHub shows it as a table that can be searched by function, guide word, situation, condition or ASIL, with the reason for every S, E and C. Each row has a stable key, *function/guide word/situation/condition* (for example `F-06/M07/OS-16/W01`), to quote in a review comment.
+
+<!-- BEGIN GENERATED: hara-all-events (assurance/02-concept/hara/hara.py) -->
+
+| Hazard | Rows | Rated A or above | Worst ASIL | Situations where it is worst | Safety goal | Open as a table |
+|---|---|---|---|---|---|---|
+| H-01 Unintended acceleration | 600 | 575 | **D** | OS-01, OS-03, OS-06, OS-07, OS-09, OS-11, OS-15, OS-16 | SG-01 | [H-01-unintended-acceleration.csv](hara/hazardous-events/H-01-unintended-acceleration.csv) |
+| H-02 Insufficient deceleration | 960 | 720 | **D** | OS-01, OS-03, OS-09, OS-11, OS-16 | SG-02 | [H-02-insufficient-deceleration.csv](hara/hazardous-events/H-02-insufficient-deceleration.csv) |
+| H-03 Unintended hard deceleration | 720 | 402 | **C** | OS-01, OS-03, OS-04, OS-08, OS-09, OS-11 | SG-03 | [H-03-unintended-hard-deceleration.csv](hara/hazardous-events/H-03-unintended-hard-deceleration.csv) |
+| H-04 Unintended lateral motion | 720 | 540 | **D** | OS-01, OS-03, OS-08, OS-09, OS-11 | SG-04 | [H-04-unintended-lateral-motion.csv](hara/hazardous-events/H-04-unintended-lateral-motion.csv) |
+| H-05 Unintended motion from standstill | 600 | 160 | **D** | OS-07 | SG-05 | [H-05-unintended-motion-from-standstill.csv](hara/hazardous-events/H-05-unintended-motion-from-standstill.csv) |
+| H-06 Proceeding against right of way | 480 | 292 | **D** | OS-03, OS-06, OS-09, OS-16 | SG-06 | [H-06-proceeding-against-right-of-way.csv](hara/hazardous-events/H-06-proceeding-against-right-of-way.csv) |
+| H-07 No minimal risk manoeuvre when one is needed | 600 | 465 | **D** | OS-01, OS-03, OS-08, OS-09, OS-11, OS-16 | SG-07 | [H-07-no-minimal-risk-manoeuvre-when-one-is-needed.csv](hara/hazardous-events/H-07-no-minimal-risk-manoeuvre-when-one-is-needed.csv) |
+| H-08 Acting on stale or corrupted remote driving commands | 240 | 12 | **C** | OS-10 | SG-08 | [H-08-acting-on-stale-or-corrupted-remote-driving-commands.csv](hara/hazardous-events/H-08-acting-on-stale-or-corrupted-remote-driving-commands.csv) |
+| H-09 Wrong signalling | 360 | 207 | **C** | OS-01, OS-03, OS-08, OS-11, OS-15, OS-16 | SG-09 | [H-09-wrong-signalling.csv](hara/hazardous-events/H-09-wrong-signalling.csv) |
+| H-10 Unintended reverse motion | 120 | 30 | **C** | OS-06, OS-07, OS-15, OS-16 | SG-05 | [H-10-unintended-reverse-motion.csv](hara/hazardous-events/H-10-unintended-reverse-motion.csv) |
+
+<!-- END GENERATED: hara-all-events -->
+
+### 6.3 Named hazardous events
+
+The events below are the ones the functional safety concept, the fallback concept, the STPA and the scenario catalogue refer to. Each sits on the rows of §6.2, and together they give every safety goal the highest ASIL of its rows.
+
+![Figure 6-1: a grid with the ten hazards H-01 to H-10 as rows and the ten operational situations the named events use, OS-01 to OS-10, as columns; each cell shows the ASIL of the hazardous events rated there, shaded from light (A) to dark (D); where a cell holds two events it shows the higher ASIL and the count. The same ratings are listed in the table below.](hara/fig-c03-6-1-asil-matrix.svg)
 
 *Figure 6-1. The ASIL of each hazardous event below, by hazard and situation. Drawn from `hara/hara.yaml` by [`hara/hara.py`](hara/hara.py); CI fails if it is stale.*
 
@@ -165,6 +293,8 @@ Each safety goal takes the highest ASIL of the hazardous events of its hazards. 
 | HA-2 | Exposure of roundabouts (OS-05) and remote driving (OS-10) is estimated without a geofence or an operations concept | Geofence (DQ-014, WP-C-02 OI-6) and WP-O-02 |
 | HA-3 | Right of way follows rules common to US states; where states differ the stricter case is assumed | State chosen (DQ-014) |
 | HA-4 | Unbelted passengers are foreseeable misuse and rated (HE-03.2); standing passengers are not, because the vehicle is assumed to have seats only | Vehicle chosen (DQ-008) |
+| HA-6 | Remote driving is limited to 10 km/h (DQ-032 A). The new rows of OS-10 are rated at that speed; the named event HE-08.1 keeps its rating at urban speed, so SG-08 stays ASIL C. Re-rating it at 10 km/h would lower SG-08, which is the safety authority's decision | Safety authority (OI-7) |
+| HA-7 | Exposure of the situations added in version 0.4 (OS-11 to OS-20) is estimated without a geofence; school zones, work zones, gradients and stops in lane depend on it | Geofence (DQ-014, WP-C-02 OI-6) |
 | HA-5 | The rated minimal risk condition is a stop in lane with hazard lights on; Autoware pulls over to the kerb first when it still can, which is not rated (DQ-016 A). Stops in lane are therefore part of normal operation after faults, and their exposure to rear-end impacts is covered by SG-03 and the fallback concept (WP-C-12) | Decided (DQ-016 A) |
 
 ## 9. Open items
@@ -176,3 +306,5 @@ Each safety goal takes the highest ASIL of the hazardous events of its hazards. 
 | OI-3 | Re-check exposure of OS-05 and OS-10 with the geofence and the remote operations concept (HA-2) | G1 |
 | OI-4 | Confirmation review of this HARA by an independent assessor (I3); needs DQ-007 | G1 |
 | OI-5 | Cross-check against the SOTIF hazards (WP-C-05) and the STPA (WP-A-05) once drafted, and add any malfunctioning behaviour they find | G1 |
+| OI-6 | Independent review of the guide-word classes (§6.1) and the severity rules behind every row (§6.2); both are single-author drafts | G1 |
+| OI-7 | Decide whether HE-08.1 is re-rated at the 10 km/h of remote driving (HA-6) | G1 |
