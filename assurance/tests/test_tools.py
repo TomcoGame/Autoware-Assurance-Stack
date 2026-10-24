@@ -33,6 +33,7 @@ for sub in (
     "03-system/timing",
     "03-system/tsr",
     "03-system/hsi",
+    "03-system/secarch",
     "06-validation/scenarios",
     "06-validation/simenv",
     "case/tools",
@@ -62,6 +63,7 @@ import hsi  # noqa: E402
 import misuse  # noqa: E402
 import modifications  # noqa: E402
 import scenarios  # noqa: E402
+import secarch  # noqa: E402
 import simenv  # noqa: E402
 import sotif  # noqa: E402
 import stpa  # noqa: E402
@@ -912,6 +914,52 @@ class Simenv(unittest.TestCase):
             self.assertTrue(any(needle in x for x in simenv.check(model, k)), needle)
 
 
+class Secarch(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(secarch.check(secarch.load(), secarch.known()), [])
+
+    def test_cal_follows_the_goals_refined(self):
+        m, k = secarch.load(), secarch.known()
+        by = {r["id"]: r for r in m["tcsrs"]}
+        goal = k["goals"]["CG-01"]
+        self.assertEqual(
+            secarch.cal(by["CSTR-01.02"], k),
+            cybersecurity.cal(k["cyber"], k["cyber_known"], goal),
+        )
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = secarch.load(), secarch.known()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["zones"][3]["components"].remove("CMP-09")
+        cases.append((bad, "CMP-09: must be in exactly one zone"))
+        bad = copy.deepcopy(m)
+        bad["conduits"] = [x for x in bad["conduits"] if x["interface"] != "IF-02"]
+        cases.append((bad, "IF-02: crosses SZ-2 and SZ-3 but is not a conduit"))
+        bad = copy.deepcopy(m)
+        bad["conduits"].append({"interface": "IF-05", "controls": ["CR-09"]})
+        cases.append((bad, "IF-05: joins two components of SZ-3"))
+        bad = copy.deepcopy(m)
+        bad["tcsrs"] = [r for r in bad["tcsrs"] if r["csr"] != "CSR-08"]
+        bad["external"][1]["controls"] = ["CSTR-07.01"]
+        cases.append((bad, "CSR-08: item-level requirement refined by no technical requirement"))
+        bad = copy.deepcopy(m)
+        bad["external"][1]["controls"] = ["CSTR-07.01"]
+        bad["external"][1]["threats"] = ["TS-03"]
+        cases.append((bad, "EX-02: TS-03 is reduced under CG-01, but no control here serves it"))
+        bad = copy.deepcopy(m)
+        bad["external"] = [e for e in bad["external"] if e["id"] != "EX-02"]
+        cases.append((bad, "TS-09: reaches the item through no exposed interface"))
+        bad = copy.deepcopy(m)
+        next(r for r in bad["tcsrs"] if r["id"] == "CSTR-08.01")["csr"] = "CSR-02"
+        cases.append((bad, "refines CSR-02, which the operating environment meets"))
+        bad = copy.deepcopy(m)
+        bad["external"][6]["pending"] = "DQ-031"
+        cases.append((bad, "pending on DQ-031, which is applied"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in secarch.check(model, k)), needle)
+
+
 class TreeChecks(unittest.TestCase):
     def test_table_cell_count(self):
         md = "| A | B |\n|---|---|\n| 1 | 2 |\n| 1 |\n"
@@ -986,6 +1034,7 @@ class Generators(unittest.TestCase):
             hsi,
             scenarios,
             simenv,
+            secarch,
         ):
             first, second = mod.build(), mod.build()
             self.assertEqual(first, second, mod.__name__)
