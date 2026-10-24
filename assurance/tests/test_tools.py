@@ -34,6 +34,7 @@ for sub in (
     "03-system/tsr",
     "03-system/hsi",
     "03-system/secarch",
+    "03-system/integ",
     "06-validation/scenarios",
     "06-validation/simenv",
     "case/tools",
@@ -60,6 +61,7 @@ import folder_index  # noqa: E402
 import fsc  # noqa: E402
 import hara  # noqa: E402
 import hsi  # noqa: E402
+import integ  # noqa: E402
 import misuse  # noqa: E402
 import modifications  # noqa: E402
 import scenarios  # noqa: E402
@@ -963,6 +965,52 @@ class Secarch(unittest.TestCase):
             self.assertTrue(any(needle in x for x in secarch.check(model, k)), needle)
 
 
+class Integ(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(integ.check(integ.load(), integ.known()), [])
+
+    def test_budgets_come_from_the_timing_model(self):
+        m, k = integ.load(), integ.known()
+        case = next(c for c in m["cases"] if c["id"] == "IT-06")
+        self.assertIn(
+            f"TSR-05.01 detect within {tsr.budget(None, k['tsr_known'], 'SM-05', 'detect')}",
+            integ.budgets(case, k),
+        )
+        self.assertEqual(integ.asil(case, k), "D")
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = integ.load(), integ.known()
+
+        def case(model, cid):
+            return next(c for c in model["cases"] if c["id"] == cid)
+
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["steps"][3]["adds"].remove("CMP-09")
+        cases.append((bad, "CMP-09: integrated 0 times"))
+        bad = copy.deepcopy(m)
+        bad["steps"][0]["interfaces"] = ["IF-02"]
+        bad["steps"][2]["interfaces"] = ["IF-01"]
+        cases.append((bad, "IS-1: IF-02 is exercised before both its ends are integrated"))
+        bad = copy.deepcopy(m)
+        case(bad, "IT-16")["covers"] = ["SIG-19"]
+        cases.append((bad, "SIG-16: covered by no integration test case"))
+        bad = copy.deepcopy(m)
+        case(bad, "IT-01")["covers"].append("TSR-16.01")
+        cases.append((bad, "IT-01: covers TSR-16.01, which needs CMP-08 integrated by IS-1"))
+        bad = copy.deepcopy(m)
+        case(bad, "IT-09")["methods"] = ["timing"]
+        cases.append((bad, "TSR-10.01: detects faults for SM-10 but no case injects them"))
+        bad = copy.deepcopy(m)
+        case(bad, "IT-04")["methods"] = ["requirements", "fault-injection"]
+        cases.append((bad, "TSR-02.01: has a WP-S-04 budget but no case measures its time"))
+        bad = copy.deepcopy(m)
+        case(bad, "IT-13")["env"] = "ENV-1"
+        cases.append((bad, "IT-13: environment ENV-1 is not one of IS-4's"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in integ.check(model, k)), needle)
+
+
 class TreeChecks(unittest.TestCase):
     def test_table_cell_count(self):
         md = "| A | B |\n|---|---|\n| 1 | 2 |\n| 1 |\n"
@@ -1038,6 +1086,7 @@ class Generators(unittest.TestCase):
             scenarios,
             simenv,
             secarch,
+            integ,
         ):
             first, second = mod.build(), mod.build()
             self.assertEqual(first, second, mod.__name__)
