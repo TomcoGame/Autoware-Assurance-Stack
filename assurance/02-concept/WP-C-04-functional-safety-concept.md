@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-04 Functional safety concept (FSRs, allocation, assumptions) |
 | Standard reference | UL 4600 §10; ISO 26262-3 §7; ASPICE 4.0 SYS.2; IEEE 2846-2022 (informative, assumptions in safety-related models) |
-| Version | 0.7 (folder page `fsc/README.md` with the whole concept on one page, Figure 4-2 on how each goal is held, and `fsc/fsrs.csv` tracing every FSR to its mechanisms, technical requirements and verification cases; 2026-10-24). 0.6 (FSR-03.02: the firm level is 3 m/s² (DQ-033 A); 2026-10-24). 0.5 (FSR-07.08: the monitor checks Autoware's stop after its own sensors fail (DQ-021 A); 2026-10-23). 0.4 (FSR-07.06 and FSR-07.07: the vehicle stops when the monitor falls silent, from the fallback concept (WP-C-12); 2026-10-23). 0.3 (collision avoidance carries SG-06 (DQ-017 A); the safety channel has its own sensors (DQ-018 A); the monitor softens unconfirmed hard braking (DQ-019 A); 2026-10-23). 0.2 (first content: the envelope concept, nine elements, functional safety requirements for the nine safety goals, generated from `fsc/fsc.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.8 (Figure 2-1, the safety view of the item architecture; 2026-10-25). 0.7 (folder page `fsc/README.md` with the whole concept on one page, Figure 4-2 on how each goal is held, and `fsc/fsrs.csv` tracing every FSR to its mechanisms, technical requirements and verification cases; 2026-10-24). 0.6 (FSR-03.02: the firm level is 3 m/s² (DQ-033 A); 2026-10-24). 0.5 (FSR-07.08: the monitor checks Autoware's stop after its own sensors fail (DQ-021 A); 2026-10-23). 0.4 (FSR-07.06 and FSR-07.07: the vehicle stops when the monitor falls silent, from the fallback concept (WP-C-12); 2026-10-23). 0.3 (collision avoidance carries SG-06 (DQ-017 A); the safety channel has its own sensors (DQ-018 A); the monitor softens unconfirmed hard braking (DQ-019 A); 2026-10-23). 0.2 (first content: the envelope concept, nine elements, functional safety requirements for the nine safety goals, generated from `fsc/fsc.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | Up to ASIL D |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -25,6 +25,14 @@ In summary:
 <!-- END GENERATED: fsc-summary -->
 
 ## 2. The concept
+
+<!-- BEGIN GENERATED: fsc-safety-view (assurance/02-concept/fsc/fsc.py) -->
+
+![Figure 2-1: the item boundary of WP-C-01 redrawn with the elements of the functional safety concept. Inside the item: Autoware computer (EL-01, QM), Safety monitor (EL-02, ASIL D), Safety perception channel (EL-03, ASIL D). Outside it: Vehicle drive-by-wire (EL-04, ASIL D), Park brake (EL-05, ASIL D), Vehicle state sensing (EL-06, ASIL D), Monitor power supply (EL-07, ASIL D), Door system (EL-08, ASIL D), Remote operations station (EL-09, ASIL C). Autoware's commands (dashed) reach the drive-by-wire only through the safety monitor; every flow a rated requirement rests on (solid) starts or ends at the monitor. Each element shows its derived ASIL and the number of FSRs allocated to it; the same data are in the elements table.](fsc/fig-c04-2-1-safety-view.svg)
+
+*Figure 2-1. The safety view of the item architecture: the item of [WP-C-01](WP-C-01-item-definition.md) §5 with the elements this concept places its requirements on. Drawn by [`fsc/fsc.py`](fsc/fsc.py) from `fsc/fsc.yaml`; CI fails if it is stale or if an element has no place in it.*
+
+<!-- END GENERATED: fsc-safety-view -->
 
 ### 2.1 Doer and checker
 
