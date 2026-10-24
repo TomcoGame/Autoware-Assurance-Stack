@@ -18,7 +18,8 @@ The model is refused when:
   requirement refines one of the operating environment;
 - a threat of the TARA reaches the item through no exposed interface, or a threat whose risk is
   reduced is exposed through an interface none of whose controls serves its goal;
-- a pending decision is no longer open.
+- an exposed interface has no threat and no decision that says why;
+- a pending decision is no longer open, or a decision rested on is not answered.
 
     python3 secarch.py            # write WP-S-07's generated tables and Figure 3-1
     python3 secarch.py --check    # fail if either is stale or the model breaks a rule
@@ -76,6 +77,9 @@ def known() -> dict:
         "mechanisms": {s["id"] for s in t["mechanisms"]},
         "interfaces": {f["id"]: f for f in hsi.load()["interfaces"]},
         "decisions": {d["id"]: d["status"] for d in check_decisions.load()},
+        "choices": {
+            d["id"]: d["answer"]["choice"] for d in check_decisions.load() if d.get("answer")
+        },
     }
 
 
@@ -97,6 +101,14 @@ def goals_of(c: str, m: dict, k: dict) -> set[str]:
     if c in k["csrs"]:
         return set(k["csrs"][c]["goals"])
     return set()
+
+
+def decided(e: dict, k: dict) -> str:
+    if e.get("pending"):
+        return f"Waits on {e['pending']}"
+    if e.get("decision"):
+        return f"{e['decision']} {k['choices'].get(e['decision'], '')}".strip()
+    return "—"
 
 
 def zone_of(m: dict) -> dict[str, str]:
@@ -182,6 +194,10 @@ def check(m: dict, k: dict) -> list[str]:
                     f"{e['id']}: {ts} is reduced under {', '.join(sorted(gs))}, but no control here serves it"
                 )
         pending(e["id"], e.get("pending"))
+        if e.get("decision") and k["decisions"].get(e["decision"]) not in ("answered", "applied"):
+            errs.append(f"{e['id']}: rests on {e['decision']}, which is not answered")
+        if not e.get("threats") and not (e.get("pending") or e.get("decision")):
+            errs.append(f"{e['id']}: no threat in the TARA, and no decision says why")
     for ts in k["threats"]:
         if ts not in exposed:
             errs.append(f"{ts}: reaches the item through no exposed interface")
@@ -257,14 +273,14 @@ def tables(m: dict, k: dict) -> dict[str, str]:
         )
     t["secarch-conduits"] = "\n".join(rows)
     rows = [
-        "| ID | Exposed interface | Zone | Attack vector | Threats | Controls | Waits on |",
+        "| ID | Exposed interface | Zone | Attack vector | Threats | Controls | Decision |",
         "|---|---|---|---|---|---|---|",
     ]
     for e in m["external"]:
         th = [f"{ts}{' (claim)' if ts in k['claimed'] else ''}" for ts in e["threats"]]
         rows.append(
             f"| {e['id']} | {cell(e['name'])} | {e['zone']} | {e['vector']} | {', '.join(th) or 'None in the TARA'} "
-            f"| {', '.join(e['controls']) or '—'} | {e.get('pending', '—')} |"
+            f"| {', '.join(e['controls']) or '—'} | {decided(e, k)} |"
         )
     t["secarch-external"] = "\n".join(rows)
     item = [i for i, r in k["csrs"].items() if r["scope"] == "item"]
