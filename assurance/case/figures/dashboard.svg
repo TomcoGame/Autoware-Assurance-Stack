@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="472" viewBox="0 0 640 472" role="img" aria-labelledby="t d">
 <title id="t">Assurance status dashboard</title>
-<desc id="d">Before G0: hazard analysis draft. Work products: 91 (0 approved); Decisions for you: 0 (0 not easy to undo); Safety case claims: 0 (0 accepted); Open defeaters: 0 (0 evidence items). Work products needed per gate: G0 Governance 20; G1 Concept 15; G2 System design 17; G3 HW/SW development 21; G4 Integration and verification 9; G5 Validation and release 15; G6 Operation 3.</desc>
+<desc id="d">Before G0: hazard analysis draft. Work products: 91 (0 approved); Decisions for you: 1 (1 not easy to undo); Safety case claims: 0 (0 accepted); Open defeaters: 0 (0 evidence items). Work products needed per gate: G0 Governance 20; G1 Concept 15; G2 System design 17; G3 HW/SW development 21; G4 Integration and verification 9; G5 Validation and release 15; G6 Operation 3.</desc>
 <style>
 svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
 @media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
@@ -25,8 +25,8 @@ svg .big { font:600 30px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fi
 <text x="36" y="148" class="s">0 approved</text>
 <rect x="174.5" y="72" width="140.5" height="88" rx="6" class="card"/>
 <text x="186.5" y="94" class="s">Decisions for you</text>
-<text x="186.5" y="128" class="big">0</text>
-<text x="186.5" y="148" class="s">0 not easy to undo</text>
+<text x="186.5" y="128" class="big">1</text>
+<text x="186.5" y="148" class="s">1 not easy to undo</text>
 <rect x="325" y="72" width="140.5" height="88" rx="6" class="card"/>
 <text x="337" y="94" class="s">Safety case claims</text>
 <text x="337" y="128" class="big">0</text>
@@ -48,8 +48,8 @@ svg .big { font:600 30px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fi
 <text x="495.1" y="264" class="tb">15</text>
 <text x="24" y="294" class="tb">G2</text>
 <text x="52" y="294" class="t">System design</text>
-<rect x="252" y="282" width="77" height="16" rx="3" class="st-d"/>
-<rect x="331" y="282" width="187.7" height="16" rx="3" class="st-s"/>
+<rect x="252" y="282" width="92.9" height="16" rx="3" class="st-d"/>
+<rect x="346.9" y="282" width="171.9" height="16" rx="3" class="st-s"/>
 <text x="526.8" y="294" class="tb">17</text>
 <text x="24" y="324" class="tb">G3</text>
 <text x="52" y="324" class="t">HW/SW development</text>
@@ -57,7 +57,8 @@ svg .big { font:600 30px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fi
 <text x="590" y="324" class="tb">21</text>
 <text x="24" y="354" class="tb">G4</text>
 <text x="52" y="354" class="t">Integration and verification</text>
-<rect x="252" y="342" width="140.3" height="16" rx="3" class="st-s"/>
+<rect x="252" y="342" width="13.8" height="16" rx="3" class="st-d"/>
+<rect x="267.8" y="342" width="124.5" height="16" rx="3" class="st-s"/>
 <text x="400.3" y="354" class="tb">9</text>
 <text x="24" y="384" class="tb">G5</text>
 <text x="52" y="384" class="t">Validation and release</text>
@@ -68,7 +69,7 @@ svg .big { font:600 30px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fi
 <rect x="252" y="402" width="45.4" height="16" rx="3" class="st-s"/>
 <text x="305.4" y="414" class="tb">3</text>
 <rect x="24" y="437" width="22" height="14" rx="3" class="st-d"/>
-<text x="52" y="448" class="t">Draft (19)</text>
+<text x="52" y="448" class="t">Draft (21)</text>
 <rect x="135.0" y="437" width="22" height="14" rx="3" class="st-s"/>
-<text x="163" y="448" class="t">Skeleton (72)</text>
+<text x="163" y="448" class="t">Skeleton (70)</text>
 </svg>
