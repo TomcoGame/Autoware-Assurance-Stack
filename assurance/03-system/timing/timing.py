@@ -197,7 +197,7 @@ def tables(m: dict, k: dict, vmax: float) -> dict[str, str]:
         total = f"{det[0] + stop:.1f} s to {det[1] + stop:.1f} s" if det and stop else "—"
         rows.append(
             f"| {x['id']} {cell(x['name'])} | {sm or 'Autoware (QM, not budgeted)'} | {span(*det) if det else '—'} "
-            f"| {f'{stop:.1f} s' if stop else ('Set in WP-S-02' if sm else '—')} | {total} |"
+            f"| {f'{stop:.1f} s' if stop else ('With the vehicle (DQ-008)' if sm else '—')} | {total} |"
         )
     t["timing-fallback"] = "\n".join(rows)
     timed = [g for g in m["goals"] if ftti(m, g["id"], "high") is not None]

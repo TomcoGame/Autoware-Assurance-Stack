@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-S-02 Technical safety requirements specification |
 | Standard reference | UL 4600 §10; ISO 26262-4 §6; ASPICE 4.0 SYS.2 |
-| Version | 0.2 (first content: technical safety requirements per safety mechanism, the envelope parameters, allocation to components and to hardware or software, and verification criteria, generated from `tsr/tsr.yaml`; 2026-10-24). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.3 (firm braking level 3 m/s² (DQ-033 A); cautious assumptions about other road users (DQ-034 A); each safety sensor carries ASIL C for false detections (DQ-035 A); 2026-10-24). 0.2 (first content: technical safety requirements per safety mechanism, the envelope parameters, allocation to components and to hardware or software, and verification criteria, generated from `tsr/tsr.yaml`; 2026-10-24). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | ASIL D |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -20,7 +20,7 @@ Needed at gate G2 ([WP-M-00](../01-management/WP-M-00-work-product-register.md))
 
 <!-- BEGIN GENERATED: tsr-summary (assurance/03-system/tsr/tsr.py) -->
 
-44 technical safety requirements refine the 34 rated FSRs through the 19 safety mechanisms of WP-S-03, on 10 components; 12 of them fall to suppliers under the DIA. 20 carry a detection or reaction budget from WP-S-04. 13 parameters set the envelope; 11 requirements wait on DQ-033, DQ-034, DQ-035.
+44 technical safety requirements refine the 34 rated FSRs through the 19 safety mechanisms of WP-S-03, on 10 components; 12 of them fall to suppliers under the DIA. 20 carry a detection or reaction budget from WP-S-04. 13 parameters set the envelope, 3 of them decided by the lead; no requirement waits on an open decision.
 
 <!-- END GENERATED: tsr-summary -->
 
@@ -44,9 +44,9 @@ The requirements name their parameters rather than repeating values. A parameter
 | P-02 | Lateral margin to a road user, obstacle or kerb | 0.3 m, the margin of SG-04 (proposed, WP-S-04 §2) | TSR-02.02 |
 | P-03 | Creep distance from standstill | 0.2 m, the margin of SG-05 (proposed, WP-S-04 §2) | TSR-06.03 |
 | P-04 | Drift allowed under remote driving | 1 m, the margin of SG-08 (proposed, WP-S-04 §2) | TSR-05.02 |
-| P-05 | Firm deceleration level for unconfirmed braking, and for the monitor's own stop | Waits on DQ-033 | TSR-01.03, TSR-04.01, TSR-04.02, TSR-06.01, TSR-13.01 |
-| P-06 | Assumptions of the safe longitudinal distance (response time, own guaranteed braking, braking of the vehicle ahead) | Waits on DQ-034 | TSR-01.01, TSR-01.03, TSR-12.01 |
-| P-07 | Bounds on other road users' speed and acceleration, for crossing paths and occlusions (DQ-017 A) | Waits on DQ-034 | TSR-01.04, TSR-01.05 |
+| P-05 | Firm deceleration level for unconfirmed braking, and for the monitor's own stop | 3 m/s² (DQ-033 A) | TSR-01.03, TSR-04.01, TSR-04.02, TSR-06.01, TSR-13.01 |
+| P-06 | Assumptions of the safe longitudinal distance (response time, own guaranteed braking, braking of the vehicle ahead) | The item responds within 0.5 s and can always brake at 4 m/s²; the vehicle ahead may brake at up to 8 m/s², which keeps 19.5 m at 50 km/h (DQ-034 A) | TSR-01.01, TSR-01.03, TSR-12.01 |
+| P-07 | Bounds on other road users' speed and acceleration, for crossing paths and occlusions (DQ-017 A) | Pedestrians may run at up to 3 m/s and cyclists ride at up to 8 m/s, including out of an occlusion (DQ-034 A) | TSR-01.04, TSR-01.05 |
 | P-08 | Silence after which the vehicle stops on its own | 179 ms to 283 ms, the detection budget of SM-14 (WP-S-04 §4) | TSR-08.02, TSR-14.01 |
 | P-09 | Age bound of a remote command | 143 ms, the detection budget of SM-05 (WP-S-04 §4) | TSR-05.02, TSR-05.03 |
 | P-10 | Steering angle and rate envelope over speed | The chosen vehicle's steering geometry and actuator (DQ-008) | TSR-02.01 |
@@ -56,7 +56,9 @@ The requirements name their parameters rather than repeating values. A parameter
 
 <!-- END GENERATED: tsr-parameters -->
 
-Two of these set how the vehicle behaves and are put to the lead: how hard the monitor may brake when its sensors cannot see the reason (P-05, DQ-033), and how cautious its assumptions about other road users are (P-06 and P-07, DQ-034). The rest follow from WP-S-04 or from the vehicle.
+Two of these set how the vehicle behaves and were decided by the lead on 2026-10-24: the monitor brakes at no more than 3 m/s² when its sensors cannot see the reason, which is also the level of its own stop (P-05, DQ-033 A), and it assumes the vehicle ahead may brake as hard as a car can and that pedestrians may run and cyclists ride fast out of an occlusion (P-06 and P-07, DQ-034 A). The rest follow from WP-S-04 or from the vehicle.
+
+**Autoware has to drive inside these assumptions.** At 50 km/h the monitor keeps 19.5 m to the vehicle ahead. If Autoware follows closer or passes parked cars faster than P-06 and P-07 allow, the monitor will brake for it often; Autoware's planning parameters must therefore be set at or beyond them (OI-2).
 
 ### 2.2 Requirements
 
@@ -64,11 +66,11 @@ Two of these set how the vehicle behaves and are put to the lead: how hard the m
 
 | ID | Technical safety requirement | Component | ASIL | Refines | Time | Waits on |
 |---|---|---|---|---|---|---|
-| TSR-01.01 | Compute the safe longitudinal distance to every road user and obstacle ahead that CMP-03 reports, from the current speed and the assumptions of P-06, plus the margin P-01 | CMP-02 Safety monitor controller | D | FSR-01.01, FSR-02.02 | — | DQ-034 |
+| TSR-01.01 | Compute the safe longitudinal distance to every road user and obstacle ahead that CMP-03 reports, from the current speed and the assumptions of P-06, plus the margin P-01 | CMP-02 Safety monitor controller | D | FSR-01.01, FSR-02.02 | — | — |
 | TSR-01.02 | Limit commanded acceleration to the envelope for the current speed, and to zero or braking while any distance of TSR-01.01 is below the safe distance | CMP-02 Safety monitor controller | D | FSR-01.01 | React within 200 ms to 283 ms | — |
-| TSR-01.03 | When a distance of TSR-01.01 is below the safe distance and the commanded deceleration does not restore it, command the deceleration that does, up to emergency level; never command emergency level otherwise | CMP-02 Safety monitor controller | D | FSR-02.02, FSR-03.03 | React within 200 ms to 283 ms | DQ-033, DQ-034 |
-| TSR-01.04 | Predict the swept path over the stopping time and reject motion that crosses the predicted path of a reported road user before the vehicle could stop or clear it, using the bounds of P-07 | CMP-02 Safety monitor controller | D | FSR-06.01 | — | DQ-034 |
-| TSR-01.05 | Where CMP-03 reports an occluded zone beside the path, limit speed so the vehicle can stop for a road user emerging from it at the bounds of P-07 | CMP-02 Safety monitor controller | D | FSR-06.02 | — | DQ-034 |
+| TSR-01.03 | When a distance of TSR-01.01 is below the safe distance and the commanded deceleration does not restore it, command the deceleration that does, up to emergency level; never command emergency level otherwise | CMP-02 Safety monitor controller | D | FSR-02.02, FSR-03.03 | React within 200 ms to 283 ms | — |
+| TSR-01.04 | Predict the swept path over the stopping time and reject motion that crosses the predicted path of a reported road user before the vehicle could stop or clear it, using the bounds of P-07 | CMP-02 Safety monitor controller | D | FSR-06.01 | — | — |
+| TSR-01.05 | Where CMP-03 reports an occluded zone beside the path, limit speed so the vehicle can stop for a road user emerging from it at the bounds of P-07 | CMP-02 Safety monitor controller | D | FSR-06.02 | — | — |
 | TSR-01.06 | Apply TSR-01.02 to TSR-01.05 to remote driving commands in the same way as to Autoware's | CMP-02 Safety monitor controller | C | FSR-08.02 | — | — |
 | TSR-01.07 | Deliver measured speed with the accuracy the safe distance of TSR-01.01 assumes | CMP-07 Vehicle state sensing | D | FSR-01.01 | — | — |
 | TSR-02.01 | Limit commanded steering angle and steering rate to the envelope P-10 for the current speed | CMP-02 Safety monitor controller | D | FSR-04.02 | React within 179 ms to 310 ms | — |
@@ -78,12 +80,12 @@ Two of these set how the vehicle behaves and are put to the lead: how hard the m
 | TSR-03.03 | Detect achieved steering differing from the commanded beyond the tolerance P-11, and stop in lane | CMP-02 Safety monitor controller | D | FSR-04.03 | Detect within 179 ms to 283 ms | — |
 | TSR-03.04 | When CMP-03 reports itself failed, let Autoware stop in lane comfortably, compare its speed, deceleration and steering with the vehicle state, and stop the vehicle itself if it does not slow as expected | CMP-02 Safety monitor controller | D | FSR-07.08 | React within 179 ms to 283 ms | — |
 | TSR-03.05 | Accept the monitor's switch to the secondary brake path and the propulsion cut within the reaction budget | CMP-06 Drive-by-wire | D | FSR-02.03, FSR-01.02 | React within 179 ms to 283 ms | — |
-| TSR-04.01 | Limit a deceleration command from Autoware above the firm level P-05 to that level unless CMP-03 reports a road user or obstacle that requires more | CMP-02 Safety monitor controller | C | FSR-03.02 | — | DQ-033 |
-| TSR-04.02 | Report with every frame whether a road user or obstacle in the path ahead requires braking above the firm level P-05 | CMP-03 Safety channel processor | C | FSR-03.02 | — | DQ-033 |
+| TSR-04.01 | Limit a deceleration command from Autoware above the firm level P-05 to that level unless CMP-03 reports a road user or obstacle that requires more | CMP-02 Safety monitor controller | C | FSR-03.02 | — | — |
+| TSR-04.02 | Report with every frame whether a road user or obstacle in the path ahead requires braking above the firm level P-05 | CMP-03 Safety channel processor | C | FSR-03.02 | — | — |
 | TSR-05.01 | Detect a lost, late, repeated, out-of-sequence or implausible command from Autoware, and start MRM-4 | CMP-02 Safety monitor controller | D | FSR-07.01 | Detect within 143 ms | — |
 | TSR-05.02 | In REMOTE mode, reject a command older than the age bound P-09, out of sequence or failing its signature check (CSR-01), and start MRM-4 | CMP-02 Safety monitor controller | C | FSR-08.01 | Detect within 143 ms | — |
 | TSR-05.03 | Keep a clock for command age that is synchronised with the remote operations station and whose own error counts against the age bound P-09 | CMP-02 Safety monitor controller | C | FSR-08.01 | — | — |
-| TSR-06.01 | On MRM-4, decelerate in lane at the firm level P-05 to standstill with hazard lights on, raised only as TSR-01.03 requires, and hold | CMP-02 Safety monitor controller | D | FSR-07.02 | React within 207 ms to 358 ms | DQ-033 |
+| TSR-06.01 | On MRM-4, decelerate in lane at the firm level P-05 to standstill with hazard lights on, raised only as TSR-01.03 requires, and hold | CMP-02 Safety monitor controller | D | FSR-07.02 | React within 207 ms to 358 ms | — |
 | TSR-06.02 | At standstill, hold service and park brake until doors are closed, CMP-03 reports the near field clear in the direction of travel, and a motion request in the selected gear is present | CMP-02 Safety monitor controller | D | FSR-05.01 | — | — |
 | TSR-06.03 | Detect motion while holding before the vehicle has moved the creep distance P-03, and apply the park brake | CMP-02 Safety monitor controller | D | FSR-05.02 | Detect within 207 ms to 358 ms | — |
 | TSR-06.04 | Allow reverse only at standstill, on request, and with CMP-03 reporting the rear near field clear | CMP-02 Safety monitor controller | D | FSR-05.03 | — | — |
@@ -94,13 +96,13 @@ Two of these set how the vehicle behaves and are put to the lead: how hard the m
 | TSR-09.01 | Detect road users and obstacles in and beside the swept path out to the range P-12 from LiDAR and radar returns by geometry and motion, without learned classification, counting a road user seen by either sensor, and report position, velocity and occluded zones with each frame | CMP-03 Safety channel processor | D | FSR-02.01 | Detect within 200 ms to 283 ms | — |
 | TSR-09.02 | Return points from road users and obstacles of the smallest size P-12 out to its range, in the ODD's light and weather, and in the near field down to the bumper in front and behind (FSR-05.01, FSR-05.03) | CMP-04 Safety LiDAR | B(D) | FSR-02.01 | — | — |
 | TSR-09.03 | Return detections with radial velocity from road users and obstacles of the smallest size P-12 out to its range, in the ODD's light and weather, and in the near field down to the bumper in front and behind (FSR-05.01, FSR-05.03) | CMP-05 Safety radar | B(D) | FSR-02.01 | — | — |
-| TSR-09.04 | Keep false detections in the swept path from the LiDAR below its share P-13 | CMP-04 Safety LiDAR | C | FSR-03.01 | — | DQ-035 |
-| TSR-09.05 | Keep false detections in the swept path from the radar below its share P-13 | CMP-05 Safety radar | C | FSR-03.01 | — | DQ-035 |
+| TSR-09.04 | Keep false detections in the swept path from the LiDAR below its share P-13 | CMP-04 Safety LiDAR | C | FSR-03.01 | — | — |
+| TSR-09.05 | Keep false detections in the swept path from the radar below its share P-13 | CMP-05 Safety radar | C | FSR-03.01 | — | — |
 | TSR-09.06 | Keep false detections in the swept path, after fusing both sensors, below the rate P-13 allows for the channel | CMP-03 Safety channel processor | C | FSR-03.01 | — | — |
 | TSR-10.01 | Detect blockage, misalignment, loss and degradation of each safety channel sensor and report it to the monitor, which starts TR-05 | CMP-03 Safety channel processor | D | FSR-02.01 | Detect within 200 ms to 283 ms | — |
 | TSR-11.01 | Cut propulsion on the monitor's command, whatever else is commanded | CMP-06 Drive-by-wire | D | FSR-01.03 | — | — |
-| TSR-12.01 | Keep a braking path that can stop the vehicle at no less than the braking P-06 assumes after any single fault in the primary one | CMP-06 Drive-by-wire | D | FSR-02.04 | — | DQ-034 |
-| TSR-13.01 | Keep steering controllable after any single fault for at least the time of a stop in lane from the top ODD speed at the firm level P-05 | CMP-06 Drive-by-wire | D | FSR-04.04 | — | DQ-033 |
+| TSR-12.01 | Keep a braking path that can stop the vehicle at no less than the braking P-06 assumes after any single fault in the primary one | CMP-06 Drive-by-wire | D | FSR-02.04 | — | — |
+| TSR-13.01 | Keep steering controllable after any single fault for at least the time of a stop in lane from the top ODD speed at the firm level P-05 | CMP-06 Drive-by-wire | D | FSR-04.04 | — | — |
 | TSR-14.01 | When the monitor's commands stop for longer than P-08, brake to a standstill and hold it, whatever Autoware sends | CMP-06 Drive-by-wire | D | FSR-07.06 | Detect within 179 ms to 283 ms | — |
 | TSR-15.01 | Deliver speed and longitudinal acceleration to the monitor on a path that does not pass through the Autoware computer, with the sensors' own fault flags, at a rate that fits the detection budget | CMP-07 Vehicle state sensing | D | FSR-01.05 | Detect within 179 ms to 283 ms | — |
 | TSR-15.02 | Deliver steering angle to the monitor on the same independent path, with its own fault flag, at a rate that fits the detection budget | CMP-07 Vehicle state sensing | D | FSR-04.06 | Detect within 179 ms to 283 ms | — |
@@ -111,7 +113,7 @@ Two of these set how the vehicle behaves and are put to the lead: how hard the m
 
 <!-- END GENERATED: tsr-requirements -->
 
-**Finding: decomposition does not split the false-alarm requirement.** The safety channel counts a road user seen by either sensor (DQ-031 A), so a false detection by either sensor can make the monitor brake hard, the hazard of SG-03 (ASIL C). Each sensor therefore carries an ASIL C requirement on its false detections (TSR-09.04, TSR-09.05) alongside its ASIL B(D) detection requirement, and WP-S-03 shows CMP-04 and CMP-05 at B(D) only. Braking hard only when both sensors agree would lower the false-alarm requirement but weaken the detection the collision goal rests on. The lead is asked which to take (DQ-035); until then the two requirements stand at ASIL C.
+**Finding: decomposition does not split the false-alarm requirement.** The safety channel counts a road user seen by either sensor (DQ-031 A), so a false detection by either sensor can make the monitor brake hard, the hazard of SG-03 (ASIL C). Each sensor therefore carries an ASIL C requirement on its false detections (TSR-09.04, TSR-09.05) alongside its ASIL B(D) detection requirement, Braking hard only when both sensors agree would have lowered the false-alarm requirement but weakened the detection the collision goal rests on. The lead decided that each sensor is developed to ASIL C for false detections as well as to ASIL B(D) for detection (DQ-035 A, 2026-10-24); WP-S-03 shows both, and `tsr.py` refuses a requirement on a decomposed component whose ASIL WP-S-03 does not show.
 
 ## 3. Safety mechanisms (detection, reaction, fallback)
 
@@ -227,9 +229,9 @@ Each requirement is verified at system level ([WP-S-08](WP-S-08-system-integrati
 
 | ID | Open item | Closes at |
 |---|---|---|
-| OI-1 | Set the firm deceleration level P-05 (DQ-033) and carry it into MRM-4's stop time (WP-S-04 §5, WP-C-12) | G2 |
-| OI-2 | Set the assumptions P-06 and P-07 (DQ-034), and set Autoware's following distance and occlusion speeds above them | G2 |
-| OI-3 | Settle the ASIL of the sensors' false-alarm requirements (DQ-035), and show it on CMP-04 and CMP-05 in WP-S-03 | G2 |
+| OI-1 | Compute MRM-4's stop time at the firm level P-05 once the vehicle's braking jerk is known (DQ-008; WP-S-04 §5, WP-C-12) | G2 |
+| OI-2 | Set Autoware's following distance and occlusion speeds at or beyond P-06 and P-07, and confirm the 0.5 s response and 4 m/s² braking with the chosen vehicle (DQ-008) | G2 |
+| OI-3 | Record in WP-A-01 that the decomposition of DQ-031 A does not split FSR-03.01, and choose sensors that meet ASIL C for false detections (WP-H-02) | G2 |
 | OI-4 | Set P-10 and P-11 from the chosen vehicle, and agree the supplier requirements in the DIA (DQ-008) | G2 |
 | OI-5 | Set the smallest object size of P-12 with FM-03, and the false-detection rates of P-13 once AC-02 is allotted (WP-V-02) | G2 |
 | OI-6 | Specify the hardware-software interface for these requirements (WP-S-05) | G2 |

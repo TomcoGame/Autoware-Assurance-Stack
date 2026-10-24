@@ -17,6 +17,8 @@ The model is refused when:
 - a requirement claims a timing budget its mechanism does not have in WP-S-04, or a time-critical
   mechanism has no timed requirement;
 - a parameter is unused, has no value source, or names a goal or mechanism the timing model lacks;
+- a requirement on a decomposed component has an ASIL that WP-S-03 does not show for it;
+- a parameter's value has no answered decision behind it;
 - a decision named does not exist, or a pending decision is no longer open.
 
     python3 tsr.py            # write WP-S-02's generated tables and Figure 4-1
@@ -75,6 +77,9 @@ def known() -> dict:
         "timed": {s["id"]: s for s in tm["mechanisms"]},
         "margins": {g["id"]: g for g in tm["goals"] if "margin" in g},
         "decisions": tk["decisions"],
+        "choices": {
+            d["id"]: d["answer"]["choice"] for d in check_decisions.load() if d.get("answer")
+        },
     }
 
 
@@ -119,9 +124,15 @@ def check(m: dict, k: dict) -> list[str]:
         new(p["id"], r"P-\d\d")
         if not p.get("name"):
             errs.append(f"{p['id']}: missing name")
-        sources = [x for x in ("margin", "budget", "pending", "source") if p.get(x)]
+        sources = [x for x in ("margin", "budget", "pending", "source", "value") if p.get(x)]
         if len(sources) != 1:
-            errs.append(f"{p['id']}: needs exactly one of margin, budget, pending or source")
+            errs.append(f"{p['id']}: needs exactly one of margin, budget, pending, source or value")
+        if bool(p.get("value")) != bool(p.get("decision")):
+            errs.append(
+                f"{p['id']}: a value needs the decision that set it, and only a value has one"
+            )
+        if p.get("decision") and k["decisions"].get(p["decision"]) not in ("answered", "applied"):
+            errs.append(f"{p['id']}: {p['decision']} is not an answered decision")
         if p.get("margin") and p["margin"] not in k["margins"]:
             errs.append(f"{p['id']}: {p['margin']} has no margin in WP-S-04")
         if p.get("budget") and p["budget"] not in k["timed"]:
@@ -165,6 +176,13 @@ def check(m: dict, k: dict) -> list[str]:
                 errs.append(f"{i}: parameter {p} does not exist")
             used.add(p)
         pending(i, r.get("pending"))
+        c = k["components"].get(r.get("component"), {})
+        if c.get("decomposed") and r.get("fsrs") and all(f in k["fsrs"] for f in r["fsrs"]):
+            a = asil(r, k)
+            if a != c["decomposed"]["asil"] and a != (c.get("also") or {}).get("asil"):
+                errs.append(
+                    f"{i}: ASIL {a} on {c['id']}, which WP-S-03 shows at {c['decomposed']['asil']} only"
+                )
     for sid, s in k["mechanisms"].items():
         if sid not in refined:
             errs.append(f"{sid}: no technical safety requirement")
@@ -198,6 +216,12 @@ def value(p: dict, m: dict, k: dict) -> str:
         return f"{budget(m, k, p['budget'], 'detect')}, the detection budget of {p['budget']} (WP-S-04 §4)"
     if p.get("pending"):
         return f"Waits on {p['pending']}"
+    if p.get("value"):
+        return (
+            f"{cell(p['value'])} ({p['decision']} {k['choices'].get(p['decision'], '')})".replace(
+                " )", ")"
+            )
+        )
     return cell(p["source"])
 
 
@@ -268,8 +292,13 @@ def tables(m: dict, k: dict) -> dict[str, str]:
         f"{len(m['tsrs'])} technical safety requirements refine the {len(k['fsrs']) - sum(f['asil'] == 'QM' for f in k['fsrs'].values())} "
         f"rated FSRs through the {len(k['mechanisms'])} safety mechanisms of WP-S-03, on {len({r['component'] for r in m['tsrs']})} "
         f"components; {sup} of them fall to suppliers under the DIA. {sum(bool(r.get('timing')) for r in m['tsrs'])} carry a "
-        f"detection or reaction budget from WP-S-04. {len(m['parameters'])} parameters set the envelope; "
-        f"{n_wait} requirements wait on {', '.join(pend)}."
+        f"detection or reaction budget from WP-S-04. {len(m['parameters'])} parameters set the envelope, "
+        f"{sum(bool(p.get('decision')) for p in m['parameters'])} of them decided by the lead; "
+        + (
+            f"{n_wait} requirements wait on {', '.join(pend)}."
+            if pend
+            else "no requirement waits on an open decision."
+        )
     )
     return t
 

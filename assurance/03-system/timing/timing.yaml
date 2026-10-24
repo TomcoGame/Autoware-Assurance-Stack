@@ -30,7 +30,7 @@ goals:
     basis: The same margin is consumed when commanded braking is lost
   - id: SG-03
     kind: limit
-    basis: Unintended hard braking is prevented by a limit on deceleration (FSR-03.02), not by detecting it in time; its firm level is set in WP-S-02
+    basis: Unintended hard braking is prevented by a limit on deceleration (FSR-03.02), not by detecting it in time; its firm level is 3 m/s² (DQ-033 A, WP-S-02 P-05)
   - id: SG-04
     kind: deviation
     range: lateral

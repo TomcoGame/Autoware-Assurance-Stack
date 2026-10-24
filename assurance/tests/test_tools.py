@@ -664,6 +664,9 @@ class Tsc(unittest.TestCase):
         bad = copy.deepcopy(m)
         next(c for c in bad["components"] if c["id"] == "CMP-05").pop("decomposed")
         cases.append((bad, "decomposed with CMP-05, which is not decomposed with it"))
+        bad = copy.deepcopy(m)
+        next(c for c in bad["components"] if c["id"] == "CMP-04")["also"]["decision"] = "DQ-008"
+        cases.append((bad, "CMP-04: also needs a decomposed component and an answered decision"))
         for model, needle in cases:
             self.assertTrue(any(needle in x for x in tsc.check(model, k)), needle)
 
@@ -713,7 +716,8 @@ class Tsr(unittest.TestCase):
         self.assertEqual(tsr.asil(by["TSR-09.02"], k), "B(D)")
         self.assertEqual(tsr.asil(by["TSR-09.04"], k), "C")
         params = {p["id"]: p for p in m["parameters"]}
-        self.assertEqual(tsr.waits(by["TSR-04.01"], params), ["DQ-033"])
+        self.assertEqual(tsr.waits(by["TSR-04.01"], params), [])
+        self.assertIn("3 m/s² (DQ-033 A)", tsr.value(params["P-05"], m, k))
 
     def test_model_breaking_a_rule_is_refused(self):
         m, k = tsr.load(), tsr.known()
@@ -744,6 +748,14 @@ class Tsr(unittest.TestCase):
         bad = copy.deepcopy(m)
         bad["parameters"].append({"id": "P-99", "name": "Unused", "source": "Nowhere"})
         cases.append((bad, "P-99: used by no requirement"))
+        bad = copy.deepcopy(m)
+        next(p for p in bad["parameters"] if p["id"] == "P-05").pop("decision")
+        cases.append((bad, "P-05: a value needs the decision"))
+        k2 = copy.deepcopy(k)
+        k2["components"]["CMP-04"].pop("also")
+        self.assertIn(
+            "TSR-09.04: ASIL C on CMP-04, which WP-S-03 shows at B(D) only", tsr.check(m, k2)
+        )
         for model, needle in cases:
             self.assertTrue(any(needle in x for x in tsr.check(model, k)), needle)
 
