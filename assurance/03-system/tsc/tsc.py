@@ -14,7 +14,9 @@ The model is refused when:
 - a rated FSR (any ASIL but QM) is implemented by no mechanism;
 - a component's derived ASIL exceeds the ASIL the functional safety concept derives for its element;
 - a reaction, triggering condition or decision named does not exist, or a pending decision is no
-  longer open.
+  longer open;
+- a component carries an ASIL beyond its decomposed one (`also`) without a decomposition or without
+  an answered decision.
 
     python3 tsc.py            # write WP-S-03's generated tables and Figure 2-1
     python3 tsc.py --check    # fail if either is stale or the model breaks a rule
@@ -71,10 +73,20 @@ def rank(a: str) -> int:
     return fsc.hara.ASILS.index(a)
 
 
+def dec_ok(k: dict, d: str | None) -> bool:
+    return k["decisions"].get(d) in ("answered", "applied")
+
+
 def label(m: dict, k: dict, cid: str) -> str:
     """The ASIL shown for a component: its decomposed ASIL where the lead decided one, else the derived one."""
     c = next(x for x in m["components"] if x["id"] == cid)
     return c["decomposed"]["asil"] if c.get("decomposed") else component_asil(m, k)[cid]
+
+
+def also(c: dict) -> str:
+    """An ASIL a component carries beyond its decomposed one, as a table suffix."""
+    a = c.get("also")
+    return f"; {a['asil']} for {a['for']} ({a['decision']})" if a else ""
 
 
 def component_asil(m: dict, k: dict) -> dict[str, str]:
@@ -153,6 +165,9 @@ def check(m: dict, k: dict) -> list[str]:
                 errs.append(f"{r['id']}: triggering condition {t} does not exist")
         pending(r["id"], r)
     for c in m.get("components", []):
+        a = c.get("also")
+        if a and (not dec_ok(k, a.get("decision")) or not c.get("decomposed")):
+            errs.append(f"{c['id']}: also needs a decomposed component and an answered decision")
         dec = c.get("decomposed")
         if not dec:
             continue
@@ -222,7 +237,7 @@ def tables(m: dict, k: dict) -> dict[str, str]:
         hosted = [s["id"] for s in m["mechanisms"] if s["host"] == c["id"]]
         serves = [s["id"] for s in m["mechanisms"] if c["id"] in s.get("uses", [])]
         rows.append(
-            f"| {c['id']} | {cell(c['name'])} | {c['element']} | {'Yes' if el['in_item'] else 'No'} | **{label(m, k, c['id'])}** "
+            f"| {c['id']} | {cell(c['name'])} | {c['element']} | {'Yes' if el['in_item'] else 'No'} | **{label(m, k, c['id'])}**{also(c)} "
             f"| {', '.join(hosted) or '—'} | {', '.join(serves) or '—'} | {c.get('pending', '—')} |"
         )
     t["tsc-components"] = "\n".join(rows)

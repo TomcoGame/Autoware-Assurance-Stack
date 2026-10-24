@@ -31,6 +31,7 @@ for sub in (
     "02-concept/misuse",
     "03-system/tsc",
     "03-system/timing",
+    "03-system/tsr",
     "06-validation/scenarios",
     "06-validation/simenv",
     "case/tools",
@@ -66,6 +67,7 @@ import tara  # noqa: E402
 import timing  # noqa: E402
 import triggering  # noqa: E402
 import tsc  # noqa: E402
+import tsr  # noqa: E402
 import wpregister  # noqa: E402
 
 GOOD = {
@@ -666,6 +668,9 @@ class Tsc(unittest.TestCase):
         bad = copy.deepcopy(m)
         next(c for c in bad["components"] if c["id"] == "CMP-05").pop("decomposed")
         cases.append((bad, "decomposed with CMP-05, which is not decomposed with it"))
+        bad = copy.deepcopy(m)
+        next(c for c in bad["components"] if c["id"] == "CMP-04")["also"]["decision"] = "DQ-008"
+        cases.append((bad, "CMP-04: also needs a decomposed component and an answered decision"))
         for model, needle in cases:
             self.assertTrue(any(needle in x for x in tsc.check(model, k)), needle)
 
@@ -702,6 +707,61 @@ class Timing(unittest.TestCase):
         cases.append((bad, "goal SG-03 has no FTTI"))
         for model, needle in cases:
             self.assertTrue(any(needle in x for x in timing.check(model, k)), needle)
+
+
+class Tsr(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(tsr.check(tsr.load(), tsr.known()), [])
+
+    def test_asil_follows_fsrs_and_decomposition(self):
+        m, k = tsr.load(), tsr.known()
+        by = {r["id"]: r for r in m["tsrs"]}
+        self.assertEqual(tsr.asil(by["TSR-09.01"], k), "D")
+        self.assertEqual(tsr.asil(by["TSR-09.02"], k), "B(D)")
+        self.assertEqual(tsr.asil(by["TSR-09.04"], k), "C")
+        params = {p["id"]: p for p in m["parameters"]}
+        self.assertEqual(tsr.waits(by["TSR-04.01"], params), [])
+        self.assertIn("3 m/s² (DQ-033 A)", tsr.value(params["P-05"], m, k))
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = tsr.load(), tsr.known()
+        cases = []
+        bad = copy.deepcopy(m)
+        bad["tsrs"] = [r for r in bad["tsrs"] if r["mechanism"] != "SM-07"]
+        cases.append((bad, "SM-07: no technical safety requirement"))
+        bad = copy.deepcopy(m)
+        bad["tsrs"] = [r for r in bad["tsrs"] if r["id"] != "TSR-01.04"]
+        cases.append((bad, "SM-01: FSR-06.01 is refined by none"))
+        bad = copy.deepcopy(m)
+        next(r for r in bad["tsrs"] if r["id"] == "TSR-07.01")["component"] = "CMP-06"
+        cases.append((bad, "neither the host of SM-07"))
+        bad = copy.deepcopy(m)
+        next(r for r in bad["tsrs"] if r["id"] == "TSR-07.01")["timing"] = "detect"
+        cases.append((bad, "SM-07 has no budget in WP-S-04"))
+        bad = copy.deepcopy(m)
+        for r in bad["tsrs"]:
+            if r["mechanism"] == "SM-10":
+                r.pop("timing", None)
+        cases.append((bad, "SM-10: time-critical in WP-S-04"))
+        bad = copy.deepcopy(m)
+        next(r for r in bad["tsrs"] if r["id"] == "TSR-07.01")["fsrs"] = ["FSR-01.01"]
+        cases.append((bad, "refines FSR-01.01, which SM-07 does not implement"))
+        bad = copy.deepcopy(m)
+        next(p for p in bad["parameters"] if p["id"] == "P-05")["pending"] = "DQ-019"
+        cases.append((bad, "pending on DQ-019, which is applied"))
+        bad = copy.deepcopy(m)
+        bad["parameters"].append({"id": "P-99", "name": "Unused", "source": "Nowhere"})
+        cases.append((bad, "P-99: used by no requirement"))
+        bad = copy.deepcopy(m)
+        next(p for p in bad["parameters"] if p["id"] == "P-05").pop("decision")
+        cases.append((bad, "P-05: a value needs the decision"))
+        k2 = copy.deepcopy(k)
+        k2["components"]["CMP-04"].pop("also")
+        self.assertIn(
+            "TSR-09.04: ASIL C on CMP-04, which WP-S-03 shows at B(D) only", tsr.check(m, k2)
+        )
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in tsr.check(model, k)), needle)
 
 
 class Scenarios(unittest.TestCase):
@@ -879,6 +939,7 @@ class Generators(unittest.TestCase):
             misuse,
             tsc,
             timing,
+            tsr,
             scenarios,
             simenv,
         ):
@@ -895,7 +956,7 @@ class Generators(unittest.TestCase):
                     self.assertIn("prefers-color-scheme: dark", content, path)
 
     def test_figure_disagreeing_with_register_is_refused(self):
-        self.assertEqual(sorted(fig_questions.FIGURES), ["DQ-001", "DQ-002"])
+        self.assertEqual(sorted(fig_questions.FIGURES), ["DQ-001", "DQ-002", "DQ-034"])
         orig = fig_questions.CHAIN
         fig_questions.CHAIN = {**orig, "D": orig["A"]}
         fig_questions.FIGURES["DQ-002"] = (
