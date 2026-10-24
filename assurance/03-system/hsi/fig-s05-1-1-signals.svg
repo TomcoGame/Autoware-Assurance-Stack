@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="488" viewBox="0 0 640 488" role="img" aria-labelledby="t d">
+<title id="t">WP-S-05 Figure 1-1: signal timeouts</title>
+<desc id="d">Receive timeout and longest period of each timed signal: SIG-01 Remote driving command, 143 ms set by SM-05, sent at least every 48 ms; SIG-03 Control command, 143 ms set by SM-05, sent at least every 48 ms; SIG-05 Autoware heartbeat and state, 143 ms set by SM-05, sent at least every 48 ms; SIG-09 Obstacle and free-space report, 179 ms set by SM-02, sent at least every 60 ms; SIG-10 Safety channel status, 179 ms set by SM-03, sent at least every 60 ms; SIG-11 Bounded motion command, 179 ms set by SM-14, sent at least every 60 ms; SIG-12 Propulsion cut and brake switch, 179 ms set by SM-03, sent at least every 60 ms; SIG-13 Drive-by-wire status, 179 ms set by SM-03, sent at least every 60 ms; SIG-14 Longitudinal vehicle state, 179 ms set by SM-03, sent at least every 60 ms; SIG-15 Steering and gear state, 179 ms set by SM-03, sent at least every 60 ms; SIG-07 LiDAR point cloud, 200 ms set by SM-09, sent at least every 67 ms; SIG-08 Radar detections, 200 ms set by SM-09, sent at least every 67 ms.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg .to { fill:var(--accsoft); stroke:var(--acc); stroke-width:1.2; }
+svg .pe { stroke:var(--amb); stroke-width:2.6; fill:none; }
+svg .pd { fill:var(--amb); }
+</style>
+<rect class="bg" width="640" height="488"/>
+<text x="24" y="32" class="h">How often each signal must arrive</text>
+<text x="24" y="54" class="t">WP-S-05 §1: receive timeout of each timed signal (bar) and the</text>
+<text x="24" y="71" class="t">longest period that still fits 3 frames in it (marker)</text>
+<path d="M290 104 L290 416" class="hair"/>
+<text x="290" y="98" class="s" text-anchor="middle">0 ms</text>
+<path d="M340 104 L340 416" class="hair"/>
+<text x="340" y="98" class="s" text-anchor="middle">50 ms</text>
+<path d="M390 104 L390 416" class="hair"/>
+<text x="390" y="98" class="s" text-anchor="middle">100 ms</text>
+<path d="M440 104 L440 416" class="hair"/>
+<text x="440" y="98" class="s" text-anchor="middle">150 ms</text>
+<path d="M490 104 L490 416" class="hair"/>
+<text x="490" y="98" class="s" text-anchor="middle">200 ms</text>
+<path d="M540 104 L540 416" class="hair"/>
+<text x="540" y="98" class="s" text-anchor="middle">250 ms</text>
+<text x="24" y="123" class="t">SIG-01 Remote driving command</text>
+<rect x="290" y="112" width="142.9" height="14" rx="3" class="to"/>
+<path d="M337.6 109 L337.6 129" class="pe"/>
+<text x="438.9" y="123" class="s">143 ms · SM-05</text>
+<text x="24" y="149" class="t">SIG-03 Control command</text>
+<rect x="290" y="138" width="142.9" height="14" rx="3" class="to"/>
+<path d="M337.6 135 L337.6 155" class="pe"/>
+<text x="438.9" y="149" class="s">143 ms · SM-05</text>
+<text x="24" y="175" class="t">SIG-05 Autoware heartbeat and state</text>
+<rect x="290" y="164" width="142.9" height="14" rx="3" class="to"/>
+<path d="M337.6 161 L337.6 181" class="pe"/>
+<text x="438.9" y="175" class="s">143 ms · SM-05</text>
+<text x="24" y="201" class="t">SIG-09 Obstacle and free-space report</text>
+<rect x="290" y="190" width="178.9" height="14" rx="3" class="to"/>
+<path d="M349.6 187 L349.6 207" class="pe"/>
+<text x="474.9" y="201" class="s">179 ms · SM-02</text>
+<text x="24" y="227" class="t">SIG-10 Safety channel status</text>
+<rect x="290" y="216" width="178.9" height="14" rx="3" class="to"/>
+<path d="M349.6 213 L349.6 233" class="pe"/>
+<text x="474.9" y="227" class="s">179 ms · SM-03</text>
+<text x="24" y="253" class="t">SIG-11 Bounded motion command</text>
+<rect x="290" y="242" width="178.9" height="14" rx="3" class="to"/>
+<path d="M349.6 239 L349.6 259" class="pe"/>
+<text x="474.9" y="253" class="s">179 ms · SM-14</text>
+<text x="24" y="279" class="t">SIG-12 Propulsion cut and brake switch</text>
+<rect x="290" y="268" width="178.9" height="14" rx="3" class="to"/>
+<path d="M349.6 265 L349.6 285" class="pe"/>
+<text x="474.9" y="279" class="s">179 ms · SM-03</text>
+<text x="24" y="305" class="t">SIG-13 Drive-by-wire status</text>
+<rect x="290" y="294" width="178.9" height="14" rx="3" class="to"/>
+<path d="M349.6 291 L349.6 311" class="pe"/>
+<text x="474.9" y="305" class="s">179 ms · SM-03</text>
+<text x="24" y="331" class="t">SIG-14 Longitudinal vehicle state</text>
+<rect x="290" y="320" width="178.9" height="14" rx="3" class="to"/>
+<path d="M349.6 317 L349.6 337" class="pe"/>
+<text x="474.9" y="331" class="s">179 ms · SM-03</text>
+<text x="24" y="357" class="t">SIG-15 Steering and gear state</text>
+<rect x="290" y="346" width="178.9" height="14" rx="3" class="to"/>
+<path d="M349.6 343 L349.6 363" class="pe"/>
+<text x="474.9" y="357" class="s">179 ms · SM-03</text>
+<text x="24" y="383" class="t">SIG-07 LiDAR point cloud</text>
+<rect x="290" y="372" width="200" height="14" rx="3" class="to"/>
+<path d="M356.7 369 L356.7 389" class="pe"/>
+<text x="496" y="383" class="s">200 ms · SM-09</text>
+<text x="24" y="409" class="t">SIG-08 Radar detections</text>
+<rect x="290" y="398" width="200" height="14" rx="3" class="to"/>
+<path d="M356.7 395 L356.7 415" class="pe"/>
+<text x="496" y="409" class="s">200 ms · SM-09</text>
+<rect x="24" y="435" width="14" height="14" rx="3" class="to"/>
+<text x="44" y="447" class="s">Receive timeout (detection budget, worst case)</text>
+<path d="M31 454 L31 469" class="pe"/>
+<text x="44" y="467" class="s">Longest period: timeout / 3</text>
+</svg>
