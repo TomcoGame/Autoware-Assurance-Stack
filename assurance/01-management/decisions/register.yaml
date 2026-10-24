@@ -1244,4 +1244,6 @@
         No risk on the track. Cost: the vehicle's own stop when the monitor falls silent (MRM-5) and the secondary
         brake path are never shown on the real vehicle; the supplier's evidence must carry them alone.
   sources: [WP-S-08 §3, ISO 26262-4 §7, WP-S-04 §6, WP-V-07, UL 4600 §12]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-24, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#38", record: "WP-S-08 v0.3 §3, ENV-4, OI-1", at: 2026-10-24}
