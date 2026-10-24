@@ -73,6 +73,8 @@ jobs:
           python3 assurance/03-system/tsc/tsc.py --check
           python3 assurance/03-system/timing/timing.py --check
           python3 assurance/03-system/tsr/tsr.py --check
+          python3 assurance/06-validation/scenarios/scenarios.py --check
+          python3 assurance/06-validation/simenv/simenv.py --check
           python3 assurance/case/tools/dashboard.py --check
 
       - name: Unit tests of the tools

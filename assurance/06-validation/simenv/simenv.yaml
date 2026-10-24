@@ -1,0 +1,99 @@
+# ODD simulation environment for WP-V-08 §2, and the simulators' tool classification for WP-P-07. simenv.py checks it
+# against the ODD model of ../scenarios/scenarios.yaml (itself checked against WP-C-02), the scenarios, WP-C-01 and
+# the technical safety concept, computes each simulator's tool confidence level, and writes the WP-V-08 §2 tables and
+# the WP-P-07 simulator rows.
+#
+# This describes what the simulation must represent, not what a simulator is known to do: whether each simulator
+# represents an attribute credibly is shown, or not, in WP-V-08 §3. `level` is where the attribute has to be
+# represented: map (the road network), object (entities and their motion), sensor (the raw data a sensor would
+# produce), link (the remote operations link), vehicle (the ego vehicle), none (not simulated; `instead` says how it
+# is covered).
+# The vehicle and its sensors are parametric placeholders until the vehicle is chosen (DQ-008): no stand-in parameter
+# may carry a value, and the generator refuses one that does.
+# Simulator versions are read from the .repos files named in `pin`, not typed here.
+# Every entry is a draft by Claude (I0).
+
+simulators:
+  - id: SIM-01
+    name: Autoware planning simulator
+    pin: {file: repositories/autoware.repos, key: core/autoware_simple_planning_simulator}
+    level: object
+    role: A simple vehicle model under Autoware's planning and control, with perception replaced by objects placed by hand; for development and regression of planning in the concept phase
+    impact: TI1
+    impact_basis: Used to develop and debug, not to produce evidence that a requirement is met; nothing it reports is claimed in the safety case
+    detection: TD1
+    detection_basis: Not needed at TI1
+  - id: SIM-02
+    name: scenario_simulator_v2
+    pin: {file: repositories/simulator.repos, key: simulator/scenario_simulator}
+    level: object
+    role: Runs the logical scenarios of WP-V-03 against Autoware, with participants, their behaviour and the traffic rules at object level; scenarios in OpenSCENARIO XML, driven from the scenario model
+    impact: TI2
+    impact_basis: Its verdicts are evidence for the pass criteria of WP-V-03; a wrong verdict, or a scene that differs from the one specified, could hide a failure of the item
+    detection: TD2
+    detection_basis: The corners of each logical scenario are repeated on the track and the results compared (WP-V-08 §3); errors that change a verdict only between the corners are not caught
+    pending: DQ-036
+  - id: SIM-03
+    name: AWSIM
+    level: sensor
+    role: Renders camera and LiDAR data in a modelled scene, for the triggering conditions that act on the sensors (light, rain, spray, glare) and for the safety channel's perception
+    impact: TI2
+    impact_basis: Its sensor data are evidence for the perception requirements under the triggering conditions; data that are too clean would hide insufficiencies
+    detection: TD2
+    detection_basis: Recorded vehicle data under the same conditions are replayed through the same perception and the results compared (WP-V-08 §3), once the vehicle and its sensors exist
+    pending: DQ-036
+
+represent:
+  ODD-01: {level: map, sims: [SIM-01, SIM-02, SIM-03], needs: The Lanelet2 and point cloud maps of the geofence, the same versions the vehicle uses (WP-W-12); a simulated route never leaves them}
+  ODD-02: {level: map, sims: [SIM-01, SIM-02, SIM-03], needs: Urban and collector streets with one or two lanes per direction, with and without a centre line, as lanelets with their attributes}
+  ODD-03: {level: map, sims: [SIM-01, SIM-02, SIM-03], needs: The posted limit of every lanelet, as the map's speed limit attribute}
+  ODD-04: {level: map, sims: [SIM-01, SIM-02, SIM-03], needs: Signalised, stop- and yield-controlled junctions, T-junctions and single- and multi-lane roundabouts, with traffic light phases and right of way as regulatory elements; signal states controlled by the scenario}
+  ODD-05: {level: map, sims: [SIM-01, SIM-02, SIM-03], needs: Marked crosswalks with and without signals, cycle lanes, and places where pedestrians cross away from a crosswalk}
+  ODD-06: {level: vehicle, sims: [SIM-01, SIM-03], needs: Road gradient up to the ODD limit, acting on the vehicle model (holding, creep, stopping) and on the sensors' view}
+  ODD-07: {level: sensor, sims: [SIM-03], needs: Lane markings as the sensors see them, including where they disagree with the map (MON-02)}
+  ODD-08: {level: object, sims: [SIM-02, SIM-03], needs: Work zones, cones and closures placed by the scenario where the map shows an open lane}
+  ODD-09: {level: map, sims: [SIM-01, SIM-02, SIM-03], needs: Kerbside stops marked in the map, with bike lanes, driveways and bus stops beside them}
+  ODD-10: {level: sensor, sims: [SIM-03], needs: Rain up to the ODD limit as it degrades LiDAR and camera data (drops, spray, reflections), and beyond it for the weather monitor}
+  ODD-11: {level: sensor, sims: [SIM-03], needs: Mist, steam, smoke and dust reducing visibility to the ODD floor and below it}
+  ODD-12: {level: sensor, sims: [SIM-03], needs: Day, dusk, night and unlit streets, low sun and oncoming headlights in the cameras' view}
+  ODD-13: {level: vehicle, sims: [SIM-01, SIM-02, SIM-03], needs: Grip of a wet road acting on braking and steering in the vehicle model, and wet-road reflections in the sensor data}
+  ODD-14: {level: none, sims: [], instead: Temperature acts on the hardware, not on the scene; covered by environmental tests of the sensors and computer (WP-H-02)}
+  ODD-15: {level: link, sims: [SIM-02], needs: The remote operations link with delay, loss, reordering and replay injected between the station and the vehicle, and GNSS loss}
+  ODD-16: {level: object, sims: [SIM-02, SIM-03], needs: Every participant class of the ODD (§2.3), moving within the behaviour bounds the requirements state, and outside them where a scenario says so}
+  ODD-17: {level: object, sims: [SIM-02], needs: Traffic from free flow to congested, as a density of background participants}
+  ODD-18: {level: object, sims: [SIM-02, SIM-03], needs: Emergency vehicles with siren and lights, and buses at stops; the siren as sound and the lights as the cameras see them}
+  ODD-19: {level: sensor, sims: [SIM-03], needs: A person directing traffic, with the gestures a camera would see}
+  ODD-20: {level: vehicle, sims: [SIM-01, SIM-02, SIM-03], needs: Ego speed up to the ODD limit and the posted limit, from the vehicle model}
+
+participants:
+  car: {category: car, bound: FSR-06.01}
+  van: {category: van, bound: FSR-06.01}
+  bus: {category: bus, bound: FSR-06.01}
+  truck: {category: truck, bound: FSR-06.01}
+  motorcycle: {category: motorbike, bound: FSR-06.01}
+  bicycle: {category: bicycle, bound: FSR-06.01}
+  e-scooter: {category: bicycle, bound: FSR-06.01, note: OpenSCENARIO has no e-scooter category; a bicycle entity with the scooter's size stands in}
+  pedestrian: {category: pedestrian, bound: FSR-06.02}
+  child: {category: pedestrian, bound: FSR-06.02, note: A pedestrian entity with a child's size}
+  wheelchair: {category: wheelchair, bound: FSR-06.02}
+  animal: {category: animal, bound: FSR-06.02}
+  emergency-vehicle: {category: car, bound: FSR-06.01, note: Siren and lights are properties of the entity; OpenSCENARIO has no emergency category}
+  bus-at-stop: {category: bus, bound: FSR-06.01}
+  directing: {category: pedestrian, bound: FSR-06.02, note: Gestures are not part of an OpenSCENARIO entity; they need the sensor-level scene}
+
+vehicle:
+  # Properties of WP-C-01 §6 the simulation's vehicle model needs; each is a parameter until the vehicle is chosen.
+  - {property: "Mass, dimensions, wheelbase", model: Size of the ego entity and its swept path; mass for the dynamics}
+  - {property: "Maximum deceleration by wire, and its response time", model: Braking limit and delay of the vehicle model}
+  - {property: "Steering range, rate and response time by wire", model: Steering limits and delay of the vehicle model}
+
+sensors:
+  # Stand-ins for the two sensor sets of WP-C-01 §5.1. A stand-in with a component is the safety channel's (WP-S-03).
+  - {id: SNS-01, kind: LiDAR, channel: Autoware, params: [position, orientation, horizontal field of view, vertical field of view, range, rate, noise]}
+  - {id: SNS-02, kind: cameras, channel: Autoware, params: [position, orientation, field of view, resolution, exposure, rate]}
+  - {id: SNS-03, kind: radar, channel: Autoware, params: [position, orientation, field of view, range, rate, noise]}
+  - {id: SNS-04, kind: GNSS, channel: Autoware, params: [position, noise, rate]}
+  - {id: SNS-05, kind: IMU, channel: Autoware, params: [position, noise, rate]}
+  - {id: SNS-06, kind: LiDAR, channel: Safety monitor, component: CMP-04, serves: [FSR-02.01], params: [position, orientation, horizontal field of view, vertical field of view, range, rate, noise]}
+  - {id: SNS-07, kind: radar, channel: Safety monitor, component: CMP-05, serves: [FSR-02.01], params: [position, orientation, field of view, range, rate, noise]}
+  - {id: SNS-08, kind: vehicle state, channel: Safety monitor, component: CMP-07, serves: [FSR-01.05, FSR-04.06], params: [signals, rate, noise]}
