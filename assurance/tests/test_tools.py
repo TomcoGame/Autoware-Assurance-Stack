@@ -656,6 +656,12 @@ class Tsc(unittest.TestCase):
         bad = copy.deepcopy(m)
         bad["links"][1]["x"] = 600
         cases.append((bad, "is not within both boxes"))
+        bad = copy.deepcopy(m)
+        bad["redundancy"] = [r for r in bad["redundancy"] if r["id"] != "RD-02"]
+        cases.append((bad, "no redundancy entry between it and CMP-05"))
+        bad = copy.deepcopy(m)
+        next(c for c in bad["components"] if c["id"] == "CMP-05").pop("decomposed")
+        cases.append((bad, "decomposed with CMP-05, which is not decomposed with it"))
         for model, needle in cases:
             self.assertTrue(any(needle in x for x in tsc.check(model, k)), needle)
 

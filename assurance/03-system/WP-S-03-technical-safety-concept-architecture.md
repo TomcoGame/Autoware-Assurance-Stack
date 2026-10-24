@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-S-03 Technical safety concept and system architectural design |
 | Standard reference | UL 4600 §10; ISO 26262-4 §6; ISO 21448 §8; ISO/PAS 8800:2024 (AI architecture measures); ASPICE 4.0 SYS.3 |
-| Version | 0.2 (first content: system components with derived ASILs, safety mechanisms and their placement, redundancy and diversity, AI architecture measures, architecture verification, generated from `tsc/tsc.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.3 (automotive monitor hardware (DQ-030 A); the safety channel's detection decomposed into LiDAR and radar at ASIL B(D) each (DQ-031 A); 2026-10-23). 0.2 (first content: system components with derived ASILs, safety mechanisms and their placement, redundancy and diversity, AI architecture measures, architecture verification, generated from `tsc/tsc.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | ASIL D |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -20,7 +20,7 @@ Needed at gate G2 ([WP-M-00](../01-management/WP-M-00-work-product-register.md))
 
 <!-- BEGIN GENERATED: tsc-summary (assurance/03-system/tsc/tsc.py) -->
 
-11 system components, 9 of them at ASIL D, carry 19 safety mechanisms that implement all 34 rated functional safety requirements, each on a component of the element the FSR is allocated to. 4 redundancies, each with its diversity and the triggering conditions they share. Entries marked as waiting depend on DQ-030, DQ-031.
+11 system components, 7 of them at ASIL D, carry 19 safety mechanisms that implement all 34 rated functional safety requirements, each on a component of the element the FSR is allocated to. 4 redundancies, each with its diversity and the triggering conditions they share.
 
 <!-- END GENERATED: tsc-summary -->
 
@@ -36,13 +36,13 @@ The architecture is the doer/checker of DQ-002 A: Autoware drives, and every com
 
 <!-- BEGIN GENERATED: tsc-components (assurance/03-system/tsc/tsc.py) -->
 
-| ID | Component | Element | In the item | Derived ASIL | Mechanisms hosted | Serves | Waits on |
+| ID | Component | Element | In the item | ASIL | Mechanisms hosted | Serves | Waits on |
 |---|---|---|---|---|---|---|---|
 | CMP-01 | Autoware computer | EL-01 | Yes | **QM** | — | — | — |
-| CMP-02 | Safety monitor controller | EL-02 | Yes | **D** | SM-01, SM-02, SM-03, SM-04, SM-05, SM-06, SM-07, SM-08 | — | DQ-030 |
-| CMP-03 | Safety channel processor | EL-03 | Yes | **D** | SM-09, SM-10 | SM-01, SM-02, SM-04 | DQ-030 |
-| CMP-04 | Safety LiDAR | EL-03 | Yes | **D** | — | SM-09, SM-10 | DQ-031 |
-| CMP-05 | Safety radar | EL-03 | Yes | **D** | — | SM-09, SM-10 | DQ-031 |
+| CMP-02 | Safety monitor controller | EL-02 | Yes | **D** | SM-01, SM-02, SM-03, SM-04, SM-05, SM-06, SM-07, SM-08 | — | — |
+| CMP-03 | Safety channel processor | EL-03 | Yes | **D** | SM-09, SM-10 | SM-01, SM-02, SM-04 | — |
+| CMP-04 | Safety LiDAR | EL-03 | Yes | **B(D)** | — | SM-09, SM-10 | — |
+| CMP-05 | Safety radar | EL-03 | Yes | **B(D)** | — | SM-09, SM-10 | — |
 | CMP-06 | Drive-by-wire | EL-04 | No | **D** | SM-11, SM-12, SM-13, SM-14 | SM-03, SM-06 | — |
 | CMP-07 | Vehicle state sensing | EL-06 | No | **D** | SM-15 | SM-01, SM-02, SM-03, SM-06, SM-07 | — |
 | CMP-08 | Park brake | EL-05 | No | **D** | SM-16 | SM-06 | — |
@@ -52,7 +52,7 @@ The architecture is the doer/checker of DQ-002 A: Autoware drives, and every com
 
 <!-- END GENERATED: tsc-components -->
 
-The Autoware computer stays QM: no mechanism it hosts implements a rated requirement. The remote operations station is ASIL C, the ASIL of SG-08, for its part of the remote command protection (SM-19).
+The monitor runs on an automotive ASIL D microcontroller and its perception on an automotive processor with a safety island (DQ-030 A, 2026-10-23), so both come with their suppliers' safety manuals. The Autoware computer stays QM: no mechanism it hosts implements a rated requirement. The remote operations station is ASIL C, the ASIL of SG-08, for its part of the remote command protection (SM-19).
 
 ## 3. Safety mechanisms and their placement
 
@@ -68,7 +68,7 @@ The Autoware computer stays QM: no mechanism it hosts implements a rated require
 | SM-06 | Stop, hold and release | CMP-02 Safety monitor controller | CMP-06, CMP-07, CMP-08, CMP-09 | Brings the vehicle to a stop in lane with hazard lights and holds it, detects motion while holding, gates reverse, and releases only on a verified release with every release condition met | FSR-07.02, FSR-07.04, FSR-05.01, FSR-05.02, FSR-05.03 | D | MRM-4 |
 | SM-07 | Indicator cross-check | CMP-02 Safety monitor controller | CMP-07 | Compares the commanded indicator with commanded and achieved steering, and switches to hazard lights on a mismatch | FSR-09.01 | C | — |
 | SM-08 | Monitor self-diagnostics and fail-silent output | CMP-02 Safety monitor controller | — | Detects faults of the monitor's own processor, memory, clock and software (lockstep, memory protection, independent watchdog) and stops its output so the vehicle's own stop takes over | FSR-07.07 | D | MRM-5 |
-| SM-09 | Geometric obstacle detection | CMP-03 Safety channel processor | CMP-04, CMP-05 | Finds road users and obstacles in and beside the swept path from LiDAR and radar returns by geometry and motion, without learned classification, and confirms detections across both sensor types to keep false detections rare | FSR-02.01, FSR-03.01 | D | — |
+| SM-09 | Geometric obstacle detection | CMP-03 Safety channel processor | CMP-04, CMP-05 | Finds road users and obstacles in and beside the swept path from LiDAR and radar returns by geometry and motion, without learned classification, and counts a road user seen by either sensor type (DQ-031 A), each sensor's chain meeting its share of the requirement at ASIL B(D) | FSR-02.01, FSR-03.01 | D | — |
 | SM-10 | Safety channel sensor diagnostics | CMP-03 Safety channel processor | CMP-04, CMP-05 | Detects blockage, misalignment, loss and degradation of the safety channel's sensors and reports it to the monitor | FSR-02.01 | D | TR-05 |
 | SM-11 | Propulsion cut | CMP-06 Drive-by-wire | — | Cuts propulsion on the monitor's command, whatever else is commanded | FSR-01.03 | D | — |
 | SM-12 | Secondary brake path | CMP-06 Drive-by-wire | — | Keeps a braking path that can stop the vehicle after any single fault in the primary one | FSR-02.04 | D | — |
@@ -99,7 +99,9 @@ The Autoware computer stays QM: no mechanism it hosts implements a rated require
 
 <!-- END GENERATED: tsc-redundancy -->
 
-Each redundancy lists the triggering conditions of WP-C-06 that affect both of its sides; those are the starting points of the dependent failure analysis ([WP-A-03](../08-analyses/WP-A-03-dependent-failure-analysis.md)). RD-02 waits on the lead's decision whether the safety channel's ASIL D detection is decomposed across LiDAR and radar (DQ-031); until then both sensors are shown at ASIL D, as the requirement stands undecomposed.
+Each redundancy lists the triggering conditions of WP-C-06 that affect both of its sides; those are the starting points of the dependent failure analysis ([WP-A-03](../08-analyses/WP-A-03-dependent-failure-analysis.md)). The lead decided (DQ-031 A, 2026-10-23) that the safety channel's ASIL D detection is decomposed into LiDAR and radar, each developed to ASIL B(D), and a road user seen by either sensor counts. The goal stays ASIL D; the decomposition holds only if RD-02 shows the two sensor chains independent, so the dependent failure analysis must treat spray and dirt (TC-03, TC-24) as common causes, and the rationale goes into [WP-A-01](../08-analyses/WP-A-01-asil-decomposition.md). The generator refuses a decomposition without an answered decision, a partner decomposed the other way, and a redundancy entry between the two.
+
+**A cost of detecting on either sensor.** Counting a road user seen by either sensor is what makes the decomposition work for SG-02, but every false detection of either sensor can now make the monitor brake. FSR-03.01 (false detections rare enough for SG-03) must therefore be met by each sensor chain on its own, which WP-S-02 states as a technical safety requirement per sensor.
 
 ## 5. AI architecture measures
 
@@ -143,8 +145,8 @@ The architecture itself is verified by review against the functional safety conc
 
 | ID | Open item | Closes at |
 |---|---|---|
-| OI-1 | Decide the monitor hardware (DQ-030) | G2 |
-| OI-2 | Decide whether the safety channel's detection is decomposed across LiDAR and radar (DQ-031), then record the rationale in WP-A-01 | G2 |
+| OI-1 | Select the monitor's ASIL D microcontroller and the safety channel processor with a safety island (DQ-030 A), and take their safety manuals into WP-H-01 | G2 |
+| OI-2 | Record the decomposition rationale of DQ-031 A in WP-A-01, and show the independence of RD-02 in WP-A-03 | G2 |
 | OI-3 | Write the technical safety requirements of every mechanism in WP-S-02 | G2 |
 | OI-4 | Set the detection and reaction times of every mechanism in WP-S-04 | G2 |
 | OI-5 | Run the dependent failure analysis on RD-01 to RD-04 (WP-A-03) and the system FTA and FMEA (WP-A-04) | G2 |

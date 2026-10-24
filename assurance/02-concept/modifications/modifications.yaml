@@ -81,7 +81,7 @@ modifications:
   - id: FM-11
     type: operations
     name: Limits on remote driving
-    change: Remote driving at a reduced speed set in WP-S-04, one vehicle per operator, video delay bounded, every command checked by the monitor
+    change: Remote driving at walking pace, up to 10 km/h (DQ-032 A), one vehicle per operator, video delay bounded, every command checked by the monitor
     addresses: [FI-09]
     by: Remote operations (WP-O-02) and the safety monitor
     concept: [FSR-08.01, FSR-08.02, AOU-10]

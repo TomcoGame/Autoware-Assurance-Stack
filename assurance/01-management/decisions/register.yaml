@@ -958,7 +958,9 @@
         Fewest parts. Cost: the monitor and its perception share a chip, so a common fault defeats both; the dependent
         failure analysis must show that cannot defeat SG-02.
   sources: [WP-S-03 §2, CMP-02, CMP-03, WP-C-04 EL-02, EL-03, ISO 26262-5]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#29", record: WP-S-03 v0.3 §2, at: 2026-10-23}
 
 - id: DQ-031
   question: Should the safety channel's ASIL D detection be split across LiDAR and radar?
@@ -991,7 +993,9 @@
         Waits for the supplier's sensor options (DQ-008). Cost: the technical safety concept and timing budget stay
         provisional until then.
   sources: [WP-S-03 §4, RD-02, FSR-02.01, ISO 26262-9 §5, WP-A-01, WP-A-03]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#29", record: "WP-S-03 v0.3 §4, CMP-04, CMP-05, RD-02", at: 2026-10-23}
 
 - id: DQ-032
   question: How fast may a remote operator drive the vehicle?
@@ -1024,4 +1028,6 @@
         No fixed limit. Cost: at normal speeds almost every command will be too old, so the monitor will stop the
         vehicle nearly every time.
   sources: [WP-S-04 §2, SG-08, FSR-08.01, FM-11, DQ-010]
-  status: open
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#29", record: WP-S-04 v0.3 §2; WP-C-07 FM-11, at: 2026-10-23}
