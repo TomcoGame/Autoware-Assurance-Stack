@@ -342,6 +342,14 @@ tsrs:
     fsrs: [FSR-03.01]
     params: [P-13]
     verify: False-detection rate from field and replay data, for the channel
+  - id: TSR-09.07
+    mechanism: SM-09
+    component: CMP-03
+    alloc: hardware
+    text: Detect faults of the safety channel processor itself (lockstep, ECC and watchdog on its safety island), and report itself failed to the monitor or fall silent, so that the monitor follows TSR-03.04
+    fsrs: [FSR-02.01]
+    timing: detect
+    verify: Hardware fault injection on the safety channel processor; diagnostic coverage analysis (WP-H-04); timing measurement
 
   # SM-10 Safety channel sensor diagnostics
   - id: TSR-10.01

@@ -29,7 +29,7 @@ across the whole operational design domain. The other standards supply the metho
 | Indicator | Value |
 |---|---|
 | Assurance state | Before G0: hazard analysis draft |
-| Work products in the register | 91 (20 draft, 71 skeleton) |
+| Work products in the register | 91 (21 draft, 70 skeleton) |
 | Work products approved or baselined | 0 |
 | Decisions waiting on the safety authority | 1 open |
 | Decisions applied | 30 |
@@ -152,6 +152,7 @@ and commit the result.
 | `python3 assurance/03-system/tsc/tsc.py` | WP-S-03 §1 summary, §2 to §4 and §6 tables, Figure 2-1 | `03-system/tsc/tsc.yaml`, `fsc/fsc.yaml`, `fallback/fallback.yaml`, `triggering/triggering.yaml`, decision register |
 | `python3 assurance/03-system/timing/timing.py` | WP-S-04 §1 summary, §2 to §5 tables and Figure 2-1 | `03-system/timing/timing.yaml`, `hara/hara.yaml`, `tsc/tsc.yaml`, `fallback/fallback.yaml`, WP-C-02 ODD-20 |
 | `python3 assurance/03-system/tsr/tsr.py` | WP-S-02 §1 summary, §2 to §5 tables and Figure 4-1 | `03-system/tsr/tsr.yaml`, `tsc/tsc.yaml`, `timing/timing.yaml`, `fsc/fsc.yaml`, decision register |
+| `python3 assurance/03-system/hsi/hsi.py` | WP-S-05 §1 to §5 tables and Figure 1-1 | `03-system/hsi/hsi.yaml`, `tsr/tsr.yaml`, `tsc/tsc.yaml`, `timing/timing.yaml`, WP-C-01 §5.2 and §8, `fallback/fallback.yaml` |
 | `python3 assurance/06-validation/scenarios/scenarios.py` | WP-V-03 §1 summary and §2 tables, WP-V-08 §4 tables and Figure 4-1 | `06-validation/scenarios/scenarios.yaml`, WP-C-02 §3 and §5, `hara/hara.yaml`, `sotif/sotif.yaml`, `triggering/triggering.yaml`, `misuse/misuse.yaml`, `stpa/stpa.yaml`, `fsc/fsc.yaml` and the references `misuse.py` checks |
 | `python3 assurance/06-validation/simenv/simenv.py` | WP-V-08 §1 summary and §2 tables, WP-P-07 §4 table | `06-validation/simenv/simenv.yaml`, `scenarios/scenarios.yaml`, WP-C-01 §5.1 and §6, `tsc/tsc.yaml`, `repositories/*.repos`, decision register |
 | `python3 assurance/case/tools/dashboard.py` | `case/figures/dashboard.svg`, the summary block above | WP-M-00, `register.yaml`, `case/records/` |
