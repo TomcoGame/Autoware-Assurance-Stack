@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-S-08 System integration and test strategy, specification and report |
 | Standard reference | UL 4600 §12; ISO 26262-4 §7; ASPICE 4.0 SYS.4 |
-| Version | 0.2 (first content: integration strategy in four steps, test environments, and a test specification covering every technical safety requirement, interface signal and technical cybersecurity requirement, generated from `integ/integ.yaml`; 2026-10-24). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.3 (fault injection on the vehicle up to 50 km/h on a closed track (DQ-038 A); 2026-10-24). 0.2 (first content: integration strategy in four steps, test environments, and a test specification covering every technical safety requirement, interface signal and technical cybersecurity requirement, generated from `integ/integ.yaml`; 2026-10-24). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | ASIL D |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -67,13 +67,13 @@ Faults that would be dangerous on the road are injected on the bench first, and 
 | ENV-1 | Software in the loop | Autoware and the monitor's software on a workstation, with scenario_simulator_v2 (SIM-02) for the scene and a vehicle model; for development and regression, evidence only where WP-V-08 §3 has checked it (DQ-036 A) |
 | ENV-2 | Hardware in the loop | The monitor's controller, the safety channel processor and the Autoware computer on a bench, with the vehicle simulated behind real bus interfaces, signal-level fault injection, and time stamps at every interface |
 | ENV-3 | Sensor bench and closed track | The safety LiDAR and radar with reference targets at measured positions, in the light and weather the ODD allows, indoors and on a closed track |
-| ENV-4 | Vehicle on a closed track | The item in the chosen vehicle on a closed track, with an independent stop the test crew holds, measuring equipment for speed, acceleration, brake pressure and steering, and fault injection at the bus and the actuators Waits on DQ-038. |
+| ENV-4 | Vehicle on a closed track | The item in the chosen vehicle on a closed track, with an independent stop the test crew holds, no one in the run-off area, measuring equipment for speed, acceleration, brake pressure and steering, and fault injection at the bus and the actuators over the full speed range up to 50 km/h (DQ-038 A), under a test safety plan reviewed before the first run (WP-V-07) |
 
 <!-- END GENERATED: integ-environments -->
 
 **Simulation takes credit only where it has been checked.** A result from software in the loop counts as evidence only where WP-V-08 §3 has checked the simulator against the real vehicle (DQ-036 A). Elsewhere it is for development and regression, and the case is repeated on the bench or the track.
 
-**Fault injection on the vehicle waits on a decision.** The faults of IT-13, IT-14 and IT-17 matter most at the top of the speed range. Whether they may be injected on the real vehicle up to 50 km/h is put to the lead (DQ-038, recommended: yes, on a closed track with an independent stop and a test safety plan). Until then ENV-4 is planned but not bounded.
+**Fault injection on the vehicle covers the full speed range.** The faults of IT-13, IT-14 and IT-17 matter most at the top of the speed range, so the lead decided that they are injected on the real vehicle up to 50 km/h (DQ-038 A, 2026-10-24). This is done on a closed track only, with an independent stop the test crew holds, no one in the run-off area, and a test safety plan reviewed before the first run (WP-V-07).
 
 ## 4. Test specification
 
@@ -130,7 +130,7 @@ No test has been run. Results are recorded per case, against a released configur
 
 | ID | Open item | Closes at |
 |---|---|---|
-| OI-1 | Decide the speed range for fault injection on the vehicle (DQ-038), and write the test safety plan for ENV-4 with WP-V-07 | G3 |
+| OI-1 | Write the test safety plan for ENV-4 with WP-V-07: the independent stop, the run-off area and the order of runs from low to full speed (DQ-038 A) | G3 |
 | OI-2 | Specify the HIL bench (ENV-2): its interfaces to CMP-02, CMP-03 and CMP-01, its fault injection points and its time stamping, once the parts are selected (DQ-030 A) | G3 |
 | OI-3 | Write the formal model of the envelope that IT-03 and IT-04 test against (WP-W-05) | G3 |
 | OI-4 | Detail each case into concrete test procedures with their inputs and expected outputs | G3 |

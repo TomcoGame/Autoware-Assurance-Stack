@@ -31,8 +31,8 @@ across the whole operational design domain. The other standards supply the metho
 | Assurance state | Before G0: hazard analysis draft |
 | Work products in the register | 91 (23 draft, 68 skeleton) |
 | Work products approved or baselined | 0 |
-| Decisions waiting on the safety authority | 1 open |
-| Decisions applied | 32 |
+| Decisions waiting on the safety authority | 0 open |
+| Decisions applied | 33 |
 | Safety case claims | 0 |
 | Evidence items | 0 |
 | Open defeaters | 0 |
