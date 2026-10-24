@@ -1031,3 +1031,38 @@
   status: applied
   answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
   applied: {ref: "#29", record: WP-S-04 v0.3 §2; WP-C-07 FM-11, at: 2026-10-23}
+
+- id: DQ-036
+  question: How much may simulation count as evidence that the vehicle is safe?
+  context: >-
+    The scenario catalogue (WP-V-03) can be run far more often in simulation than on a track or road, and some of its
+    scenarios (a red-light runner, an emergency vehicle, a child stepping out) are hard to stage safely in reality.
+    But a simulator can be wrong in ways that hide a failure, and an assessor will ask why its results should be
+    believed (UL 4600 §13). **This sets how many track and road miles the validation needs, and how much the
+    simulators must be qualified.**
+  reversibility: revisit
+  blocks: WP-V-08 §3 and §5, the tool confidence of SIM-02 and SIM-03 in WP-P-07, the validation targets of WP-V-02
+  gate: G2
+  asked: 2026-10-24
+  batch: 11
+  options:
+    - key: A
+      recommended: true
+      title: Counts where it has been checked against the real vehicle
+      detail: >-
+        A simulator's result counts for a scenario only where its corners have been repeated on the track, or its
+        sensor data compared with recordings, and agreed. Elsewhere simulation is for exploring. Cost: track time for
+        every logical scenario and recordings in every sensor condition; the simulators need qualification at TCL2.
+    - key: B
+      title: Never counts; only for exploring and regression
+      detail: >-
+        All validation credit comes from track tests and road driving. Simplest to argue. Cost: far more road miles
+        and staged tests; the rare and dangerous scenarios get little evidence, because they cannot be staged often.
+    - key: C
+      title: Counts everywhere once the simulator is qualified
+      detail: >-
+        Qualify each simulator once (TCL3) and accept its results across the ODD without checking each scenario.
+        Cheapest in track time. Cost: an assessor is unlikely to accept it for sensor-level effects such as rain and
+        glare, which simulators reproduce least well; a mistake in the simulator spreads to every result.
+  sources: [WP-V-03 §3, WP-V-08 §3 and §5, WP-P-07 §4, WP-V-02, UL 4600 §12 and §13, ISO 26262-8 §11, ISO 21448 §9]
+  status: open

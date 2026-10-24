@@ -1,0 +1,591 @@
+# Scenario model for WP-V-03 (known scenarios) and WP-V-08 §4 (scenario coverage of the ODD). scenarios.py checks it
+# against WP-C-02 and the concept work products it draws on, works out the safety goals each scenario puts at stake,
+# and writes the WP-V-03 catalogue, the WP-V-08 coverage tables and Figure 4-1 of WP-V-08.
+#
+# `odd` is a structured reading of WP-C-02 §3, not a second copy of it: every value quotes the cell it comes from, and
+# the generator refuses a quote that WP-C-02 no longer contains, or a number that the quote does not state. A value
+# marked `outside` quotes the "Outside the ODD" cell; only a scenario that tests the ODD monitor may use it. A numeric
+# attribute with no `min` has the physical floor 0 (no rain, a level road), which WP-C-02 does not need to state.
+#
+# A scenario is a logical scenario (ISO 34501 terms): parameters with ranges, exported later to OpenSCENARIO 2 or
+# scenario_simulator_v2 (WP-V-08 §2), with one concrete scenario per sample. A parameter is one of:
+#   {odd: ODD-nn, min, max, unit}   a range inside a numeric ODD attribute; `crosses: true` sweeps up to the limit and
+#                                   beyond it, without stating how far, to test the monitor that detects the exit
+#   {odd: ODD-nn, values: [...]}    values of a categorical ODD attribute
+#   {name, bound: <requirement>}    a behaviour bound that a requirement states but no work product has fixed yet;
+#                                   no number is given until it is fixed
+# `events` are HARA hazardous events, `triggers` WP-C-06 triggering conditions, `misuse` WP-C-08 entries, `losses`
+# STPA loss scenarios (WP-A-05). Safety goals at stake are computed from the events and from the hazards the triggering
+# conditions lead to; they are not typed. `pass` lists the requirements the pass criterion is judged against.
+# `methods`: sim (simulation), xil (hardware or software in the loop, fault injection), track (closed course),
+# road (public road in the ODD), bench (vehicle or component bench), drill (operations exercise).
+# Every entry is a draft by Claude (I0). No scenario has been run (WP-V-03 §4).
+
+odd:
+  ODD-01:
+    values:
+      geofence: {quote: Public roads inside a mapped geofence}
+  ODD-02:
+    values:
+      urban-street: {quote: Urban streets}
+      collector: {quote: collector roads}
+      lanes-1-2: {quote: one or two lanes per direction}
+      centre-line: {quote: with or without a centre line}
+  ODD-03: {unit: mph, max: 30, quote: Roads posted at or below 30 mph}
+  ODD-04:
+    values:
+      signalised: {quote: Signalised intersections}
+      protected-turn: {quote: protected}
+      unprotected-turn: {quote: unprotected turns}
+      stop-controlled: {quote: stop-controlled}
+      yield-controlled: {quote: yield-controlled}
+      t-junction: {quote: T-junctions}
+      roundabout-single: {quote: single-lane}
+      roundabout-multi: {quote: multi-lane roundabouts}
+  ODD-05:
+    values:
+      marked-crosswalk: {quote: Marked pedestrian crossings}
+      signalised-crosswalk: {quote: with or without signals}
+      cycle-lane: {quote: cycle lanes alongside the road}
+      mid-block: {quote: Unmarked mid-block crossings are not excluded}
+  ODD-06: {unit: "%", max: 8, quote: gradients up to 8 %}
+  ODD-07:
+    values:
+      markings-visible: {quote: Present and visible}
+      markings-absent: {quote: absent where the map encodes the lane}
+      re-marking: {quote: Roads under re-marking, outside: true}
+  ODD-08:
+    values:
+      none: {quote: None}
+      captured: {quote: changes that the map update process has captured}
+      work-zone: {quote: "Construction zones, closures and diversions not yet in the map", outside: true}
+  ODD-09:
+    values:
+      kerbside-stop: {quote: Kerbside stops marked in the map}
+  ODD-10: {unit: mm/h, max: 2.5, quote: light rain up to 2.5 mm/h}
+  ODD-11: {unit: m, min: 200, quote: visibility of 200 m or more}
+  ODD-12:
+    values:
+      day: {quote: Day}
+      dusk: {quote: dusk}
+      night: {quote: night}
+      unlit: {quote: unlit streets}
+      low-sun: {quote: low sun and glare}
+  ODD-13:
+    values:
+      dry: {quote: Dry}
+      wet: {quote: wet}
+  ODD-14:
+    values:
+      in-range: {quote: The operating range of the sensors and computer}
+  ODD-15:
+    values:
+      link-available: {quote: Remote operations link available}
+      gnss-lost: {quote: GNSS available or not}
+      link-lost: {quote: Loss of the remote link, outside: true}
+  ODD-16:
+    values:
+      car: {quote: Cars}
+      van: {quote: vans}
+      bus: {quote: buses}
+      truck: {quote: trucks}
+      motorcycle: {quote: motorcycles}
+      bicycle: {quote: bicycles}
+      e-scooter: {quote: e-scooters}
+      pedestrian: {quote: pedestrians}
+      child: {quote: children}
+      wheelchair: {quote: people using wheelchairs}
+      animal: {quote: animals at the roadside}
+  ODD-17:
+    values:
+      free-flow: {quote: Free flow}
+      congested: {quote: congested}
+  ODD-18:
+    values:
+      emergency-vehicle: {quote: Emergency vehicles with sirens and lights}
+      bus-at-stop: {quote: buses at stops}
+  ODD-19:
+    values:
+      directing: {quote: A police officer or flagger directing traffic, outside: true}
+  ODD-20: {unit: km/h, min: 0, max: 50, quote: "0 to 50 km/h, never above the posted limit", capped_by: ODD-03}
+
+scenarios:
+  - id: SC-01
+    name: Pedestrian on or stepping onto a marked crosswalk
+    description: The vehicle approaches a marked crosswalk in lane while a pedestrian is on it or steps onto it
+    situations: [OS-09]
+    oedr: [OEDR-03]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-03, max: 30, unit: mph}
+      - {odd: ODD-05, values: [marked-crosswalk, signalised-crosswalk]}
+      - {odd: ODD-16, values: [pedestrian, child, wheelchair]}
+      - {odd: ODD-12, values: [day, dusk, night, unlit]}
+      - {odd: ODD-10, min: 0, max: 2.5, unit: mm/h}
+      - {odd: ODD-13, values: [dry, wet]}
+      - {name: Pedestrian walking speed and start time, bound: FSR-06.01}
+    events: [HE-02.1, HE-06.4]
+    triggers: [TC-02, TC-03, TC-15]
+    misuse: [MU-11]
+    losses: [LS-01, LS-02]
+    pass:
+      criterion: No contact with the pedestrian; the vehicle yields as the traffic rules require, and the monitor commands the deceleration that restores the safe distance whenever Autoware does not; unjustified hard braking counts against the SOTIF acceptance criteria
+      refs: [FSR-02.01, FSR-02.02, FSR-02.05, FSR-03.01, FSR-06.01, FSR-06.03, AC-02]
+    methods: [sim, track, road]
+
+  - id: SC-02
+    name: Pedestrian emerging from behind a parked vehicle
+    description: A pedestrian, child or cyclist steps out from behind a parked van or bus away from a crossing, where pedestrians are dense
+    situations: [OS-02, OS-01]
+    oedr: [OEDR-04, OEDR-08]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-05, values: [mid-block]}
+      - {odd: ODD-16, values: [pedestrian, child, bicycle, e-scooter]}
+      - {odd: ODD-12, values: [day, night, unlit]}
+      - {odd: ODD-02, values: [urban-street, lanes-1-2]}
+      - {name: Speed of the road user emerging from the occlusion, bound: FSR-06.02}
+    events: [HE-04.3]
+    triggers: [TC-10, TC-17]
+    misuse: [MU-10]
+    losses: [LS-01, LS-02]
+    pass:
+      criterion: The vehicle's speed near the occlusion lets it stop for a road user emerging at the assumed speed; no contact, and no swerve out of the drivable area to avoid one
+      refs: [FSR-06.02, FSR-02.02, FSR-04.01, FSR-04.05, FSR-03.01, AC-02]
+    methods: [sim, track]
+
+  - id: SC-03
+    name: Vehicle ahead braking or stopping in congested traffic
+    description: The vehicle follows another in congestion or in free flow; the lead vehicle brakes hard, stops, or another vehicle cuts in
+    situations: [OS-08, OS-01]
+    oedr: [OEDR-01]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-03, max: 30, unit: mph}
+      - {odd: ODD-17, values: [free-flow, congested]}
+      - {odd: ODD-16, values: [car, van, bus, truck, motorcycle]}
+      - {odd: ODD-13, values: [dry, wet]}
+      - {odd: ODD-10, min: 0, max: 2.5, unit: mm/h}
+      - {name: Deceleration of the lead vehicle and cut-in gap, bound: FSR-06.01}
+    events: [HE-01.2, HE-02.2]
+    triggers: [TC-11, TC-25]
+    misuse: [MU-14]
+    losses: [LS-03, LS-04]
+    pass:
+      criterion: No collision with the vehicle ahead; acceleration stays inside the envelope, the monitor restores the safe longitudinal distance, and a braking shortfall on a wet road switches to the secondary path
+      refs: [FSR-01.01, FSR-01.02, FSR-02.02, FSR-02.03, FSR-02.05, FSR-03.02, FSR-04.05, FSR-06.01, AC-02]
+    methods: [sim, xil, track]
+
+  - id: SC-04
+    name: Spurious obstacle with a road user following
+    description: Spray, steam, blowing debris or a soiled sensor produces a false obstacle in the path while a car or motorcycle follows closely, possibly with an unbelted passenger
+    situations: [OS-01]
+    oedr: [OEDR-01, OEDR-11]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-10, min: 0, max: 2.5, unit: mm/h}
+      - {odd: ODD-11, min: 200, unit: m}
+      - {odd: ODD-13, values: [dry, wet]}
+      - {odd: ODD-16, values: [car, motorcycle]}
+      - {name: Gap of the following road user, bound: FSR-06.01}
+    events: [HE-03.1, HE-03.2]
+    triggers: [TC-03, TC-04, TC-24]
+    misuse: [MU-04, MU-07]
+    losses: [LS-08, LS-19]
+    pass:
+      criterion: Braking that the safety channel does not confirm stays at or below the firm level; emergency braking happens only when a road user is confirmed; a blocked safety sensor is detected and Autoware stops comfortably; the belt warning acts
+      refs: [FSR-03.01, FSR-03.02, FSR-03.03, FSR-02.01, FSR-07.08, FM-10, HR-03, AC-02]
+    methods: [sim, track]
+
+  - id: SC-05
+    name: Signalised intersection with cross traffic
+    description: The vehicle approaches a signalised intersection; the signal is hard to read, dark or meant for another lane, or a crossing vehicle runs its red
+    situations: [OS-03]
+    manoeuvres: [MAN-03]
+    oedr: [OEDR-05, OEDR-07]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-04, values: [signalised, protected-turn]}
+      - {odd: ODD-12, values: [day, low-sun, night]}
+      - {odd: ODD-16, values: [car, truck, motorcycle, bicycle]}
+      - {odd: ODD-17, values: [free-flow, congested]}
+      - {name: Speed of the crossing vehicle running the red, bound: FSR-06.01}
+    events: [HE-06.1]
+    triggers: [TC-01, TC-06, TC-07, TC-19]
+    losses: [LS-01, LS-02]
+    pass:
+      criterion: The vehicle enters only on a recognised green and treats an unknown signal as red; whatever the signal, it does not enter when its swept path crosses that of a detected road user before it could stop or clear
+      refs: [FSR-06.01, FSR-06.03, FSR-02.01, FSR-02.02, FSR-03.01, FM-05, AC-02]
+    methods: [sim, track, road]
+
+  - id: SC-06
+    name: Unprotected left turn across oncoming traffic
+    description: Left turn on a permissive green or at an uncontrolled junction, with an oncoming lane hidden by a turning vehicle, or a motorcycle approaching fast
+    situations: [OS-04]
+    manoeuvres: [MAN-04]
+    oedr: [OEDR-07, OEDR-08]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-04, values: [signalised, unprotected-turn, stop-controlled, t-junction]}
+      - {odd: ODD-16, values: [car, van, truck, motorcycle, bicycle]}
+      - {odd: ODD-12, values: [day, dusk, night]}
+      - {name: Speed and acceleration of the oncoming vehicle, bound: FSR-06.01}
+    events: [HE-06.2]
+    triggers: [TC-12, TC-20]
+    losses: [LS-02]
+    pass:
+      criterion: The vehicle starts the turn only with a gap that lets the oncoming road user pass at its assumed speed and acceleration, and stops before the conflict area otherwise
+      refs: [FSR-06.01, FSR-06.02, FSR-06.03, FSR-02.02, FSR-03.01, FM-07, AC-02]
+    methods: [sim, track]
+
+  - id: SC-07
+    name: Entry to a roundabout with traffic circulating
+    description: The vehicle enters a single-lane or multi-lane roundabout while vehicles circulate
+    situations: [OS-05]
+    manoeuvres: [MAN-05]
+    oedr: [OEDR-06, OEDR-07]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-04, values: [roundabout-single, roundabout-multi, yield-controlled]}
+      - {odd: ODD-16, values: [car, bus, truck, motorcycle, bicycle]}
+      - {odd: ODD-17, values: [free-flow, congested]}
+      - {name: Speed of circulating vehicles, bound: FSR-06.01}
+    events: [HE-06.3]
+    triggers: [TC-13]
+    losses: [LS-02]
+    pass:
+      criterion: The vehicle yields to circulating traffic and enters only with a gap that its assumed speed allows
+      refs: [FSR-06.01, FSR-06.03, FSR-02.02, FM-07, AC-02]
+    methods: [sim, track]
+
+  - id: SC-08
+    name: Cyclist alongside on the inside of a turn
+    description: A cyclist or scooter rider rides up on the inside as the vehicle turns, or swerves between lanes round an obstacle
+    situations: [OS-01, OS-03]
+    manoeuvres: [MAN-03]
+    oedr: [OEDR-04, OEDR-12]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-05, values: [cycle-lane]}
+      - {odd: ODD-16, values: [bicycle, e-scooter]}
+      - {odd: ODD-04, values: [signalised, stop-controlled, t-junction]}
+      - {name: Cyclist speed and lateral motion, bound: FSR-06.01}
+    events: [HE-04.2]
+    triggers: [TC-18]
+    misuse: [MU-13]
+    losses: [LS-02]
+    pass:
+      criterion: No steering command whose swept path comes within the safe lateral distance of the cyclist is executed; the vehicle waits or stops in lane
+      refs: [FSR-04.01, FSR-04.05, FSR-06.01, FSR-02.02, FSR-03.01, FM-06, AC-02]
+    methods: [sim, track]
+
+  - id: SC-09
+    name: Lane keeping where localisation is degraded
+    description: Driving in lane beside oncoming traffic or the sidewalk on a street with few features, many moved objects, or large vehicles blocking the view
+    situations: [OS-01, OS-02]
+    manoeuvres: [MAN-01]
+    oedr: [OEDR-12]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-01, values: [geofence]}
+      - {odd: ODD-02, values: [urban-street, collector, centre-line]}
+      - {odd: ODD-03, max: 30, unit: mph}
+      - {odd: ODD-07, values: [markings-visible, markings-absent]}
+      - {odd: ODD-08, values: [none, captured]}
+      - {odd: ODD-15, values: [gnss-lost]}
+      - {odd: ODD-17, values: [free-flow, congested]}
+      - {odd: ODD-06, min: 0, max: 8, unit: "%"}
+    events: [HE-04.1, HE-04.3]
+    triggers: [TC-08, TC-11]
+    losses: [LS-05]
+    pass:
+      criterion: The vehicle stays in its lane and drivable area; a steering command toward a detected road user or kerb is rejected and the vehicle stops in lane; a degraded pose is detected
+      refs: [FSR-04.01, FSR-04.02, FSR-04.03, FSR-04.05, FSR-02.02, FSR-03.01, FSR-06.01, FM-09, AC-02]
+    methods: [sim, road]
+
+  - id: SC-10
+    name: Work zone or re-marked lanes not yet in the map
+    description: The road ahead has been re-marked, closed or turned into a work zone that the HD map does not show
+    situations: [OS-01]
+    manoeuvres: [MAN-01, MAN-07]
+    oedr: [OEDR-11]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-07, values: [re-marking]}
+      - {odd: ODD-08, values: [work-zone]}
+      - {odd: ODD-12, values: [day, night]}
+    triggers: [TC-09]
+    losses: [LS-14]
+    pass:
+      criterion: The divergence monitor detects the disagreement and the vehicle carries out a minimal risk manoeuvre; it never follows the map into a closed lane
+      refs: [MON-02, FSR-07.05, FSR-04.01, FSR-02.02, FSR-06.01, FSR-06.03, TR-09, FM-13, AC-02]
+    methods: [sim, track]
+
+  - id: SC-11
+    name: Person directing traffic
+    description: A police officer, flagger or first responder directs traffic at a junction or a scene
+    situations: [OS-03]
+    manoeuvres: [MAN-07]
+    oedr: [OEDR-10]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-19, values: [directing]}
+      - {odd: ODD-04, values: [signalised, stop-controlled]}
+      - {odd: ODD-12, values: [day, night]}
+    triggers: [TC-22]
+    misuse: [MU-20]
+    pass:
+      criterion: The vehicle detects the person directing traffic, stops safely and asks for remote assistance; it does not move on the signal alone, and responders can stop or hold it
+      refs: [MON-02, FSR-07.05, FSR-06.01, FSR-02.02, FM-16, HR-08, AC-02]
+    methods: [sim, track, drill]
+
+  - id: SC-12
+    name: Emergency vehicle approaching with siren and lights
+    description: An emergency vehicle approaches from behind, ahead or across a junction while the vehicle drives or waits
+    situations: [OS-01, OS-03]
+    manoeuvres: [MAN-07, MAN-10]
+    oedr: [OEDR-09]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-18, values: [emergency-vehicle]}
+      - {odd: ODD-17, values: [free-flow, congested]}
+      - {odd: ODD-04, values: [signalised, t-junction]}
+      - {name: Speed of the emergency vehicle, bound: FSR-06.01}
+    triggers: [TC-21]
+    pass:
+      criterion: The vehicle detects the emergency vehicle, pulls to the side when safe or stops, and lets it pass; when it cannot yield it reaches a minimal risk condition
+      refs: [FSR-06.01, FSR-06.03, FSR-07.05, FSR-02.02, FM-15, TR-14, AC-02]
+    methods: [sim, track]
+
+  - id: SC-13
+    name: Rare object or debris in the lane
+    description: A fallen load, low debris, an animal, an e-scooter lying in the lane, or cones placed to trap the vehicle
+    situations: [OS-01]
+    oedr: [OEDR-11, OEDR-02]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-16, values: [animal, e-scooter, wheelchair]}
+      - {odd: ODD-12, values: [day, night, unlit]}
+      - {odd: ODD-13, values: [dry, wet]}
+    triggers: [TC-15, TC-16]
+    misuse: [MU-12]
+    losses: [LS-01]
+    pass:
+      criterion: The vehicle stops before the object or passes it within the lane when clear; a vehicle that cannot find a way on reaches a minimal risk condition and asks for help
+      refs: [FSR-02.01, FSR-02.02, FSR-03.01, FM-03, TR-14, SR-01, AC-02]
+    methods: [sim, track]
+
+  - id: SC-14
+    name: Weather changing toward the ODD limits during a trip
+    description: Rain grows heavier or visibility falls during a trip, up to and past the limits of the ODD
+    situations: [OS-01]
+    manoeuvres: [MAN-07, MAN-10]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-10, min: 0, max: 2.5, unit: mm/h, crosses: true}
+      - {odd: ODD-11, min: 200, unit: m, crosses: true}
+      - {odd: ODD-12, values: [day, dusk, night]}
+      - {odd: ODD-13, values: [dry, wet]}
+      - {odd: ODD-16, values: [car, pedestrian, bicycle]}
+    triggers: [TC-05, TC-28]
+    losses: [LS-07, LS-27]
+    pass:
+      criterion: The weather monitor detects the exit, treats a reading it cannot tell from the limit as outside, and the vehicle reaches a minimal risk condition; detection inside the ODD still meets the safety channel's requirement
+      refs: [MON-03, FSR-07.05, FSR-02.01, FSR-02.02, FSR-03.01, FSR-06.01, TR-10, SR-07, AC-02]
+    methods: [sim, road]
+
+  - id: SC-15
+    name: Kerbside stop while passengers board or alight
+    description: The vehicle pulls in to a mapped stop, passengers get in and out, including slowly or with help, and the vehicle pulls out; a person may stand behind it
+    situations: [OS-07]
+    manoeuvres: [MAN-06]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-09, values: [kerbside-stop]}
+      - {odd: ODD-16, values: [pedestrian, child, wheelchair, bicycle]}
+      - {odd: ODD-06, min: 0, max: 8, unit: "%"}
+    events: [HE-05.1, HE-10.1]
+    misuse: [MU-01, MU-08, MU-19]
+    losses: [LS-12, LS-16, LS-20]
+    pass:
+      criterion: The vehicle does not move with a door open or a person in the near field in the direction of travel, never reverses, and resumes only when every release condition holds
+      refs: [FSR-05.01, FSR-05.03, FSR-05.05, FSR-07.04, HR-04]
+    methods: [sim, bench, track]
+
+  - id: SC-16
+    name: Stopped at a red light with pedestrians crossing in front
+    description: The vehicle waits at a red light or in a queue on a gradient while pedestrians cross in front of it
+    situations: [OS-06]
+    oedr: [OEDR-03, OEDR-05]
+    parameters:
+      - {odd: ODD-04, values: [signalised]}
+      - {odd: ODD-05, values: [marked-crosswalk, signalised-crosswalk]}
+      - {odd: ODD-06, min: 0, max: 8, unit: "%"}
+      - {odd: ODD-16, values: [pedestrian, child, wheelchair]}
+      - {odd: ODD-13, values: [dry, wet]}
+    events: [HE-01.1, HE-05.2]
+    losses: [LS-20, LS-21]
+    pass:
+      criterion: The vehicle stays held until every release condition holds; motion while holding is detected and the park brake applied; no acceleration toward a detected road user
+      refs: [FSR-05.01, FSR-05.02, FSR-05.04, FSR-01.01, FSR-01.02]
+    methods: [xil, bench, track]
+
+  - id: SC-17
+    name: Loss of Autoware while driving
+    description: Autoware's commands stop, freeze or become implausible while driving in lane; other road users then pass the vehicle stopped in lane
+    situations: [OS-01]
+    manoeuvres: [MAN-07]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-17, values: [free-flow, congested]}
+      - {odd: ODD-02, values: [urban-street, centre-line]}
+      - {odd: ODD-12, values: [day, night]}
+    events: [HE-07.1]
+    misuse: [MU-15]
+    losses: [LS-03, LS-06, LS-18, LS-22]
+    pass:
+      criterion: The monitor detects the loss within its detection budget and stops the vehicle in lane with hazard lights on, without Autoware; a fault of the monitor itself leads to the vehicle's own stop, never to the park brake while moving
+      refs: [FSR-07.01, FSR-07.02, FSR-07.06, FSR-07.07, FSR-01.01, FSR-02.02, FSR-04.01, TR-01, SR-01, SR-04]
+    methods: [xil, track]
+
+  - id: SC-18
+    name: Pull-over minimal risk manoeuvre along a busy kerb
+    description: Autoware pulls over after a stop request or a minor fault, where the kerb has bike lanes, driveways, bus stops or crosswalks
+    situations: [OS-01]
+    manoeuvres: [MAN-10, MAN-07]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-05, values: [cycle-lane, marked-crosswalk]}
+      - {odd: ODD-09, values: [kerbside-stop]}
+      - {odd: ODD-18, values: [bus-at-stop]}
+      - {odd: ODD-16, values: [bicycle, pedestrian]}
+    triggers: [TC-14]
+    misuse: [MU-03]
+    losses: [LS-25]
+    pass:
+      criterion: The vehicle pulls over only into a mapped safe stopping place and stops in lane otherwise; repeated stop requests go to a remote operator
+      refs: [FSR-07.05, FSR-04.01, FSR-02.02, MRM-1, FM-19, HR-01, AC-02]
+    methods: [sim, track]
+
+  - id: SC-19
+    name: Passengers leaving at a stop in lane
+    description: After a minimal risk manoeuvre the vehicle stands in a traffic lane and passengers open the doors on the traffic side
+    situations: [OS-01]
+    manoeuvres: [MAN-07]
+    parameters:
+      - {odd: ODD-17, values: [free-flow, congested]}
+      - {odd: ODD-16, values: [car, bicycle, motorcycle]}
+      - {odd: ODD-12, values: [day, night]}
+    triggers: [TC-29]
+    misuse: [MU-02]
+    losses: [LS-23]
+    pass:
+      criterion: The vehicle holds the minimal risk condition with hazard lights on and warns passengers of traffic on their side before they leave; the residual risk counts against the SOTIF acceptance criteria
+      refs: [FSR-07.02, FSR-07.04, FM-20, AC-02]
+    methods: [sim, drill]
+
+  - id: SC-20
+    name: Remote driving with a delayed or lost link
+    description: A remote operator drives the vehicle at walking pace; video and commands are delayed, compressed or lost, or the operator is tired or busy
+    situations: [OS-10]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 10, unit: km/h}
+      - {odd: ODD-15, values: [link-available, link-lost]}
+      - {odd: ODD-16, values: [pedestrian, bicycle, car]}
+      - {odd: ODD-12, values: [day, night]}
+      - {name: Age of remote commands, bound: FSR-08.01}
+    events: [HE-08.1]
+    triggers: [TC-26, TC-27]
+    misuse: [MU-17, MU-18]
+    losses: [LS-09, LS-10, LS-11, LS-26]
+    pass:
+      criterion: Commands older than the age bound, out of sequence or failing their integrity check are rejected and the vehicle stops; the envelope checks apply to remote commands as to Autoware's; a remote emergency stop brakes firmly unless the safety channel confirms a road user
+      refs: [MON-04, FSR-07.05, FSR-08.01, FSR-08.02, FSR-08.03, FSR-01.01, FSR-02.02, FSR-04.01, FSR-06.01, FSR-07.01, FSR-03.01, SR-06, FM-11, AC-02]
+    methods: [sim, xil, drill]
+
+  - id: SC-21
+    name: Remote release of the wrong vehicle or at the wrong moment
+    description: A remote operator releases or moves a vehicle that is not the one meant, or a release message is replayed
+    situations: [OS-07, OS-06]
+    parameters:
+      - {odd: ODD-15, values: [link-available]}
+      - {odd: ODD-09, values: [kerbside-stop]}
+    misuse: [MU-16]
+    losses: [LS-12, LS-13]
+    pass:
+      criterion: A release moves the vehicle only when it is bound to that vehicle, authentic and fresh, and the release conditions hold
+      refs: [FSR-07.04, FSR-05.01, SR-02, CSR-01, HR-07]
+    methods: [bench, drill]
+
+  - id: SC-22
+    name: Turn indicator during a turn or lane change
+    description: The vehicle changes lane to pass a stopped vehicle, or turns at a junction, with other road users relying on its indicator
+    situations: [OS-01]
+    manoeuvres: [MAN-02, MAN-03]
+    oedr: [OEDR-02]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-02, values: [lanes-1-2]}
+      - {odd: ODD-16, values: [car, bicycle, pedestrian]}
+    events: [HE-09.1]
+    losses: [LS-17]
+    pass:
+      criterion: The indicator always matches the commanded and achieved steering direction; on a mismatch hazard lights come on
+      refs: [FSR-09.01, FSR-04.01]
+    methods: [sim, xil]
+
+  - id: SC-23
+    name: Give and take with other drivers
+    description: Four-way stops, merging and letting another vehicle out, where other drivers expect the vehicle to negotiate
+    situations: [OS-03, OS-08]
+    oedr: [OEDR-06, OEDR-07]
+    parameters:
+      - {odd: ODD-20, min: 0, max: 48, unit: km/h}
+      - {odd: ODD-04, values: [stop-controlled, yield-controlled, t-junction]}
+      - {odd: ODD-17, values: [free-flow, congested]}
+      - {odd: ODD-16, values: [car, van, bicycle, pedestrian]}
+    triggers: [TC-23]
+    pass:
+      criterion: The vehicle takes its turn as the rules give it and shows when it yields and when it is about to move; its hesitations and stops count against the SOTIF acceptance criteria
+      refs: [FSR-06.01, FSR-06.03, FSR-03.02, FM-17, HR-06, AC-02]
+    methods: [sim, road]
+
+  - id: SC-24
+    name: Passenger misuse and emergencies in the cabin
+    description: A passenger tries to take control, a passenger has a medical emergency or is threatened, or a child rides alone or is left behind
+    situations: [OS-01, OS-07]
+    parameters:
+      - {odd: ODD-15, values: [link-available]}
+    misuse: [MU-05, MU-06, MU-09]
+    pass:
+      criterion: No control is reachable from the cabin; every seat reaches a remote operator who can divert the vehicle; no trip ends with a person inside without an operator's decision
+      refs: [AOU-07, HR-02, HR-05]
+    methods: [bench, drill]
+
+  - id: SC-25
+    name: First responders at a collision
+    description: After a collision the vehicle stops; responders need to make it safe, open the doors and move it
+    situations: [OS-01]
+    manoeuvres: [MAN-07]
+    parameters:
+      - {odd: ODD-12, values: [day, night]}
+      - {odd: ODD-15, values: [link-available]}
+    misuse: [MU-21]
+    losses: [LS-24]
+    pass:
+      criterion: The vehicle stops and holds after a collision; doors open from inside without power; responders can find the isolation points and reach remote operations
+      refs: [TR-15, MRM-3, SR-05, HR-08, HR-09]
+    methods: [bench, drill]
+
+  - id: SC-26
+    name: Return to service after maintenance
+    description: A technician returns a vehicle with a misaligned or dirty sensor, mixed software versions, or parameters changed through a service port
+    situations: [OS-01]
+    parameters:
+      - {odd: ODD-14, values: [in-range]}
+    misuse: [MU-22, MU-23]
+    losses: [LS-15]
+    pass:
+      criterion: The vehicle refuses driverless dispatch until calibration, cleanliness and versions are checked and recorded; parameter changes outside the release process are rejected
+      refs: [HR-10, AOU-08, SR-03, CR-03, CSR-05]
+    methods: [bench, drill]
