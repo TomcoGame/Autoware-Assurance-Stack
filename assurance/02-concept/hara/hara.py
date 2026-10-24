@@ -4,7 +4,7 @@
 Writes the generated tables of WP-C-03 (operational situations, conditions, functions and their
 guide words, hazards, every rated hazardous event, the named hazardous events, safety goals),
 Figures 6-1 and 6-2, the guide-word classification (guide-words.csv) and every rated row, one file
-per hazard (hazardous-events/). No ASIL is typed anywhere: each row's and each named event's ASIL
+per hazard in this folder. No ASIL is typed anywhere: each row's and each named event's ASIL
 is computed from S, E and C with the rule of ISO 26262-3:2018 Table 4, and each safety goal takes
 the highest ASIL of its hazards' events.
 
@@ -41,10 +41,17 @@ ASSURANCE = HERE.parents[1]
 sys.path.insert(0, str(ASSURANCE / "01-management" / "figures"))
 import figkit as fk  # noqa: E402
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import scenes  # noqa: E402
+
 MODEL = HERE / "hara.yaml"
 ANALYSIS = HERE / "analysis.yaml"
-EVENTS_DIR = HERE / "hazardous-events"
-GUIDE_CSV = HERE / "guide-words.csv"
+S0_CSV = HERE / "not-hazardous.csv"
+HAZOP_CSV = HERE / "hazop.csv"
+FIG_HAZOP = HERE / "fig-c03-6-3-hazop.svg"
+README = HERE / "README.md"
+ITEM = ASSURANCE / "02-concept" / "WP-C-01-item-definition.md"
+BOUNDARY = ASSURANCE / "02-concept" / "figures" / "fig-c01-5-1-boundary.svg"
 FIG2 = HERE / "fig-c03-6-2-all-events.svg"
 DOC = ASSURANCE / "02-concept" / "WP-C-03-hara.md"
 FIG = HERE / "fig-c03-6-1-asil-matrix.svg"
@@ -138,6 +145,9 @@ def check_analysis(m: dict, a: dict) -> list[str]:
     for w in a.get("conditions", []):
         if w.get("exposure") not in E_SCALE:
             errs.append(f"{w['id']}: exposure must be one of {', '.join(E_SCALE)}")
+    for g, d in a.get("guidewords", {}).items():
+        if set(d or {}) != {"name", "means"} or not all(isinstance(v, str) for v in d.values()):
+            errs.append(f"{g}: needs only a name and a means; quote a means with commas")
     reached: set[str] = set()
     for f in a.get("functions", []):
         cls = f.get("class") or {}
@@ -300,7 +310,7 @@ def slug(name: str) -> str:
 
 
 def event_file(h: dict) -> Path:
-    return EVENTS_DIR / f"{h['id']}-{slug(h['name'])}.csv"
+    return HERE / f"{h['id']}-{slug(h['name'])}.csv"
 
 
 def to_csv(header: list[str], data: list[list[str]]) -> str:
@@ -314,62 +324,270 @@ def to_csv(header: list[str], data: list[list[str]]) -> str:
     return buf.getvalue()
 
 
+def named_at(m: dict) -> dict[tuple[str, str], list[str]]:
+    out: dict[tuple[str, str], list[str]] = {}
+    for e in m["events"]:
+        out.setdefault((e["hazard"], e["situation"]), []).append(e["id"])
+    return out
+
+
 def csv_files(m: dict, a: dict) -> dict[Path, str]:
     gw = a["guidewords"]
+    named = named_at(m)
     out = {}
     head = [
         "Key",
+        "ASIL",
+        "S",
+        "E",
+        "C",
         "Function",
         "Guide word",
         "Situation",
         "Condition",
-        "S",
-        "E",
-        "C",
-        "ASIL",
         "Safety goal",
-        "Severity basis",
-        "Exposure basis",
-        "Controllability basis",
+        "Named event",
+        "Why this severity",
+        "Exposure from",
     ]
     rs = analysis_rows(m, a)
     for h in m["hazards"]:
+        hr = [r for r in rs if r["hazard"] == h["id"] and r["s"] != "S0"]
+        hr.sort(key=lambda r: (-ASILS.index(r["asil"]), r["key"]))
         data = [
             [
                 r["key"],
+                r["asil"],
+                r["s"],
+                r["e"],
+                r["c"],
                 f"{r['function']['id']} {r['function']['name']}",
                 f"{r['gw']} {gw[r['gw']]['name']}",
                 f"{r['situation']['id']} {r['situation']['name']}",
                 f"{r['condition']['id']} {r['condition']['name']}",
-                r["s"],
-                r["e"],
-                r["c"],
-                r["asil"],
                 r["goal"],
+                ", ".join(named.get((r["hazard"], r["situation"]["id"]), [])) or "—",
                 r["s_why"],
-                r["e_why"],
-                r["c_why"],
+                f"{r['situation']['id']} {r['situation']['exposure']} · {r['condition']['id']} {r['condition']['exposure']}",
             ]
-            for r in rs
-            if r["hazard"] == h["id"]
+            for r in hr
         ]
         out[event_file(h)] = to_csv(head, data)
-    data = [
+    hzn = {h["id"]: h["name"] for h in m["hazards"]}
+    zero = [r for r in rs if r["s"] == "S0"]
+    out[S0_CSV] = to_csv(
         [
-            f"{f['id']}/{g}",
-            f"{f['id']} {f['name']}",
-            f"{g} {gw[g]['name']}",
-            c[0],
-            c[1],
-            c[2] and f"{c[2]} {gw[c[2]]['name']}",
-            c[3],
-        ]
-        for f, g, c in pairs(a)
-    ]
-    out[GUIDE_CSV] = to_csv(
-        ["Key", "Function", "Guide word", "Class", "Hazard", "Rated as", "Reason"], data
+            "Key",
+            "Hazard",
+            "Function",
+            "Guide word",
+            "Situation",
+            "Conditions",
+            "Why it cannot occur here",
+        ],
+        [
+            [
+                f"{r['function']['id']}/{r['gw']}/{r['situation']['id']}",
+                f"{r['hazard']} {hzn[r['hazard']]}",
+                f"{r['function']['id']} {r['function']['name']}",
+                f"{r['gw']} {gw[r['gw']]['name']}",
+                f"{r['situation']['id']} {r['situation']['name']}",
+                "all six",
+                r["s_why"],
+            ]
+            for r in zero
+            if r["condition"]["id"] == a["conditions"][0]["id"]
+        ],
     )
+    out[HAZOP_CSV] = hazop_csv(m, a)
     return out
+
+
+def safeguards() -> dict[str, list[str]]:
+    """Safety mechanisms of WP-S-03 by the safety goal of the FSRs they implement."""
+    sys.path.insert(0, str(ASSURANCE / "02-concept" / "fsc"))
+    sys.path.insert(0, str(ASSURANCE / "03-system" / "tsc"))
+    import fsc
+    import tsc
+
+    goal = {f["id"]: f["goal"] for f in fsc.load()["fsrs"]}
+    out: dict[str, list[str]] = {}
+    for sm in tsc.load()["mechanisms"]:
+        for g in sorted({goal[f] for f in sm["implements"]}):
+            out.setdefault(g, []).append(sm["id"])
+    return out
+
+
+def pair_worst(m: dict, a: dict) -> dict[tuple[str, str], str]:
+    """Worst ASIL of each rated pair over its rows."""
+    out: dict[tuple[str, str], str] = {}
+    for r in analysis_rows(m, a):
+        k = (r["function"]["id"], r["gw"])
+        out[k] = max(out.get(k, "QM"), r["asil"], key=ASILS.index)
+    return out
+
+
+def hazop_rows(m: dict, a: dict) -> list[dict]:
+    gw = a["guidewords"]
+    worst_ = pair_worst(m, a)
+    goal_of = {h: g["id"] for g in m["goals"] for h in g["hazards"]}
+    sg = safeguards()
+    hzn = {h["id"]: h["name"] for h in m["hazards"]}
+    out = []
+    for f, g, (kind, hz, into, why) in pairs(a):
+        rated_as = into or g
+        out.append(
+            {
+                "key": f"{f['id']}/{g}",
+                "function": f"{f['id']} {f['name']}",
+                "gw": f"{g} {gw[g]['name']}",
+                "deviation": gw[g]["means"],
+                "class": {
+                    "SC": "Safety-related",
+                    "NSC": "Not safety-related",
+                    "NA": "Not applicable",
+                }[kind],
+                "consequence": why,
+                "hazard": f"{hz} {hzn[hz]}" if hz else "—",
+                "rated_as": "—" if kind != "SC" else (f"{f['id']}/{into}" if into else "Itself"),
+                "worst": worst_.get((f["id"], rated_as), "—") if kind == "SC" else "—",
+                "goal": goal_of.get(hz, "—") if hz else "—",
+                "safeguards": ", ".join(sg.get(goal_of.get(hz, ""), [])) or "—",
+            }
+        )
+    return out
+
+
+def hazop_csv(m: dict, a: dict) -> str:
+    rows_ = hazop_rows(m, a)
+    return to_csv(
+        [
+            "Key",
+            "Function",
+            "Guide word",
+            "Deviation",
+            "Class",
+            "Consequence",
+            "Hazard",
+            "Rated as",
+            "Worst ASIL",
+            "Safety goal",
+            "Safeguards (WP-S-03)",
+        ],
+        [
+            [
+                r["key"],
+                r["function"],
+                r["gw"],
+                r["deviation"],
+                r["class"],
+                r["consequence"],
+                r["hazard"],
+                r["rated_as"],
+                r["worst"],
+                r["goal"],
+                r["safeguards"],
+            ]
+            for r in rows_
+        ],
+    )
+
+
+HZ_EXTRA = """svg .sr { fill:var(--a3); } svg .sf { fill:var(--a1); } svg .ns { fill:var(--card); stroke:var(--grid); stroke-width:1; }
+svg .na { fill:var(--bg); stroke:var(--grid); stroke-width:1; }
+svg .cw { font:600 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--t4); }
+svg .cf { font:500 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--t1); }
+svg .cn { font:500 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink3); }
+svg .gh { font:600 11px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .gs { font:10px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+"""
+
+
+def figure_hazop(m: dict, a: dict) -> str:
+    w = 1240
+    gws = list(a["guidewords"])
+    x0, xg, top = 24, 340, 128
+    cw = (w - 24 - xg - 44) / len(gws)
+    rh = 26
+    body = [
+        fk.text(24, 32, "What each malfunction of each function leads to", "h"),
+        fk.text(
+            24,
+            54,
+            "WP-C-03 §6.1: every function against the fourteen guide words; the hazard where",
+            "t",
+        ),
+        fk.text(
+            24, 71, "a pair is safety-related, or the pair it is rated as where it is folded", "t"
+        ),
+    ]
+    for j, g in enumerate(gws):
+        cx = xg + cw * j + cw / 2
+        body.append(fk.text(cx, top - 26, g, "gh", "middle"))
+        for k, ln in enumerate(fk.wrap(a["guidewords"][g]["name"], (cw - 4) * 1.15, "s")[:2]):
+            body.append(fk.text(cx, top - 13 + 11 * k, ln, "gs", "middle"))
+    body.append(fk.text(w - 30, top - 13, "Rated", "gs", "middle"))
+    y = top + 10
+    for f in a["functions"]:
+        body.append(fk.text(x0, y + 17, f["id"], "tb"))
+        body.append(fk.text(x0 + 40, y + 17, fk.fit(f["name"], xg - x0 - 48, "s"), "s"))
+        for j, g in enumerate(gws):
+            kind, hz, into, _ = f["class"][g]
+            if kind == "SC" and not into:
+                cls, tcls, txt = "sr", "cw", hz
+            elif kind == "SC":
+                cls, tcls, txt = "sf", "cf", f"→{into}"
+            elif kind == "NSC":
+                cls, tcls, txt = "ns", "cn", "NSC"
+            else:
+                cls, tcls, txt = "na", "cn", "·"
+            body.append(
+                fk.el(
+                    "rect",
+                    None,
+                    x=fk.num(xg + cw * j + 1),
+                    y=fk.num(y + 2),
+                    width=fk.num(cw - 2),
+                    height=rh - 4,
+                    rx=3,
+                    class_=cls,
+                )
+            )
+            body.append(fk.text(xg + cw * j + cw / 2, y + 17, txt, tcls, "middle"))
+        n = sum(1 for g in gws if f["class"][g][0] == "SC" and not f["class"][g][2])
+        body.append(fk.text(w - 30, y + 17, str(n), "tb", "middle"))
+        y += rh
+    y += 28
+    x = x0
+    for cls, tcls, txt, label in (
+        ("sr", "cw", "H-06", "safety-related, rated"),
+        ("sf", "cf", "→M12", "folded into the pair named"),
+        ("ns", "cn", "NSC", "not safety-related"),
+        ("na", "cn", "·", "not applicable"),
+    ):
+        body += [
+            fk.el("rect", None, x=x, y=fk.num(y - 13), width=46, height=18, rx=3, class_=cls),
+            fk.text(x + 23, y + 1, txt, tcls, "middle"),
+            fk.text(x + 54, y, label, "t"),
+        ]
+        x += 54 + fk.width(label, "t") + 22
+    y += 20
+    desc = "Function by guide word: " + "; ".join(
+        f"{f['id']} {f['name']}: "
+        + ", ".join(
+            f"{g} {c[1] if c[0] == 'SC' and not c[2] else ('as ' + c[2] if c[0] == 'SC' else c[0])}"
+            for g, c in f["class"].items()
+        )
+        for f in a["functions"]
+    )
+    return fk.svg(
+        w,
+        int(y),
+        "WP-C-03 Figure 6-3: functions against malfunction guide words",
+        desc + ".",
+        body,
+        EXTRA + HZ_EXTRA,
+    )
 
 
 # ---------------------------------------------------------------- tables
@@ -486,7 +704,7 @@ def analysis_tables(m: dict, a: dict) -> dict[str, str]:
     ]
     t["hara-counts"] = "\n".join(rows_)
     rows_ = [
-        "| Hazard | Rows | Rated A or above | Worst ASIL | Situations where it is worst | Safety goal | Open as a table |",
+        "| Hazard | Hazardous rows | Rated A or above | Worst ASIL | Situations where it is worst | Safety goal | Open as a table |",
         "|---|---|---|---|---|---|---|",
     ]
     goal_of = {h: g["id"] for g in m["goals"] for h in g["hazards"]}
@@ -496,7 +714,7 @@ def analysis_tables(m: dict, a: dict) -> dict[str, str]:
         at = sorted({r["situation"]["id"] for r in hr if r["asil"] == w and w != "QM"})
         rel = event_file(h).relative_to(DOC.parent).as_posix()
         rows_.append(
-            f"| {h['id']} {cell(h['name'])} | {len(hr)} | {sum(r['asil'] != 'QM' for r in hr)} | **{w}** "
+            f"| {h['id']} {cell(h['name'])} | {sum(r['s'] != 'S0' for r in hr)} | {sum(r['asil'] != 'QM' for r in hr)} | **{w}** "
             f"| {', '.join(at) or '—'} | {goal_of[h['id']]} | [{event_file(h).name}]({rel}) |"
         )
     t["hara-all-events"] = "\n".join(rows_)
@@ -700,6 +918,204 @@ def figure_all(m: dict, a: dict) -> str:
     )
 
 
+def scene_file(f: dict) -> Path:
+    return HERE / f"fig-c03-6-4-{f['id']}-scenes.svg"
+
+
+def scene_files(m: dict, a: dict) -> dict[Path, tuple[dict, str]]:
+    """Figure 6-4.n: the guide-word scenes of each function with safety-related guide words."""
+    errs = scenes.check(a, {h["id"] for h in m["hazards"]})
+    if errs:
+        raise fk.FigureError("analysis.yaml: " + "; ".join(errs))
+    goal_of = {h: g["id"] for g in m["goals"] for h in g["hazards"]}
+    hazards = {h["id"]: h["name"] for h in m["hazards"]}
+    sheets = scenes.sheets(a, hazards, pair_worst(m, a), goal_of)
+    return {scene_file(f): (f, svg) for f, svg in sheets}
+
+
+def here(md: str) -> str:
+    """WP-C-03 table text with its links rewritten to work from this folder."""
+    return md.replace("](hara/", "](")
+
+
+def realised_by() -> dict[str, str]:
+    """The 'Realised by' cell of each function in WP-C-01 §3, with links rewritten for this folder."""
+    head, rows_ = fk.table(fk.section(ITEM.read_text(encoding="utf-8"), "## 3."), "ID")
+    i = fk.col(head, "Realised by (pinned packages)")
+    return {r[0]: re.sub(r"\]\((?!https?:|#)", "](../", r[i]) for r in rows_}
+
+
+def readme(m: dict, a: dict, t: dict[str, str], figs: dict[Path, str]) -> str:
+    """The folder page: the whole HARA on one page, from the item to the safety goals."""
+    rb = realised_by()
+    missing = [f["id"] for f in a["functions"] if f["id"] not in rb]
+    if missing:
+        raise fk.FigureError(f"WP-C-01 §3 has no row for {', '.join(missing)}")
+    sheets = {f["id"]: p.name for p, f in figs.items()}
+    funcs = [
+        "| ID | Function | Realised by (WP-C-01 §3) | Output | Safety-related guide words | Hazards reached | Scenes |",
+        "|---|---|---|---|---|---|---|",
+    ]
+    for f in a["functions"]:
+        sc = [c for c in f["class"].values() if c[0] == "SC"]
+        rated_ = sum(not c[2] for c in sc)
+        scene = (
+            f"[Figure 6-4 ({f['id']})](#{f['id'].lower()}-{slug(f['name'])})"
+            if f["id"] in sheets
+            else "—"
+        )
+        funcs.append(
+            f"| {f['id']} | {cell(f['name'])} | {rb[f['id']]} | {cell(f['output'])} "
+            f"| {len(sc)} ({rated_} rated, {len(sc) - rated_} folded) "
+            f"| {', '.join(sorted({c[1] for c in sc})) or '—'} | {scene} |"
+        )
+    files = [
+        "| File | What it holds |",
+        "|---|---|",
+        *(
+            f"| [`{event_file(h).name}`]({event_file(h).name}) | Every hazardous row of {h['id']} {cell(h['name'])}, most severe first |"
+            for h in m["hazards"]
+        ),
+        "| [`not-hazardous.csv`](not-hazardous.csv) | Each rated pair and situation where the hazard cannot occur, with the reason (S0) |",
+        "| [`hazop.csv`](hazop.csv) | Every function against every guide word: deviation, class, consequence, hazard, worst ASIL, safety goal, safeguards |",
+        "| [`hara.yaml`](hara.yaml) | Situations, hazards, named hazardous events and safety goals |",
+        "| [`analysis.yaml`](analysis.yaml) | Functions, guide words, the class of every pair, conditions, severity rules |",
+        "| [`hara.py`](hara.py), [`scenes.py`](scenes.py) | The generator: checks both YAML files, rates every row and writes everything else here |",
+    ]
+    scenes_md = []
+    for p, f in figs.items():
+        sc = [(g, c) for g, c in f["class"].items() if c[0] == "SC"]
+        scenes_md += [
+            f"### {f['id']} {f['name']}",
+            "",
+            f"![Figure 6-4 ({f['id']}): one card for each of the {len(sc)} safety-related guide words of "
+            f"{f['id']}; each card shows the required and performed {f['output'].lower()} over time and a top-down "
+            f"scene of the hazard it leads to, with where the deviation starts and the moment it matters.]({p.name})",
+            "",
+        ]
+    lines = [
+        "<!-- Generated by assurance/02-concept/hara/hara.py; do not edit by hand. -->",
+        "",
+        "# Hazard analysis and risk assessment",
+        "",
+        "The whole HARA of [WP-C-03](../WP-C-03-hara.md) on one page: the item and its functions, what each "
+        "malfunction of each function leads to, every rated row, the named hazardous events and the safety goals. "
+        "Every file here is generated from the two YAML files by `hara.py`; CI fails if one is stale. "
+        "Everything is a draft by Claude (I0): no rating is accepted until it is reviewed.",
+        "",
+        t["hara-summary"],
+        "",
+        "1. [The item](#1-the-item)",
+        "2. [Functions](#2-functions)",
+        "3. [How the rows are made](#3-how-the-rows-are-made)",
+        "4. [What each malfunction leads to](#4-what-each-malfunction-leads-to)",
+        "5. [Operational situations and conditions](#5-operational-situations-and-conditions)",
+        "6. [Hazards](#6-hazards)",
+        "7. [Every rated row](#7-every-rated-row)",
+        "8. [Named hazardous events](#8-named-hazardous-events)",
+        "9. [Safety goals](#9-safety-goals)",
+        "10. [Guide-word scenes](#10-guide-word-scenes)",
+        "11. [Files in this folder](#11-files-in-this-folder)",
+        "",
+        "## 1. The item",
+        "",
+        "![The item boundary: inside it the sensors, the Autoware computer and the safety monitor; outside it, "
+        "on the left, the HD map data, the update backend, the remote operations centre and the passengers; on "
+        "the right, the vehicle platform with its drive-by-wire system, the power supply and the other road "
+        "users. Arrows numbered I-01 to I-13 show what crosses the boundary.](../figures/fig-c01-5-1-boundary.svg)",
+        "",
+        "*The item and its boundary, from [WP-C-01](../WP-C-01-item-definition.md) §5, where §5.2 lists the interfaces I-01 to I-13.*",
+        "",
+        "## 2. Functions",
+        "",
+        "Every function of the item is analysed. The output is what the function delivers; the scenes in §10 "
+        "chart it against time.",
+        "",
+        *funcs,
+        "",
+        "## 3. How the rows are made",
+        "",
+        "1. Each function is taken against the fourteen guide words below. Each pair is classed safety-related, "
+        "not safety-related or not applicable, with the reason (§4). A safety-related pair names the hazard it "
+        "leads to; a pair with the same effect on the vehicle as another of the same function is folded into it "
+        "and rated once.",
+        "2. Each rated pair is rated in every operational situation under every road and light condition (§5). "
+        "Severity comes from the hazard and the situation, or is S0 with the reason it cannot occur there; "
+        "exposure is the rarer of the situation's and the condition's; controllability is C3 for every row, "
+        "since there is no driver (WP-C-03 §3.3). ASIL follows ISO 26262-3 Table 4.",
+        "3. The hazardous rows go one file per hazard (§7), which GitHub shows as a table that can be searched. "
+        "Each row has a stable key, *function/guide word/situation/condition*, to quote in a review comment.",
+        "4. The named hazardous events (§8) are the ones the rest of the safety case refers to. The generator "
+        "refuses a named event more severe than its rows allow, and a row whose ASIL exceeds its safety goal's.",
+        "",
+        "## 4. What each malfunction leads to",
+        "",
+        t["hara-guidewords"],
+        "",
+        "![Figure 6-3: a grid with the twelve functions F-01 to F-12 as rows and the fourteen guide words M01 to "
+        "M14 as columns; each cell names the hazard of a safety-related pair, the pair it is folded into, or "
+        "marks it not safety-related or not applicable. The same classes are in hazop.csv.]"
+        f"({FIG_HAZOP.name})",
+        "",
+        "*Figure 6-3. Every function against every guide word. Each pair's deviation, consequence, worst ASIL, "
+        "safety goal and safety mechanisms are in [`hazop.csv`](hazop.csv).*",
+        "",
+        t["hara-functions"],
+        "",
+        "## 5. Operational situations and conditions",
+        "",
+        t["hara-situations"],
+        "",
+        t["hara-conditions"],
+        "",
+        "## 6. Hazards",
+        "",
+        t["hara-hazards"],
+        "",
+        "## 7. Every rated row",
+        "",
+        t["hara-counts"],
+        "",
+        "![Figure 6-2: a grid with the ten hazards as rows and the twenty operational situations as columns; each "
+        "filled cell shows the highest ASIL of that hazard in that situation over every function, guide word and "
+        f"condition, shaded from light (A) to dark (D).]({FIG2.name})",
+        "",
+        "*Figure 6-2. Worst ASIL by hazard and situation over every rated row.*",
+        "",
+        "Open a hazard's file to read its rows, with the reason for every S, E and C. The rows that cannot be "
+        "hazardous are in [`not-hazardous.csv`](not-hazardous.csv).",
+        "",
+        here(t["hara-all-events"]),
+        "",
+        "## 8. Named hazardous events",
+        "",
+        "![Figure 6-1: a grid with the ten hazards as rows and the situations the named events use as columns; "
+        f"each cell shows the ASIL of the hazardous events rated there.]({FIG.name})",
+        "",
+        "*Figure 6-1. The ASIL of each named hazardous event, by hazard and situation.*",
+        "",
+        t["hara-events"],
+        "",
+        "## 9. Safety goals",
+        "",
+        t["hara-goals"],
+        "",
+        "## 10. Guide-word scenes",
+        "",
+        "One card for each safety-related guide word of each function: what the function must deliver over time "
+        "(dashed green) against what the malfunction delivers (red), and under it the hazard on the road, with "
+        "where the deviation starts and the moment it matters. A folded pair names the pair it is rated as. The "
+        "scenes are schematic; they explain each hazard and are not simulation results.",
+        "",
+        *scenes_md,
+        "## 11. Files in this folder",
+        "",
+        *files,
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def build() -> dict[Path, str]:
     m = load()
     errs = check(m)
@@ -712,6 +1128,10 @@ def build() -> dict[Path, str]:
         FIG2: figure_all(m, a),
     }
     out.update(csv_files(m, a))
+    out[FIG_HAZOP] = figure_hazop(m, a)
+    figs = scene_files(m, a)
+    out.update({p: svg for p, (_, svg) in figs.items()})
+    out[README] = readme(m, a, tables(m), {p: f for p, (f, _) in figs.items()})
     return out
 
 

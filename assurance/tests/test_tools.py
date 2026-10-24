@@ -65,6 +65,7 @@ import integ  # noqa: E402
 import misuse  # noqa: E402
 import modifications  # noqa: E402
 import scenarios  # noqa: E402
+import scenes  # noqa: E402
 import secarch  # noqa: E402
 import simenv  # noqa: E402
 import sotif  # noqa: E402
@@ -304,8 +305,51 @@ class HaraRows(unittest.TestCase):
         bad["conditions"][0]["exposure"] = "E4"
         bad["severity"]["H-03"]["OS-01"] = ["S3", "x"]
         cases.append((bad, "exceeds SG-03's C"))
+        bad = copy.deepcopy(a)
+        bad["guidewords"]["M02"] = {
+            "name": "Stops functioning",
+            "means": "Acts at first",
+            "then": None,
+        }
+        cases.append((bad, "M02: needs only a name and a means"))
         for model, needle in cases:
             self.assertTrue(any(needle in x for x in hara.check_analysis(m, model)), needle)
+
+
+class HaraFolder(unittest.TestCase):
+    def test_hazop_has_every_pair_with_its_full_deviation(self):
+        m, a = hara.load(), hara.load_analysis()
+        rs = hara.hazop_rows(m, a)
+        self.assertEqual(len(rs), len(a["functions"]) * len(a["guidewords"]))
+        r = next(r for r in rs if r["key"] == "F-01/M02")
+        self.assertEqual(r["deviation"], "Acts at first, then stops while still needed")
+
+    def test_every_safety_related_guide_word_has_a_scene_card(self):
+        m, a = hara.load(), hara.load_analysis()
+        self.assertEqual(scenes.check(a, {h["id"] for h in m["hazards"]}), [])
+        figs = hara.scene_files(m, a)
+        for f in a["functions"]:
+            sc = sorted(g for g, c in f["class"].items() if c[0] == "SC")
+            path = hara.scene_file(f)
+            if not sc:
+                self.assertNotIn(path, figs, f["id"])
+                continue
+            cards = re.findall(r'class="gid">(M\d\d)<', figs[path][1])
+            self.assertEqual(sorted(cards), sc, f["id"])
+
+    def test_scene_starts_where_the_chart_does(self):
+        self.assertEqual(scenes.onset("M01"), 20)
+        self.assertEqual(scenes.onset("M02"), 55)
+        self.assertEqual(scenes.onset("M07"), 20)
+        self.assertEqual(scenes.onset("M10"), 55)
+
+    def test_folder_page_links_every_file_in_the_folder(self):
+        page = hara.build()[hara.README]
+        for p in hara.HERE.iterdir():
+            if p.suffix in (".csv", ".svg", ".yaml"):
+                self.assertIn(f"]({p.name})", page, p.name)
+        self.assertIn("../figures/fig-c01-5-1-boundary.svg", page)
+        self.assertNotIn("](hara/", page)
 
 
 class Hara(unittest.TestCase):

@@ -44,12 +44,12 @@ The vehicle is not chosen (DQ-008), so severities assume a generic mid-size pass
 
 The analysis works through every malfunction of every function, in every situation, instead of starting from the events an analyst thinks of:
 
-1. Every function of the item (WP-C-01 §2) is taken against fourteen malfunction guide words (§6.1). Each pair is classed safety-related, not safety-related or not applicable, with the reason. A safety-related pair names the hazard it leads to; a pair with the same effect on the vehicle as another of the same function is folded into it and rated once.
+1. Every function of the item (WP-C-01 §3) is taken against fourteen malfunction guide words (§6.1). Each pair is classed safety-related, not safety-related or not applicable, with the reason. A safety-related pair names the hazard it leads to; a pair with the same effect on the vehicle as another of the same function is folded into it and rated once.
 2. Every safety-related pair that is not folded is rated in every operational situation (§4) under every road and light condition (§4.1). Severity comes from the hazard and the situation, with its reason, or is S0 with the reason it cannot occur there. Exposure is the rarer of the situation's and the condition's. Controllability follows §3.3. Nothing is dropped: a row that is not hazardous is kept with S0 and its reason.
-3. The rows are written one file per hazard ([`hara/hazardous-events/`](hara/hazardous-events/)), which GitHub shows as a searchable table in the browser, so the analysis can be read row by row without downloading anything (§6.2).
+3. The hazardous rows are written one file per hazard in [`hara/`](hara/), most severe first, which GitHub shows as a searchable table in the browser, so the analysis can be read row by row without downloading anything (§6.2). The rows that cannot be hazardous are kept with their reasons in [`hara/not-hazardous.csv`](hara/not-hazardous.csv).
 4. The named hazardous events of §6.3 are the representative events the rest of the safety case refers to. The generator refuses a named event more severe than its rows allow, and a row whose ASIL exceeds the ASIL its safety goal takes from the named events. Either would mean the named events no longer cover the analysis.
 
-The situations, hazards, named events and goals are kept in [`hara/hara.yaml`](hara/hara.yaml); the functions, guide-word classification, conditions and severity rules in [`hara/analysis.yaml`](hara/analysis.yaml). [`hara/hara.py`](hara/hara.py) checks both, computes every ASIL, and writes the tables of §4 to §7, Figures 6-1 and 6-2, and the row files; CI runs it with `--check`. To change a rating, edit the YAML and run the generator; the diff of the row files shows every row the change moves. No ASIL is typed by hand.
+The situations, hazards, named events and goals are kept in [`hara/hara.yaml`](hara/hara.yaml); the functions, guide-word classification, conditions and severity rules in [`hara/analysis.yaml`](hara/analysis.yaml). [`hara/hara.py`](hara/hara.py) checks both, computes every ASIL, and writes the tables of §4 to §7, Figures 6-1 and 6-2, the row files and the folder page [`hara/README.md`](hara/README.md); CI runs it with `--check`. To change a rating, edit the YAML and run the generator; the diff of the row files shows every row the change moves. No ASIL is typed by hand.
 
 ### 3.2 Ratings
 
@@ -148,7 +148,7 @@ The fourteen guide words, applied to every function:
 | ID | Guide word | Means |
 |---|---|---|
 | M01 | No function | Never acts when it should |
-| M02 | Stops functioning | Acts at first |
+| M02 | Stops functioning | Acts at first, then stops while still needed |
 | M03 | Unrequested function | Acts when it should not |
 | M04 | Function stuck | Holds its last output and ignores new input |
 | M05 | Excessive function | Output larger than intended |
@@ -159,12 +159,16 @@ The fourteen guide words, applied to every function:
 | M10 | Applies too long | Output lasts longer than intended |
 | M11 | Delayed | Acts correctly but with latency beyond its specification |
 | M12 | Inverse function | Acts in the opposite direction or sense |
-| M13 | Erratic or intermittent | Output oscillates |
+| M13 | Erratic or intermittent | Output oscillates, chatters or comes and goes |
 | M14 | Uneven | Output asymmetric or non-monotonic |
 
 <!-- END GENERATED: hara-guidewords -->
 
-How each function's pairs were classed. The class, hazard and reason of every pair are in [`hara/guide-words.csv`](hara/guide-words.csv), which opens as a table in the browser.
+![Figure 6-3: a grid with the twelve functions F-01 to F-12 as rows and the fourteen guide words M01 to M14 as columns; each cell names the hazard of a safety-related pair, the pair it is folded into, or marks it not safety-related or not applicable. The same classes are counted in the table below.](hara/fig-c03-6-3-hazop.svg)
+
+*Figure 6-3. Every function against every guide word. Drawn by [`hara/hara.py`](hara/hara.py); CI fails if it is stale.*
+
+How each function's pairs were classed. The deviation, class, consequence, hazard, worst ASIL, safety goal and safety mechanisms of every pair are in [`hara/hazop.csv`](hara/hazop.csv), which opens as a table in the browser. Figure 6-4 draws each safety-related pair as a scene, one sheet per function, on the folder page [`hara/README.md`](hara/README.md#10-guide-word-scenes).
 
 <!-- BEGIN GENERATED: hara-functions (assurance/02-concept/hara/hara.py) -->
 
@@ -214,18 +218,18 @@ Two choices shape the classes. The safety monitor (F-10) failing to bound a comm
 
 <!-- BEGIN GENERATED: hara-all-events (assurance/02-concept/hara/hara.py) -->
 
-| Hazard | Rows | Rated A or above | Worst ASIL | Situations where it is worst | Safety goal | Open as a table |
+| Hazard | Hazardous rows | Rated A or above | Worst ASIL | Situations where it is worst | Safety goal | Open as a table |
 |---|---|---|---|---|---|---|
-| H-01 Unintended acceleration | 600 | 575 | **D** | OS-01, OS-03, OS-06, OS-07, OS-09, OS-11, OS-15, OS-16 | SG-01 | [H-01-unintended-acceleration.csv](hara/hazardous-events/H-01-unintended-acceleration.csv) |
-| H-02 Insufficient deceleration | 960 | 720 | **D** | OS-01, OS-03, OS-09, OS-11, OS-16 | SG-02 | [H-02-insufficient-deceleration.csv](hara/hazardous-events/H-02-insufficient-deceleration.csv) |
-| H-03 Unintended hard deceleration | 720 | 402 | **C** | OS-01, OS-03, OS-04, OS-08, OS-09, OS-11 | SG-03 | [H-03-unintended-hard-deceleration.csv](hara/hazardous-events/H-03-unintended-hard-deceleration.csv) |
-| H-04 Unintended lateral motion | 720 | 540 | **D** | OS-01, OS-03, OS-08, OS-09, OS-11 | SG-04 | [H-04-unintended-lateral-motion.csv](hara/hazardous-events/H-04-unintended-lateral-motion.csv) |
-| H-05 Unintended motion from standstill | 600 | 160 | **D** | OS-07 | SG-05 | [H-05-unintended-motion-from-standstill.csv](hara/hazardous-events/H-05-unintended-motion-from-standstill.csv) |
-| H-06 Proceeding against right of way | 480 | 292 | **D** | OS-03, OS-06, OS-09, OS-16 | SG-06 | [H-06-proceeding-against-right-of-way.csv](hara/hazardous-events/H-06-proceeding-against-right-of-way.csv) |
-| H-07 No minimal risk manoeuvre when one is needed | 600 | 465 | **D** | OS-01, OS-03, OS-08, OS-09, OS-11, OS-16 | SG-07 | [H-07-no-minimal-risk-manoeuvre-when-one-is-needed.csv](hara/hazardous-events/H-07-no-minimal-risk-manoeuvre-when-one-is-needed.csv) |
-| H-08 Acting on stale or corrupted remote driving commands | 240 | 12 | **C** | OS-10 | SG-08 | [H-08-acting-on-stale-or-corrupted-remote-driving-commands.csv](hara/hazardous-events/H-08-acting-on-stale-or-corrupted-remote-driving-commands.csv) |
-| H-09 Wrong signalling | 360 | 207 | **C** | OS-01, OS-03, OS-08, OS-11, OS-15, OS-16 | SG-09 | [H-09-wrong-signalling.csv](hara/hazardous-events/H-09-wrong-signalling.csv) |
-| H-10 Unintended reverse motion | 120 | 30 | **C** | OS-06, OS-07, OS-15, OS-16 | SG-05 | [H-10-unintended-reverse-motion.csv](hara/hazardous-events/H-10-unintended-reverse-motion.csv) |
+| H-01 Unintended acceleration | 600 | 575 | **D** | OS-01, OS-03, OS-06, OS-07, OS-09, OS-11, OS-15, OS-16 | SG-01 | [H-01-unintended-acceleration.csv](hara/H-01-unintended-acceleration.csv) |
+| H-02 Insufficient deceleration | 768 | 720 | **D** | OS-01, OS-03, OS-09, OS-11, OS-16 | SG-02 | [H-02-insufficient-deceleration.csv](hara/H-02-insufficient-deceleration.csv) |
+| H-03 Unintended hard deceleration | 576 | 402 | **C** | OS-01, OS-03, OS-04, OS-08, OS-09, OS-11 | SG-03 | [H-03-unintended-hard-deceleration.csv](hara/H-03-unintended-hard-deceleration.csv) |
+| H-04 Unintended lateral motion | 576 | 540 | **D** | OS-01, OS-03, OS-08, OS-09, OS-11 | SG-04 | [H-04-unintended-lateral-motion.csv](hara/H-04-unintended-lateral-motion.csv) |
+| H-05 Unintended motion from standstill | 180 | 160 | **D** | OS-07 | SG-05 | [H-05-unintended-motion-from-standstill.csv](hara/H-05-unintended-motion-from-standstill.csv) |
+| H-06 Proceeding against right of way | 312 | 292 | **D** | OS-03, OS-06, OS-09, OS-16 | SG-06 | [H-06-proceeding-against-right-of-way.csv](hara/H-06-proceeding-against-right-of-way.csv) |
+| H-07 No minimal risk manoeuvre when one is needed | 480 | 465 | **D** | OS-01, OS-03, OS-08, OS-09, OS-11, OS-16 | SG-07 | [H-07-no-minimal-risk-manoeuvre-when-one-is-needed.csv](hara/H-07-no-minimal-risk-manoeuvre-when-one-is-needed.csv) |
+| H-08 Acting on stale or corrupted remote driving commands | 12 | 12 | **C** | OS-10 | SG-08 | [H-08-acting-on-stale-or-corrupted-remote-driving-commands.csv](hara/H-08-acting-on-stale-or-corrupted-remote-driving-commands.csv) |
+| H-09 Wrong signalling | 288 | 207 | **C** | OS-01, OS-03, OS-08, OS-11, OS-15, OS-16 | SG-09 | [H-09-wrong-signalling.csv](hara/H-09-wrong-signalling.csv) |
+| H-10 Unintended reverse motion | 36 | 30 | **C** | OS-06, OS-07, OS-15, OS-16 | SG-05 | [H-10-unintended-reverse-motion.csv](hara/H-10-unintended-reverse-motion.csv) |
 
 <!-- END GENERATED: hara-all-events -->
 

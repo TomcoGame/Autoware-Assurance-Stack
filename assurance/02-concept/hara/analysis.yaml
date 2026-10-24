@@ -1,14 +1,15 @@
-# Analysis data for WP-C-03 §6: every function of WP-C-01 §2 against the fourteen malfunction guide words, the
+# Analysis data for WP-C-03 §6: every function of WP-C-01 §3 against the fourteen malfunction guide words, the
 # road and light conditions, and the severity of each hazard in each operational situation of hara.yaml.
 # hara.py expands every safety-related function and guide-word pair, not folded into another, over every situation
-# and condition, rates each row and writes the rows to hazardous-events/, one file per hazard.
-# `class` is SC (can cause the hazard named), NSC (cannot cause a hazard, with the reason) or NA (the guide word does
-# not apply to the function). `same_as` folds an SC pair into another of the same function with the same effect on
+# and condition, rates each row and writes the hazardous rows one file per hazard next to this one.
+# `output` names what the function delivers, the chart axis of its guide-word scenes. `class` is SC (can cause the
+# hazard named), NSC (cannot cause a hazard, with the reason) or NA (the guide word does not apply to the function).
+# The third item folds an SC pair into another of the same function with the same effect on
 # the vehicle, so it is rated once. Every entry is a draft by Claude (I0).
 
 guidewords:
   M01: {name: No function, means: Never acts when it should}
-  M02: {name: Stops functioning, means: Acts at first, then stops while still needed}
+  M02: {name: Stops functioning, means: "Acts at first, then stops while still needed"}
   M03: {name: Unrequested function, means: Acts when it should not}
   M04: {name: Function stuck, means: Holds its last output and ignores new input}
   M05: {name: Excessive function, means: Output larger than intended}
@@ -19,7 +20,7 @@ guidewords:
   M10: {name: Applies too long, means: Output lasts longer than intended}
   M11: {name: Delayed, means: Acts correctly but with latency beyond its specification}
   M12: {name: Inverse function, means: Acts in the opposite direction or sense}
-  M13: {name: Erratic or intermittent, means: Output oscillates, chatters or comes and goes}
+  M13: {name: Erratic or intermittent, means: "Output oscillates, chatters or comes and goes"}
   M14: {name: Uneven, means: Output asymmetric or non-monotonic}
 
 # Road and light conditions across the ODD (WP-C-02 ODD-10 to ODD-13), with one foreseeable condition beyond it.
@@ -34,6 +35,7 @@ conditions:
 functions:
   - id: F-01
     name: Localise the vehicle on the HD map
+    output: Pose
     class:
       M01: [SC, H-04, "", Pose lost without detection; control continues on dead reckoning and the vehicle drifts out of its lane]
       M02: [SC, H-04, M01, Localisation stops mid-trip; same as no function]
@@ -51,6 +53,7 @@ functions:
       M14: [NA, "", "", No asymmetric output]
   - id: F-02
     name: Detect and track objects
+    output: Objects reported
     class:
       M01: [SC, H-02, "", A road user or obstacle in the path is not detected; no deceleration is planned for it]
       M02: [SC, H-02, M01, Detection stops mid-trip; same as no function]
@@ -68,6 +71,7 @@ functions:
       M14: [NA, "", "", No asymmetric output]
   - id: F-03
     name: Recognise traffic lights
+    output: Light state
     class:
       M01: [NSC, "", "", No recognition result is treated as red (WP-C-07 FM-05); the vehicle stops at the light]
       M02: [NSC, "", "", Recognition stops; treated as M01]
@@ -85,6 +89,7 @@ functions:
       M14: [NA, "", "", No asymmetric output]
   - id: F-04
     name: Predict the motion of other road users
+    output: Predicted paths
     class:
       M01: [SC, H-02, "", No prediction; road users are taken as standing still and the vehicle does not slow for one moving into its path]
       M02: [SC, H-02, M01, Prediction stops; same as no function]
@@ -102,6 +107,7 @@ functions:
       M14: [NA, "", "", No asymmetric output]
   - id: F-05
     name: Plan the route to the destination
+    output: Route
     class:
       M01: [NSC, "", "", No route; the vehicle does not set off]
       M02: [NSC, "", "", Route lost mid-trip; Autoware stops and asks for assistance]
@@ -119,6 +125,7 @@ functions:
       M14: [NA, "", "", No asymmetric output]
   - id: F-06
     name: Plan behaviour and motion
+    output: Planned trajectory
     class:
       M01: [SC, H-07, "", No trajectory; the vehicle continues without a plan instead of stopping]
       M02: [SC, H-07, M01, Planning stops mid-trip; same as no function]
@@ -136,6 +143,7 @@ functions:
       M14: [SC, H-04, M12, An uneven path swerves out of the lane as in M12]
   - id: F-07
     name: Follow the planned trajectory
+    output: Actuation command
     class:
       M01: [SC, H-02, "", No control output while braking is needed; the vehicle does not slow]
       M02: [SC, H-02, M01, Control stops; same as no function]
@@ -153,6 +161,7 @@ functions:
       M14: [SC, H-04, M13, Steering asymmetric left and right; the excess side leaves the lane as in M13]
   - id: F-08
     name: Select and limit the command sent on
+    output: Command sent on
     class:
       M01: [SC, H-07, "", No command passed on and the loss not detected; the vehicle continues on its last command instead of stopping]
       M02: [SC, H-07, M01, Stops passing commands; same as no function]
@@ -170,6 +179,7 @@ functions:
       M14: [NA, "", "", No asymmetric output]
   - id: F-09
     name: Monitor the system and carry out a minimal risk manoeuvre
+    output: Stop when needed
     class:
       M01: [SC, H-07, "", "A fault is not detected, or no manoeuvre follows; the vehicle keeps driving without control"]
       M02: [SC, H-07, M01, The manoeuvre is abandoned midway; same as no function]
@@ -187,6 +197,7 @@ functions:
       M14: [NA, "", "", No asymmetric output]
   - id: F-10
     name: Bound every command to a safety envelope and stop the vehicle independently
+    output: Bounded command
     class:
       M01: [NSC, "", "", "A monitor that does not bound causes no hazard while Autoware works; a latent fault, counted in the hardware metrics (WP-H-04)"]
       M02: [SC, H-07, "", The monitor stops passing commands; the vehicle's own stop must take over (AOU-11) or it keeps going]
@@ -204,6 +215,7 @@ functions:
       M14: [NA, "", "", No asymmetric output]
   - id: F-11
     name: Accept trips, mode changes and requests
+    output: Request accepted
     class:
       M01: [NSC, "", "", Requests ignored; trips do not start and the stop request is answered by remote operations]
       M02: [NSC, "", "", As M01]
@@ -221,6 +233,7 @@ functions:
       M14: [NA, "", "", No asymmetric output]
   - id: F-12
     name: Signal intent to other road users
+    output: Indicator
     class:
       M01: [SC, H-09, "", "No indicator before a turn or lane change, or no hazard lights at a stop in lane; others are not warned"]
       M02: [SC, H-09, M01, Indicator stops before the manoeuvre ends; as M01]
