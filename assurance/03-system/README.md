@@ -28,7 +28,6 @@ Standard clauses: UL 4600 §9–10; 26262-4; SYS.1–5.
 
 | Folder | What it holds |
 |---|---|
-| [`hsi/`](hsi/) | — |
 | [`timing/`](timing/) | — |
 | [`tsc/`](tsc/) | — |
 | [`tsr/`](tsr/) | — |
