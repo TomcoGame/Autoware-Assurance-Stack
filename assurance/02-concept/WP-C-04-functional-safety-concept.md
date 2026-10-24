@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-04 Functional safety concept (FSRs, allocation, assumptions) |
 | Standard reference | UL 4600 §10; ISO 26262-3 §7; ASPICE 4.0 SYS.2; IEEE 2846-2022 (informative, assumptions in safety-related models) |
-| Version | 0.6 (FSR-03.02: the firm level is 3 m/s² (DQ-033 A); 2026-10-24). 0.5 (FSR-07.08: the monitor checks Autoware's stop after its own sensors fail (DQ-021 A); 2026-10-23). 0.4 (FSR-07.06 and FSR-07.07: the vehicle stops when the monitor falls silent, from the fallback concept (WP-C-12); 2026-10-23). 0.3 (collision avoidance carries SG-06 (DQ-017 A); the safety channel has its own sensors (DQ-018 A); the monitor softens unconfirmed hard braking (DQ-019 A); 2026-10-23). 0.2 (first content: the envelope concept, nine elements, functional safety requirements for the nine safety goals, generated from `fsc/fsc.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.7 (folder page `fsc/README.md` with the whole concept on one page, Figure 4-2 on how each goal is held, and `fsc/fsrs.csv` tracing every FSR to its mechanisms, technical requirements and verification cases; 2026-10-24). 0.6 (FSR-03.02: the firm level is 3 m/s² (DQ-033 A); 2026-10-24). 0.5 (FSR-07.08: the monitor checks Autoware's stop after its own sensors fail (DQ-021 A); 2026-10-23). 0.4 (FSR-07.06 and FSR-07.07: the vehicle stops when the monitor falls silent, from the fallback concept (WP-C-12); 2026-10-23). 0.3 (collision avoidance carries SG-06 (DQ-017 A); the safety channel has its own sensors (DQ-018 A); the monitor softens unconfirmed hard braking (DQ-019 A); 2026-10-23). 0.2 (first content: the envelope concept, nine elements, functional safety requirements for the nine safety goals, generated from `fsc/fsc.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | Up to ASIL D |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -74,6 +74,10 @@ SG-02 (brake enough, ASIL D) and SG-03 (do not brake hard without reason, ASIL C
 
 *Figure 4-1. Which element carries which safety goal. Drawn from `fsc/fsc.yaml` and the HARA model by [`fsc/fsc.py`](fsc/fsc.py); CI fails if it is stale.*
 
+![Figure 4-2: nine cards, one per safety goal SG-01 to SG-09. Each shows a chart of a faulty command, the envelope bound and what the safety monitor passes to the vehicle over time, a top-down scene with the path the faulty command would take, where the monitor steps in and the safe state reached, and the rated requirements by the element that carries them.](fsc/fig-c04-4-2-goals.svg)
+
+*Figure 4-2. How the concept holds each safety goal. Schematic, not simulation results. Drawn by [`fsc/fsc.py`](fsc/fsc.py); CI fails if it is stale. The whole concept is on one page in [`fsc/README.md`](fsc/README.md).*
+
 Each element's ASIL is derived: the highest ASIL among the FSRs allocated to it. Elements outside the item are bound by the assumption named, which becomes a requirement on the vehicle supplier through the development interface agreement ([WP-M-11](../01-management/WP-M-11-upstream-and-supplier-management.md)).
 
 <!-- BEGIN GENERATED: fsc-elements (assurance/02-concept/fsc/fsc.py) -->
@@ -94,7 +98,7 @@ Each element's ASIL is derived: the highest ASIL among the FSRs allocated to it.
 
 ## 5. Functional safety requirements
 
-Requirements that depended on a decision of the safety authority name it.
+Requirements that depended on a decision of the safety authority name it. [`fsc/fsrs.csv`](fsc/fsrs.csv) traces each one to the safety mechanisms of WP-S-03, the technical safety requirements of WP-S-02 and the verification cases of WP-S-09.
 
 <!-- BEGIN GENERATED: fsc-fsrs (assurance/02-concept/fsc/fsc.py) -->
 
