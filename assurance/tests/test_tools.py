@@ -32,6 +32,8 @@ for sub in (
     "03-system/tsc",
     "03-system/timing",
     "03-system/tsr",
+    "06-validation/scenarios",
+    "06-validation/simenv",
     "case/tools",
     "trace/tools",
 ):
@@ -57,6 +59,8 @@ import fsc  # noqa: E402
 import hara  # noqa: E402
 import misuse  # noqa: E402
 import modifications  # noqa: E402
+import scenarios  # noqa: E402
+import simenv  # noqa: E402
 import sotif  # noqa: E402
 import stpa  # noqa: E402
 import tara  # noqa: E402
@@ -760,6 +764,111 @@ class Tsr(unittest.TestCase):
             self.assertTrue(any(needle in x for x in tsr.check(model, k)), needle)
 
 
+class Scenarios(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(scenarios.check(scenarios.load(), scenarios.known()), [])
+
+    def test_goals_at_stake_are_computed(self):
+        m, k = scenarios.load(), scenarios.known()
+        sc = next(s for s in m["scenarios"] if s["id"] == "SC-01")
+        # HE-02.1 is H-02 (SG-02); HE-06.4 is H-06 (SG-06); TC-02 exposes FI-08, which causes SH-14 (H-03, SG-03).
+        self.assertEqual(scenarios.stake(sc, k), ["SG-02", "SG-03", "SG-06"])
+        self.assertAlmostEqual(scenarios.ceiling(m, "ODD-20"), 30 * scenarios.MPH)
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = scenarios.load(), scenarios.known()
+
+        def sc(model, sid):
+            return next(s for s in model["scenarios"] if s["id"] == sid)
+
+        cases = []
+        bad = copy.deepcopy(m)
+        sc(bad, "SC-23")["triggers"] = []
+        cases.append((bad, "TC-23: triggering condition with no scenario"))
+        bad = copy.deepcopy(m)
+        sc(bad, "SC-26")["misuse"] = ["MU-22"]
+        cases.append((bad, "MU-23: misuse case with no scenario"))
+        bad = copy.deepcopy(m)
+        sc(bad, "SC-01")["triggers"].append("TC-99")
+        cases.append((bad, "triggering condition TC-99 does not exist"))
+        bad = copy.deepcopy(m)
+        sc(bad, "SC-01")["pass"]["refs"].append("FSR-99.01")
+        cases.append((bad, "requirement FSR-99.01 does not exist"))
+        bad = copy.deepcopy(m)
+        sc(bad, "SC-01")["parameters"][0]["max"] = 50
+        cases.append((bad, "ODD-20 value 50 is above the ODD limit"))
+        bad = copy.deepcopy(m)
+        sc(bad, "SC-04")["parameters"][2]["min"] = 150
+        cases.append((bad, "ODD-11 value 150 is below the ODD limit"))
+        bad = copy.deepcopy(m)
+        sc(bad, "SC-01")["parameters"][2]["values"] = ["snow"]
+        cases.append((bad, "has no value snow"))
+        bad = copy.deepcopy(m)
+        sc(bad, "SC-14")["pass"]["refs"].remove("FSR-07.05")
+        cases.append((bad, "crosses the ODD boundary"))
+        bad = copy.deepcopy(m)
+        sc(bad, "SC-06")["pass"]["refs"].remove("FSR-06.01")
+        sc(bad, "SC-06")["pass"]["refs"].remove("FSR-06.02")
+        sc(bad, "SC-06")["pass"]["refs"].remove("FSR-06.03")
+        cases.append((bad, "SG-06 is at stake"))
+        bad = copy.deepcopy(m)
+        bad["odd"]["ODD-10"]["max"] = 5
+        cases.append((bad, "max 5 is not stated in its quote"))
+        bad = copy.deepcopy(m)
+        bad["odd"]["ODD-12"]["values"]["fog"] = {"quote": "thick fog"}
+        cases.append((bad, "is not in the row of WP-C-02"))
+        bad = copy.deepcopy(m)
+        sc(bad, "SC-01")["parameters"][-1]["min"] = 1
+        cases.append((bad, "must not state min until it is fixed"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in scenarios.check(model, k)), needle)
+
+
+class Simenv(unittest.TestCase):
+    def test_real_model_passes(self):
+        self.assertEqual(simenv.check(simenv.load(), simenv.known()), [])
+
+    def test_tcl_follows_impact_and_detection(self):
+        self.assertEqual(simenv.tcl("TI1", "TD3"), "TCL1")
+        self.assertEqual(simenv.tcl("TI2", "TD1"), "TCL1")
+        self.assertEqual(simenv.tcl("TI2", "TD3"), "TCL3")
+        self.assertEqual(simenv.pin(simenv.load()["simulators"][1]["pin"]), "22.0.0")
+
+    def test_model_breaking_a_rule_is_refused(self):
+        m, k = simenv.load(), simenv.known()
+        cases = []
+        bad = copy.deepcopy(m)
+        del bad["represent"]["ODD-10"]
+        cases.append((bad, "ODD-10: ODD attribute with no representation"))
+        bad = copy.deepcopy(m)
+        bad["sensors"][0]["params"][0] = "position 1.2 m"
+        cases.append((bad, "carries a value; the vehicle waits on DQ-008"))
+        bad = copy.deepcopy(m)
+        bad["sensors"] = [s for s in bad["sensors"] if s.get("component") != "CMP-05"]
+        cases.append((bad, "CMP-05: sensor component of WP-S-03 with no stand-in"))
+        bad = copy.deepcopy(m)
+        del bad["participants"]["wheelchair"]
+        cases.append((bad, "ODD-16 wheelchair: participant class with no entity"))
+        bad = copy.deepcopy(m)
+        bad["participants"]["car"]["category"] = "hovercraft"
+        cases.append((bad, "not an OpenSCENARIO category"))
+        bad = copy.deepcopy(m)
+        bad["simulators"][0]["impact"] = "TI3"
+        cases.append((bad, "impact must be TI1 or TI2"))
+        bad = copy.deepcopy(m)
+        bad["simulators"][1]["pin"]["key"] = "simulator/nothing"
+        cases.append((bad, "is not in repositories/simulator.repos"))
+        bad = copy.deepcopy(m)
+        bad["represent"]["ODD-10"]["sims"] = []
+        bad["represent"]["ODD-10"]["instead"] = "Not at all"
+        cases.append((bad, "runs in simulation but varies ODD-10"))
+        bad = copy.deepcopy(m)
+        bad["vehicle"][0]["property"] = "Colour"
+        cases.append((bad, "is not a property of WP-C-01 §6"))
+        for model, needle in cases:
+            self.assertTrue(any(needle in x for x in simenv.check(model, k)), needle)
+
+
 class TreeChecks(unittest.TestCase):
     def test_table_cell_count(self):
         md = "| A | B |\n|---|---|\n| 1 | 2 |\n| 1 |\n"
@@ -831,6 +940,8 @@ class Generators(unittest.TestCase):
             tsc,
             timing,
             tsr,
+            scenarios,
+            simenv,
         ):
             first, second = mod.build(), mod.build()
             self.assertEqual(first, second, mod.__name__)

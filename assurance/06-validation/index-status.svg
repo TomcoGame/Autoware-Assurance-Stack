@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="462" viewBox="0 0 640 462" role="img" aria-labelledby="t d">
 <title id="t">06-validation: work products by gate and status</title>
-<desc id="d">Work products of 06-validation from WP-M-00 §3, with the gates they are needed for and their status: WP-V-01 Safety validation plan, specification and report: G5, Skeleton; WP-V-02 SOTIF verification and validation strategy, validation targets: G2, Skeleton; WP-V-03 Evaluation of known hazardous scenarios: G4, Skeleton; WP-V-04 Evaluation of unknown hazardous scenarios: G5, Skeleton; WP-V-05 Fault injection test specification and report: G4, Skeleton; WP-V-06 Cybersecurity validation and penetration testing: G5, Skeleton; WP-V-07 Test operations: safety drivers, remote supervisors, test sites: G1, Skeleton; WP-V-08 Simulation credibility and scenario coverage: G2, Skeleton.</desc>
+<desc id="d">Work products of 06-validation from WP-M-00 §3, with the gates they are needed for and their status: WP-V-01 Safety validation plan, specification and report: G5, Skeleton; WP-V-02 SOTIF verification and validation strategy, validation targets: G2, Skeleton; WP-V-03 Evaluation of known hazardous scenarios: G4, Draft; WP-V-04 Evaluation of unknown hazardous scenarios: G5, Skeleton; WP-V-05 Fault injection test specification and report: G4, Skeleton; WP-V-06 Cybersecurity validation and penetration testing: G5, Skeleton; WP-V-07 Test operations: safety drivers, remote supervisors, test sites: G1, Skeleton; WP-V-08 Simulation credibility and scenario coverage: G2, Draft.</desc>
 <style>
 svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
 @media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
@@ -37,7 +37,7 @@ svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dashar
 <rect x="16" y="180" width="608" height="40" rx="4" class="card"/>
 <text x="24" y="197" class="tb">WP-V-03</text>
 <text x="24" y="212" class="s">Evaluation of known hazardous scenarios</text>
-<rect x="511.3" y="193" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="511.3" y="193" width="26.6" height="14" rx="7" class="st-d"/>
 <text x="24" y="237" class="tb">WP-V-04</text>
 <text x="24" y="252" class="s">Evaluation of unknown hazardous scenarios</text>
 <rect x="547.9" y="233" width="26.6" height="14" rx="7" class="st-s"/>
@@ -54,7 +54,9 @@ svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dashar
 <rect x="401.6" y="353" width="26.6" height="14" rx="7" class="st-s"/>
 <text x="24" y="397" class="tb">WP-V-08</text>
 <text x="24" y="412" class="s">Simulation credibility and scenario coverage</text>
-<rect x="438.1" y="393" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="438.1" y="393" width="26.6" height="14" rx="7" class="st-d"/>
 <rect x="24" y="433" width="26" height="14" rx="7" class="st-s"/>
-<text x="56" y="444" class="t">Skeleton (8)</text>
+<text x="56" y="444" class="t">Skeleton (6)</text>
+<rect x="154.0" y="433" width="26" height="14" rx="7" class="st-d"/>
+<text x="186" y="444" class="t">Draft (2)</text>
 </svg>
