@@ -48,6 +48,7 @@ for g in assurance/01-management/figures/fig_m00_register.py assurance/01-manage
          assurance/02-concept/tara/tara.py assurance/02-concept/cybersecurity/cybersecurity.py \
          assurance/02-concept/ai/ai.py assurance/02-concept/misuse/misuse.py \
          assurance/03-system/tsc/tsc.py assurance/03-system/timing/timing.py \
+         assurance/03-system/tsr/tsr.py \
          assurance/06-validation/scenarios/scenarios.py assurance/06-validation/simenv/simenv.py \
          assurance/case/tools/dashboard.py; do python3 "$g" --check; done
 python3 -m unittest discover -s assurance/tests -p 'test_*.py'

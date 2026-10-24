@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-M-00 Work product register |
 | Standard reference | UL 4600 §5 (safety case work products); ISO 26262-2:2018 §6 (safety plan, work product list); ISO/SAE 21434:2021 §6; ASPICE 4.0 MAN.3 (define work products), SUP.8 (configuration items) |
-| Version | 0.18 (WP-V-03 and WP-V-08 drafted; 2026-10-24). 0.17 (WP-S-04 drafted; 2026-10-23). 0.16 (WP-S-03 drafted; 2026-10-23). 0.15 (WP-C-08 drafted; 2026-10-23). 0.14 (WP-C-11 drafted; 2026-10-23). 0.13 (WP-C-10 drafted; 2026-10-23). 0.12 (WP-C-09 drafted; 2026-10-23). 0.11 (WP-A-05 drafted; 2026-10-23). 0.10 (WP-C-07 drafted; 2026-10-23). 0.9 (WP-C-06 drafted; 2026-10-23). 0.8 (WP-C-12 drafted; 2026-10-23). 0.7 (WP-C-05 drafted; 2026-10-23). 0.6 (WP-C-04 drafted; 2026-10-23). 0.5 (WP-C-03 drafted; 2026-10-23). 0.4 (WP-C-02 drafted; 2026-10-23). 0.3 (WP-C-01 drafted; 2026-10-23). 0.2 (G2 exit criterion adds the vehicle choice, deferred to G2 by DQ-003 C; 2026-10-23). 0.1 (first issue: every work product of the assurance path, its clauses, gate and status; 2026-10-22) |
+| Version | 0.19 (WP-V-03 and WP-V-08 drafted; 2026-10-24). 0.18 (WP-S-02 drafted; 2026-10-24). 0.17 (WP-S-04 drafted; 2026-10-23). 0.16 (WP-S-03 drafted; 2026-10-23). 0.15 (WP-C-08 drafted; 2026-10-23). 0.14 (WP-C-11 drafted; 2026-10-23). 0.13 (WP-C-10 drafted; 2026-10-23). 0.12 (WP-C-09 drafted; 2026-10-23). 0.11 (WP-A-05 drafted; 2026-10-23). 0.10 (WP-C-07 drafted; 2026-10-23). 0.9 (WP-C-06 drafted; 2026-10-23). 0.8 (WP-C-12 drafted; 2026-10-23). 0.7 (WP-C-05 drafted; 2026-10-23). 0.6 (WP-C-04 drafted; 2026-10-23). 0.5 (WP-C-03 drafted; 2026-10-23). 0.4 (WP-C-02 drafted; 2026-10-23). 0.3 (WP-C-01 drafted; 2026-10-23). 0.2 (G2 exit criterion adds the vehicle choice, deferred to G2 by DQ-003 C; 2026-10-23). 0.1 (first issue: every work product of the assurance path, its clauses, gate and status; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -82,7 +82,7 @@ Clause columns cite the editions in [assurance/README.md](../README.md#standards
 | ID | Work product | UL 4600 | ISO 26262 | ISO 21448 | ISO/SAE 21434 | ISO/PAS 8800 | ASPICE | Gate | Status |
 |---|---|---|---|---|---|---|---|---|---|
 | [WP-S-01](../03-system/WP-S-01-system-requirements.md) | System requirements specification | §9 | | §5 | | | SYS.2 | G2 | S |
-| [WP-S-02](../03-system/WP-S-02-technical-safety-requirements.md) | Technical safety requirements specification | §10 | 4 §6 | | | | SYS.2 | G2 | S |
+| [WP-S-02](../03-system/WP-S-02-technical-safety-requirements.md) | Technical safety requirements specification | §10 | 4 §6 | | | | SYS.2 | G2 | D |
 | [WP-S-03](../03-system/WP-S-03-technical-safety-concept-architecture.md) | Technical safety concept and system architectural design | §10 | 4 §6 | §8 | | AI architecture measures | SYS.3 | G2 | D |
 | [WP-S-04](../03-system/WP-S-04-timing-ftti-budget.md) | Timing: FTTI, detection and reaction budget, fallback timing | §10 | 4 §6 | | | | SYS.3 | G2 | D |
 | [WP-S-05](../03-system/WP-S-05-hsi-specification.md) | Hardware-software interface, including the drive-by-wire interface | §10 | 4 §6 | | | | SYS.3 | G2 | S |
