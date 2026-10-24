@@ -769,6 +769,37 @@ class Tsc(unittest.TestCase):
     def test_real_model_passes(self):
         self.assertEqual(tsc.check(tsc.load(), tsc.known()), [])
 
+    def test_every_mechanism_has_a_card_with_its_budget(self):
+        m, k = tsc.load(), tsc.known()
+        svg = tsc.cards.sheet(m, tsc.card_known(m, k))
+        self.assertEqual(
+            re.findall(r'class="gid">(SM-\d\d)<', svg), [s["id"] for s in m["mechanisms"]]
+        )
+        tm, tmech = tsc.cards.timed()
+        b = tsc.cards.budget(next(s for s in m["mechanisms"] if s["id"] == "SM-05"), tm, tmech)
+        self.assertEqual(b["goal"], "SG-08")
+        self.assertIsNone(
+            tsc.cards.budget(next(s for s in m["mechanisms"] if s["id"] == "SM-04"), tm, tmech)
+        )
+
+    def test_mechanisms_csv_traces_every_mechanism(self):
+        import csv
+
+        m, k = tsc.load(), tsc.known()
+        rows = list(csv.DictReader(io.StringIO(tsc.mechanisms_csv(m, k))))
+        self.assertEqual([r["ID"] for r in rows], [s["id"] for s in m["mechanisms"]])
+        r = rows[0]
+        self.assertIn("TSR-01.02", r["Technical safety requirements (WP-S-02)"])
+        self.assertIn("IT-03", r["Integration test cases (WP-S-08)"])
+        self.assertTrue(r["Binding FTTI (WP-S-04)"].endswith("(SG-01)"))
+
+    def test_folder_page_links_every_file_in_the_folder(self):
+        page = tsc.build()[tsc.README]
+        for p in tsc.HERE.iterdir():
+            if p.suffix in (".csv", ".svg", ".yaml", ".py"):
+                self.assertIn(f"]({p.name})", page, p.name)
+        self.assertNotIn("](tsc/", page)
+
     def test_component_asil_is_derived(self):
         m, k = tsc.load(), tsc.known()
         ca = tsc.component_asil(m, k)
