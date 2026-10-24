@@ -1175,3 +1175,36 @@
         glare, which simulators reproduce least well; a mistake in the simulator spreads to every result.
   sources: [WP-V-03 §3, WP-V-08 §3 and §5, WP-P-07 §4, WP-V-02, UL 4600 §12 and §13, ISO 26262-8 §11, ISO 21448 §9]
   status: open
+
+- id: DQ-037
+  question: Should the vehicle have any short-range wireless, such as Wi-Fi or Bluetooth?
+  context: >-
+    The design so far reaches the vehicle only through its two cellular links, its sensors, the passenger interface
+    and service ports behind a sealed housing. Wi-Fi or Bluetooth would let a passenger's phone talk to the vehicle
+    directly, or give passengers internet access. **Every radio added is a way in for an attacker standing next to
+    the vehicle,** and the threat analysis (WP-C-09) has not covered one.
+  reversibility: revisit
+  blocks: WP-S-07 EX-07, the threat analysis of any radio added (WP-C-09), the vehicle and its options (DQ-008)
+  gate: G2
+  asked: 2026-10-24
+  batch: 11
+  options:
+    - key: A
+      recommended: true
+      title: None; passengers use the app through the backend
+      detail: >-
+        The phone talks to the fleet backend over its own connection, and the backend to the vehicle over the
+        signed cellular path. Cost: no direct phone-to-vehicle features (for example unlocking by proximity), and no
+        passenger Wi-Fi.
+    - key: B
+      title: Bluetooth Low Energy to identify the passenger at the door
+      detail: >-
+        The passenger's phone proves the booking at the vehicle. Cost: a radio reachable by anyone nearby, its own
+        threat analysis, and its stack kept out of the safety and vehicle zones.
+    - key: C
+      title: Passenger Wi-Fi hotspot
+      detail: >-
+        Internet access for passengers. Cost: the largest exposure of the three; it must be a separate network with no
+        path to the Autoware computer, shown by test.
+  sources: [WP-S-07 §4, WP-C-09, WP-C-10, CSR-12, ISO/SAE 21434 §15]
+  status: open
