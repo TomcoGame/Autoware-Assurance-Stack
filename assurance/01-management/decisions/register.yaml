@@ -1031,3 +1031,106 @@
   status: applied
   answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
   applied: {ref: "#29", record: WP-S-04 v0.3 §2; WP-C-07 FM-11, at: 2026-10-23}
+
+- id: DQ-033
+  question: How hard may the safety monitor brake when its own sensors cannot see the reason?
+  context: >-
+    You decided the monitor softens hard braking from Autoware that its sensors cannot match to an object, down to a
+    firm level (DQ-019 A). The same level is how hard the monitor's own stop brakes (MRM-4). **A low level is kinder
+    to the car behind; a high level lets more of Autoware's braking through when only Autoware sees the danger.**
+    From 50 km/h a stop takes 4.6 s and 32 m at 3 m/s², 6.9 s and 48 m at 2 m/s², 3.5 s and 24 m at 4 m/s².
+  reversibility: revisit
+  blocks: WP-S-02 P-05, TSR-04.01, TSR-06.01, TSR-13.01; MRM-4 stop time in WP-S-04 §5 and WP-C-12
+  gate: G2
+  asked: 2026-10-24
+  batch: 11
+  options:
+    - key: A
+      recommended: true
+      title: 3 m/s², firm braking
+      detail: >-
+        Above Autoware's own emergency stop (2.5 m/s²), so that stop always passes unchanged; well below full braking,
+        so a following driver can react. Cost: Autoware's harder braking for something only it sees is held to
+        3 m/s², and the monitor's sensors must carry the collision goal on their own, which they must anyway.
+    - key: B
+      title: 2 m/s², gentle braking
+      detail: >-
+        Kindest to a following vehicle or motorcycle. Cost: Autoware's emergency stop is softened too when the
+        monitor cannot confirm it, and the monitor's own stop takes 2.3 s longer from 50 km/h.
+    - key: C
+      title: 4 m/s², hard braking
+      detail: >-
+        More of Autoware's braking passes and the monitor's stop is shortest. Cost: a spurious stop at 4 m/s² is more
+        likely to be hit from behind, which is the hazard SG-03 (ASIL C) guards against.
+  sources: [DQ-019, FSR-03.02, WP-C-12 §3.2, WP-S-04 §5, WP-S-02 §2.1]
+  status: open
+
+- id: DQ-034
+  question: How cautious should the safety monitor's assumptions about other road users be?
+  context: >-
+    The monitor keeps a safe distance and checks crossing paths using stated bounds on what others can do: how hard
+    the vehicle ahead may brake, how fast a pedestrian or cyclist may come out from behind a parked car (DQ-017 A).
+    **These bounds decide how close the vehicle follows and how slowly it passes parked cars; anything outside them is
+    not covered by the rated argument.** Figures below assume the vehicle responds within 0.5 s and can always brake
+    at 4 m/s², to be confirmed with the vehicle (DQ-008).
+  reversibility: revisit
+  blocks: WP-S-02 P-06, P-07, TSR-01.01, TSR-01.03 to TSR-01.05, TSR-12.01; Autoware's following distance
+  gate: G2
+  asked: 2026-10-24
+  batch: 11
+  figure: figures/dq-034.svg
+  caption: Following distance the monitor keeps behind a vehicle at the same speed, for each option. Higher is more cautious.
+  options:
+    - key: A
+      recommended: true
+      title: Cautious, the vehicle ahead may brake as hard as a car can
+      detail: >-
+        The vehicle ahead may brake at 8 m/s²; pedestrians may run at 3 m/s and cyclists ride at 8 m/s out of a blind
+        spot. At 50 km/h the monitor keeps 19.5 m (1.4 s). Cost: Autoware must follow at least that far back, and
+        passes parked cars more slowly; other drivers may cut in.
+    - key: B
+      title: Typical, the vehicle ahead brakes firmly at most
+      detail: >-
+        The vehicle ahead may brake at 6 m/s²; pedestrians walk briskly at 2 m/s, cyclists ride at 6 m/s. At 50 km/h
+        the monitor keeps 15.5 m (1.1 s). Cost: a vehicle ahead in a real emergency stop, or a running child, is
+        outside the rated argument and rests on Autoware alone.
+    - key: C
+      title: Minimal, the vehicle ahead brakes no harder than ours
+      detail: >-
+        At 50 km/h the monitor keeps 7.4 m (0.5 s). Cost: the monitor protects only against our own response time; a
+        vehicle ahead braking harder than ours can be hit, and the rated argument barely covers following.
+  sources: [FSR-01.01, FSR-02.02, FSR-06.01, FSR-06.02, DQ-017, WP-S-02 §2.1, WP-S-04 §2]
+  status: open
+
+- id: DQ-035
+  question: Must each safety sensor also avoid false alarms to ASIL C, or should the monitor brake hard only when both agree?
+  context: >-
+    You split the safety channel's detection across LiDAR and radar, each to ASIL B(D), so that a road user seen by
+    either counts (DQ-031 A). The other side of that choice: **a false detection by either sensor can make the monitor
+    brake hard, which is the ASIL C hazard of unexpected braking (SG-03).** Decomposition does not split that
+    requirement, so each sensor must keep its own false alarms rare at ASIL C.
+  reversibility: hard
+  blocks: WP-S-02 TSR-09.04, TSR-09.05; ASIL of CMP-04 and CMP-05 in WP-S-03; sensor choice (WP-H-02)
+  gate: G2
+  asked: 2026-10-24
+  batch: 11
+  options:
+    - key: A
+      recommended: true
+      title: Each sensor avoids false alarms to ASIL C
+      detail: >-
+        Detection stays as decided: either sensor is enough. Cost: each sensor and its processing is developed to
+        ASIL C for false alarms as well as B(D) for detection, more than the decomposition alone suggested.
+    - key: B
+      title: Brake hard only when both sensors agree; one sensor alone brakes firmly
+      detail: >-
+        A false alarm from one sensor causes only firm braking (DQ-033). Cost: a road user only one sensor sees gets
+        firm braking, not emergency braking, which weakens the collision goal (SG-02, ASIL D) and needs its own
+        analysis.
+    - key: C
+      title: Decide when the sensors are chosen
+      detail: >-
+        Wait for the candidate sensors' false-alarm data (DQ-008). Cost: the sensor requirements of WP-S-02 stay
+        provisional, and the sensor choice cannot use them.
+  sources: [DQ-031, FSR-03.01, FSR-02.01, WP-S-03 RD-02, ISO 26262-9 §5, WP-S-02 §2]
+  status: open
