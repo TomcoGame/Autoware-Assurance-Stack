@@ -35,6 +35,10 @@ Identifiers are never reused; a withdrawn item keeps its identifier and is marke
 | `IF-<nn>`, `SIG-<nn>`, `CK-<nn>`, `HD-<nn>` | Interface, signal, clock and hardware diagnostic of the hardware–software interface ([WP-S-05](../assurance/03-system/hsi/README.md)) |
 | `ENV-<n>`, `IS-<n>`, `IT-<nn>` | Test environment, integration step and integration test case ([WP-S-08](../assurance/03-system/integ/README.md)) |
 | `SIM-<nn>` | Simulator used for validation ([WP-V-08](../assurance/06-validation/README.md)) |
+| `SC-<nn>` | Known hazardous scenario ([WP-V-03](../assurance/06-validation/scenarios/README.md)) |
+| `MU-<nn>`, `HR-<nn>` | Misuse or interaction entry, and a requirement the misuse and interaction analysis adds ([WP-C-08](../assurance/02-concept/WP-C-08-human-interaction-misuse-analysis.md)) |
+| `LS-<nn>`, `SR-<nn>` | Loss scenario and requirement of the STPA ([WP-A-05](../assurance/08-analyses/WP-A-05-stpa.md)) |
+| `MAN-<nn>` | Manoeuvre the vehicle performs in its ODD ([WP-C-02](../assurance/02-concept/WP-C-02-odd-and-intended-functionality.md)) |
 | `TR-<nn>` | Fallback trigger: a condition that starts a minimal risk manoeuvre ([WP-C-12](../assurance/02-concept/WP-C-12-fallback-and-minimal-risk-concept.md)) |
 | `OS-<nn>` | Operational situation: a driving situation the HARA rates hazards in ([WP-C-03](../assurance/02-concept/WP-C-03-hara.md)) |
 | `M01` to `M14`, `W01` to `W06` | HARA guide words (the ways a function can malfunction, such as M01 "no function") and road and light conditions (such as W01 "dry road in daylight") ([WP-C-03](../assurance/02-concept/WP-C-03-hara.md)) |

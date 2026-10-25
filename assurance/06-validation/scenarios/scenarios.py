@@ -54,6 +54,7 @@ import misuse  # noqa: E402
 import scards  # noqa: E402
 import sotif  # noqa: E402
 import stpa  # noqa: E402
+import terms  # noqa: E402
 import triggering  # noqa: E402
 
 MODEL = HERE / "scenarios.yaml"
@@ -788,7 +789,7 @@ def build() -> dict[Path, str]:
         FIG: figure(m, k),
         FIG2: scards.sheet(card_data(m, k)),
         CSV: scenarios_csv(m, k),
-        README: readme(t, doc3, doc8),
+        README: terms.close(readme(t, doc3, doc8), README),
     }
 
 
