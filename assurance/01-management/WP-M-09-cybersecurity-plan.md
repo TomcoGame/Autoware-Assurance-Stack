@@ -36,8 +36,8 @@ This repository is public. A cybersecurity work product here may publish what he
 | Assets and the cybersecurity properties that matter for each | Attack feasibility ratings and attack potential factors per threat |
 | Damage scenarios and their impact ratings | Risk values per threat, and the attack vector of each |
 | Threat scenarios named at the level of published research | The rationale for retaining a risk (what makes an attack hard) |
-| The treatment of each threat (reduce or retain) and the decisions behind it | Design detail: key management, network topology, open ports and services, cryptographic parameters, debug access |
-| Cybersecurity goals, their CALs, claims by identifier, and concept-level requirements and controls | Vulnerability analysis, penetration test and fuzzing plans and findings, known weaknesses, incident records |
+| The treatment of each threat (reduce or retain) and the decisions behind it | Design detail: the text of technical cybersecurity requirements, trust zones, conduits, exposed interfaces, key management, network topology, open ports and services, cryptographic parameters, debug access |
+| Cybersecurity goals, their CALs, claims by identifier, concept-level requirements and controls, and the trace and CAL of technical requirements | Vulnerability analysis, penetration test and fuzzing plans and findings, known weaknesses, incident records |
 | That an activity was done, by whom, and its overall outcome | Keys, certificates, credentials and any other secret |
 
 How it is enforced:
@@ -47,7 +47,7 @@ How it is enforced:
 - **Report vulnerabilities privately.** A vulnerability in the item or in this fork is reported through GitHub's private vulnerability reporting for this repository, never in a public issue.
 - **When restricted information is published by mistake,** remove it from the tree, then from history, and tell the safety authority; treat a published secret as compromised and replace it.
 
-The restricted tier of the TARA and the cybersecurity concept (WP-C-09, WP-C-10) was removed from this repository on 2026-10-25 and is held outside it until a controlled store is chosen (OI-2).
+The restricted tier of the TARA, the cybersecurity concept and the security architecture (WP-C-09, WP-C-10, WP-S-07), and the README figure that placed risk values on the vehicle, were removed from this repository and from its history on 2026-10-25. They are held outside it until a controlled store is chosen (OI-2).
 
 ## 5. Reuse and off-the-shelf components (Autoware, ROS 2, DDS, OS)
 

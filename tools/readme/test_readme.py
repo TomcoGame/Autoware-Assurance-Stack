@@ -343,23 +343,6 @@ class Figures(unittest.TestCase):
             self.assertIn(f"{t.margin:g} m (proposed)", flat)
         self.assertIn("nothing measured", flat)
 
-    def test_attack_figure_lists_every_asset_and_refuses_a_renamed_one(self):
-        assets, scale, _ = fx.tara()
-        flat = " ".join(
-            re.findall(r">([^<]*)</text>", self.out[figures.OUT / "attack-surface.svg"])
-        )
-        for a in assets:
-            label = f"{len(a.threats)} threat{'s' if len(a.threats) != 1 else ''} · risk {a.max_risk}/{scale}"
-            self.assertIn(label, flat, a.aid)
-        renamed = [fx.Asset("A-01", "Something else", [], 0)] + assets[1:]
-        old = fx.tara
-        fx.tara = lambda: (renamed, scale, 3)
-        try:
-            with self.assertRaises(fx.FactError):
-                figures.attack_figure(fx.load(), {}, {})
-        finally:
-            fx.tara = old
-
     def test_repository_map_names_its_folders(self):
         folders = fx.folders()
         flat = " ".join(

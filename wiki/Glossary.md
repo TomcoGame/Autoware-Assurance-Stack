@@ -28,8 +28,8 @@ Identifiers are never reused; a withdrawn item keeps its identifier and is marke
 | `AIS-<nn>`, `AISR-<nn>` | AI system and AI safety requirement ([WP-C-11](../assurance/02-concept/WP-C-11-ai-system-definition-and-safety-requirements.md)) |
 | `CG-`, `CC-<nn>` | Cybersecurity goal and cybersecurity claim in the cybersecurity concept ([WP-C-10](../assurance/02-concept/WP-C-10-cybersecurity-goals-and-concept.md)) |
 | `CR-<nn>` | Cybersecurity control proposed by the TARA ([WP-C-09](../assurance/02-concept/WP-C-09-tara.md)) |
-| `CSTR-<nn>.<nn>` | Technical cybersecurity requirement ([WP-S-07](../assurance/03-system/secarch/README.md)) |
-| `SZ-<n>`, `EX-<nn>` | Security zone (a part of the system with one level of trust) and external interface (a way into the vehicle from outside) ([WP-S-07](../assurance/03-system/secarch/README.md)) |
+| `CSTR-<nn>.<nn>` | Technical cybersecurity requirement ([WP-S-07](../assurance/03-system/WP-S-07-cybersecurity-requirements-architecture.md)) |
+| `SZ-<n>`, `EX-<nn>` | Security zone (a part of the system with one level of trust) and external interface (a way into the vehicle from outside); their detail is restricted ([WP-S-07](../assurance/03-system/WP-S-07-cybersecurity-requirements-architecture.md)) |
 | `CMP-<nn>`, `SM-<nn>`, `RD-<nn>` | Component of the system architecture, safety mechanism, and redundancy (two channels that cover each other) ([WP-S-03](../assurance/03-system/tsc/README.md)) |
 | `P-<nn>` | Safety envelope parameter ([WP-S-02](../assurance/03-system/tsr/README.md)) |
 | `IF-<nn>`, `SIG-<nn>`, `CK-<nn>`, `HD-<nn>` | Interface, signal, clock and hardware diagnostic of the hardware–software interface ([WP-S-05](../assurance/03-system/hsi/README.md)) |
@@ -186,6 +186,3 @@ The software the [`ansible/`](../ansible/README.md) and [`docker/`](../docker/RE
 
 *Illustration: proposed values, nothing measured. FTTIs computed by WP-S-04's own `timing.py`. Labels read from the work products by [`figures.py`](../tools/readme/figures.py); vehicle models CC BY 4.0, see [credits](../tools/readme/models/CREDITS.md).*
 
-![Where an attacker could reach: the robotaxi with numbered markers where the assets of the threat analysis (WP-C-09) sit, and a list of the assets with their number of threat scenarios and highest risk.](../tools/readme/figures/attack-surface.svg)
-
-*Illustration: positions are illustrative. Risks computed by WP-C-09's own `tara.py`. Labels read from the work products by [`figures.py`](../tools/readme/figures.py); vehicle models CC BY 4.0, see [credits](../tools/readme/models/CREDITS.md).*

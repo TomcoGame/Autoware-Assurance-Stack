@@ -1777,7 +1777,7 @@ def gates_figure(f: fx.Facts, v: dict, models) -> str:
     return svg(W, H, "The road to driverless operation", desc, b)
 
 
-# ---------------------------------------------------------------- wiki figures: FTTI, attack surface, repository map
+# ---------------------------------------------------------------- wiki figures: FTTI, repository map
 
 FTTI_PANELS = [  # goal, what the fault does, how the margin is drawn
     ("SG-01", "Unintended acceleration", "ahead"),
@@ -1911,140 +1911,6 @@ def ftti_figure(f: fx.Facts, v: dict, models) -> str:
     return svg(W, H, "How long a fault may last", desc, b)
 
 
-ASSET_PLACES = (
-    {  # asset -> (keyword its name must contain, where on or off the vehicle it is drawn)
-        "A-01": ("remote driving", (0.0, -1.25, 1.52)),
-        "A-02": ("release", (0.0, -1.25, 1.52)),
-        "A-03": ("operator", None),
-        "A-04": ("fleet backend", None),
-        "A-05": ("safety monitor", (0.0, -0.95, 0.62)),
-        "A-06": ("autoware", (0.0, -1.6, 0.75)),
-        "A-07": ("map", (0.0, -1.6, 0.75)),
-        "A-08": ("update", (0.0, -1.25, 1.52)),
-        "A-09": ("sensor", (0.0, -0.2, 1.62)),
-        "A-10": ("command path", (0.0, 0.9, 0.3)),
-        "A-11": ("cabin", (0.0, 0.3, 1.15)),
-        "A-12": ("telemetry", None),
-        "A-13": ("passenger interface", (-0.86, 0.1, 0.9)),
-    }
-)
-
-
-def attack_figure(f: fx.Facts, v: dict, models) -> str:
-    assets, scale, reduce_at = fx.tara()
-    ids = {a.aid for a in assets}
-    if ids != set(ASSET_PLACES):
-        raise fx.FactError(
-            f"WP-C-09 lists assets {', '.join(sorted(ids))}; the figure places {', '.join(ASSET_PLACES)}"
-        )
-    for a in assets:
-        if ASSET_PLACES[a.aid][0] not in a.name.lower():
-            raise fx.FactError(f"WP-C-09 {a.aid} is now '{a.name}': place it again in figures.py")
-    W, H = 1240, 600
-    cam = look_at((-5.6, 6.4, 3.1), (0.0, 0.0), 15, 640, 330, 360)
-    b = [f'<rect width="{W}" height="{H}" fill="url(#sky)"/>']
-    b += ground_grid(cam, -4.0, 4.0, -4.0, 6.0)
-    sx, sy = cam(0, 0, 0)
-    b.append(
-        f'<ellipse cx="{sx:.1f}" cy="{sy + 6:.1f}" rx="150" ry="30" fill="#000" fill-opacity="0.5" filter="url(#soft)"/>'
-    )
-    b += vehicle(cam, models["kiri10"], 0.0, 0.0, 0.0, EGO_PAINT, 0.03)[1]
-
-    def risk_col(r):
-        return RED if r >= reduce_at + 1 else (AMBER if r >= reduce_at else GREEN)
-
-    seen: dict[tuple, int] = {}
-    for n, a in enumerate(assets, 1):
-        place = ASSET_PLACES[a.aid][1]
-        if place is None:
-            continue
-        px, py = cam(*place)
-        k = seen.get(place, 0)
-        seen[place] = k + 1
-        px, py = px + 22 * k, py - 4 * k
-        b.append(
-            f'<circle cx="{px:.1f}" cy="{py:.1f}" r="10" fill="{risk_col(a.max_risk)}" stroke="#0d0f12" stroke-width="1.5"/>'
-        )
-        b.append(text(px, py + 4, str(n), 10.5, "#0d0f12", 800, "middle"))
-    # the off-vehicle assets, drawn as a backend in the corner
-    b.append(
-        '<rect x="40" y="110" width="250" height="78" rx="10" fill="#141820" stroke="#2c3440"/>'
-    )
-    b.append(text(56, 132, "Off the vehicle", 12, "#9aa3ad", 700))
-    k = 0
-    for n, a in enumerate(assets, 1):
-        if ASSET_PLACES[a.aid][1] is None:
-            cx_ = 70 + 64 * k
-            b.append(
-                f'<circle cx="{cx_}" cy="164" r="10" fill="{risk_col(a.max_risk)}" stroke="#0d0f12" stroke-width="1.5"/>'
-            )
-            b.append(text(cx_, 168, str(n), 10.5, "#0d0f12", 800, "middle"))
-            k += 1
-    x0, y = 700, 104
-    b.append(
-        text(
-            x0,
-            y,
-            "ASSETS OF WP-C-09, WITH THEIR THREAT SCENARIOS",
-            11,
-            "#9aa3ad",
-            700,
-            extra='letter-spacing="1"',
-        )
-    )
-    y += 12
-    for n, a in enumerate(assets, 1):
-        col = risk_col(a.max_risk)
-        b.append(f'<circle cx="{x0 + 10}" cy="{y + 12}" r="9" fill="{col}"/>')
-        b.append(text(x0 + 10, y + 16, str(n), 10, "#0d0f12", 800, "middle"))
-        name = a.name if tw(a.name, 12) < 330 else wrap(a.name, 12, 320)[0] + " …"
-        b.append(text(x0 + 26, y + 16, name, 12, "#e3e6ea", 600))
-        b.append(
-            text(
-                x0 + 520,
-                y + 16,
-                f"{len(a.threats)} threat{'s' if len(a.threats) != 1 else ''} · risk {a.max_risk}/{scale}",
-                11.5,
-                col,
-                650,
-                "end",
-            )
-        )
-        y += 30
-    b.append(
-        text(
-            x0,
-            y + 14,
-            f"Risk {reduce_at} or more is reduced by a control (WP-C-09 method); positions on the car are illustrative.",
-            11,
-            "#9aa3ad",
-        )
-    )
-    b.append(text(28, 40, "Where an attacker could reach", 22, "#ffffff", 700))
-    b.append(
-        text(
-            28,
-            64,
-            "The assets the TARA protects, on and around the robotaxi, coloured by the highest risk of the threats against them.",
-            13.5,
-            "#c9ced6",
-        )
-    )
-    b += stamp(
-        28, H - 44, 11, "ILLUSTRATION · positions illustrative · draft for engineering review"
-    )
-    desc = (
-        "The robotaxi seen from the front left with numbered markers where the assets of the threat analysis "
-        "(WP-C-09) sit, and a list of the assets with their number of threat scenarios and highest risk: "
-        + "; ".join(
-            f"{a.aid} {a.name}, {len(a.threats)} threats, risk {a.max_risk} of {scale}"
-            for a in assets
-        )
-        + "."
-    )
-    return svg(W, H, "Where an attacker could reach", desc, b)
-
-
 REPO_PARTS = [  # folder, where on the robotaxi its subject is, card position (x, y)
     ("04-hardware", (0.0, -0.2, 1.62), (40, 110)),
     ("02-concept", (-0.86, 0.6, 0.85), (40, 222)),
@@ -2130,7 +1996,6 @@ def build() -> dict[Path, str]:
         OUT / "safety-goals.svg": goals_figure(f, v, models),
         OUT / "gates.svg": gates_figure(f, v, models),
         OUT / "ftti.svg": ftti_figure(f, v, models),
-        OUT / "attack-surface.svg": attack_figure(f, v, models),
         OUT / "repository-map.svg": repo_map_figure(f, v, models),
     }
 

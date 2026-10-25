@@ -296,36 +296,6 @@ def timing() -> dict[str, Timing]:
     return out
 
 
-@dataclass(frozen=True)
-class Asset:
-    aid: str
-    name: str
-    threats: list[str]  # threat scenario ids
-    max_risk: int  # highest risk value of those threats (0 when none)
-
-
-def tara() -> tuple[list[Asset], int, int]:
-    """The assets of WP-C-09 with their threat scenarios and highest risk, computed by its own
-    tara.py; also the highest value of the risk scale and the value from which risk is reduced."""
-    sys.path.insert(0, str(ASSURANCE / "02-concept" / "tara"))
-    import tara as ta  # noqa: PLC0415
-
-    m = ta.load()
-    out = []
-    for a in m["assets"]:
-        ts = [t for t in m["threats"] if a["id"] in t.get("assets", [])]
-        out.append(
-            Asset(
-                a["id"],
-                str(a["name"]),
-                [t["id"] for t in ts],
-                max((ta.risk(m, t) for t in ts), default=0),
-            )
-        )
-    scale = max(v for row in m["method"]["matrix"] for v in row)
-    return out, scale, int(m["method"]["reduce_at"])
-
-
 def folders() -> dict[str, str]:
     """Folder -> its content, from the Layout table of assurance/README.md."""
     head, rows = _rows(ASSURANCE_README, "Folder", "## Layout")
