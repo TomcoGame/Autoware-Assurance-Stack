@@ -1,0 +1,385 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1070" height="1796" viewBox="0 0 1070 1796" role="img" aria-labelledby="t d">
+<title id="t">WP-S-02 Figure 2-1: envelope parameters</title>
+<desc id="d">Envelope parameters: P-01 Longitudinal margin beyond the safe distance: 0.5 m, the margin of SG-01 (proposed, WP-S-04 §2); P-02 Lateral margin to a road user, obstacle or kerb: 0.3 m, the margin of SG-04 (proposed, WP-S-04 §2); P-03 Creep distance from standstill: 0.2 m, the margin of SG-05 (proposed, WP-S-04 §2); P-04 Drift allowed under remote driving: 1 m, the margin of SG-08 (proposed, WP-S-04 §2); P-05 Firm deceleration level for unconfirmed braking, and for the monitor's own stop: 3 m/s² (DQ-033 A); P-06 Assumptions of the safe longitudinal distance (response time, own guaranteed braking, braking of the vehicle ahead): The item responds within 0.5 s and can always brake at 4 m/s²; the vehicle ahead may brake at up to 8 m/s², which keeps 19.5 m at 50 km/h (DQ-034 A); P-07 Bounds on other road users' speed and acceleration, for crossing paths and occlusions (DQ-017 A): Pedestrians may run at up to 3 m/s and cyclists ride at up to 8 m/s, including out of an occlusion (DQ-034 A); P-08 Silence after which the vehicle stops on its own: 179 ms to 283 ms, the detection budget of SM-14 (WP-S-04 §4); P-09 Age bound of a remote command: 143 ms, the detection budget of SM-05 (WP-S-04 §4); P-10 Steering angle and rate envelope over speed: The chosen vehicle's steering geometry and actuator (DQ-008); P-11 Tolerances of achieved against commanded acceleration, deceleration and steering: The chosen vehicle's actuator response (DQ-008), set above its measured fault-free spread; P-12 Smallest object the safety channel must detect, and its detection range: Range is the stopping distance at the top ODD speed; the smallest height is set with FM-03; P-13 Allowed rate of false detections in the swept path, per sensor: The share of AC-02 allotted to unjustified monitor braking (WP-V-02), split across LiDAR and radar (DQ-031 A).</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg { --req:#23875a; --perf:#c2412b; --road:#e9ebee; --verge:#f7f8f9; --lane:#ffffff; --zeb:#ffffff;
+ --ego:#c2412b; --oth:#9aa1ab; --amber:#e39b00; --a3:#d4644a; --a1:#f5dcd3; --t1:#3b140b; }
+@media (prefers-color-scheme: dark) { svg { --req:#45b882; --perf:#ff7a63; --road:#2b2f36; --verge:#1b1e22;
+ --lane:#7f8792; --zeb:#c9ced6; --ego:#ff7a63; --oth:#6f7782; --amber:#f2b84b; --a3:#bb4f34; --a1:#4a2820; --t1:#f6e3dd; } }
+svg .plot { fill:var(--bg); stroke:var(--grid); stroke-width:1; }
+svg .axis { stroke:var(--ink3); stroke-width:1; }
+svg .ax { font:10.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .req { fill:none; stroke:var(--req); stroke-width:2; stroke-dasharray:5 4; }
+svg .perf { fill:none; stroke:var(--perf); stroke-width:2.4; stroke-linejoin:round; }
+svg .on { stroke:var(--perf); stroke-width:1; stroke-dasharray:2 3; }
+svg .cur { stroke:var(--ink2); stroke-width:1; opacity:.55; }
+svg .verge { fill:var(--verge); stroke:var(--grid); stroke-width:1; }
+svg .road { fill:var(--road); }
+svg .lane { stroke:var(--lane); stroke-width:1.5; stroke-dasharray:8 7; }
+svg .kerb { stroke:var(--ink3); stroke-width:1.2; }
+svg .zebra { fill:var(--zeb); }
+svg .stop { stroke:var(--zeb); stroke-width:3; }
+svg .oth { fill:var(--oth); }
+svg .ego { fill:var(--ego); } svg .egow { fill:var(--bg); opacity:.75; }
+svg .ghost { fill:none; stroke:var(--req); stroke-width:1.4; stroke-dasharray:3 2; } svg .ghostw { fill:none; }
+svg .ped { fill:var(--ink); }
+svg .bike { fill:var(--ink2); }
+svg .mast { fill:none; stroke:var(--ink2); stroke-width:1.6; }
+svg .ipath { fill:none; stroke:var(--req); stroke-width:2; stroke-dasharray:5 4; }
+svg .apath { fill:none; stroke:var(--perf); stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1 1; }
+svg .fault { fill:var(--perf); }
+svg .fx { font:700 10px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--bg); }
+svg .ring { fill:none; stroke:var(--perf); stroke-width:1.6; }
+svg .callout { fill:var(--perf); }
+svg .ct { font:600 11px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--bg); }
+svg .bl-bad { fill:var(--amber); }
+svg .gid { font:700 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .pr { fill:var(--a3); } svg .pf { fill:var(--a1); }
+svg .prt { font:600 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:#ffffff; }
+svg .pft { font:600 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--t1); }
+svg .lr { stroke:var(--req); stroke-width:2; stroke-dasharray:5 4; } svg .lp { stroke:var(--perf); stroke-width:2.4; }
+svg { --mon:#2d55c8; --monsoft:#e7ecfb; --dimc:#4b525c; }
+@media (prefers-color-scheme: dark) { svg { --mon:#86a2ff; --monsoft:#232c48; --dimc:#b9bfc8; } }
+svg .ego2 { fill:var(--mon); } svg .ego2w { fill:var(--bg); opacity:.75; }
+svg .ghostr { fill:none; stroke:var(--perf); stroke-width:1.4; stroke-dasharray:3 2; } svg .ghostrw { fill:none; }
+svg .dm { stroke:var(--dimc); stroke-width:1.2; } svg .dmr { stroke:var(--perf); stroke-width:1.6; }
+svg .dmt { font:600 10.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .swept { fill:var(--monsoft); stroke:var(--mon); stroke-width:1; stroke-dasharray:3 2; }
+svg .mv { stroke:var(--perf); stroke-width:1.6; } svg .mvh { fill:var(--perf); }
+svg .mvp { fill:none; stroke:var(--mon); stroke-width:2.2; stroke-linejoin:round; }
+svg .cap { fill:none; stroke:var(--amber); stroke-width:2; stroke-dasharray:5 3; }
+svg .cap2 { stroke:var(--ink3); stroke-width:1.2; stroke-dasharray:2 3; }
+svg .cut { stroke:var(--perf); stroke-width:1.6; stroke-dasharray:3 2; }
+svg .allow { fill:var(--monsoft); }
+svg .tick { stroke:var(--mon); stroke-width:3; } svg .tickr { stroke:var(--perf); stroke-width:3; }
+svg .ring2 { fill:none; stroke:var(--perf); stroke-width:1.6; }
+svg .obj { fill:var(--ink); }
+svg .phantom { fill:none; stroke:var(--perf); stroke-width:1.4; stroke-dasharray:3 2; }
+svg .po { fill:var(--monsoft); stroke:var(--mon); stroke-width:1; } svg .pot { font:600 10px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--mon); }
+svg .pd { fill:var(--a3); } svg .pdt { font:600 10px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:#ffffff; }
+svg .pw { fill:var(--bg); stroke:var(--ink3); stroke-width:1; stroke-dasharray:3 2; } svg .pwt { font:600 10px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink2); }
+</style>
+<rect class="bg" width="1070" height="1796"/>
+<text x="24" y="34" class="h">What each envelope parameter bounds</text>
+<text x="24" y="56" class="t">WP-S-02 §2.1, Figure 2-1: a schematic of what each parameter bounds, its value or source as WP-S-02 states it, and the requirements</text>
+<text x="24" y="73" class="t">that use it. The drawings carry no numbers; the values are the text below them.</text>
+<rect x="24" y="96" width="330" height="316" rx="8" class="card"/>
+<text x="38" y="120" class="gid">P-01</text>
+<rect x="281.7" y="107" width="58.3" height="18" rx="4" class="po"/>
+<text x="310.9" y="120" class="pot" text-anchor="middle">WP-S-04</text>
+<text x="38" y="140" class="tb">Longitudinal margin beyond the safe</text>
+<text x="38" y="156" class="tb">distance</text>
+<rect x="39" y="188" width="300" height="120" rx="6" class="verge"/>
+<rect x="39" y="218" width="300" height="64" class="road"/>
+<line x1="39" y1="250" x2="339" y2="250" class="lane"/>
+<line x1="39" y1="218" x2="339" y2="218" class="kerb"/>
+<line x1="39" y1="282" x2="339" y2="282" class="kerb"/>
+<g><rect x="77" y="259.5" width="24" height="13" rx="3" class="ego2"/></g>
+<g><rect x="277" y="259.5" width="24" height="13" rx="3" class="oth"/></g>
+<line x1="101" y1="250" x2="244" y2="250" class="dm"/>
+<line x1="101" y1="245" x2="101" y2="255" class="dm"/>
+<line x1="244" y1="245" x2="244" y2="255" class="dm"/>
+<text x="172.5" y="243" class="dmt" text-anchor="middle">safe distance (P-06)</text>
+<line x1="244" y1="286" x2="277" y2="286" class="dmr"/>
+<line x1="244" y1="281" x2="244" y2="291" class="dmr"/>
+<line x1="277" y1="281" x2="277" y2="291" class="dmr"/>
+<text x="260.5" y="279" class="dmt" text-anchor="middle">P-01</text>
+<text x="38" y="326" class="s">0.5 m, the margin of SG-01 (proposed, WP-S-04 §2)</text>
+<text x="38" y="345" class="ax">Used by TSR-01.01, TSR-01.02</text>
+<rect x="370" y="96" width="330" height="316" rx="8" class="card"/>
+<text x="384" y="120" class="gid">P-02</text>
+<rect x="627.7" y="107" width="58.3" height="18" rx="4" class="po"/>
+<text x="656.9" y="120" class="pot" text-anchor="middle">WP-S-04</text>
+<text x="384" y="140" class="tb">Lateral margin to a road user, obstacle</text>
+<text x="384" y="156" class="tb">or kerb</text>
+<rect x="385" y="188" width="300" height="120" rx="6" class="verge"/>
+<rect x="385" y="218" width="300" height="64" class="road"/>
+<line x1="385" y1="250" x2="685" y2="250" class="lane"/>
+<line x1="385" y1="218" x2="685" y2="218" class="kerb"/>
+<line x1="385" y1="282" x2="685" y2="282" class="kerb"/>
+<rect x="405" y="257" width="200" height="18" rx="3" class="swept"/>
+<g><rect x="413" y="259.5" width="24" height="13" rx="3" class="ego2"/></g>
+<rect x="555" y="279" width="16" height="5" rx="2.5" class="bike"/>
+<line x1="615" y1="275" x2="615" y2="281.5" class="dm"/>
+<line x1="610" y1="275" x2="620" y2="275" class="dm"/>
+<line x1="610" y1="281.5" x2="620" y2="281.5" class="dm"/>
+<text x="623" y="282.2" class="dmt">P-02</text>
+<text x="505" y="253" class="dmt" text-anchor="middle">swept path</text>
+<text x="384" y="326" class="s">0.3 m, the margin of SG-04 (proposed, WP-S-04 §2)</text>
+<text x="384" y="345" class="ax">Used by TSR-02.02</text>
+<rect x="716" y="96" width="330" height="316" rx="8" class="card"/>
+<text x="730" y="120" class="gid">P-03</text>
+<rect x="973.7" y="107" width="58.3" height="18" rx="4" class="po"/>
+<text x="1002.9" y="120" class="pot" text-anchor="middle">WP-S-04</text>
+<text x="730" y="140" class="tb">Creep distance from standstill</text>
+<rect x="731" y="188" width="300" height="120" rx="6" class="verge"/>
+<rect x="731" y="218" width="300" height="64" class="road"/>
+<line x1="731" y1="250" x2="1031" y2="250" class="lane"/>
+<line x1="731" y1="218" x2="1031" y2="218" class="kerb"/>
+<line x1="731" y1="282" x2="1031" y2="282" class="kerb"/>
+<rect x="927" y="221" width="24" height="4" class="zebra"/>
+<rect x="927" y="229" width="24" height="4" class="zebra"/>
+<rect x="927" y="237" width="24" height="4" class="zebra"/>
+<rect x="927" y="245" width="24" height="4" class="zebra"/>
+<rect x="927" y="253" width="24" height="4" class="zebra"/>
+<rect x="927" y="261" width="24" height="4" class="zebra"/>
+<rect x="927" y="269" width="24" height="4" class="zebra"/>
+<rect x="927" y="277" width="24" height="4" class="zebra"/>
+<line x1="920" y1="251" x2="920" y2="281" class="stop"/>
+<circle cx="939" cy="262" r="4.2" class="ped"/>
+<g><rect x="909" y="259.5" width="24" height="13" rx="3" class="ghostr"/></g>
+<g><rect x="891" y="259.5" width="24" height="13" rx="3" class="ego2"/></g>
+<line x1="915" y1="250" x2="933" y2="250" class="dmr"/>
+<line x1="915" y1="245" x2="915" y2="255" class="dmr"/>
+<line x1="933" y1="245" x2="933" y2="255" class="dmr"/>
+<text x="924" y="243" class="dmt" text-anchor="middle">P-03</text>
+<text x="831" y="270" class="dmt" text-anchor="middle">held at standstill</text>
+<text x="730" y="326" class="s">0.2 m, the margin of SG-05 (proposed, WP-S-04 §2)</text>
+<text x="730" y="345" class="ax">Used by TSR-06.03</text>
+<rect x="24" y="428" width="330" height="316" rx="8" class="card"/>
+<text x="38" y="452" class="gid">P-04</text>
+<rect x="281.7" y="439" width="58.3" height="18" rx="4" class="po"/>
+<text x="310.9" y="452" class="pot" text-anchor="middle">WP-S-04</text>
+<text x="38" y="472" class="tb">Drift allowed under remote driving</text>
+<rect x="39" y="520" width="300" height="120" rx="6" class="verge"/>
+<rect x="39" y="550" width="300" height="64" class="road"/>
+<line x1="39" y1="582" x2="339" y2="582" class="lane"/>
+<line x1="39" y1="550" x2="339" y2="550" class="kerb"/>
+<line x1="39" y1="614" x2="339" y2="614" class="kerb"/>
+<path d="M57 542 L63 526 L69 542" class="mast"/>
+<text x="75" y="539" class="ax">remote operator</text>
+<path d="M61 598 L71 600.9 L81 603.6 L91 605.6 L101 606.7 L111 607 L121 606.2 L131 604.5 L141 602.1 L151 599.3 L161 596.3 L171 593.5 L181 591.2 L191 589.6 L201 589 L211 589.4 L221 590.7 L231 592.8 L241 595.5 L251 598.5 L261 601.4 L271 603.9 L281 605.8 L291 606.8 L301 606.9" class="mvp"/>
+<g><rect x="289" y="600.4" width="24" height="13" rx="3" class="ego2"/></g>
+<line x1="321" y1="589" x2="321" y2="607" class="dm"/>
+<line x1="316" y1="589" x2="326" y2="589" class="dm"/>
+<line x1="316" y1="607" x2="326" y2="607" class="dm"/>
+<text x="329" y="602" class="dmt">P-04</text>
+<text x="38" y="658" class="s">1 m, the margin of SG-08 (proposed, WP-S-04 §2)</text>
+<text x="38" y="677" class="ax">Used by TSR-05.02</text>
+<rect x="370" y="428" width="330" height="316" rx="8" class="card"/>
+<text x="384" y="452" class="gid">P-05</text>
+<rect x="634.1" y="439" width="51.9" height="18" rx="4" class="pd"/>
+<text x="660" y="452" class="pdt" text-anchor="middle">DQ-033</text>
+<text x="384" y="472" class="tb">Firm deceleration level for unconfirmed</text>
+<text x="384" y="488" class="tb">braking, and for the monitor's own stop</text>
+<rect x="385" y="520" width="300" height="120" rx="6" class="plot"/>
+<line x1="415" y1="618" x2="675" y2="618" class="axis"/>
+<line x1="415" y1="530" x2="415" y2="618" class="axis"/>
+<text x="419" y="538" class="ax">↑ deceleration</text>
+<text x="675" y="632" class="ax" text-anchor="end">time →</text>
+<line x1="415" y1="552" x2="675" y2="552" class="cap2"/>
+<text x="671" y="548" class="ax" text-anchor="end">emergency</text>
+<line x1="415" y1="588" x2="675" y2="588" class="cap"/>
+<text x="671" y="584" class="dmt" text-anchor="end">P-05</text>
+<path d="M415 618 L475 618 L475 588 L635 588 L635 618" class="mvp"/>
+<path d="M475 588 L475 552" class="cut"/>
+<text x="481" y="568" class="ax">unconfirmed braking held here</text>
+<text x="384" y="658" class="s">3 m/s² (DQ-033 A)</text>
+<text x="384" y="677" class="ax">Used by TSR-01.03, TSR-04.01, TSR-04.02, TSR-06.01,</text>
+<text x="384" y="691" class="ax">TSR-13.01</text>
+<rect x="716" y="428" width="330" height="316" rx="8" class="card"/>
+<text x="730" y="452" class="gid">P-06</text>
+<rect x="980.1" y="439" width="51.9" height="18" rx="4" class="pd"/>
+<text x="1006" y="452" class="pdt" text-anchor="middle">DQ-034</text>
+<text x="730" y="472" class="tb">Assumptions of the safe longitudinal</text>
+<text x="730" y="488" class="tb">distance (response time, own guaranteed</text>
+<text x="730" y="504" class="tb">braking, braking of the vehicle ahead)</text>
+<rect x="731" y="520" width="300" height="120" rx="6" class="verge"/>
+<rect x="731" y="550" width="300" height="64" class="road"/>
+<line x1="731" y1="582" x2="1031" y2="582" class="lane"/>
+<line x1="731" y1="550" x2="1031" y2="550" class="kerb"/>
+<line x1="731" y1="614" x2="1031" y2="614" class="kerb"/>
+<g><rect x="759" y="591.5" width="24" height="13" rx="3" class="ego2"/></g>
+<g><rect x="981" y="591.5" width="24" height="13" rx="3" class="oth"/></g>
+<line x1="783" y1="580" x2="823" y2="580" class="dm"/>
+<line x1="783" y1="575" x2="783" y2="585" class="dm"/>
+<line x1="823" y1="575" x2="823" y2="585" class="dm"/>
+<text x="803" y="573" class="dmt" text-anchor="middle">response</text>
+<line x1="823" y1="580" x2="931" y2="580" class="dm"/>
+<line x1="823" y1="575" x2="823" y2="585" class="dm"/>
+<line x1="931" y1="575" x2="931" y2="585" class="dm"/>
+<text x="877" y="573" class="dmt" text-anchor="middle">own braking</text>
+<line x1="931" y1="580" x2="981" y2="580" class="dm"/>
+<line x1="931" y1="575" x2="931" y2="585" class="dm"/>
+<line x1="981" y1="575" x2="981" y2="585" class="dm"/>
+<text x="956" y="573" class="dmt" text-anchor="middle"></text>
+<text x="956" y="573" class="dmt" text-anchor="middle">less lead's</text>
+<line x1="783" y1="618" x2="981" y2="618" class="dm"/>
+<line x1="783" y1="613" x2="783" y2="623" class="dm"/>
+<line x1="981" y1="613" x2="981" y2="623" class="dm"/>
+<text x="882" y="611" class="dmt" text-anchor="middle">safe distance</text>
+<text x="730" y="658" class="s">The item responds within 0.5 s and can always brake</text>
+<text x="730" y="673" class="s">at 4 m/s²; the vehicle ahead may brake at up to 8</text>
+<text x="730" y="688" class="s">m/s², which keeps 19.5 m at 50 km/h (DQ-034 A)</text>
+<text x="730" y="707" class="ax">Used by TSR-01.01, TSR-01.03, TSR-12.01</text>
+<rect x="24" y="760" width="330" height="316" rx="8" class="card"/>
+<text x="38" y="784" class="gid">P-07</text>
+<rect x="288.1" y="771" width="51.9" height="18" rx="4" class="pd"/>
+<text x="314" y="784" class="pdt" text-anchor="middle">DQ-034</text>
+<text x="38" y="804" class="tb">Bounds on other road users' speed and</text>
+<text x="38" y="820" class="tb">acceleration, for crossing paths and</text>
+<text x="38" y="836" class="tb">occlusions (DQ-017 A)</text>
+<rect x="39" y="852" width="300" height="120" rx="6" class="verge"/>
+<rect x="39" y="882" width="300" height="64" class="road"/>
+<line x1="39" y1="914" x2="339" y2="914" class="lane"/>
+<line x1="39" y1="882" x2="339" y2="882" class="kerb"/>
+<line x1="39" y1="946" x2="339" y2="946" class="kerb"/>
+<rect x="189" y="933" width="44" height="14" rx="3" class="oth"/>
+<g><rect x="87" y="923.5" width="24" height="13" rx="3" class="ego2"/></g>
+<circle cx="211" cy="960" r="4.2" class="ped"/>
+<rect x="275" y="895.5" width="16" height="5" rx="2.5" class="bike"/>
+<line x1="211" y1="954" x2="211" y2="952" class="mv"/>
+<path d="M211 952 L207 959 L215 959 Z" class="mvh"/>
+<line x1="275" y1="904" x2="249" y2="926" class="mv"/>
+<path d="M249 926 L256.9 924.5 L251.8 918.4 Z" class="mvh"/>
+<text x="203" y="962" class="ax" text-anchor="end">pedestrian, from the occlusion</text>
+<text x="295" y="902" class="ax">cyclist</text>
+<text x="38" y="990" class="s">Pedestrians may run at up to 3 m/s and cyclists ride</text>
+<text x="38" y="1005" class="s">at up to 8 m/s, including out of an occlusion</text>
+<text x="38" y="1020" class="s">(DQ-034 A)</text>
+<text x="38" y="1039" class="ax">Used by TSR-01.04, TSR-01.05</text>
+<rect x="370" y="760" width="330" height="316" rx="8" class="card"/>
+<text x="384" y="784" class="gid">P-08</text>
+<rect x="627.7" y="771" width="58.3" height="18" rx="4" class="po"/>
+<text x="656.9" y="784" class="pot" text-anchor="middle">WP-S-04</text>
+<text x="384" y="804" class="tb">Silence after which the vehicle stops on</text>
+<text x="384" y="820" class="tb">its own</text>
+<rect x="385" y="852" width="300" height="120" rx="6" class="plot"/>
+<line x1="415" y1="950" x2="675" y2="950" class="axis"/>
+<line x1="415" y1="862" x2="415" y2="950" class="axis"/>
+<text x="419" y="870" class="ax">↑ messages</text>
+<text x="675" y="964" class="ax" text-anchor="end">time →</text>
+<line x1="425" y1="950" x2="425" y2="920" class="tick"/>
+<line x1="445" y1="950" x2="445" y2="920" class="tick"/>
+<line x1="465" y1="950" x2="465" y2="920" class="tick"/>
+<line x1="485" y1="950" x2="485" y2="920" class="tick"/>
+<line x1="505" y1="950" x2="505" y2="920" class="tick"/>
+<line x1="505" y1="908" x2="615" y2="908" class="dmr"/>
+<line x1="505" y1="903" x2="505" y2="913" class="dmr"/>
+<line x1="615" y1="903" x2="615" y2="913" class="dmr"/>
+<text x="560" y="901" class="dmt" text-anchor="middle">P-08</text>
+<text x="560" y="944" class="ax" text-anchor="middle">monitor silent</text>
+<path d="M615 906 L615 950" class="cut"/>
+<text x="677" y="888" class="dmt" text-anchor="end">vehicle stops itself</text>
+<text x="384" y="990" class="s">179 ms to 283 ms, the detection budget of SM-14</text>
+<text x="384" y="1005" class="s">(WP-S-04 §4)</text>
+<text x="384" y="1024" class="ax">Used by TSR-08.02, TSR-14.01</text>
+<rect x="716" y="760" width="330" height="316" rx="8" class="card"/>
+<text x="730" y="784" class="gid">P-09</text>
+<rect x="973.7" y="771" width="58.3" height="18" rx="4" class="po"/>
+<text x="1002.9" y="784" class="pot" text-anchor="middle">WP-S-04</text>
+<text x="730" y="804" class="tb">Age bound of a remote command</text>
+<rect x="731" y="852" width="300" height="120" rx="6" class="plot"/>
+<line x1="761" y1="950" x2="1021" y2="950" class="axis"/>
+<line x1="761" y1="862" x2="761" y2="950" class="axis"/>
+<text x="765" y="870" class="ax">↑ remote commands</text>
+<text x="1021" y="964" class="ax" text-anchor="end">time →</text>
+<line x1="771" y1="950" x2="771" y2="920" class="tick"/>
+<line x1="801" y1="950" x2="801" y2="920" class="tick"/>
+<line x1="831" y1="950" x2="831" y2="920" class="tick"/>
+<line x1="891" y1="950" x2="891" y2="920" class="tickr"/>
+<text x="897" y="930" class="ax">old command</text>
+<line x1="831" y1="908" x2="891" y2="908" class="dmr"/>
+<line x1="831" y1="903" x2="831" y2="913" class="dmr"/>
+<line x1="891" y1="903" x2="891" y2="913" class="dmr"/>
+<text x="861" y="901" class="dmt" text-anchor="middle">P-09</text>
+<text x="1023" y="888" class="dmt" text-anchor="end">older than P-09: rejected, stop</text>
+<text x="730" y="990" class="s">143 ms, the detection budget of SM-05 (WP-S-04 §4)</text>
+<text x="730" y="1009" class="ax">Used by TSR-05.02, TSR-05.03</text>
+<rect x="24" y="1092" width="330" height="316" rx="8" class="card"/>
+<text x="38" y="1116" class="gid">P-10</text>
+<rect x="269.1" y="1103" width="70.9" height="18" rx="4" class="pw"/>
+<text x="304.5" y="1116" class="pwt" text-anchor="middle">to be set</text>
+<text x="38" y="1136" class="tb">Steering angle and rate envelope over</text>
+<text x="38" y="1152" class="tb">speed</text>
+<rect x="39" y="1184" width="300" height="120" rx="6" class="plot"/>
+<line x1="69" y1="1282" x2="329" y2="1282" class="axis"/>
+<line x1="69" y1="1194" x2="69" y2="1282" class="axis"/>
+<text x="73" y="1202" class="ax">↑ steering angle</text>
+<text x="329" y="1296" class="ax" text-anchor="end">speed →</text>
+<path d="M69 1282 L69 1210 L82 1211.9 L95 1217.2 L108 1224.4 L121 1232.2 L134 1239.5 L147 1246 L160 1251.5 L173 1256.1 L186 1259.8 L199 1262.9 L212 1265.5 L225 1267.6 L238 1269.4 L251 1270.8 L264 1272.1 L277 1273.1 L290 1274 L303 1274.8 L316 1275.5 L329 1276.1 L329 1282 Z" class="allow"/>
+<path d="M69 1210 L82 1211.9 L95 1217.2 L108 1224.4 L121 1232.2 L134 1239.5 L147 1246 L160 1251.5 L173 1256.1 L186 1259.8 L199 1262.9 L212 1265.5 L225 1267.6 L238 1269.4 L251 1270.8 L264 1272.1 L277 1273.1 L290 1274 L303 1274.8 L316 1275.5 L329 1276.1" class="cap"/>
+<text x="209" y="1250" class="dmt">allowed below P-10</text>
+<text x="38" y="1322" class="s">The chosen vehicle's steering geometry and actuator</text>
+<text x="38" y="1337" class="s">(DQ-008)</text>
+<text x="38" y="1356" class="ax">Used by TSR-02.01</text>
+<rect x="370" y="1092" width="330" height="316" rx="8" class="card"/>
+<text x="384" y="1116" class="gid">P-11</text>
+<rect x="615.1" y="1103" width="70.9" height="18" rx="4" class="pw"/>
+<text x="650.5" y="1116" class="pwt" text-anchor="middle">to be set</text>
+<text x="384" y="1136" class="tb">Tolerances of achieved against commanded</text>
+<text x="384" y="1152" class="tb">acceleration, deceleration and steering</text>
+<rect x="385" y="1184" width="300" height="120" rx="6" class="plot"/>
+<line x1="415" y1="1282" x2="675" y2="1282" class="axis"/>
+<line x1="415" y1="1194" x2="415" y2="1282" class="axis"/>
+<text x="419" y="1202" class="ax">↑ acceleration</text>
+<text x="675" y="1296" class="ax" text-anchor="end">time →</text>
+<path d="M415 1252 L475 1252 L475 1217 L675 1217 L675 1237 L475 1237 L475 1272 L415 1272 Z" class="allow"/>
+<path d="M415 1262 L475 1262 L475 1227 L675 1227" class="cap"/>
+<path d="M415 1260 L485 1258 L515 1230 L585 1225 L605 1204" class="mvp"/>
+<circle cx="605" cy="1204" r="8" class="ring2"/>
+<text x="593" y="1206" class="dmt" text-anchor="end">outside ±P-11: fault</text>
+<text x="384" y="1322" class="s">The chosen vehicle's actuator response (DQ-008), set</text>
+<text x="384" y="1337" class="s">above its measured fault-free spread</text>
+<text x="384" y="1356" class="ax">Used by TSR-03.01, TSR-03.02, TSR-03.03</text>
+<rect x="716" y="1092" width="330" height="316" rx="8" class="card"/>
+<text x="730" y="1116" class="gid">P-12</text>
+<rect x="961.1" y="1103" width="70.9" height="18" rx="4" class="pw"/>
+<text x="996.5" y="1116" class="pwt" text-anchor="middle">to be set</text>
+<text x="730" y="1136" class="tb">Smallest object the safety channel must</text>
+<text x="730" y="1152" class="tb">detect, and its detection range</text>
+<rect x="731" y="1184" width="300" height="120" rx="6" class="verge"/>
+<rect x="731" y="1214" width="300" height="64" class="road"/>
+<line x1="731" y1="1246" x2="1031" y2="1246" class="lane"/>
+<line x1="731" y1="1214" x2="1031" y2="1214" class="kerb"/>
+<line x1="731" y1="1278" x2="1031" y2="1278" class="kerb"/>
+<g><rect x="749" y="1255.5" width="24" height="13" rx="3" class="ego2"/></g>
+<rect x="979" y="1259" width="6" height="6" class="obj"/>
+<line x1="773" y1="1244" x2="982" y2="1244" class="dm"/>
+<line x1="773" y1="1239" x2="773" y2="1249" class="dm"/>
+<line x1="982" y1="1239" x2="982" y2="1249" class="dm"/>
+<text x="877.5" y="1237" class="dmt" text-anchor="middle">range: stopping distance at top ODD speed</text>
+<text x="989" y="1290" class="ax" text-anchor="end">smallest object</text>
+<text x="730" y="1322" class="s">Range is the stopping distance at the top ODD speed;</text>
+<text x="730" y="1337" class="s">the smallest height is set with FM-03</text>
+<text x="730" y="1356" class="ax">Used by TSR-09.01, TSR-09.02, TSR-09.03</text>
+<rect x="24" y="1424" width="330" height="316" rx="8" class="card"/>
+<text x="38" y="1448" class="gid">P-13</text>
+<rect x="269.1" y="1435" width="70.9" height="18" rx="4" class="pw"/>
+<text x="304.5" y="1448" class="pwt" text-anchor="middle">to be set</text>
+<text x="38" y="1468" class="tb">Allowed rate of false detections in the</text>
+<text x="38" y="1484" class="tb">swept path, per sensor</text>
+<rect x="39" y="1516" width="300" height="120" rx="6" class="verge"/>
+<rect x="39" y="1546" width="300" height="64" class="road"/>
+<line x1="39" y1="1578" x2="339" y2="1578" class="lane"/>
+<line x1="39" y1="1546" x2="339" y2="1546" class="kerb"/>
+<line x1="39" y1="1610" x2="339" y2="1610" class="kerb"/>
+<g><rect x="87" y="1587.5" width="24" height="13" rx="3" class="ego2"/></g>
+<rect x="229" y="1587" width="18" height="14" rx="3" class="phantom"/>
+<g><rect x="57" y="1587.5" width="24" height="13" rx="3" class="oth"/></g>
+<text x="238" y="1581" class="dmt" text-anchor="middle">nothing there</text>
+<text x="189" y="1626" class="ax" text-anchor="middle">each false detection can brake: rate ≤ P-13, per sensor</text>
+<text x="38" y="1654" class="s">The share of AC-02 allotted to unjustified monitor</text>
+<text x="38" y="1669" class="s">braking (WP-V-02), split across LiDAR and radar</text>
+<text x="38" y="1684" class="s">(DQ-031 A)</text>
+<text x="38" y="1703" class="ax">Used by TSR-09.04, TSR-09.05, TSR-09.06</text>
+<rect x="24" y="1758" width="22" height="16" rx="4" class="po"/>
+<text x="54" y="1770" class="t">from the timing model (WP-S-04)</text>
+<rect x="279.5" y="1758" width="22" height="16" rx="4" class="pd"/>
+<text x="309.5" y="1770" class="t">decided by the lead</text>
+<rect x="457.0" y="1758" width="22" height="16" rx="4" class="pw"/>
+<text x="487" y="1770" class="t">to be set (vehicle, data or targets)</text>
+</svg>

@@ -33,5 +33,5 @@ Standard clauses: UL 4600 §9–10; 26262-4; SYS.1–5.
 | [`secarch/`](secarch/) | — |
 | [`timing/`](timing/) | — |
 | [`tsc/`](tsc/README.md) | Technical safety concept |
-| [`tsr/`](tsr/) | — |
+| [`tsr/`](tsr/README.md) | Technical safety requirements |
 | [`verif/`](verif/) | — |
