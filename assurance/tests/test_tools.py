@@ -459,6 +459,13 @@ class Fsc(unittest.TestCase):
         self.assertIn("../figures/fig-c01-5-1-boundary.svg", page)
         self.assertNotIn("](fsc/", page)
 
+    def test_folder_page_shows_the_item_before_its_safety_view(self):
+        page = fsc.build()[fsc.README]
+        item = page.index("](../figures/fig-c01-5-1-boundary.svg)")
+        view = page.index(f"]({fsc.FIG0.name})")
+        self.assertLess(item, view)
+        self.assertLess(view, page.index("## 2. The concept"))
+
     def test_element_asil_is_the_highest_of_its_requirements(self):
         ea = fsc.element_asil(self.m)
         self.assertEqual(ea["EL-01"], "QM")
