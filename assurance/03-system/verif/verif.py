@@ -49,9 +49,15 @@ import modifications  # noqa: E402
 import scenarios  # noqa: E402
 import triggering  # noqa: E402
 
+sys.path.insert(0, str(HERE))
+import vcards  # noqa: E402
+
 MODEL = HERE / "verif.yaml"
 DOC = ASSURANCE / "03-system" / "WP-S-09-system-verification.md"
 FIG = HERE / "fig-s09-2-1-coverage.svg"
+FIG2 = HERE / "fig-s09-2-2-requirements.svg"
+CSV = HERE / "cases.csv"
+README = HERE / "README.md"
 ASILS = ["QM", "A", "B", "C", "D"]
 
 # What WP-C-04 says about verifying a requirement, and what that asks of the cases covering it.
@@ -231,6 +237,16 @@ def tables(m: dict, k: dict) -> dict[str, str]:
         cs = [c["id"] for c in cases if meth in c["methods"]]
         rows.append(f"| {name} | {', '.join(cs) or '—'} |")
     t["verif-methods"] = "\n".join(rows)
+    t["verif-requirement-cards"] = (
+        "![Figure 2-2: one card per safety goal SG-01 to SG-09 and two for the SOTIF measures. A goal's card "
+        "lists each of its functional safety requirements with the verification cases that verify it, as chips "
+        "coloured by where the case runs (simulation, HIL, bench, closed track, or review only); the SOTIF cards "
+        "do the same for the triggering conditions by category and the functional modifications by type. The "
+        f"same coverage is in the tables of §3.](verif/{FIG2.name})\n\n"
+        "*Figure 2-2. How each safety goal and SOTIF measure is verified, requirement by requirement. No case "
+        "has been run. Drawn by [`verif/verif.py`](verif/verif.py); CI fails if it is stale. Every case is "
+        f"also in [`verif/{CSV.name}`](verif/{CSV.name}).*"
+    )
     run = {sid for c in cases for sid in c["scenarios"]}
     not_run = [s for s in k["scenarios"] if s not in run]
     t["verif-summary"] = (
@@ -338,12 +354,173 @@ def figure(m: dict, k: dict) -> str:
     )
 
 
+def card_data(m: dict, k: dict) -> list[dict]:
+    """The coverage requirement by requirement: one card per safety goal, then the SOTIF measures."""
+    cov = {c["id"]: covered(c, k) for c in m["cases"]}
+    env = {c["id"]: c.get("env") for c in m["cases"]}
+    elements = {e["id"]: e["name"] for e in fsc.load()["elements"]}
+
+    def by(x: str) -> list[tuple[str, str | None]]:
+        return [(v, env[v]) for v in cov if x in cov[v]]
+
+    cards = []
+    for g, d in k["goals"].items():
+        rows = [
+            {"id": f, "sub": f"{r['asil']} · {elements[r['element']]}", "cases": by(f)}
+            for f, r in k["fsrs"].items()
+            if r["goal"] == g
+        ]
+        cards.append({"id": g, "title": d["statement"], "asil": d["asil"], "rows": rows})
+    for title, items, key in (
+        ("Triggering conditions (WP-C-06), by category", k["tcs"], "category"),
+        ("Functional modifications (WP-C-07), by type", k["fms"], "type"),
+    ):
+        groups: dict[str, list[str]] = {}
+        for x, item in items.items():
+            groups.setdefault(item[key], []).append(x)
+        rows = []
+        for grp, xs in groups.items():
+            vcs = sorted({v for x in xs for v, _ in by(x)})
+            rows.append(
+                {
+                    "id": grp.replace("_", " "),
+                    "sub": f"{len(xs)} {'item' if len(xs) == 1 else 'items'}",
+                    "cases": [(v, env[v]) for v in vcs],
+                }
+            )
+        cards.append({"id": "SOTIF", "title": title, "rows": rows})
+    return cards
+
+
+def cases_csv(m: dict, k: dict) -> str:
+    """Every verification case with what it verifies and its result."""
+    import csv
+    import io
+
+    buf = io.StringIO()
+    w = csv.writer(buf, lineterminator="\n")
+    w.writerow(
+        [
+            "ID",
+            "Verification case",
+            "Environment",
+            "Methods",
+            "ASIL",
+            "Scenarios run (WP-V-03)",
+            "Functional safety requirements (WP-C-04)",
+            "Triggering conditions (WP-C-06)",
+            "Functional modifications (WP-C-07)",
+            "Pass criterion",
+            "Result",
+        ]
+    )
+    for c in m["cases"]:
+        cov = covered(c, k)
+        w.writerow(
+            [
+                c["id"],
+                c["name"],
+                c.get("env") or "—",
+                ", ".join(m["methods"][x] for x in c["methods"]),
+                asil(c, k),
+                ", ".join(c["scenarios"]) or "—",
+                ids(x for x in cov if x in k["fsrs"]),
+                ids(x for x in cov if x in k["tcs"]),
+                ids(x for x in cov if x in k["fms"]),
+                c["pass"],
+                "Not run",
+            ]
+        )
+    return buf.getvalue()
+
+
+def here(md: str) -> str:
+    """Text of WP-S-09 with its relative links rewritten to work from this folder."""
+    md = md.replace("](verif/", "](")
+    return re.sub(r"\]\((?!https?:|#|fig-|cases\.csv|verif\.|README)", "](../", md)
+
+
+def readme(t: dict[str, str], doc: str) -> str:
+    """The folder page: the whole system verification plan on one page."""
+
+    def part(heading: str) -> str:
+        return here(fk.section(doc, heading).strip())
+
+    files = [
+        "| File | What it holds |",
+        "|---|---|",
+        f"| [`{CSV.name}`]({CSV.name}) | Every verification case with its environment, methods, ASIL, the scenarios it runs, the requirements, triggering conditions and modifications it verifies, its pass criterion and result |",
+        f"| [`{FIG.name}`]({FIG.name}) | Figure 2-1, what each verification case verifies |",
+        f"| [`{FIG2.name}`]({FIG2.name}) | Figure 2-2, how each safety goal and SOTIF measure is verified |",
+        "| [`verif.yaml`](verif.yaml) | Methods, the scenarios each environment can run, and the verification cases |",
+        "| [`verif.py`](verif.py), [`vcards.py`](vcards.py) | The generator: checks the model against the functional safety concept, the triggering conditions, the modifications, the known scenarios and the test environments, and writes WP-S-09's tables and everything here |",
+    ]
+    lines = [
+        "<!-- Generated by assurance/03-system/verif/verif.py; do not edit by hand. -->",
+        "",
+        "# System verification",
+        "",
+        "The whole system verification plan of [WP-S-09](../WP-S-09-system-verification.md) on one page: how "
+        "the integrated item is verified against the [functional safety concept](../../02-concept/fsc/README.md) "
+        "and the SOTIF measures, by which cases, where they run, and when each passes. It runs the known "
+        "scenarios of WP-V-03 in the environments of the [integration tests](../integ/README.md). Everything "
+        "here is generated by `verif.py` from `verif.yaml`; CI fails if it is stale. Everything is a draft by "
+        "Claude (I0); no case has been run.",
+        "",
+        t["verif-summary"],
+        "",
+        "1. [What this covers](#1-what-this-covers)",
+        "2. [Verification strategy](#2-verification-strategy)",
+        "3. [Test specification](#3-test-specification)",
+        "4. [Results and deviations](#4-results-and-deviations)",
+        "5. [Files in this folder](#5-files-in-this-folder)",
+        "",
+        "## 1. What this covers",
+        "",
+        re.sub(
+            r"<!-- BEGIN GENERATED: verif-summary .*?END GENERATED: verif-summary -->\n\n",
+            "",
+            part("## 1. Purpose"),
+            flags=re.S,
+        ),
+        "",
+        "## 2. Verification strategy",
+        "",
+        part("## 2. Verification strategy"),
+        "",
+        "## 3. Test specification",
+        "",
+        f"Every case is also in [`{CSV.name}`]({CSV.name}), which GitHub shows as a table that can be searched.",
+        "",
+        part("## 3. Test specification"),
+        "",
+        "## 4. Results and deviations",
+        "",
+        part("## 4. Results and deviations"),
+        "",
+        "## 5. Files in this folder",
+        "",
+        *files,
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def build() -> dict[Path, str]:
     m, k = load(), known()
     errs = check(m, k)
     if errs:
         raise fk.FigureError("verif.yaml: " + "; ".join(errs))
-    return {DOC: fill(DOC.read_text(encoding="utf-8"), tables(m, k)), FIG: figure(m, k)}
+    t = tables(m, k)
+    doc = fill(DOC.read_text(encoding="utf-8"), t)
+    envs = {e: f"{e} {k['envs'][e]['name']}" for e in m["runs"]}
+    return {
+        DOC: doc,
+        FIG: figure(m, k),
+        FIG2: vcards.sheet(card_data(m, k), envs),
+        CSV: cases_csv(m, k),
+        README: readme(t, doc),
+    }
 
 
 if __name__ == "__main__":

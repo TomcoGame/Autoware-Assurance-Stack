@@ -1336,6 +1336,33 @@ class Verif(unittest.TestCase):
     def test_real_model_passes(self):
         self.assertEqual(verif.check(verif.load(), verif.known()), [])
 
+    def test_every_requirement_has_its_cases_on_a_goal_card(self):
+        m, k = verif.load(), verif.known()
+        cards = verif.card_data(m, k)
+        self.assertEqual([c["id"] for c in cards[:-2]], list(k["goals"]))
+        rows = {r["id"]: r for c in cards[:-2] for r in c["rows"]}
+        self.assertEqual(sorted(rows), sorted(k["fsrs"]))
+        self.assertTrue(all(r["cases"] for r in rows.values()))
+        self.assertNotIn("VC-01", [v for v, _ in rows["FSR-02.02"]["cases"]])  # shadow mode
+        svg = verif.vcards.sheet(cards, {"ENV-1": "sim"})
+        self.assertIn(">FSR-09.01<", svg)
+
+    def test_cases_csv_lists_every_case_not_run(self):
+        import csv
+
+        m, k = verif.load(), verif.known()
+        rows = list(csv.DictReader(io.StringIO(verif.cases_csv(m, k))))
+        self.assertEqual([r["ID"] for r in rows], [c["id"] for c in m["cases"]])
+        self.assertTrue(all(r["Result"] == "Not run" for r in rows))
+
+    def test_folder_page_links_every_file_in_the_folder(self):
+        page = verif.build()[verif.README]
+        for p in verif.HERE.iterdir():
+            if p.suffix in (".csv", ".svg", ".yaml", ".py"):
+                self.assertIn(f"]({p.name})", page, p.name)
+        self.assertNotIn("](verif/", page)
+        self.assertEqual(page.count("verification cases cover all"), 1)  # the summary, once
+
     def test_scenarios_carry_their_requirements_and_conditions(self):
         m, k = verif.load(), verif.known()
         case = next(c for c in m["cases"] if c["id"] == "VC-12")
