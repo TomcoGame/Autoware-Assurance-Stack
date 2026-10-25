@@ -28,6 +28,10 @@ few questions, and make each one quick to answer.
 - Work on a branch and ask before merging. Do not start the hazard analysis until the lead says so (DQ-005).
 - Your drafts are I0. Never mark your own work Approved, accept evidence or claims, close defeaters or pass gates.
 - Never lower an ASIL, change a timing budget or loosen a safety limit to make a finding go away.
+- This repository is public. Never commit restricted cybersecurity information: attack paths, feasibility
+  ratings, risk values, attack vectors, the reasons a risk is retained, design security detail, vulnerability and
+  test findings, secrets ([WP-M-09 §4](assurance/01-management/WP-M-09-cybersecurity-plan.md#4-handling-of-cybersecurity-information)).
+  Not in files, commit messages, pull requests or issues either.
 - Keep proposals, evidence and accepted conclusions apart. Do not invent clauses, measurements, reviews or results.
 - Every generated output has a generator with `--check`, and CI runs it. Edit the source (a table, a register,
   a record), run the generator, commit both. The generators are listed in
@@ -39,6 +43,7 @@ python3 -m pip install --user -r assurance/requirements.txt
 python3 assurance/01-management/decisions/check_decisions.py
 python3 assurance/case/tools/validate.py
 python3 assurance/trace/tools/check_headers.py && python3 assurance/trace/tools/check_links.py && python3 assurance/trace/tools/check_tables.py
+python3 assurance/trace/tools/check_restricted.py
 for g in assurance/01-management/figures/fig_m00_register.py assurance/01-management/figures/folder_index.py \
          assurance/01-management/decisions/fig_lifecycle.py assurance/01-management/decisions/fig_questions.py \
          assurance/02-concept/figures/fig_c01_boundary.py assurance/02-concept/hara/hara.py \

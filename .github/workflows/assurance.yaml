@@ -1,8 +1,10 @@
 name: assurance
 
 # Checks of the assurance tree (assurance/): the decision register, the safety case records, the work-product
-# headers, links and tables, and every generated figure, page and block, each run with --check so a stale output
-# fails. Read-only: the job never writes to the repository. Contributors run the generators and commit the result.
+# headers, links and tables, that no restricted cybersecurity information is published (WP-M-09 §4), and every
+# generated figure, page and block, each run with --check so a stale output fails. Read-only: the job never writes
+# to the repository. Contributors run the generators and commit the result. Pull requests run it whatever they touch,
+# so restricted information cannot come in through a file outside the assurance tree.
 
 on:
   push:
@@ -10,13 +12,11 @@ on:
       - main
     paths:
       - assurance/**
+      - wiki/**
       - CLAUDE.md
+      - .gitignore
       - .github/workflows/assurance.yaml
   pull_request:
-    paths:
-      - assurance/**
-      - CLAUDE.md
-      - .github/workflows/assurance.yaml
 
 permissions:
   contents: read
@@ -51,6 +51,9 @@ jobs:
           python3 assurance/trace/tools/check_headers.py
           python3 assurance/trace/tools/check_links.py
           python3 assurance/trace/tools/check_tables.py
+
+      - name: No restricted cybersecurity information is published (WP-M-09 §4)
+        run: python3 assurance/trace/tools/check_restricted.py
 
       - name: Every generated output is current
         run: |

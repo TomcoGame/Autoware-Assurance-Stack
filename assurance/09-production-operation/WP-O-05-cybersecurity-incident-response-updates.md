@@ -16,6 +16,8 @@
 
 Cybersecurity monitoring, incident response, vulnerability management and updates.
 
+Vulnerability reports, incident records and unpatched weaknesses are restricted ([WP-M-09 §4](../01-management/WP-M-09-cybersecurity-plan.md#4-handling-of-cybersecurity-information)): they are kept outside this public repository, and only what WP-M-09 §4 allows is published here.
+
 Needed at gate G6 ([WP-M-00](../01-management/WP-M-00-work-product-register.md)).
 
 ## 2. Monitoring sources

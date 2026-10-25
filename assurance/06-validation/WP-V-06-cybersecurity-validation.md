@@ -16,6 +16,8 @@
 
 Cybersecurity validation and penetration testing.
 
+Penetration test plans, findings and the vulnerabilities they reveal are restricted ([WP-M-09 §4](../01-management/WP-M-09-cybersecurity-plan.md#4-handling-of-cybersecurity-information)): they are kept outside this public repository, and only what WP-M-09 §4 allows is published here.
+
 Needed at gate G5 ([WP-M-00](../01-management/WP-M-00-work-product-register.md)).
 
 ## 2. Scope

@@ -42,6 +42,7 @@ import caselib  # noqa: E402
 import check_decisions  # noqa: E402
 import check_headers  # noqa: E402
 import check_links  # noqa: E402
+import check_restricted  # noqa: E402
 import check_tables  # noqa: E402
 import cybersecurity  # noqa: E402
 import dashboard  # noqa: E402
@@ -510,24 +511,10 @@ class Tara(unittest.TestCase):
     def test_real_model_passes(self):
         self.assertEqual(tara.check(tara.load(), tara.known()), [])
 
-    def test_feasibility_and_risk_are_computed(self):
+    def test_impact_is_the_highest_over_the_damage(self):
         m = tara.load()
-        t = {
-            "damage": ["DS-01"],
-            "factors": {
-                "time": "≤1 day",
-                "expertise": "layman",
-                "knowledge": "public",
-                "window": "unlimited",
-                "equipment": "standard",
-            },
-        }
-        self.assertEqual(tara.potential(m, t), 0)
-        self.assertEqual(tara.feasibility(m, t), "High")
-        self.assertEqual(tara.impact(m, t), "Severe")
-        self.assertEqual(tara.risk(m, t), 5)
-        t["factors"].update(time=">6 months", expertise="multiple experts")
-        self.assertEqual(tara.feasibility(m, t), "Very low")
+        self.assertEqual(tara.impact(m, {"damage": ["DS-09"]}), "Moderate")
+        self.assertEqual(tara.impact(m, {"damage": ["DS-09", "DS-01"]}), "Severe")
 
     def test_model_breaking_a_rule_is_refused(self):
         m, k = tara.load(), tara.known()
@@ -540,14 +527,15 @@ class Tara(unittest.TestCase):
         ts["controls"] = []
         cases.append((bad, "TS-03: its risk must be reduced but it names no control"))
         bad = copy.deepcopy(m)
-        bad["threats"][0]["factors"]["time"] = "a fortnight"
-        cases.append((bad, "is not a value of the method"))
+        bad["threats"][0]["treatment"] = "ignore"
+        cases.append((bad, "treatment must be reduce or retain"))
         bad = copy.deepcopy(m)
         bad["assets"][0]["properties"] = ["X"]
         cases.append((bad, "properties must be among C, I, A"))
-        bad = copy.deepcopy(m)
-        bad["method"]["pending"] = "DQ-001"
-        cases.append((bad, "apply the decision"))
+        for key in ("path", "factors", "risk"):
+            bad = copy.deepcopy(m)
+            bad["threats"][0][key] = "x"
+            cases.append((bad, f"TS-01: '{key}' is restricted"))
         for model, needle in cases:
             self.assertTrue(any(needle in x for x in tara.check(model, k)), needle)
 
@@ -555,11 +543,6 @@ class Tara(unittest.TestCase):
 class Cybersecurity(unittest.TestCase):
     def test_real_model_passes(self):
         self.assertEqual(cybersecurity.check(cybersecurity.load(), cybersecurity.known()), [])
-
-    def test_cal_is_the_highest_over_the_threats(self):
-        m, k = cybersecurity.load(), cybersecurity.known()
-        self.assertEqual(cybersecurity.cal(m, k, {"threats": ["TS-15"]}), "CAL1")
-        self.assertEqual(cybersecurity.cal(m, k, {"threats": ["TS-15", "TS-01"]}), "CAL4")
 
     def test_model_breaking_a_rule_is_refused(self):
         m, k = cybersecurity.load(), cybersecurity.known()
@@ -578,8 +561,14 @@ class Cybersecurity(unittest.TestCase):
             r["from"] = [x for x in r["from"] if x != "CR-11"]
         cases.append((bad, "CR-11: the TARA proposed it"))
         bad = copy.deepcopy(m)
-        bad["vectors"]["TS-01"] = "telepathy"
-        cases.append((bad, "TS-01: attack vector must be"))
+        bad["goals"][0]["cal"] = "CAL5"
+        cases.append((bad, "CG-01: CAL must be one of"))
+        bad = copy.deepcopy(m)
+        bad["vectors"] = {"TS-01": "network"}
+        cases.append((bad, "'vectors' is restricted"))
+        bad = copy.deepcopy(m)
+        bad["claims"][0]["text"] = "It needs physical access"
+        cases.append((bad, "CC-01: the rationale of a claim is restricted"))
         for model, needle in cases:
             self.assertTrue(any(needle in x for x in cybersecurity.check(model, k)), needle)
 
@@ -732,6 +721,31 @@ class TreeChecks(unittest.TestCase):
             finally:
                 check_links.REPO = orig
         self.assertEqual(len(e), 2)
+
+    def test_restricted_information_is_refused(self):
+        mark = "classi" + "fication: restricted"
+        key = "-----BEGIN " + "PRIVATE KEY-----"
+        with tempfile.TemporaryDirectory() as t:
+            files = {
+                "ok.md": "| ID | Threat scenario | Impact |\n|---|---|---|\n",
+                "table.md": "| ID | Attack path |\n|---|---|\n",
+                "first.md": "| Risk value | ID |\n|---|---|\n",
+                "marked.md": f"<!-- {mark} -->\n",
+                "marked.yaml": f"{mark}\n",
+                "secret.txt": f"{key}\n",
+                "cert.pem": "x",
+                "notes.restricted.md": "x",
+                "restricted/notes.md": "x",
+            }
+            for name, text in files.items():
+                Path(t, name).parent.mkdir(exist_ok=True)
+                Path(t, name).write_text(text, encoding="utf-8")
+            e = check_restricted.check([Path(t, name) for name in files])
+        self.assertEqual(len(e), len(files) - 1, e)
+        self.assertFalse(any("ok.md" in x for x in e))
+
+    def test_tree_has_no_restricted_information(self):
+        self.assertEqual(check_restricted.check(check_restricted.files()), [])
 
     def test_header_status_must_match_register(self):
         p = next(x for x in wpregister.load().products if x.wid == "WP-C-03")

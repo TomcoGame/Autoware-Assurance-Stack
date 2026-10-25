@@ -24,6 +24,7 @@ starts there are no requirements to trace; the folder holds the checks that alre
 |---|---|
 | `python3 assurance/trace/tools/check_links.py` | A relative link or `#anchor` in the tree that does not resolve |
 | `python3 assurance/trace/tools/check_tables.py` | A table row whose cell count differs from its header |
+| `python3 assurance/trace/tools/check_restricted.py` | Restricted cybersecurity information in any tracked file: a file marked `classification: restricted` or named as restricted, key material, a table with an attack path, feasibility, risk value or attack vector column ([WP-M-09 §4](../01-management/WP-M-09-cybersecurity-plan.md#4-handling-of-cybersecurity-information)) |
 | `python3 assurance/trace/tools/check_headers.py` | A work product without the full document control header, whose `Status` disagrees with WP-M-00, or that is missing from WP-M-00 |
 
 Each has unit tests in [`assurance/tests/`](../tests/) and runs in the [assurance workflow](../../.github/workflows/assurance.yaml).

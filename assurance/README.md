@@ -143,7 +143,7 @@ and commit the result.
 | `python3 assurance/02-concept/triggering/triggering.py` | WP-C-06 §1 summary, §3 to §6 tables and Figure 5-1 | `02-concept/triggering/triggering.yaml`, `sotif/sotif.yaml`, WP-C-01 §3, WP-C-02 §3 and §4 |
 | `python3 assurance/02-concept/modifications/modifications.py` | WP-C-07 §1 summary, §2 and §5 tables, Figure 2-1 | `02-concept/modifications/modifications.yaml`, `triggering/triggering.yaml`, `fsc/fsc.yaml`, WP-C-01 §8, WP-C-02 §4, decision register |
 | `python3 assurance/08-analyses/stpa/stpa.py` | WP-A-05 §1 summary, §2 to §6 tables and Figure 3-1 | `08-analyses/stpa/stpa.yaml`, `hara/hara.yaml`, `sotif/sotif.yaml`, `fsc/fsc.yaml`, `fallback/fallback.yaml`, `modifications/modifications.yaml` |
-| `python3 assurance/02-concept/tara/tara.py` | WP-C-09 §1 summary, §2 to §5 tables and Figure 5-1 | `02-concept/tara/tara.yaml`, `stpa/stpa.yaml` and the references it checks, decision register |
+| `python3 assurance/02-concept/tara/tara.py` | WP-C-09 §1 summary, §2, §3 and §5 tables | `02-concept/tara/tara.yaml`, `stpa/stpa.yaml` and the references it checks, decision register |
 | `python3 assurance/02-concept/cybersecurity/cybersecurity.py` | WP-C-10 §1 summary, §2 to §4 tables and Figure 2-1 | `02-concept/cybersecurity/cybersecurity.yaml`, `tara/tara.yaml` and the references it checks |
 | `python3 assurance/02-concept/ai/ai.py` | WP-C-11 §1 summary, §2 to §5 tables and Figure 4-1 | `02-concept/ai/ai.yaml`, WP-C-01 §3, WP-C-02 §6, `fsc/fsc.yaml`, `triggering/triggering.yaml`, `cybersecurity/cybersecurity.yaml` |
 | `python3 assurance/02-concept/misuse/misuse.py` | WP-C-08 §1 summary, §2 and §4 to §6 tables, Figure 5-1 | `02-concept/misuse/misuse.yaml` and the analyses it refers to, decision register |

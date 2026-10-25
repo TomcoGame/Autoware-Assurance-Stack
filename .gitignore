@@ -28,3 +28,7 @@ node_modules/
 
 # Autoware Index
 repositories/autoware-index.repos
+
+# Restricted cybersecurity information (assurance/01-management/WP-M-09-cybersecurity-plan.md §4)
+restricted/
+*.restricted.*

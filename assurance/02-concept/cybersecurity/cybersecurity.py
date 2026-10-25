@@ -4,11 +4,13 @@
 Writes the generated tables of WP-C-10 (goals with their CAL, claims, cybersecurity requirements
 on the item and on its operational environment) and Figure 2-1 (from the TARA's threat scenarios
 to goals or claims, and from goals to requirements). Whether a threat needs a goal or a claim
-follows from its treatment in the TARA, and each goal's CAL from the impact and attack vector of
-its threats; neither is typed.
+follows from its treatment in the TARA. This repository is public: attack vectors, risk values and
+the rationale of each claim are restricted (WP-M-09 §4) and kept outside it, so each goal's CAL is
+recorded, not computed.
 
 The model is refused when:
-- an identifier is malformed or repeated, or an attack vector or CAL table entry is unknown;
+- it carries a restricted field (see tara.RESTRICTED), or a claim carries its rationale;
+- an identifier is malformed or repeated, or a CAL is unknown;
 - a threat scenario whose risk is reduced has no goal, or one whose risk is retained has no claim,
   or a threat is in a goal and a claim, or in the wrong one;
 - a goal has no requirement, or a requirement names a goal that does not exist;
@@ -56,31 +58,9 @@ def known() -> dict:
     }
 
 
-def cal(m: dict, k: dict, goal: dict) -> str | None:
-    t, meth = k["tara"], m["method"]
-    cals = []
-    for ts in goal["threats"]:
-        row = meth["cal"][tara.impact(t, k["threats"][ts])]
-        cals.append(row[meth["vectors"].index(m["vectors"][ts])])
-    cals = [c for c in cals if c]
-    return max(cals, key=CALS.index) if cals else None
-
-
 def check(m: dict, k: dict) -> list[str]:
-    errs: list[str] = []
+    errs: list[str] = tara.restricted(m)
     t = k["tara"]
-    meth = m.get("method", {})
-    for im in t["method"]["impacts"]:
-        row = meth.get("cal", {}).get(im)
-        if (
-            not row
-            or len(row) != len(meth.get("vectors", []))
-            or any(c not in CALS + (None,) for c in row)
-        ):
-            errs.append(f"method: CAL row for {im} must give a CAL or null per attack vector")
-    for ts in k["threats"]:
-        if m.get("vectors", {}).get(ts) not in meth.get("vectors", []):
-            errs.append(f"{ts}: attack vector must be one of {', '.join(meth.get('vectors', []))}")
     seen: set[str] = set()
 
     def new(i: str, pat: str) -> None:
@@ -113,10 +93,14 @@ def check(m: dict, k: dict) -> list[str]:
         new(g["id"], r"CG-\d\d")
         if not g.get("text") or not g.get("threats"):
             errs.append(f"{g['id']}: needs text and threats")
+        if g.get("cal") not in CALS:
+            errs.append(f"{g['id']}: CAL must be one of {', '.join(CALS)}")
         if not any(g["id"] in r.get("goals", []) for r in m.get("requirements", [])):
             errs.append(f"{g['id']}: no requirement meets it")
     for c in m.get("claims", []):
         new(c["id"], r"CC-\d\d")
+        if "text" in c:
+            errs.append(f"{c['id']}: the rationale of a claim is restricted (WP-M-09 §4)")
         for x in c.get("controls") or []:
             if x not in k["controls"]:
                 errs.append(f"{c['id']}: control {x} is not in the TARA")
@@ -142,25 +126,21 @@ def cell(s) -> str:
 
 
 def tables(m: dict, k: dict) -> dict[str, str]:
-    t = k["tara"]
     out = {}
     rows = [
-        "| ID | Cybersecurity goal | Threats | Highest risk | CAL | Requirements |",
-        "|---|---|---|---|---|---|",
+        "| ID | Cybersecurity goal | Threats | CAL | Requirements |",
+        "|---|---|---|---|---|",
     ]
     for g in m["goals"]:
-        rk = max(tara.risk(t, k["threats"][x]) for x in g["threats"])
         reqs = [r["id"] for r in m["requirements"] if g["id"] in r["goals"]]
-        out_cal = cal(m, k, g) or "—"
         rows.append(
-            f"| {g['id']} | {cell(g['text'])} | {', '.join(g['threats'])} | {rk} | **{out_cal}** | {', '.join(reqs)} |"
+            f"| {g['id']} | {cell(g['text'])} | {', '.join(g['threats'])} | **{g['cal']}** | {', '.join(reqs)} |"
         )
     out["cs-goals"] = "\n".join(rows)
-    rows = ["| ID | Threats | Risk | Claim | Controls applied anyway |", "|---|---|---|---|---|"]
+    rows = ["| ID | Threats | Rationale | Controls applied anyway |", "|---|---|---|---|"]
     for c in m["claims"]:
-        rk = max(tara.risk(t, k["threats"][x]) for x in c["threats"])
         rows.append(
-            f"| {c['id']} | {', '.join(c['threats'])} | {rk} | {cell(c['text'])} | {', '.join(c['controls']) or '—'} |"
+            f"| {c['id']} | {', '.join(c['threats'])} | Restricted (WP-M-09 §4) | {', '.join(c['controls']) or '—'} |"
         )
     out["cs-claims"] = "\n".join(rows)
     for on in ("item", "environment"):
@@ -172,7 +152,7 @@ def tables(m: dict, k: dict) -> dict[str, str]:
                 f"| {r['id']} | {cell(r['text'])} | {', '.join(r['goals'])} | {cell(r['element'])} | {', '.join(r['from']) or '— (new)'} |"
             )
         out[f"cs-{on}"] = "\n".join(rows)
-    cals = [cal(m, k, g) for g in m["goals"]]
+    cals = [g["cal"] for g in m["goals"]]
     hist = ", ".join(
         f"{sum(1 for c in cals if c == x)} at {x}" for x in reversed(CALS) if x in cals
     )
@@ -213,7 +193,6 @@ svg .col { font:600 11px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fi
 
 
 def figure(m: dict, k: dict) -> str:
-    t = k["tara"]
     top, rh = 116, 24
     cx = {"ts": (24, 92), "mid": (228, 150), "req": (514, 102)}
     nodes = [(g["id"], "goal") for g in m["goals"]] + [(c["id"], "claim") for c in m["claims"]]
@@ -296,9 +275,7 @@ def figure(m: dict, k: dict) -> str:
                 class_="ts",
             )
         )
-        body.append(
-            fk.text(cx["ts"][0] + 8, y + 13, f"{ts} · {tara.risk(t, k['threats'][ts])}", "id")
-        )
+        body.append(fk.text(cx["ts"][0] + 8, y + 13, ts, "id"))
     for i, kind in nodes:
         y = pos[("mid", i)]
         body.append(
@@ -315,8 +292,8 @@ def figure(m: dict, k: dict) -> str:
         )
         body.append(fk.text(cx["mid"][0] + 8, y + 13, i, "id"))
         if kind == "goal":
-            c = cal(m, k, next(g for g in m["goals"] if g["id"] == i))
-            body.append(fk.text(cx["mid"][0] + cx["mid"][1] - 8, y + 13, c or "", "cal", "end"))
+            c = next(g for g in m["goals"] if g["id"] == i)["cal"]
+            body.append(fk.text(cx["mid"][0] + cx["mid"][1] - 8, y + 13, c, "cal", "end"))
         else:
             body.append(fk.text(cx["mid"][0] + cx["mid"][1] - 8, y + 13, "retained", "s", "end"))
     for r in m["requirements"]:
@@ -348,16 +325,14 @@ def figure(m: dict, k: dict) -> str:
         fk.text(
             24,
             y,
-            "Threat label: ID · risk value. Goal label: CAL. Requirement label: on the item or its environment.",
+            "Goal label: CAL. Requirement label: on the item or its environment.",
             "s",
         )
     )
     y += 16
     desc = (
         "Goals: "
-        + "; ".join(
-            f"{g['id']} ({cal(m, k, g)}) from {', '.join(g['threats'])}" for g in m["goals"]
-        )
+        + "; ".join(f"{g['id']} ({g['cal']}) from {', '.join(g['threats'])}" for g in m["goals"])
         + ". Claims: "
         + "; ".join(f"{c['id']} for {', '.join(c['threats'])}" for c in m["claims"])
         + ". Requirements: "
