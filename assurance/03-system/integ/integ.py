@@ -43,6 +43,7 @@ import check_decisions  # noqa: E402
 import figkit as fk  # noqa: E402
 import hsi  # noqa: E402
 import secarch  # noqa: E402
+import terms  # noqa: E402
 import tsc  # noqa: E402
 import tsr  # noqa: E402
 
@@ -513,7 +514,7 @@ def build() -> dict[Path, str]:
         FIG: figure(m, k),
         FIG2: ccards.sheet(card_data(m, k), comps),
         CSV: cases_csv(m, k),
-        README: readme(t, doc),
+        README: terms.close(readme(t, doc), README),
     }
 
 

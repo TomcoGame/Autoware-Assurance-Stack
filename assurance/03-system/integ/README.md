@@ -140,3 +140,36 @@ No test has been run. Results are recorded per case, against a released configur
 | [`fig-s08-4-1-cases.svg`](fig-s08-4-1-cases.svg) | Figure 4-1, what each case runs on and what it proves |
 | [`integ.yaml`](integ.yaml) | Environments, integration steps, methods and test cases |
 | [`integ.py`](integ.py), [`ccards.py`](ccards.py) | The generator: checks the model against the architecture, the technical safety and cybersecurity requirements, the interfaces and the timing budget, and writes WP-S-08's tables and everything here |
+
+## Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| 21434, 21448, 26262, PAS 8800 | ISO/SAE 21434 (cybersecurity), ISO 21448 (SOTIF), ISO 26262 (functional safety), ISO/PAS 8800 (AI safety). "26262-3" is part 3 of ISO 26262 |
+| ASIL | Automotive Safety Integrity Level, A (lowest) to D (highest), set by ISO 26262 for each safety goal. B(D) means rated B as part of a decomposition of D |
+| CI | Continuous integration: the automated checks GitHub runs on every pull request and push |
+| CMP | Component identifier, as in CMP-02: a part of the system architecture (WP-S-03) |
+| CSTR | Technical cybersecurity requirement identifier, as in CSTR-01.01 (WP-S-07) |
+| DQ | A question in the decision register, as in DQ-004. "DQ-015 B" means option B |
+| ENV | Test environment identifier, as in ENV-1 (WP-S-08) |
+| G0 to G6 | Gates: project milestones with exit criteria, defined in WP-M-00 §2 |
+| GNSS | Global navigation satellite system, such as GPS; here also a source of exact time |
+| I0 to I3 | Independence of a reviewer from the author, from none (I0) to an independent assessor (I3). Work drafted by the AI assistant is I0 |
+| ID | Identifier |
+| IF | Interface identifier of the hardware–software interface, as in IF-01 (WP-S-05) |
+| IS | Integration step identifier, as in IS-1 (WP-S-08) |
+| ISO | International Organization for Standardization |
+| IT | Integration test case identifier, as in IT-01 (WP-S-08) |
+| MRM | Minimal risk manoeuvre: the manoeuvre that brings the vehicle to a minimal risk condition |
+| ODD | Operational design domain: the roads, conditions and traffic the system is designed for |
+| P | Safety envelope parameter identifier, as in P-01 (WP-S-02) |
+| SIG | Signal identifier, as in SIG-01: one message that crosses an interface (WP-S-05) |
+| SIM | Simulator identifier, as in SIM-01 (WP-V-08) |
+| TR | Fallback trigger identifier, as in TR-01: a condition that starts a minimal risk manoeuvre (WP-C-12) |
+| TSR | Technical safety requirement, as in TSR-01.01 (WP-S-02) |
+| WP | Work product: a document or record the assurance path needs. WP-M-00 is the register that lists them all |
+| YAML | A plain-text data format; the generator's source data is a `.yaml` file |
+| § | Section or clause, as in "UL 4600 §5" |
+| — | Nothing: no value, or the subfolder has no README of its own |
+
+Other terms are defined in the [Glossary](../../../wiki/Glossary.md).
