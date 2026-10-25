@@ -1182,6 +1182,36 @@ class Secarch(unittest.TestCase):
     def test_real_model_passes(self):
         self.assertEqual(secarch.check(secarch.load(), secarch.known()), [])
 
+    def test_every_exposed_interface_has_an_attack_path_card(self):
+        m, k = secarch.load(), secarch.known()
+        exposed, zones = secarch.card_data(m, k)
+        self.assertEqual([e["id"] for e in exposed], [e["id"] for e in m["external"]])
+        self.assertEqual([z["id"] for z in zones], ["SZ-1", "SZ-2", "SZ-3", "SZ-4"])
+        ex1 = exposed[0]
+        self.assertEqual(ex1["cal"], "CAL4")
+        self.assertTrue(any(t["claim"] for t in ex1["threats"]))
+        svg = secarch.acards.sheet(exposed, zones)
+        self.assertEqual(re.findall(r'class="gid">(EX-\d\d)<', svg), [e["id"] for e in exposed])
+
+    def test_requirements_csv_traces_every_technical_requirement(self):
+        import csv
+
+        m, k = secarch.load(), secarch.known()
+        rows = list(csv.DictReader(io.StringIO(secarch.requirements_csv(m, k))))
+        self.assertEqual(sorted(r["ID"] for r in rows), sorted(r["id"] for r in m["tcsrs"]))
+        r = next(r for r in rows if r["ID"] == "CSTR-01.02")
+        self.assertIn("EX-01", r["Guards exposed interfaces"])
+        self.assertIn("IF-01", r["Guards conduits"])
+        self.assertIn("IT-06", r["Integration test cases (WP-S-08)"])
+
+    def test_folder_page_links_every_file_in_the_folder(self):
+        page = secarch.build()[secarch.README]
+        for p in secarch.HERE.iterdir():
+            if p.suffix in (".csv", ".svg", ".yaml", ".py"):
+                self.assertIn(f"]({p.name})", page, p.name)
+        self.assertNotIn("](secarch/", page)
+        self.assertEqual(page.count("technical cybersecurity requirements refine the"), 1)
+
     def test_cal_follows_the_goals_refined(self):
         m, k = secarch.load(), secarch.known()
         by = {r["id"]: r for r in m["tcsrs"]}
