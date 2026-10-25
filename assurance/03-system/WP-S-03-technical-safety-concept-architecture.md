@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-S-03 Technical safety concept and system architectural design |
 | Standard reference | UL 4600 §10; ISO 26262-4 §6; ISO 21448 §8; ISO/PAS 8800:2024 (AI architecture measures); ASPICE 4.0 SYS.3 |
-| Version | 0.4 (the safety LiDAR and radar also carry ASIL C for false detections (DQ-035 A); 2026-10-24). 0.3 (automotive monitor hardware (DQ-030 A); the safety channel's detection decomposed into LiDAR and radar at ASIL B(D) each (DQ-031 A); 2026-10-23). 0.2 (first content: system components with derived ASILs, safety mechanisms and their placement, redundancy and diversity, AI architecture measures, architecture verification, generated from `tsc/tsc.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.5 (folder page `tsc/README.md` with the whole concept on one page, Figure 3-1 on where each mechanism runs and how fast it must act, and `tsc/mechanisms.csv` tracing every mechanism to its FSRs, budget, technical safety requirements and integration tests; 2026-10-25). 0.4 (the safety LiDAR and radar also carry ASIL C for false detections (DQ-035 A); 2026-10-24). 0.3 (automotive monitor hardware (DQ-030 A); the safety channel's detection decomposed into LiDAR and radar at ASIL B(D) each (DQ-031 A); 2026-10-23). 0.2 (first content: system components with derived ASILs, safety mechanisms and their placement, redundancy and diversity, AI architecture measures, architecture verification, generated from `tsc/tsc.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | ASIL D |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -81,6 +81,14 @@ The monitor runs on an automotive ASIL D microcontroller and its perception on a
 | SM-19 | Remote command protection | CMP-11 Remote operations station | — | Stamps, numbers and signs every remote command and release before it leaves the station (CSR-01) | FSR-08.03 | C | — |
 
 <!-- END GENERATED: tsc-mechanisms -->
+
+<!-- BEGIN GENERATED: tsc-mechanism-cards (assurance/03-system/tsc/tsc.py) -->
+
+![Figure 3-1: one card per safety mechanism SM-01 to SM-19. Each shows the system architecture of Figure 2-1 in small with the component the mechanism runs on filled and those it uses outlined; for a time-critical mechanism, a bar dividing the binding fault tolerant time interval of WP-S-04 into time to detect, time to react and reserve, with their ranges; the reaction it starts; what it does; and the functional safety requirements it implements.](tsc/fig-s03-3-1-mechanisms.svg)
+
+*Figure 3-1. Where each safety mechanism runs, and how fast it must act. Budgets are the ranges WP-S-04 computes, not measurements. Drawn by [`tsc/tsc.py`](tsc/tsc.py); CI fails if it is stale. Each mechanism's trace to its FSRs, technical safety requirements and test cases is in [`tsc/mechanisms.csv`](tsc/mechanisms.csv).*
+
+<!-- END GENERATED: tsc-mechanism-cards -->
 
 **The monitor carries most of the weight.** Eight of the mechanisms run on the safety monitor controller. They are deliberately simple: rules over positions, speeds and accelerations, which can be specified completely, verified formally (SM-01, SM-02) and fault-injected. The hard problem, seeing the world, sits in SM-09 on the safety channel processor, and its performance is a SOTIF question as much as a functional safety one (WP-C-06 FI-08).
 
