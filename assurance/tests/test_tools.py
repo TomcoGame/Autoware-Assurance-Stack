@@ -1550,6 +1550,20 @@ class Generators(unittest.TestCase):
         with self.assertRaises(figkit.FigureError):
             terms.close("An undefined XYZQ.", figkit.ASSURANCE / "02-concept" / "README.md")
 
+    def test_glossary_defines_every_readme_term(self):
+        cells = " ".join(
+            ln.split("|")[1]
+            for ln in terms.GLOSSARY.read_text(encoding="utf-8").splitlines()
+            if ln.startswith("| ")
+        )
+        for _, term, _ in terms.TERMS:
+            if not term[0].isalnum():
+                continue
+            for part in re.split(r",\s*| to |–", re.sub(r"\(.*?\)", "", term)):
+                part = part.strip()
+                with self.subTest(term=term, part=part):
+                    self.assertRegex(cells, r"(?<![\w-])" + re.escape(part) + r"(?!\w)")
+
     def test_figure_disagreeing_with_register_is_refused(self):
         self.assertEqual(sorted(fig_questions.FIGURES), ["DQ-001", "DQ-002", "DQ-034"])
         orig = fig_questions.CHAIN
