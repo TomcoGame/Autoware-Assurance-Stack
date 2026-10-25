@@ -11,6 +11,12 @@ The same values as text, taken from [`assurance/README.md`](../assurance/README.
 
 {{GENERATED:assurance/README.md:assurance-summary}}
 
+## Where the project is on the road to driverless operation
+
+![The road to driverless operation: the robotaxi on a road with seven gate posts, G0 to G6, standing at the project's current position. Under each gate, its exit criterion from WP-M-00 §2 and how many of the work products it needs are approved and drafted.](../tools/readme/figures/gates.svg)
+
+*Illustration. Gate criteria from WP-M-00 §2, counts from the register, the current state from the dashboard; drawn by [`figures.py`](../tools/readme/figures.py).*
+
 ## Where each value comes from
 
 | Value | Source | Rule |
