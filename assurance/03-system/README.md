@@ -29,7 +29,7 @@ Standard clauses: UL 4600 §9–10; 26262-4; SYS.1–5.
 | Folder | What it holds |
 |---|---|
 | [`hsi/`](hsi/README.md) | Hardware-software interface |
-| [`integ/`](integ/) | — |
+| [`integ/`](integ/README.md) | System integration and test |
 | [`secarch/`](secarch/README.md) | Cybersecurity requirements and architecture |
 | [`timing/`](timing/README.md) | Timing: FTTI, detection and reaction budget |
 | [`tsc/`](tsc/README.md) | Technical safety concept |
