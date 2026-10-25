@@ -21,4 +21,18 @@ otherwise unchanged; the textures of the downloads are not used and not kept.
 - the meshes are simplified (vertices clustered on a grid), so fine detail is lost;
 - the ego vehicle carries a roof sensor that is not part of the model.
 
+## Changes made in the Blender scenes
+
+[`tools/sim/build_blend.py`](../../sim/build_blend.py) uses the models, through `mesh.py`, in qualitative scenes of the
+known scenarios:
+
+- the same parts are left out and kept as above, and the models are normalised the same way;
+- the meshes are used at full resolution, not simplified;
+- textures are not used: each part class has one material, and the body colours are ours (amber for the road user a
+  scenario is about, grey for the others, white for the ego vehicle);
+- the ego vehicle carries a roof sensor that is not part of the model;
+- the SUV of the pack stands in for an emergency vehicle and the minivan for a van.
+
+Every render names both models, their authors and the licence on its face.
+
 Their use here does not mean that either author endorses this project or its figures.

@@ -1,0 +1,61 @@
+name: sim-render
+
+# Renders the qualitative scenario scenes in Blender from the committed descriptions (tools/sim/scenes/*.json), checks
+# that each built scene matches its description (build_blend.py --verify: road users where the description puts
+# them, the stamp and every label on the frame), and publishes the stills and manifests as the workflow artifact
+# `scenario-scenes`. Renders are not byte-deterministic and are not committed; see tools/sim/README.md. Every render
+# is stamped "qualitative illustration · not a simulation result" and is not evidence.
+
+on:
+  pull_request:
+    paths:
+      - tools/sim/**
+      - tools/readme/mesh.py
+      - tools/readme/fbx.py
+      - tools/readme/models/**
+      - assurance/06-validation/scenarios/**
+      - .github/workflows/sim-render.yaml
+  workflow_dispatch:
+    inputs:
+      animate:
+        description: Also render the clips (MP4)
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  render:
+    name: Render and verify the scenario scenes
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install Blender as a Python module (bpy) and the libraries it loads
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q libxi6 libxkbcommon0 libsm6 libgl1 libxrender1 libxxf86vm1 libxfixes3
+          python -m pip install --quiet bpy==5.2.3
+
+      - name: Build, verify and render every scene
+        env:
+          ANIMATE: ${{ inputs.animate && '--animate' || '' }}
+        run: python tools/sim/build_blend.py tools/sim/scenes/*.json --out "$RUNNER_TEMP/sim" --verify $ANIMATE
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: scenario-scenes
+          path: ${{ runner.temp }}/sim
+          retention-days: 30

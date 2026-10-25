@@ -1,0 +1,220 @@
+{
+ "version": 1,
+ "generator": "tools/sim/scene.py",
+ "stamp": "qualitative illustration · not a simulation result · draft for engineering review",
+ "scenario": {
+  "id": "SC-06",
+  "name": "Unprotected left turn across oncoming traffic",
+  "description": "Left turn on a permissive green or at an uncontrolled junction, with an oncoming lane hidden by a turning vehicle, or a motorcycle approaching fast",
+  "situations": [
+   "OS-04"
+  ],
+  "events": [
+   {
+    "id": "HE-06.2",
+    "description": "Turns left in front of an oncoming vehicle"
+   }
+  ],
+  "triggers": [
+   {
+    "id": "TC-12",
+    "condition": "Unprotected left turn with a turning vehicle hiding an oncoming lane"
+   },
+   {
+    "id": "TC-20",
+    "condition": "Motorcycles, and vehicles accelerating hard, approaching from far away"
+   }
+  ],
+  "goals": [
+   {
+    "id": "SG-02",
+    "asil": "D",
+    "statement": "Decelerate at least as much as needed to avoid a collision the planned trajectory avoids"
+   },
+   {
+    "id": "SG-06",
+    "asil": "D",
+    "statement": "Do not enter an intersection, roundabout or crosswalk against right of way"
+   }
+  ],
+  "monitors": [],
+  "meant": "turns only with a safe gap",
+  "pass": "The vehicle starts the turn only with a gap that lets the oncoming road user pass at its assumed speed and acceleration, and stops before the conflict area otherwise",
+  "pass_refs": [
+   "FSR-06.01",
+   "FSR-06.02",
+   "FSR-06.03",
+   "FSR-02.02",
+   "FSR-03.01",
+   "FM-07",
+   "AC-02"
+  ],
+  "source": "assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ },
+ "sample": {
+  "salt": "tools/sim sample 1",
+  "parameters": [
+   {
+    "parameter": "ODD-20",
+    "range": "0 to 48 km/h",
+    "value": 15.8,
+    "unit": "km/h",
+    "crosses": false,
+    "label": "ODD-20 Ego speed: 15.8 km/h (range 0 to 48 km/h)"
+   },
+   {
+    "parameter": "ODD-04",
+    "range": "signalised, unprotected-turn, stop-controlled, t-junction",
+    "value": "t-junction",
+    "chosen": "seeded",
+    "outside": false,
+    "label": "ODD-04 Junctions: t-junction"
+   },
+   {
+    "parameter": "ODD-16",
+    "range": "car, van, truck, motorcycle, bicycle",
+    "value": "motorcycle",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-16 Traffic participants: motorcycle"
+   },
+   {
+    "parameter": "ODD-12",
+    "range": "day, dusk, night",
+    "value": "dusk",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-12 Illumination: dusk"
+   },
+   {
+    "parameter": "Speed and acceleration of the oncoming vehicle",
+    "range": "Bound stated by FSR-06.01, not yet fixed",
+    "value": null,
+    "label": "Speed and acceleration of the oncoming vehicle: Bound stated by FSR-06.01, not yet fixed; the motion drawn is choreography"
+   }
+  ]
+ },
+ "conditions": {
+  "light": "dusk",
+  "surface": "dry",
+  "rain": null,
+  "visibility": null,
+  "beyond": null
+ },
+ "legend": {
+  "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed, the vehicle is not chosen",
+  "meant": "Meant to do: turns only with a safe gap",
+  "hazard": "Where the hazard lies: HE-06.2 Turns left in front of an oncoming vehicle",
+  "key": "The road user or condition the scenario is about"
+ },
+ "road": {
+  "length": [
+   -40,
+   110
+  ],
+  "lane": 3.5,
+  "parking": 0,
+  "sidewalk": 3.0,
+  "stop_line": 26.0,
+  "cross": {
+   "y": 32.0,
+   "width": 7.0,
+   "sides": [
+    "left",
+    "right"
+   ]
+  }
+ },
+ "features": [
+  "t_left"
+ ],
+ "ego": {
+  "path": [
+   [
+    1.75,
+    0.0
+   ],
+   [
+    1.75,
+    25.0
+   ]
+  ],
+  "stops": true,
+  "speed_kmh": 15.8
+ },
+ "plan": [
+  [
+   1.75,
+   0.0
+  ],
+  [
+   1.75,
+   26.0
+  ],
+  [
+   1.2,
+   29.5
+  ],
+  [
+   -0.6,
+   32.4
+  ],
+  [
+   -3.4,
+   33.6
+  ],
+  [
+   -8.0,
+   33.75
+  ],
+  [
+   -40.0,
+   33.75
+  ]
+ ],
+ "occlusion": [],
+ "hazard": [
+  -3.5,
+  28.5,
+  0.0,
+  35.5
+ ],
+ "actors": [
+  {
+   "role": "key",
+   "class": "motorcycle",
+   "drawn_as": "box:motorcycle",
+   "label": "motorcycle",
+   "path": [
+    [
+     -1.75,
+     80.0
+    ],
+    [
+     -1.75,
+     6.0
+    ]
+   ],
+   "move": [
+    0.0,
+    1.0
+   ]
+  }
+ ],
+ "still": 0.55,
+ "camera": {
+  "pos": [
+   4.0,
+   -6.0,
+   8.0
+  ],
+  "look": [
+   -2.0,
+   32.0,
+   0.0
+  ],
+  "lens": 24
+ },
+ "credits": "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md)"
+}
