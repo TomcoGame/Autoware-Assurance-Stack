@@ -1,0 +1,625 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1070" height="1470" viewBox="0 0 1070 1470" role="img" aria-labelledby="t d">
+<title id="t">WP-S-09 Figure 2-2: verification by requirement</title>
+<desc id="d">Verification by requirement: SG-01: FSR-01.01 by VC-02, VC-03, VC-04, VC-05, VC-06, VC-11, VC-13, VC-14, VC-15, FSR-01.02 by VC-02, VC-03, VC-05, VC-06, VC-11, FSR-01.03 by VC-17, FSR-01.05 by VC-17, FSR-01.04 by VC-01, VC-03; SG-02: FSR-02.01 by VC-02, VC-03, VC-06, VC-07, VC-09, VC-12, VC-18, FSR-02.02 by VC-02, VC-03, VC-04, VC-05, VC-06, VC-10, VC-12, VC-14, VC-15, VC-18, FSR-02.03 by VC-02, VC-03, VC-05, VC-06, FSR-02.04 by VC-17, FSR-02.05 by VC-01, VC-02, VC-03, VC-05, VC-06; SG-03: FSR-03.01 by VC-02, VC-03, VC-06, VC-08, VC-09, VC-10, VC-12, VC-15, VC-18, FSR-03.02 by VC-02, VC-03, VC-05, VC-06, VC-09, FSR-03.03 by VC-02, VC-03, VC-08, VC-09; SG-04: FSR-04.01 by VC-02, VC-03, VC-10, VC-12, VC-13, VC-14, VC-15, VC-16, VC-18, FSR-04.02 by VC-02, VC-04, VC-10, FSR-04.03 by VC-02, VC-10, FSR-04.04 by VC-17, FSR-04.06 by VC-17, FSR-04.05 by VC-01, VC-02, VC-03, VC-05, VC-06, VC-10, VC-12; SG-05: FSR-05.01 by VC-02, VC-03, VC-05, VC-11, VC-15, FSR-05.02 by VC-03, VC-05, VC-11, FSR-05.03 by VC-02, VC-03, VC-11, FSR-05.04 by VC-03, VC-05, VC-11, VC-17, FSR-05.05 by VC-02, VC-03, VC-11, VC-17; SG-06: FSR-06.01 by VC-02, VC-03, VC-05, VC-06, VC-10, VC-12, VC-13, VC-15, VC-18, FSR-06.02 by VC-02, VC-03, VC-12, FSR-06.03 by VC-01, VC-02, VC-03, VC-06, VC-12, VC-18; SG-07: FSR-07.01 by VC-02, VC-03, VC-14, VC-15, FSR-07.02 by VC-02, VC-03, VC-14, FSR-07.03 by VC-17, FSR-07.04 by VC-02, VC-03, VC-11, VC-15, VC-19, FSR-07.05 by VC-01, VC-02, VC-03, VC-14, VC-15, VC-18, FSR-07.06 by VC-03, VC-14, VC-17, FSR-07.07 by VC-03, VC-14, VC-19, FSR-07.08 by VC-02, VC-03, VC-09, VC-14; SG-08: FSR-08.01 by VC-02, VC-15, FSR-08.02 by VC-02, VC-15, FSR-08.03 by VC-02, VC-15; SG-09: FSR-09.01 by VC-02, VC-16; SOTIF: environment by VC-01, VC-02, VC-03, VC-06, VC-07, VC-09, VC-12, VC-18, road by VC-01, VC-02, VC-03, VC-05, VC-06, VC-12, VC-14, VC-18, road users by VC-01, VC-02, VC-03, VC-06, VC-10, VC-12, VC-18, vehicle by VC-01, VC-02, VC-03, VC-05, VC-06, VC-07, VC-09, operations by VC-02, VC-15; SOTIF: data by VC-20, architecture by VC-02, function by VC-01, VC-02, VC-03, VC-06, VC-07, VC-09, VC-10, VC-12, VC-14, VC-18, odd by VC-20, operations by VC-01, VC-02, VC-03, VC-15, VC-18.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg { --mon:#2d55c8; --monsoft:#e7ecfb; --a3:#d4644a; --e1:#7c5cc4; --e2:#2d55c8; --e3:#23875a; --e4:#b97800; }
+@media (prefers-color-scheme: dark) { svg { --mon:#86a2ff; --monsoft:#232c48; --a3:#bb4f34; --e1:#b49cf0; --e2:#86a2ff; --e3:#45b882; --e4:#e7a52a; } }
+svg .ax { font:10.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .bad { font:600 10.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--bad); }
+svg .gid { font:700 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .rid { font:600 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .pa { fill:var(--a3); } svg .pat { font:600 10px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:#ffffff; }
+svg .e1 { fill:none; stroke:var(--e1); stroke-width:1.3; } svg .e1t { font:600 9.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--e1); }
+svg .e2 { fill:none; stroke:var(--e2); stroke-width:1.3; } svg .e2t { font:600 9.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--e2); }
+svg .e3 { fill:none; stroke:var(--e3); stroke-width:1.3; } svg .e3t { font:600 9.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--e3); }
+svg .e4 { fill:none; stroke:var(--e4); stroke-width:1.3; } svg .e4t { font:600 9.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--e4); }
+svg .e0 { fill:none; stroke:var(--ink3); stroke-width:1.2; stroke-dasharray:3 2; } svg .e0t { font:600 9.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink3); }
+</style>
+<rect class="bg" width="1070" height="1470"/>
+<text x="24" y="34" class="h">How each safety goal and SOTIF measure is verified</text>
+<text x="24" y="56" class="t">WP-S-09 §2, Figure 2-2: each requirement of each safety goal, and the triggering conditions and modifications by kind, with the cases that</text>
+<text x="24" y="73" class="t">verify them, coloured by where each case runs. No case has been run; a chip is a plan, not a result.</text>
+<rect x="24" y="96" width="330" height="304" rx="8" class="card"/>
+<text x="38" y="120" class="gid">SG-01</text>
+<rect x="290.1" y="107" width="49.9" height="18" rx="4" class="pa"/>
+<text x="315" y="120" class="pat" text-anchor="middle">ASIL D</text>
+<text x="38" y="140" class="tb">Avoid unintended acceleration</text>
+<text x="38" y="161" class="rid">FSR-01.01</text>
+<text x="38" y="173" class="ax">D · Safety monitor</text>
+<rect x="152" y="150" width="42" height="15" rx="7" class="e1"/>
+<text x="173" y="161" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="198" y="150" width="42" height="15" rx="7" class="e4"/>
+<text x="219" y="161" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="244" y="150" width="42" height="15" rx="7" class="e2"/>
+<text x="265" y="161" class="e2t" text-anchor="middle">VC-04</text>
+<rect x="290" y="150" width="42" height="15" rx="7" class="e4"/>
+<text x="311" y="161" class="e4t" text-anchor="middle">VC-05</text>
+<rect x="152" y="168" width="42" height="15" rx="7" class="e4"/>
+<text x="173" y="179" class="e4t" text-anchor="middle">VC-06</text>
+<rect x="198" y="168" width="42" height="15" rx="7" class="e4"/>
+<text x="219" y="179" class="e4t" text-anchor="middle">VC-11</text>
+<rect x="244" y="168" width="42" height="15" rx="7" class="e0"/>
+<text x="265" y="179" class="e0t" text-anchor="middle">VC-13</text>
+<rect x="290" y="168" width="42" height="15" rx="7" class="e4"/>
+<text x="311" y="179" class="e4t" text-anchor="middle">VC-14</text>
+<rect x="152" y="186" width="42" height="15" rx="7" class="e2"/>
+<text x="173" y="197" class="e2t" text-anchor="middle">VC-15</text>
+<text x="38" y="221" class="rid">FSR-01.02</text>
+<text x="38" y="233" class="ax">D · Safety monitor</text>
+<rect x="152" y="210" width="42" height="15" rx="7" class="e1"/>
+<text x="173" y="221" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="198" y="210" width="42" height="15" rx="7" class="e4"/>
+<text x="219" y="221" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="244" y="210" width="42" height="15" rx="7" class="e4"/>
+<text x="265" y="221" class="e4t" text-anchor="middle">VC-05</text>
+<rect x="290" y="210" width="42" height="15" rx="7" class="e4"/>
+<text x="311" y="221" class="e4t" text-anchor="middle">VC-06</text>
+<rect x="152" y="228" width="42" height="15" rx="7" class="e4"/>
+<text x="173" y="239" class="e4t" text-anchor="middle">VC-11</text>
+<text x="38" y="263" class="rid">FSR-01.03</text>
+<text x="38" y="275" class="ax">D · Vehicle drive-…</text>
+<rect x="152" y="252" width="42" height="15" rx="7" class="e4"/>
+<text x="173" y="263" class="e4t" text-anchor="middle">VC-17</text>
+<text x="38" y="293" class="rid">FSR-01.05</text>
+<text x="38" y="305" class="ax">D · Vehicle state…</text>
+<rect x="152" y="282" width="42" height="15" rx="7" class="e4"/>
+<text x="173" y="293" class="e4t" text-anchor="middle">VC-17</text>
+<text x="38" y="323" class="rid">FSR-01.04</text>
+<text x="38" y="335" class="ax">QM · Autoware comp…</text>
+<rect x="152" y="312" width="42" height="15" rx="7" class="e1"/>
+<text x="173" y="323" class="e1t" text-anchor="middle">VC-01</text>
+<rect x="198" y="312" width="42" height="15" rx="7" class="e4"/>
+<text x="219" y="323" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="370" y="96" width="330" height="304" rx="8" class="card"/>
+<text x="384" y="120" class="gid">SG-02</text>
+<rect x="636.1" y="107" width="49.9" height="18" rx="4" class="pa"/>
+<text x="661" y="120" class="pat" text-anchor="middle">ASIL D</text>
+<text x="384" y="140" class="tb">Decelerate at least as much as needed to</text>
+<text x="384" y="156" class="tb">avoid a collision the planned trajectory</text>
+<text x="384" y="172" class="tb">avoids</text>
+<text x="384" y="193" class="rid">FSR-02.01</text>
+<text x="384" y="205" class="ax">D · Safety percept…</text>
+<rect x="498" y="182" width="42" height="15" rx="7" class="e1"/>
+<text x="519" y="193" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="544" y="182" width="42" height="15" rx="7" class="e4"/>
+<text x="565" y="193" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="590" y="182" width="42" height="15" rx="7" class="e4"/>
+<text x="611" y="193" class="e4t" text-anchor="middle">VC-06</text>
+<rect x="636" y="182" width="42" height="15" rx="7" class="e3"/>
+<text x="657" y="193" class="e3t" text-anchor="middle">VC-07</text>
+<rect x="498" y="200" width="42" height="15" rx="7" class="e4"/>
+<text x="519" y="211" class="e4t" text-anchor="middle">VC-09</text>
+<rect x="544" y="200" width="42" height="15" rx="7" class="e4"/>
+<text x="565" y="211" class="e4t" text-anchor="middle">VC-12</text>
+<rect x="590" y="200" width="42" height="15" rx="7" class="e1"/>
+<text x="611" y="211" class="e1t" text-anchor="middle">VC-18</text>
+<text x="384" y="235" class="rid">FSR-02.02</text>
+<text x="384" y="247" class="ax">D · Safety monitor</text>
+<rect x="498" y="224" width="42" height="15" rx="7" class="e1"/>
+<text x="519" y="235" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="544" y="224" width="42" height="15" rx="7" class="e4"/>
+<text x="565" y="235" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="590" y="224" width="42" height="15" rx="7" class="e2"/>
+<text x="611" y="235" class="e2t" text-anchor="middle">VC-04</text>
+<rect x="636" y="224" width="42" height="15" rx="7" class="e4"/>
+<text x="657" y="235" class="e4t" text-anchor="middle">VC-05</text>
+<rect x="498" y="242" width="42" height="15" rx="7" class="e4"/>
+<text x="519" y="253" class="e4t" text-anchor="middle">VC-06</text>
+<rect x="544" y="242" width="42" height="15" rx="7" class="e4"/>
+<text x="565" y="253" class="e4t" text-anchor="middle">VC-10</text>
+<rect x="590" y="242" width="42" height="15" rx="7" class="e4"/>
+<text x="611" y="253" class="e4t" text-anchor="middle">VC-12</text>
+<rect x="636" y="242" width="42" height="15" rx="7" class="e4"/>
+<text x="657" y="253" class="e4t" text-anchor="middle">VC-14</text>
+<rect x="498" y="260" width="42" height="15" rx="7" class="e2"/>
+<text x="519" y="271" class="e2t" text-anchor="middle">VC-15</text>
+<rect x="544" y="260" width="42" height="15" rx="7" class="e1"/>
+<text x="565" y="271" class="e1t" text-anchor="middle">VC-18</text>
+<text x="384" y="295" class="rid">FSR-02.03</text>
+<text x="384" y="307" class="ax">D · Safety monitor</text>
+<rect x="498" y="284" width="42" height="15" rx="7" class="e1"/>
+<text x="519" y="295" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="544" y="284" width="42" height="15" rx="7" class="e4"/>
+<text x="565" y="295" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="590" y="284" width="42" height="15" rx="7" class="e4"/>
+<text x="611" y="295" class="e4t" text-anchor="middle">VC-05</text>
+<rect x="636" y="284" width="42" height="15" rx="7" class="e4"/>
+<text x="657" y="295" class="e4t" text-anchor="middle">VC-06</text>
+<text x="384" y="325" class="rid">FSR-02.04</text>
+<text x="384" y="337" class="ax">D · Vehicle drive-…</text>
+<rect x="498" y="314" width="42" height="15" rx="7" class="e4"/>
+<text x="519" y="325" class="e4t" text-anchor="middle">VC-17</text>
+<text x="384" y="355" class="rid">FSR-02.05</text>
+<text x="384" y="367" class="ax">QM · Autoware comp…</text>
+<rect x="498" y="344" width="42" height="15" rx="7" class="e1"/>
+<text x="519" y="355" class="e1t" text-anchor="middle">VC-01</text>
+<rect x="544" y="344" width="42" height="15" rx="7" class="e1"/>
+<text x="565" y="355" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="590" y="344" width="42" height="15" rx="7" class="e4"/>
+<text x="611" y="355" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="636" y="344" width="42" height="15" rx="7" class="e4"/>
+<text x="657" y="355" class="e4t" text-anchor="middle">VC-05</text>
+<rect x="498" y="362" width="42" height="15" rx="7" class="e4"/>
+<text x="519" y="373" class="e4t" text-anchor="middle">VC-06</text>
+<rect x="716" y="96" width="330" height="304" rx="8" class="card"/>
+<text x="730" y="120" class="gid">SG-03</text>
+<rect x="982.1" y="107" width="49.9" height="18" rx="4" class="pa"/>
+<text x="1007" y="120" class="pat" text-anchor="middle">ASIL C</text>
+<text x="730" y="140" class="tb">Avoid unintended hard deceleration</text>
+<text x="730" y="161" class="rid">FSR-03.01</text>
+<text x="730" y="173" class="ax">C · Safety percept…</text>
+<rect x="844" y="150" width="42" height="15" rx="7" class="e1"/>
+<text x="865" y="161" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="890" y="150" width="42" height="15" rx="7" class="e4"/>
+<text x="911" y="161" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="936" y="150" width="42" height="15" rx="7" class="e4"/>
+<text x="957" y="161" class="e4t" text-anchor="middle">VC-06</text>
+<rect x="982" y="150" width="42" height="15" rx="7" class="e1"/>
+<text x="1003" y="161" class="e1t" text-anchor="middle">VC-08</text>
+<rect x="844" y="168" width="42" height="15" rx="7" class="e4"/>
+<text x="865" y="179" class="e4t" text-anchor="middle">VC-09</text>
+<rect x="890" y="168" width="42" height="15" rx="7" class="e4"/>
+<text x="911" y="179" class="e4t" text-anchor="middle">VC-10</text>
+<rect x="936" y="168" width="42" height="15" rx="7" class="e4"/>
+<text x="957" y="179" class="e4t" text-anchor="middle">VC-12</text>
+<rect x="982" y="168" width="42" height="15" rx="7" class="e2"/>
+<text x="1003" y="179" class="e2t" text-anchor="middle">VC-15</text>
+<rect x="844" y="186" width="42" height="15" rx="7" class="e1"/>
+<text x="865" y="197" class="e1t" text-anchor="middle">VC-18</text>
+<text x="730" y="221" class="rid">FSR-03.02</text>
+<text x="730" y="233" class="ax">C · Safety monitor</text>
+<rect x="844" y="210" width="42" height="15" rx="7" class="e1"/>
+<text x="865" y="221" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="890" y="210" width="42" height="15" rx="7" class="e4"/>
+<text x="911" y="221" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="936" y="210" width="42" height="15" rx="7" class="e4"/>
+<text x="957" y="221" class="e4t" text-anchor="middle">VC-05</text>
+<rect x="982" y="210" width="42" height="15" rx="7" class="e4"/>
+<text x="1003" y="221" class="e4t" text-anchor="middle">VC-06</text>
+<rect x="844" y="228" width="42" height="15" rx="7" class="e4"/>
+<text x="865" y="239" class="e4t" text-anchor="middle">VC-09</text>
+<text x="730" y="263" class="rid">FSR-03.03</text>
+<text x="730" y="275" class="ax">C · Safety monitor</text>
+<rect x="844" y="252" width="42" height="15" rx="7" class="e1"/>
+<text x="865" y="263" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="890" y="252" width="42" height="15" rx="7" class="e4"/>
+<text x="911" y="263" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="936" y="252" width="42" height="15" rx="7" class="e1"/>
+<text x="957" y="263" class="e1t" text-anchor="middle">VC-08</text>
+<rect x="982" y="252" width="42" height="15" rx="7" class="e4"/>
+<text x="1003" y="263" class="e4t" text-anchor="middle">VC-09</text>
+<rect x="24" y="416" width="330" height="306" rx="8" class="card"/>
+<text x="38" y="440" class="gid">SG-04</text>
+<rect x="290.1" y="427" width="49.9" height="18" rx="4" class="pa"/>
+<text x="315" y="440" class="pat" text-anchor="middle">ASIL D</text>
+<text x="38" y="460" class="tb">Avoid unintended lateral motion out of</text>
+<text x="38" y="476" class="tb">the planned path</text>
+<text x="38" y="497" class="rid">FSR-04.01</text>
+<text x="38" y="509" class="ax">D · Safety monitor</text>
+<rect x="152" y="486" width="42" height="15" rx="7" class="e1"/>
+<text x="173" y="497" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="198" y="486" width="42" height="15" rx="7" class="e4"/>
+<text x="219" y="497" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="244" y="486" width="42" height="15" rx="7" class="e4"/>
+<text x="265" y="497" class="e4t" text-anchor="middle">VC-10</text>
+<rect x="290" y="486" width="42" height="15" rx="7" class="e4"/>
+<text x="311" y="497" class="e4t" text-anchor="middle">VC-12</text>
+<rect x="152" y="504" width="42" height="15" rx="7" class="e0"/>
+<text x="173" y="515" class="e0t" text-anchor="middle">VC-13</text>
+<rect x="198" y="504" width="42" height="15" rx="7" class="e4"/>
+<text x="219" y="515" class="e4t" text-anchor="middle">VC-14</text>
+<rect x="244" y="504" width="42" height="15" rx="7" class="e2"/>
+<text x="265" y="515" class="e2t" text-anchor="middle">VC-15</text>
+<rect x="290" y="504" width="42" height="15" rx="7" class="e2"/>
+<text x="311" y="515" class="e2t" text-anchor="middle">VC-16</text>
+<rect x="152" y="522" width="42" height="15" rx="7" class="e1"/>
+<text x="173" y="533" class="e1t" text-anchor="middle">VC-18</text>
+<text x="38" y="557" class="rid">FSR-04.02</text>
+<text x="38" y="569" class="ax">D · Safety monitor</text>
+<rect x="152" y="546" width="42" height="15" rx="7" class="e1"/>
+<text x="173" y="557" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="198" y="546" width="42" height="15" rx="7" class="e2"/>
+<text x="219" y="557" class="e2t" text-anchor="middle">VC-04</text>
+<rect x="244" y="546" width="42" height="15" rx="7" class="e4"/>
+<text x="265" y="557" class="e4t" text-anchor="middle">VC-10</text>
+<text x="38" y="587" class="rid">FSR-04.03</text>
+<text x="38" y="599" class="ax">D · Safety monitor</text>
+<rect x="152" y="576" width="42" height="15" rx="7" class="e1"/>
+<text x="173" y="587" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="198" y="576" width="42" height="15" rx="7" class="e4"/>
+<text x="219" y="587" class="e4t" text-anchor="middle">VC-10</text>
+<text x="38" y="617" class="rid">FSR-04.04</text>
+<text x="38" y="629" class="ax">D · Vehicle drive-…</text>
+<rect x="152" y="606" width="42" height="15" rx="7" class="e4"/>
+<text x="173" y="617" class="e4t" text-anchor="middle">VC-17</text>
+<text x="38" y="647" class="rid">FSR-04.06</text>
+<text x="38" y="659" class="ax">D · Vehicle state…</text>
+<rect x="152" y="636" width="42" height="15" rx="7" class="e4"/>
+<text x="173" y="647" class="e4t" text-anchor="middle">VC-17</text>
+<text x="38" y="677" class="rid">FSR-04.05</text>
+<text x="38" y="689" class="ax">QM · Autoware comp…</text>
+<rect x="152" y="666" width="42" height="15" rx="7" class="e1"/>
+<text x="173" y="677" class="e1t" text-anchor="middle">VC-01</text>
+<rect x="198" y="666" width="42" height="15" rx="7" class="e1"/>
+<text x="219" y="677" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="244" y="666" width="42" height="15" rx="7" class="e4"/>
+<text x="265" y="677" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="290" y="666" width="42" height="15" rx="7" class="e4"/>
+<text x="311" y="677" class="e4t" text-anchor="middle">VC-05</text>
+<rect x="152" y="684" width="42" height="15" rx="7" class="e4"/>
+<text x="173" y="695" class="e4t" text-anchor="middle">VC-06</text>
+<rect x="198" y="684" width="42" height="15" rx="7" class="e4"/>
+<text x="219" y="695" class="e4t" text-anchor="middle">VC-10</text>
+<rect x="244" y="684" width="42" height="15" rx="7" class="e4"/>
+<text x="265" y="695" class="e4t" text-anchor="middle">VC-12</text>
+<rect x="370" y="416" width="330" height="306" rx="8" class="card"/>
+<text x="384" y="440" class="gid">SG-05</text>
+<rect x="636.1" y="427" width="49.9" height="18" rx="4" class="pa"/>
+<text x="661" y="440" class="pat" text-anchor="middle">ASIL D</text>
+<text x="384" y="460" class="tb">Avoid unintended motion from standstill,</text>
+<text x="384" y="476" class="tb">forward or backward</text>
+<text x="384" y="497" class="rid">FSR-05.01</text>
+<text x="384" y="509" class="ax">D · Safety monitor</text>
+<rect x="498" y="486" width="42" height="15" rx="7" class="e1"/>
+<text x="519" y="497" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="544" y="486" width="42" height="15" rx="7" class="e4"/>
+<text x="565" y="497" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="590" y="486" width="42" height="15" rx="7" class="e4"/>
+<text x="611" y="497" class="e4t" text-anchor="middle">VC-05</text>
+<rect x="636" y="486" width="42" height="15" rx="7" class="e4"/>
+<text x="657" y="497" class="e4t" text-anchor="middle">VC-11</text>
+<rect x="498" y="504" width="42" height="15" rx="7" class="e2"/>
+<text x="519" y="515" class="e2t" text-anchor="middle">VC-15</text>
+<text x="384" y="539" class="rid">FSR-05.02</text>
+<text x="384" y="551" class="ax">D · Safety monitor</text>
+<rect x="498" y="528" width="42" height="15" rx="7" class="e4"/>
+<text x="519" y="539" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="544" y="528" width="42" height="15" rx="7" class="e4"/>
+<text x="565" y="539" class="e4t" text-anchor="middle">VC-05</text>
+<rect x="590" y="528" width="42" height="15" rx="7" class="e4"/>
+<text x="611" y="539" class="e4t" text-anchor="middle">VC-11</text>
+<text x="384" y="569" class="rid">FSR-05.03</text>
+<text x="384" y="581" class="ax">D · Safety monitor</text>
+<rect x="498" y="558" width="42" height="15" rx="7" class="e1"/>
+<text x="519" y="569" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="544" y="558" width="42" height="15" rx="7" class="e4"/>
+<text x="565" y="569" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="590" y="558" width="42" height="15" rx="7" class="e4"/>
+<text x="611" y="569" class="e4t" text-anchor="middle">VC-11</text>
+<text x="384" y="599" class="rid">FSR-05.04</text>
+<text x="384" y="611" class="ax">D · Park brake</text>
+<rect x="498" y="588" width="42" height="15" rx="7" class="e4"/>
+<text x="519" y="599" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="544" y="588" width="42" height="15" rx="7" class="e4"/>
+<text x="565" y="599" class="e4t" text-anchor="middle">VC-05</text>
+<rect x="590" y="588" width="42" height="15" rx="7" class="e4"/>
+<text x="611" y="599" class="e4t" text-anchor="middle">VC-11</text>
+<rect x="636" y="588" width="42" height="15" rx="7" class="e4"/>
+<text x="657" y="599" class="e4t" text-anchor="middle">VC-17</text>
+<text x="384" y="629" class="rid">FSR-05.05</text>
+<text x="384" y="641" class="ax">D · Door system</text>
+<rect x="498" y="618" width="42" height="15" rx="7" class="e1"/>
+<text x="519" y="629" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="544" y="618" width="42" height="15" rx="7" class="e4"/>
+<text x="565" y="629" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="590" y="618" width="42" height="15" rx="7" class="e4"/>
+<text x="611" y="629" class="e4t" text-anchor="middle">VC-11</text>
+<rect x="636" y="618" width="42" height="15" rx="7" class="e4"/>
+<text x="657" y="629" class="e4t" text-anchor="middle">VC-17</text>
+<rect x="716" y="416" width="330" height="306" rx="8" class="card"/>
+<text x="730" y="440" class="gid">SG-06</text>
+<rect x="982.1" y="427" width="49.9" height="18" rx="4" class="pa"/>
+<text x="1007" y="440" class="pat" text-anchor="middle">ASIL D</text>
+<text x="730" y="460" class="tb">Do not enter an intersection, roundabout</text>
+<text x="730" y="476" class="tb">or crosswalk against right of way</text>
+<text x="730" y="497" class="rid">FSR-06.01</text>
+<text x="730" y="509" class="ax">D · Safety monitor</text>
+<rect x="844" y="486" width="42" height="15" rx="7" class="e1"/>
+<text x="865" y="497" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="890" y="486" width="42" height="15" rx="7" class="e4"/>
+<text x="911" y="497" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="936" y="486" width="42" height="15" rx="7" class="e4"/>
+<text x="957" y="497" class="e4t" text-anchor="middle">VC-05</text>
+<rect x="982" y="486" width="42" height="15" rx="7" class="e4"/>
+<text x="1003" y="497" class="e4t" text-anchor="middle">VC-06</text>
+<rect x="844" y="504" width="42" height="15" rx="7" class="e4"/>
+<text x="865" y="515" class="e4t" text-anchor="middle">VC-10</text>
+<rect x="890" y="504" width="42" height="15" rx="7" class="e4"/>
+<text x="911" y="515" class="e4t" text-anchor="middle">VC-12</text>
+<rect x="936" y="504" width="42" height="15" rx="7" class="e0"/>
+<text x="957" y="515" class="e0t" text-anchor="middle">VC-13</text>
+<rect x="982" y="504" width="42" height="15" rx="7" class="e2"/>
+<text x="1003" y="515" class="e2t" text-anchor="middle">VC-15</text>
+<rect x="844" y="522" width="42" height="15" rx="7" class="e1"/>
+<text x="865" y="533" class="e1t" text-anchor="middle">VC-18</text>
+<text x="730" y="557" class="rid">FSR-06.02</text>
+<text x="730" y="569" class="ax">D · Safety monitor</text>
+<rect x="844" y="546" width="42" height="15" rx="7" class="e1"/>
+<text x="865" y="557" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="890" y="546" width="42" height="15" rx="7" class="e4"/>
+<text x="911" y="557" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="936" y="546" width="42" height="15" rx="7" class="e4"/>
+<text x="957" y="557" class="e4t" text-anchor="middle">VC-12</text>
+<text x="730" y="587" class="rid">FSR-06.03</text>
+<text x="730" y="599" class="ax">QM · Autoware comp…</text>
+<rect x="844" y="576" width="42" height="15" rx="7" class="e1"/>
+<text x="865" y="587" class="e1t" text-anchor="middle">VC-01</text>
+<rect x="890" y="576" width="42" height="15" rx="7" class="e1"/>
+<text x="911" y="587" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="936" y="576" width="42" height="15" rx="7" class="e4"/>
+<text x="957" y="587" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="982" y="576" width="42" height="15" rx="7" class="e4"/>
+<text x="1003" y="587" class="e4t" text-anchor="middle">VC-06</text>
+<rect x="844" y="594" width="42" height="15" rx="7" class="e4"/>
+<text x="865" y="605" class="e4t" text-anchor="middle">VC-12</text>
+<rect x="890" y="594" width="42" height="15" rx="7" class="e1"/>
+<text x="911" y="605" class="e1t" text-anchor="middle">VC-18</text>
+<rect x="24" y="738" width="330" height="348" rx="8" class="card"/>
+<text x="38" y="762" class="gid">SG-07</text>
+<rect x="290.1" y="749" width="49.9" height="18" rx="4" class="pa"/>
+<text x="315" y="762" class="pat" text-anchor="middle">ASIL D</text>
+<text x="38" y="782" class="tb">Reach a minimal risk condition whenever</text>
+<text x="38" y="798" class="tb">the item can no longer drive safely</text>
+<text x="38" y="819" class="rid">FSR-07.01</text>
+<text x="38" y="831" class="ax">D · Safety monitor</text>
+<rect x="152" y="808" width="42" height="15" rx="7" class="e1"/>
+<text x="173" y="819" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="198" y="808" width="42" height="15" rx="7" class="e4"/>
+<text x="219" y="819" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="244" y="808" width="42" height="15" rx="7" class="e4"/>
+<text x="265" y="819" class="e4t" text-anchor="middle">VC-14</text>
+<rect x="290" y="808" width="42" height="15" rx="7" class="e2"/>
+<text x="311" y="819" class="e2t" text-anchor="middle">VC-15</text>
+<text x="38" y="849" class="rid">FSR-07.02</text>
+<text x="38" y="861" class="ax">D · Safety monitor</text>
+<rect x="152" y="838" width="42" height="15" rx="7" class="e1"/>
+<text x="173" y="849" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="198" y="838" width="42" height="15" rx="7" class="e4"/>
+<text x="219" y="849" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="244" y="838" width="42" height="15" rx="7" class="e4"/>
+<text x="265" y="849" class="e4t" text-anchor="middle">VC-14</text>
+<text x="38" y="879" class="rid">FSR-07.03</text>
+<text x="38" y="891" class="ax">D · Monitor power…</text>
+<rect x="152" y="868" width="42" height="15" rx="7" class="e4"/>
+<text x="173" y="879" class="e4t" text-anchor="middle">VC-17</text>
+<text x="38" y="909" class="rid">FSR-07.04</text>
+<text x="38" y="921" class="ax">D · Safety monitor</text>
+<rect x="152" y="898" width="42" height="15" rx="7" class="e1"/>
+<text x="173" y="909" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="198" y="898" width="42" height="15" rx="7" class="e4"/>
+<text x="219" y="909" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="244" y="898" width="42" height="15" rx="7" class="e4"/>
+<text x="265" y="909" class="e4t" text-anchor="middle">VC-11</text>
+<rect x="290" y="898" width="42" height="15" rx="7" class="e2"/>
+<text x="311" y="909" class="e2t" text-anchor="middle">VC-15</text>
+<rect x="152" y="916" width="42" height="15" rx="7" class="e0"/>
+<text x="173" y="927" class="e0t" text-anchor="middle">VC-19</text>
+<text x="38" y="951" class="rid">FSR-07.05</text>
+<text x="38" y="963" class="ax">QM · Autoware comp…</text>
+<rect x="152" y="940" width="42" height="15" rx="7" class="e1"/>
+<text x="173" y="951" class="e1t" text-anchor="middle">VC-01</text>
+<rect x="198" y="940" width="42" height="15" rx="7" class="e1"/>
+<text x="219" y="951" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="244" y="940" width="42" height="15" rx="7" class="e4"/>
+<text x="265" y="951" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="290" y="940" width="42" height="15" rx="7" class="e4"/>
+<text x="311" y="951" class="e4t" text-anchor="middle">VC-14</text>
+<rect x="152" y="958" width="42" height="15" rx="7" class="e2"/>
+<text x="173" y="969" class="e2t" text-anchor="middle">VC-15</text>
+<rect x="198" y="958" width="42" height="15" rx="7" class="e1"/>
+<text x="219" y="969" class="e1t" text-anchor="middle">VC-18</text>
+<text x="38" y="993" class="rid">FSR-07.06</text>
+<text x="38" y="1005" class="ax">D · Vehicle drive-…</text>
+<rect x="152" y="982" width="42" height="15" rx="7" class="e4"/>
+<text x="173" y="993" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="198" y="982" width="42" height="15" rx="7" class="e4"/>
+<text x="219" y="993" class="e4t" text-anchor="middle">VC-14</text>
+<rect x="244" y="982" width="42" height="15" rx="7" class="e4"/>
+<text x="265" y="993" class="e4t" text-anchor="middle">VC-17</text>
+<text x="38" y="1023" class="rid">FSR-07.07</text>
+<text x="38" y="1035" class="ax">D · Safety monitor</text>
+<rect x="152" y="1012" width="42" height="15" rx="7" class="e4"/>
+<text x="173" y="1023" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="198" y="1012" width="42" height="15" rx="7" class="e4"/>
+<text x="219" y="1023" class="e4t" text-anchor="middle">VC-14</text>
+<rect x="244" y="1012" width="42" height="15" rx="7" class="e0"/>
+<text x="265" y="1023" class="e0t" text-anchor="middle">VC-19</text>
+<text x="38" y="1053" class="rid">FSR-07.08</text>
+<text x="38" y="1065" class="ax">D · Safety monitor</text>
+<rect x="152" y="1042" width="42" height="15" rx="7" class="e1"/>
+<text x="173" y="1053" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="198" y="1042" width="42" height="15" rx="7" class="e4"/>
+<text x="219" y="1053" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="244" y="1042" width="42" height="15" rx="7" class="e4"/>
+<text x="265" y="1053" class="e4t" text-anchor="middle">VC-09</text>
+<rect x="290" y="1042" width="42" height="15" rx="7" class="e4"/>
+<text x="311" y="1053" class="e4t" text-anchor="middle">VC-14</text>
+<rect x="370" y="738" width="330" height="348" rx="8" class="card"/>
+<text x="384" y="762" class="gid">SG-08</text>
+<rect x="636.1" y="749" width="49.9" height="18" rx="4" class="pa"/>
+<text x="661" y="762" class="pat" text-anchor="middle">ASIL C</text>
+<text x="384" y="782" class="tb">Do not act on remote driving commands</text>
+<text x="384" y="798" class="tb">that are stale, corrupted or not the</text>
+<text x="384" y="814" class="tb">operator's</text>
+<text x="384" y="835" class="rid">FSR-08.01</text>
+<text x="384" y="847" class="ax">C · Safety monitor</text>
+<rect x="498" y="824" width="42" height="15" rx="7" class="e1"/>
+<text x="519" y="835" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="544" y="824" width="42" height="15" rx="7" class="e2"/>
+<text x="565" y="835" class="e2t" text-anchor="middle">VC-15</text>
+<text x="384" y="865" class="rid">FSR-08.02</text>
+<text x="384" y="877" class="ax">C · Safety monitor</text>
+<rect x="498" y="854" width="42" height="15" rx="7" class="e1"/>
+<text x="519" y="865" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="544" y="854" width="42" height="15" rx="7" class="e2"/>
+<text x="565" y="865" class="e2t" text-anchor="middle">VC-15</text>
+<text x="384" y="895" class="rid">FSR-08.03</text>
+<text x="384" y="907" class="ax">C · Remote operati…</text>
+<rect x="498" y="884" width="42" height="15" rx="7" class="e1"/>
+<text x="519" y="895" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="544" y="884" width="42" height="15" rx="7" class="e2"/>
+<text x="565" y="895" class="e2t" text-anchor="middle">VC-15</text>
+<rect x="716" y="738" width="330" height="348" rx="8" class="card"/>
+<text x="730" y="762" class="gid">SG-09</text>
+<rect x="982.1" y="749" width="49.9" height="18" rx="4" class="pa"/>
+<text x="1007" y="762" class="pat" text-anchor="middle">ASIL C</text>
+<text x="730" y="782" class="tb">Avoid signalling a manoeuvre other than</text>
+<text x="730" y="798" class="tb">the one performed</text>
+<text x="730" y="819" class="rid">FSR-09.01</text>
+<text x="730" y="831" class="ax">C · Safety monitor</text>
+<rect x="844" y="808" width="42" height="15" rx="7" class="e1"/>
+<text x="865" y="819" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="890" y="808" width="42" height="15" rx="7" class="e2"/>
+<text x="911" y="819" class="e2t" text-anchor="middle">VC-16</text>
+<rect x="24" y="1102" width="330" height="282" rx="8" class="card"/>
+<text x="38" y="1126" class="gid">SOTIF</text>
+<text x="38" y="1146" class="tb">Triggering conditions (WP-C-06), by</text>
+<text x="38" y="1162" class="tb">category</text>
+<text x="38" y="1183" class="rid">environment</text>
+<text x="38" y="1195" class="ax">7 items</text>
+<rect x="152" y="1172" width="42" height="15" rx="7" class="e1"/>
+<text x="173" y="1183" class="e1t" text-anchor="middle">VC-01</text>
+<rect x="198" y="1172" width="42" height="15" rx="7" class="e1"/>
+<text x="219" y="1183" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="244" y="1172" width="42" height="15" rx="7" class="e4"/>
+<text x="265" y="1183" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="290" y="1172" width="42" height="15" rx="7" class="e4"/>
+<text x="311" y="1183" class="e4t" text-anchor="middle">VC-06</text>
+<rect x="152" y="1190" width="42" height="15" rx="7" class="e3"/>
+<text x="173" y="1201" class="e3t" text-anchor="middle">VC-07</text>
+<rect x="198" y="1190" width="42" height="15" rx="7" class="e4"/>
+<text x="219" y="1201" class="e4t" text-anchor="middle">VC-09</text>
+<rect x="244" y="1190" width="42" height="15" rx="7" class="e4"/>
+<text x="265" y="1201" class="e4t" text-anchor="middle">VC-12</text>
+<rect x="290" y="1190" width="42" height="15" rx="7" class="e1"/>
+<text x="311" y="1201" class="e1t" text-anchor="middle">VC-18</text>
+<text x="38" y="1225" class="rid">road</text>
+<text x="38" y="1237" class="ax">8 items</text>
+<rect x="152" y="1214" width="42" height="15" rx="7" class="e1"/>
+<text x="173" y="1225" class="e1t" text-anchor="middle">VC-01</text>
+<rect x="198" y="1214" width="42" height="15" rx="7" class="e1"/>
+<text x="219" y="1225" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="244" y="1214" width="42" height="15" rx="7" class="e4"/>
+<text x="265" y="1225" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="290" y="1214" width="42" height="15" rx="7" class="e4"/>
+<text x="311" y="1225" class="e4t" text-anchor="middle">VC-05</text>
+<rect x="152" y="1232" width="42" height="15" rx="7" class="e4"/>
+<text x="173" y="1243" class="e4t" text-anchor="middle">VC-06</text>
+<rect x="198" y="1232" width="42" height="15" rx="7" class="e4"/>
+<text x="219" y="1243" class="e4t" text-anchor="middle">VC-12</text>
+<rect x="244" y="1232" width="42" height="15" rx="7" class="e4"/>
+<text x="265" y="1243" class="e4t" text-anchor="middle">VC-14</text>
+<rect x="290" y="1232" width="42" height="15" rx="7" class="e1"/>
+<text x="311" y="1243" class="e1t" text-anchor="middle">VC-18</text>
+<text x="38" y="1267" class="rid">road users</text>
+<text x="38" y="1279" class="ax">9 items</text>
+<rect x="152" y="1256" width="42" height="15" rx="7" class="e1"/>
+<text x="173" y="1267" class="e1t" text-anchor="middle">VC-01</text>
+<rect x="198" y="1256" width="42" height="15" rx="7" class="e1"/>
+<text x="219" y="1267" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="244" y="1256" width="42" height="15" rx="7" class="e4"/>
+<text x="265" y="1267" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="290" y="1256" width="42" height="15" rx="7" class="e4"/>
+<text x="311" y="1267" class="e4t" text-anchor="middle">VC-06</text>
+<rect x="152" y="1274" width="42" height="15" rx="7" class="e4"/>
+<text x="173" y="1285" class="e4t" text-anchor="middle">VC-10</text>
+<rect x="198" y="1274" width="42" height="15" rx="7" class="e4"/>
+<text x="219" y="1285" class="e4t" text-anchor="middle">VC-12</text>
+<rect x="244" y="1274" width="42" height="15" rx="7" class="e1"/>
+<text x="265" y="1285" class="e1t" text-anchor="middle">VC-18</text>
+<text x="38" y="1309" class="rid">vehicle</text>
+<text x="38" y="1321" class="ax">2 items</text>
+<rect x="152" y="1298" width="42" height="15" rx="7" class="e1"/>
+<text x="173" y="1309" class="e1t" text-anchor="middle">VC-01</text>
+<rect x="198" y="1298" width="42" height="15" rx="7" class="e1"/>
+<text x="219" y="1309" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="244" y="1298" width="42" height="15" rx="7" class="e4"/>
+<text x="265" y="1309" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="290" y="1298" width="42" height="15" rx="7" class="e4"/>
+<text x="311" y="1309" class="e4t" text-anchor="middle">VC-05</text>
+<rect x="152" y="1316" width="42" height="15" rx="7" class="e4"/>
+<text x="173" y="1327" class="e4t" text-anchor="middle">VC-06</text>
+<rect x="198" y="1316" width="42" height="15" rx="7" class="e3"/>
+<text x="219" y="1327" class="e3t" text-anchor="middle">VC-07</text>
+<rect x="244" y="1316" width="42" height="15" rx="7" class="e4"/>
+<text x="265" y="1327" class="e4t" text-anchor="middle">VC-09</text>
+<text x="38" y="1351" class="rid">operations</text>
+<text x="38" y="1363" class="ax">3 items</text>
+<rect x="152" y="1340" width="42" height="15" rx="7" class="e1"/>
+<text x="173" y="1351" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="198" y="1340" width="42" height="15" rx="7" class="e2"/>
+<text x="219" y="1351" class="e2t" text-anchor="middle">VC-15</text>
+<rect x="370" y="1102" width="330" height="282" rx="8" class="card"/>
+<text x="384" y="1126" class="gid">SOTIF</text>
+<text x="384" y="1146" class="tb">Functional modifications (WP-C-07), by</text>
+<text x="384" y="1162" class="tb">type</text>
+<text x="384" y="1183" class="rid">data</text>
+<text x="384" y="1195" class="ax">1 item</text>
+<rect x="498" y="1172" width="42" height="15" rx="7" class="e0"/>
+<text x="519" y="1183" class="e0t" text-anchor="middle">VC-20</text>
+<text x="384" y="1213" class="rid">architecture</text>
+<text x="384" y="1225" class="ax">1 item</text>
+<rect x="498" y="1202" width="42" height="15" rx="7" class="e1"/>
+<text x="519" y="1213" class="e1t" text-anchor="middle">VC-02</text>
+<text x="384" y="1243" class="rid">function</text>
+<text x="384" y="1255" class="ax">14 items</text>
+<rect x="498" y="1232" width="42" height="15" rx="7" class="e1"/>
+<text x="519" y="1243" class="e1t" text-anchor="middle">VC-01</text>
+<rect x="544" y="1232" width="42" height="15" rx="7" class="e1"/>
+<text x="565" y="1243" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="590" y="1232" width="42" height="15" rx="7" class="e4"/>
+<text x="611" y="1243" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="636" y="1232" width="42" height="15" rx="7" class="e4"/>
+<text x="657" y="1243" class="e4t" text-anchor="middle">VC-06</text>
+<rect x="498" y="1250" width="42" height="15" rx="7" class="e3"/>
+<text x="519" y="1261" class="e3t" text-anchor="middle">VC-07</text>
+<rect x="544" y="1250" width="42" height="15" rx="7" class="e4"/>
+<text x="565" y="1261" class="e4t" text-anchor="middle">VC-09</text>
+<rect x="590" y="1250" width="42" height="15" rx="7" class="e4"/>
+<text x="611" y="1261" class="e4t" text-anchor="middle">VC-10</text>
+<rect x="636" y="1250" width="42" height="15" rx="7" class="e4"/>
+<text x="657" y="1261" class="e4t" text-anchor="middle">VC-12</text>
+<rect x="498" y="1268" width="42" height="15" rx="7" class="e4"/>
+<text x="519" y="1279" class="e4t" text-anchor="middle">VC-14</text>
+<rect x="544" y="1268" width="42" height="15" rx="7" class="e1"/>
+<text x="565" y="1279" class="e1t" text-anchor="middle">VC-18</text>
+<text x="384" y="1303" class="rid">odd</text>
+<text x="384" y="1315" class="ax">1 item</text>
+<rect x="498" y="1292" width="42" height="15" rx="7" class="e0"/>
+<text x="519" y="1303" class="e0t" text-anchor="middle">VC-20</text>
+<text x="384" y="1333" class="rid">operations</text>
+<text x="384" y="1345" class="ax">3 items</text>
+<rect x="498" y="1322" width="42" height="15" rx="7" class="e1"/>
+<text x="519" y="1333" class="e1t" text-anchor="middle">VC-01</text>
+<rect x="544" y="1322" width="42" height="15" rx="7" class="e1"/>
+<text x="565" y="1333" class="e1t" text-anchor="middle">VC-02</text>
+<rect x="590" y="1322" width="42" height="15" rx="7" class="e4"/>
+<text x="611" y="1333" class="e4t" text-anchor="middle">VC-03</text>
+<rect x="636" y="1322" width="42" height="15" rx="7" class="e2"/>
+<text x="657" y="1333" class="e2t" text-anchor="middle">VC-15</text>
+<rect x="498" y="1340" width="42" height="15" rx="7" class="e1"/>
+<text x="519" y="1351" class="e1t" text-anchor="middle">VC-18</text>
+<rect x="24" y="1412" width="26" height="15" rx="7" class="e1"/>
+<text x="58" y="1424" class="t">ENV-1 Software in the loop</text>
+<rect x="249.0" y="1412" width="26" height="15" rx="7" class="e2"/>
+<text x="283" y="1424" class="t">ENV-2 Hardware in the loop</text>
+<rect x="474.0" y="1412" width="26" height="15" rx="7" class="e3"/>
+<text x="508" y="1424" class="t">ENV-3 Sensor bench and closed track</text>
+<rect x="757.5" y="1412" width="26" height="15" rx="7" class="e4"/>
+<text x="791.5" y="1424" class="t">ENV-4 Vehicle on a closed track</text>
+<rect x="24" y="1436" width="26" height="15" rx="7" class="e0"/>
+<text x="58" y="1448" class="t">review only</text>
+</svg>
