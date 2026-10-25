@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-S-04 Timing: FTTI, detection and reaction budget, fallback timing |
 | Standard reference | UL 4600 §10; ISO 26262-4 §6; ASPICE 4.0 SYS.3 |
-| Version | 0.4 (firm braking level of 3 m/s² for SG-03 and MRM-4 (DQ-033 A); 2026-10-24). 0.3 (remote driving up to 10 km/h (DQ-032 A); 2026-10-23). 0.2 (first content: FTTIs computed per safety goal from proposed margins and fault ranges, the share of each FTTI given to detection and reaction, budgets of the time-critical mechanisms, the sensing-to-actuation chain, fallback timing and the measurement method, generated from `timing/timing.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.5 (folder page `timing/README.md` with the whole budget on one page, Figure 2-2 on how long each goal lets a fault last, and `timing/measurements.csv` listing every time a test must measure; 2026-10-25). 0.4 (firm braking level of 3 m/s² for SG-03 and MRM-4 (DQ-033 A); 2026-10-24). 0.3 (remote driving up to 10 km/h (DQ-032 A); 2026-10-23). 0.2 (first content: FTTIs computed per safety goal from proposed margins and fault ranges, the share of each FTTI given to detection and reaction, budgets of the time-critical mechanisms, the sensing-to-actuation chain, fallback timing and the measurement method, generated from `timing/timing.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | ASIL D |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -51,6 +51,14 @@ A goal of kind *deviation* is violated when a fault's acceleration has moved the
 | SG-09 Avoid signalling a manoeuvre other than the one performed | limit | — | — | — | A wrong indicator misleads others only while it is shown; FSR-09.01 switches to hazard lights, and the time it may take is set in WP-S-02 with the indicator's own timing |
 
 <!-- END GENERATED: timing-ftti -->
+
+<!-- BEGIN GENERATED: timing-goal-cards (assurance/03-system/timing/timing.py) -->
+
+![Figure 2-2: one card per safety goal SG-01 to SG-09. For a goal with an FTTI, a plot of how far a fault moves the vehicle over the first second, for the largest and the smallest fault the candidate vehicles can produce, the proposed margin, and the FTTI where the margin is reached; under it, the worst-case FTTI split into time to detect, time to react and reserve on the same time axis. A derived goal shows the goal that binds it; a goal met by a limit says so. The same values are in the table above.](timing/fig-s04-2-2-goals.svg)
+
+*Figure 2-2. How long each safety goal lets a fault last. Computed from `timing/timing.yaml`; nothing is measured. Drawn by [`timing/timing.py`](timing/timing.py); CI fails if it is stale.*
+
+<!-- END GENERATED: timing-goal-cards -->
 
 **Remote driving is the tightest.** SG-08 allows a remote command only as old as the time the vehicle needs to move by its drift margin at remote driving speed. At 20 km/h that would have been under 200 ms for the whole path, which a cellular link is unlikely to hold. The lead limited remote driving to walking pace, up to 10 km/h (DQ-032 A, 2026-10-23), which doubles the time; the video delay to the operator still counts against it, and the measurement of §6 must show the link holds it in its worst hours.
 
