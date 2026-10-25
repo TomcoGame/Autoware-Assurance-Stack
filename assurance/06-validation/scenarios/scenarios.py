@@ -2,10 +2,12 @@
 """The scenario catalogue of WP-V-03 and its ODD coverage in WP-V-08, generated from scenarios.yaml.
 
 Writes the generated tables of WP-V-03 (catalogue, logical parameters, pass criteria) and of
-WP-V-08 §4 (coverage of the ODD and of the analyses), and Figure 4-1 of WP-V-08 (which ODD
-attributes each scenario varies). The safety goals at stake in a scenario are computed: the goals of
-the hazards of its hazardous events, and of the HARA hazards its triggering conditions can lead to
-through the insufficiencies they expose (WP-C-06) and the SOTIF hazards those cause (WP-C-05).
+WP-V-08 §4 (coverage of the ODD and of the analyses), Figure 2-1 of WP-V-03 (a card per scenario,
+drawn by scards.py), Figure 4-1 of WP-V-08 (which ODD attributes each scenario varies), and the
+folder page README.md with scenarios.csv. The safety goals at stake in a scenario are computed:
+the goals of the hazards of its hazardous events, and of the HARA hazards its triggering conditions
+can lead to through the insufficiencies they expose (WP-C-06) and the SOTIF hazards those cause
+(WP-C-05).
 
 The model is refused when:
 - an identifier is malformed or repeated, or a scenario lacks a name, description, method or pass
@@ -20,9 +22,10 @@ The model is refused when:
   case, loss scenario or requirement does not exist, or an event's situation is not the scenario's;
 - a safety goal at stake has no FSR of that goal among the pass references, or a scenario that
   exercises a triggering condition cites no SOTIF acceptance criterion;
-- a triggering condition, misuse case or hazardous event has no scenario.
+- a triggering condition, misuse case or hazardous event has no scenario;
+- a scenario has no sketch in scards.py, or a sketch has no scenario.
 
-    python3 scenarios.py            # write the generated tables of WP-V-03 and WP-V-08, and Figure 4-1
+    python3 scenarios.py            # write the tables of WP-V-03 and WP-V-08, the figures and the folder page
     python3 scenarios.py --check    # fail if any is stale or the model breaks a rule
 """
 
@@ -48,6 +51,7 @@ import fallback  # noqa: E402
 import figkit as fk  # noqa: E402
 import hara  # noqa: E402
 import misuse  # noqa: E402
+import scards  # noqa: E402
 import sotif  # noqa: E402
 import stpa  # noqa: E402
 import triggering  # noqa: E402
@@ -56,6 +60,10 @@ MODEL = HERE / "scenarios.yaml"
 V03 = ASSURANCE / "06-validation" / "WP-V-03-sotif-known-scenarios.md"
 V08 = ASSURANCE / "06-validation" / "WP-V-08-simulation-credibility.md"
 FIG = HERE / "fig-v08-4-1-coverage.svg"
+FIG2 = HERE / "fig-v03-2-1-scenarios.svg"
+CSV = HERE / "scenarios.csv"
+README = HERE / "README.md"
+VERIF = ASSURANCE / "03-system" / "verif" / "verif.yaml"
 METHODS = {
     "sim": "Simulation",
     "xil": "In the loop",
@@ -299,6 +307,7 @@ def check(m: dict, k: dict) -> list[str]:
         for x in universe:
             if x not in covered[key]:
                 errs.append(f"{x}: {what} with no scenario")
+    errs += scards.check([s.get("id") for s in m.get("scenarios", [])])
     return errs
 
 
@@ -382,6 +391,20 @@ def tables(m: dict, k: dict) -> dict[str, str]:
     bounds = sorted({p["bound"] for s in sc for p in s.get("parameters") or [] if "bound" in p})
     nb = sum(1 for s in sc for p in s.get("parameters") or [] if "bound" in p)
     cross = [s["id"] for s in sc if any(crosses_on(s, m).values())]
+    t["scenarios-cards"] = (
+        "![Figure 2-1: one card per scenario SC-01 to SC-26. Each has a top-down sketch of one concrete instance "
+        "of the logical scenario: the vehicle in blue, the road user or condition the scenario is about in amber, "
+        "other road users grey, and the behaviour the pass criterion asks for as a dashed green path with its "
+        "moment ringed. Under the sketch: the hazardous events, triggering conditions, misuse cases and loss "
+        "scenarios it exercises, the safety goals at stake, the ODD attributes it varies (outlined red where it "
+        "sweeps across the ODD boundary) and the behaviour bounds not yet fixed, its methods, its pass criterion "
+        "with the requirements it is judged against, and the verification cases of WP-S-09 that run it. The same "
+        f"information is in the tables of §2.](scenarios/{FIG2.name})\n\n"
+        "*Figure 2-1. What each known scenario sets up, and when it passes. Schematic: one instance chosen to "
+        "explain each scenario; the ranges are in §2.2, and no scenario has been run. Drawn by "
+        "[`scenarios/scenarios.py`](scenarios/scenarios.py) and `scenarios/scards.py`; CI fails if it is stale. "
+        f"Every scenario is also in [`scenarios/{CSV.name}`](scenarios/{CSV.name}).*"
+    )
     t["scenarios-summary"] = (
         f"{len(sc)} logical scenarios exercise all {len(k['triggers'])} triggering conditions of WP-C-06, all "
         f"{len(k['misuse'])} misuse and interaction entries of WP-C-08 and all {len(k['events'])} hazardous events "
@@ -546,6 +569,200 @@ def figure(m: dict, k: dict) -> str:
     return fk.svg(W, int(y), "WP-V-08 Figure 4-1: ODD coverage of the scenarios", desc, body, EXTRA)
 
 
+def run_by() -> dict[str, list[str]]:
+    """Scenario -> the verification cases of WP-S-09 that run it (read from verif.yaml, which imports this)."""
+    import yaml
+
+    out: dict[str, list[str]] = {}
+    for c in yaml.safe_load(VERIF.read_text(encoding="utf-8"))["cases"]:
+        for sid in c.get("scenarios") or []:
+            out.setdefault(sid, []).append(c["id"])
+    return out
+
+
+def bounds(s: dict) -> list[str]:
+    return [p["bound"] for p in s.get("parameters") or [] if "bound" in p]
+
+
+def card_data(m: dict, k: dict) -> list[dict]:
+    """One card per scenario: what it exercises, what it varies, how it runs and when it passes."""
+    runs = run_by()
+    cards = []
+    for s in m["scenarios"]:
+        ex = [
+            (label, s.get(key) or [])
+            for label, key in (
+                ("Hazardous events", "events"),
+                ("Triggering conditions", "triggers"),
+                ("Misuse", "misuse"),
+                ("Loss scenarios", "losses"),
+            )
+        ]
+        ex.append(("Goals at stake", stake(s, k)))
+        cross = crosses_on(s, m)
+        cards.append(
+            {
+                "id": s["id"],
+                "name": s["name"],
+                "crosses": any(cross.values()),
+                "exercises": [(label, xs) for label, xs in ex if xs],
+                "odd": list(cross.items()),
+                "bounds": sorted(set(bounds(s))),
+                "methods": [METHODS[x] for x in s["methods"]],
+                "criterion": s["pass"]["criterion"],
+                "refs": s["pass"]["refs"],
+                "run_by": runs.get(s["id"], []),
+            }
+        )
+    return cards
+
+
+def scenarios_csv(m: dict, k: dict) -> str:
+    """Every scenario with what it exercises and varies, how it runs, when it passes, and its result."""
+    import csv
+    import io
+
+    runs = run_by()
+    buf = io.StringIO()
+    w = csv.writer(buf, lineterminator="\n")
+    w.writerow(
+        [
+            "ID",
+            "Scenario",
+            "Description",
+            "Situations (WP-C-03)",
+            "Manoeuvres and OEDR (WP-C-02)",
+            "Hazardous events (WP-C-03)",
+            "Triggering conditions (WP-C-06)",
+            "Misuse (WP-C-08)",
+            "Loss scenarios (WP-A-05)",
+            "Safety goals at stake",
+            "ODD attributes varied (WP-C-02)",
+            "Crosses the ODD boundary on",
+            "Behaviour bounds not yet fixed",
+            "Methods",
+            "Pass criterion",
+            "Judged against",
+            "Run by (WP-S-09)",
+            "Result",
+        ]
+    )
+    for s in m["scenarios"]:
+        cross = crosses_on(s, m)
+        w.writerow(
+            [
+                s["id"],
+                s["name"],
+                s["description"],
+                ids(s["situations"]),
+                ids((s.get("manoeuvres") or []) + (s.get("oedr") or [])),
+                ids(s.get("events")),
+                ids(s.get("triggers")),
+                ids(s.get("misuse")),
+                ids(s.get("losses")),
+                ids(stake(s, k)),
+                ids(list(cross)),
+                ids([a for a, x in cross.items() if x]),
+                ids(sorted(set(bounds(s)))),
+                ", ".join(METHODS[x] for x in s["methods"]),
+                s["pass"]["criterion"],
+                ids(s["pass"]["refs"]),
+                ids(runs.get(s["id"], [])),
+                "Not run",
+            ]
+        )
+    return buf.getvalue()
+
+
+def here(md: str) -> str:
+    """Text of WP-V-03 or WP-V-08 with its relative links rewritten to work from this folder."""
+    md = md.replace("](scenarios/", "](")
+    return re.sub(r"\]\((?!https?:|#|fig-|scenarios\.|scards\.|README)", "](../", md)
+
+
+def readme(t: dict[str, str], v03: str, v08: str) -> str:
+    """The folder page: the known scenarios of WP-V-03 and their coverage of the ODD (WP-V-08 §4)."""
+
+    def part(doc: str, heading: str) -> str:
+        return here(fk.section(doc, heading).strip())
+
+    files = [
+        "| File | What it holds |",
+        "|---|---|",
+        f"| [`{CSV.name}`]({CSV.name}) | Every scenario with what it exercises, the goals at stake, the ODD attributes it varies and crosses, the open behaviour bounds, its methods, pass criterion, the verification cases that run it and its result |",
+        f"| [`{FIG2.name}`]({FIG2.name}) | WP-V-03 Figure 2-1, what each known scenario sets up and when it passes |",
+        f"| [`{FIG.name}`]({FIG.name}) | WP-V-08 Figure 4-1, which ODD attributes each scenario varies |",
+        "| [`scenarios.yaml`](scenarios.yaml) | The structured reading of the ODD and the logical scenarios |",
+        "| [`scenarios.py`](scenarios.py), [`scards.py`](scards.py) | The generator: checks the model against the ODD and the analyses, and writes the tables of WP-V-03 and WP-V-08 §4 and everything here |",
+    ]
+    lines = [
+        "<!-- Generated by assurance/06-validation/scenarios/scenarios.py; do not edit by hand. -->",
+        "",
+        "# Known scenarios",
+        "",
+        "The known hazardous scenarios of [WP-V-03](../WP-V-03-sotif-known-scenarios.md) on one page: what each "
+        "logical scenario sets up, what it exercises from the analyses, the ODD ranges it varies, how it is run and "
+        "when it passes, and how the catalogue covers the ODD ([WP-V-08 §4](../WP-V-08-simulation-credibility.md"
+        "#4-scenario-coverage-metrics-against-the-odd)). The [system verification](../../03-system/verif/README.md) "
+        "runs them. Everything here is generated by `scenarios.py` from `scenarios.yaml`; CI fails if it is stale. "
+        "Everything is a draft by Claude (I0); no scenario has been run.",
+        "",
+        t["scenarios-summary"],
+        "",
+        "1. [What this covers](#1-what-this-covers)",
+        "2. [Scenario catalogue](#2-scenario-catalogue)",
+        "3. [Evaluation method](#3-evaluation-method)",
+        "4. [Results](#4-results)",
+        "5. [Open items](#5-open-items)",
+        "6. [Coverage of the ODD and the analyses](#6-coverage-of-the-odd-and-the-analyses)",
+        "7. [Files in this folder](#7-files-in-this-folder)",
+        "",
+        "## 1. What this covers",
+        "",
+        re.sub(
+            r"<!-- BEGIN GENERATED: scenarios-summary .*?END GENERATED: scenarios-summary -->\n\n",
+            "",
+            part(v03, "## 1. Purpose"),
+            flags=re.S,
+        ),
+        "",
+        "## 2. Scenario catalogue",
+        "",
+        f"Every scenario is also in [`{CSV.name}`]({CSV.name}), which GitHub shows as a table that can be searched.",
+        "",
+        part(v03, "## 2. Scenario catalogue"),
+        "",
+        "## 3. Evaluation method",
+        "",
+        part(v03, "## 3. Evaluation method"),
+        "",
+        "## 4. Results",
+        "",
+        part(v03, "## 4. Results"),
+        "",
+        "## 5. Open items",
+        "",
+        part(v03, "## 5. Open items"),
+        "",
+        "## 6. Coverage of the ODD and the analyses",
+        "",
+        "From [WP-V-08 §4](../WP-V-08-simulation-credibility.md#4-scenario-coverage-metrics-against-the-odd).",
+        "",
+        re.sub(
+            r"^### 4\.",
+            "### 6.",
+            part(v08, "## 4. Scenario coverage metrics against the ODD"),
+            flags=re.M,
+        ),
+        "",
+        "## 7. Files in this folder",
+        "",
+        *files,
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def build() -> dict[Path, str]:
     m, k = load(), known()
     errs = check(m, k)
@@ -556,16 +773,22 @@ def build() -> dict[Path, str]:
         x: t[x]
         for x in (
             "scenarios-summary",
+            "scenarios-cards",
             "scenarios-catalogue",
             "scenarios-parameters",
             "scenarios-pass",
         )
     }
     v08 = {x: t[x] for x in ("scenarios-coverage-odd", "scenarios-coverage-analyses")}
+    doc3 = fill(V03.read_text(encoding="utf-8"), v03, "WP-V-03")
+    doc8 = fill(V08.read_text(encoding="utf-8"), v08, "WP-V-08")
     return {
-        V03: fill(V03.read_text(encoding="utf-8"), v03, "WP-V-03"),
-        V08: fill(V08.read_text(encoding="utf-8"), v08, "WP-V-08"),
+        V03: doc3,
+        V08: doc8,
         FIG: figure(m, k),
+        FIG2: scards.sheet(card_data(m, k)),
+        CSV: scenarios_csv(m, k),
+        README: readme(t, doc3, doc8),
     }
 
 

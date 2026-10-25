@@ -1130,8 +1130,47 @@ class Scenarios(unittest.TestCase):
         bad = copy.deepcopy(m)
         sc(bad, "SC-01")["parameters"][-1]["min"] = 1
         cases.append((bad, "must not state min until it is fixed"))
+        bad = copy.deepcopy(m)
+        bad["scenarios"].append(dict(sc(bad, "SC-26"), id="SC-27"))
+        cases.append((bad, "SC-27: no sketch in scards.py"))
         for model, needle in cases:
             self.assertTrue(any(needle in x for x in scenarios.check(model, k)), needle)
+
+    def test_every_scenario_has_a_card(self):
+        m, k = scenarios.load(), scenarios.known()
+        cards = scenarios.card_data(m, k)
+        self.assertEqual([c["id"] for c in cards], [s["id"] for s in m["scenarios"]])
+        c14 = next(c for c in cards if c["id"] == "SC-14")
+        self.assertTrue(c14["crosses"])
+        self.assertIn(("ODD-10", True), c14["odd"])
+        c01 = next(c for c in cards if c["id"] == "SC-01")
+        self.assertEqual(c01["bounds"], ["FSR-06.01"])
+        self.assertIn("VC-01", c01["run_by"])
+        svg = scenarios.scards.sheet(cards)
+        self.assertIn(">SC-26<", svg)
+        self.assertIn("crosses the ODD boundary", svg)
+
+    def test_scenarios_csv_lists_every_scenario_not_run(self):
+        import csv
+
+        m, k = scenarios.load(), scenarios.known()
+        rows = list(csv.DictReader(io.StringIO(scenarios.scenarios_csv(m, k))))
+        self.assertEqual([r["ID"] for r in rows], [s["id"] for s in m["scenarios"]])
+        self.assertTrue(all(r["Result"] == "Not run" for r in rows))
+        sc01 = rows[0]
+        self.assertEqual(sc01["Safety goals at stake"], "SG-02, SG-03, SG-06")
+        self.assertEqual(rows[13]["Crosses the ODD boundary on"], "ODD-10, ODD-11")
+
+    def test_folder_page_links_every_file_in_the_folder(self):
+        out = scenarios.build()
+        page = out[scenarios.README]
+        for p in scenarios.HERE.iterdir():
+            if p.suffix in (".csv", ".svg", ".yaml", ".py"):
+                self.assertIn(f"]({p.name})", page, p.name)
+        self.assertNotIn("](scenarios/", page)
+        self.assertEqual(page.count("logical scenarios exercise all"), 1)  # the summary, once
+        self.assertIn("### 6.1 Coverage of the ODD", page)  # WP-V-08 §4, renumbered
+        self.assertIn("scenarios-cards", out[scenarios.V03])
 
 
 class Simenv(unittest.TestCase):
