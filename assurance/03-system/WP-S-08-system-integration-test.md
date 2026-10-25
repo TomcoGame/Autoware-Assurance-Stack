@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-S-08 System integration and test strategy, specification and report |
 | Standard reference | UL 4600 §12; ISO 26262-4 §7; ASPICE 4.0 SYS.4 |
-| Version | 0.3 (fault injection on the vehicle up to 50 km/h on a closed track (DQ-038 A); 2026-10-24). 0.2 (first content: integration strategy in four steps, test environments, and a test specification covering every technical safety requirement, interface signal and technical cybersecurity requirement, generated from `integ/integ.yaml`; 2026-10-24). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.4 (folder page `integ/README.md` with the whole plan on one page, Figure 4-1 on what each test runs on and what it proves, and `integ/cases.csv` with every case; 2026-10-25). 0.3 (fault injection on the vehicle up to 50 km/h on a closed track (DQ-038 A); 2026-10-24). 0.2 (first content: integration strategy in four steps, test environments, and a test specification covering every technical safety requirement, interface signal and technical cybersecurity requirement, generated from `integ/integ.yaml`; 2026-10-24). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | ASIL D |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -103,6 +103,14 @@ Each case names the step and environment it runs at, its methods, what it covers
 | IT-18 | Remote driving over the real cellular links | IS-4 | ENV-4 | timing, interface | C | TSR-05.02, SIG-01, CSTR-03.01 | TSR-05.02 detect within 143 ms | The age of remote commands at the monitor stays within P-09 over both links, in the worst hours measured in the geofence (WP-S-04 §6); older commands stop the vehicle |
 
 <!-- END GENERATED: integ-cases -->
+
+<!-- BEGIN GENERATED: integ-case-cards (assurance/03-system/integ/integ.py) -->
+
+![Figure 4-1: one card per integration test case IT-01 to IT-18. Each shows the architecture of WP-S-03 as it stands at the case's integration step, with components not yet integrated faint, those already integrated grey, those the step adds outlined and those the case exercises filled; then its environment, methods, how many requirements, signals and cybersecurity requirements it covers, the time budgets it measures and its pass criterion. The same data are in the table above.](integ/fig-s08-4-1-cases.svg)
+
+*Figure 4-1. What each integration test runs on, and what it proves. No case has been run. Drawn by [`integ/integ.py`](integ/integ.py); CI fails if it is stale. Every case is also in [`integ/cases.csv`](integ/cases.csv).*
+
+<!-- END GENERATED: integ-case-cards -->
 
 The methods are those ISO 26262-4 §7 asks of system and item integration testing, with security tests for the requirements of WP-S-07:
 
