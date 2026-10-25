@@ -119,6 +119,7 @@ road-level views only flat marks on the road are drawn.
 | F-33 | `verify()` | Nothing checked that overlays stay on the road, so all three got through the first two rounds | Minor | **Fixed:** the manifest records the highest point of every overlay at the still frame, and `--verify` fails above OVERLAY_TOP_M (0.25 m, a sidewalk's height); `test_an_overlay_standing_up_fails` |
 | F-34 | Review | The first two rounds checked labels, positions, motion and picture detail, but not whether the overlays were legible to someone seeing the frames cold. The question came from the lead, not from the audit | Note | **Applied in this round:** each dashboard was read as a first-time reviewer would; F-35 is what that found. Carried as a check for later rounds |
 | F-35 | Dashboard legend | The dashed green path and the green ring had no legend line on the dashboard (only the green "Meant to do" heading hinted at them) | Minor | **Fixed:** a legend line from the description says what both mean; the footer is re-spaced for it, and `test_footer_lines_do_not_overlap` checks it |
+| F-36 | `sim-render.yaml` | The step added in round 2 to fetch the assets had an unquoted `run:` value containing ": ", which is not valid YAML. GitHub could not parse the workflow, so from `bd2bba6` on every render run failed at once and its check vanished from the pull request; the author then reported the job as "probably still queued" instead of looking | Major | **Fixed:** the step is a block scalar; `test_the_sim_workflows_parse` loads both sim workflows. The committed dashboards were rendered and verified locally, so they are unaffected; the CI render is re-checked on the push that carries this fix |
 
 ## Checks run before pushing
 
@@ -128,7 +129,7 @@ Run on the commit of the third round, in the session's container (Python 3.13, P
 |---|---|
 | Everything `CLAUDE.md` lists: the decision register, the safety case records, headers, links, tables, `check_restricted.py`, every generator with `--check`, the assurance tests, the README figures | All pass |
 | `python3 tools/sim/scene.py --check` | 6 generated files current |
-| `python3 -m unittest discover -s tools/sim -p 'test_*.py'` | 35 tests pass |
+| `python3 -m unittest discover -s tools/sim -p 'test_*.py'` | 36 tests pass |
 | `build_blend.py tools/sim/scenes/*.json --out tools/sim/dashboards --verify` (32 samples, CC0 look after `fetch_assets.py --locked`) | All five scenes match their descriptions; the gallery shows each dashboard as current |
 | The wiki's tests and `build_wiki.py --check` | Pass |
 | black and isort at line length 100 | Clean |

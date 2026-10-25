@@ -270,6 +270,19 @@ class Motion(unittest.TestCase):
         texts = bb.dashboard_texts(bb.dashboard_layout(describe("SC-01"), [], cc0))
         self.assertTrue(any("Poly Haven" in t for t in texts))
 
+    def test_the_sim_workflows_parse(self):
+        # A workflow GitHub cannot parse fails at once and silently drops its checks from the pull request.
+        import yaml  # noqa: PLC0415
+
+        for name in ("sim.yaml", "sim-render.yaml"):
+            wf = yaml.safe_load(
+                (HERE.parents[1] / ".github" / "workflows" / name).read_text("utf-8")
+            )
+            self.assertTrue(wf.get("jobs"), name)
+            for job in wf["jobs"].values():
+                for step in job["steps"]:
+                    self.assertIsInstance(step.get("run", ""), str, name)
+
     def test_the_asset_lock_names_only_cc0_sources(self):
         lock = json.loads((HERE / "assets.lock.json").read_text(encoding="utf-8"))
         self.assertIn("CC0", lock["licence"])

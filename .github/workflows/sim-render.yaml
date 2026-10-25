@@ -51,7 +51,8 @@ jobs:
           python -m pip install --quiet bpy==5.2.3
 
       - name: Fetch the CC0 skies, textures and street models (assets.lock.json); without them, the procedural look
-        run: python tools/sim/fetch_assets.py --locked || echo "assets unavailable: rendering the procedural look"
+        run: |
+          python tools/sim/fetch_assets.py --locked || echo "assets unavailable: rendering the procedural look"
 
       - name: Build, verify and render every scene
         env:
