@@ -166,3 +166,45 @@ Questions only the safety authority can answer (risk acceptance, ASIL and hazard
 behaviour defaults, money and hardware, roles and the assessor, gate go/no-go) go to the
 [decision register](01-management/decisions/README.md). Work authored by an AI assistant is a draft at
 independence level I0 and needs human review before it counts.
+
+## Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| 21434, 21448, 26262, PAS 8800 | Short for ISO/SAE 21434, ISO 21448, ISO 26262 and ISO/PAS 8800. "26262-3" is part 3 of ISO 26262; "26262-8 §13" is clause 13 of part 8 |
+| ACQ, HWE, MAN, MLE, SUP, SWE, SYS, VAL | Automotive SPICE process groups: acquisition, hardware engineering, management, machine learning engineering, support, software engineering, system engineering, validation. "SWE.1–6" means processes 1 to 6 of the group; "SUP.1/8/9/10" means processes 1, 8, 9 and 10 |
+| AI | Artificial intelligence; here the machine-learned perception and prediction models |
+| ASIL | Automotive Safety Integrity Level: A (lowest) to D (highest), set by ISO 26262 for each safety goal. QM means no ASIL is needed |
+| ASPICE, Automotive SPICE | Automotive Software Process Improvement and Capability dEtermination: a model for rating how capable the development process is |
+| CI | Continuous integration: the automated checks GitHub runs on every pull request and push |
+| CS | Cybersecurity |
+| DFA | Dependent failure analysis: looks for one cause that could defeat several safety measures at once |
+| FMEA | Failure mode and effects analysis: works through how each part can fail and what follows |
+| FSC | Functional safety concept: how the safety goals are met, as requirements allocated to elements |
+| FTA | Fault tree analysis: works backward from a harmful event to the combinations of faults that cause it |
+| G0 to G6 | Gates: project milestones with exit criteria ([WP-M-00 §2](01-management/WP-M-00-work-product-register.md#2-gates)) |
+| HARA | Hazard analysis and risk assessment (ISO 26262-3) |
+| HD map | High-definition map: the detailed lane-level map Autoware drives from |
+| HSI | Hardware–software interface |
+| I0 to I3 | Independence of a reviewer from the author, from none (I0) to an independent assessor (I3) |
+| ISO, SAE, UL | International Organization for Standardization; SAE International (formerly the Society of Automotive Engineers); UL Standards & Engagement, which publishes UL 4600 |
+| ISO/PAS | An ISO Publicly Available Specification: a standard published before full consensus |
+| ML | Machine learning |
+| n/a | Not applicable |
+| ODD | Operational design domain: the roads, conditions and traffic the system is designed for |
+| OI | Open item: a known gap recorded in a document, numbered per document |
+| QM | Quality management: no ASIL, ordinary quality processes are enough |
+| SOTIF | Safety of the intended functionality (ISO 21448): harm from a function working as designed but not well enough |
+| STPA | System-theoretic process analysis: finds hazards from unsafe control actions and interactions rather than from failed parts |
+| SVG | Scalable Vector Graphics: the image format of the generated figures |
+| TARA | Threat analysis and risk assessment (ISO/SAE 21434) |
+| UL 4600 | The standard for the safety of autonomous products, used here as the main framework for the safety case |
+| WP | Work product: a document or record the assurance path needs, such as `WP-C-03` |
+| YAML | A plain-text data format; the analyses keep their source data in `.yaml` files |
+| `<nn>`, `<nnn>`, `<n>` | Placeholders in identifier patterns for a two-digit, three-digit or any number |
+| `--check` | The mode of a generator that changes nothing and fails if the committed output is stale |
+| § | Section or clause, as in "WP-M-01 §4" or "UL 4600 §5" |
+| – (en dash) in a range | "through", as in "§6–8" (clauses 6 to 8) or "I0–I3" |
+| / in a list | "or" or "and" between alternatives, as in "Hazard / hazardous event / safety goal" |
+
+Other terms and every identifier prefix are defined in the [Glossary](../wiki/Glossary.md).

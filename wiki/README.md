@@ -50,3 +50,21 @@ python3 tools/wiki/build_wiki.py --out build/wiki   # to look at the result
 GitHub creates the wiki repository (`<owner>/<repo>.wiki.git`) only when a first page is saved from the
 repository's **Wiki** tab. Until then the publish job of the workflow fails at "Clone the wiki" and says so. Any
 first page will do; the first sync replaces it.
+
+## Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| ASIL | Automotive Safety Integrity Level, A (lowest) to D (highest), from ISO 26262 |
+| Build | The step that turns these source pages into the published wiki pages |
+| Document control header | The table at the top of every work product with its ID, version, status, author, reviewer and approver |
+| Pin | The exact version of an Autoware source repository that `repositories/autoware.repos` records |
+| Placeholder | A `{{...}}` marker that the build replaces with a value from the repository |
+| Sync stamp | The line on every wiki page saying which commit and date it was built from |
+| Work product | A document or record the assurance path needs, listed in the work-product register |
+| `<owner>/<repo>`, `<path>`, `<name>`, `<key>` | Placeholders: fill in the real value |
+| `#anchor` | The part of a link after `#` that points to a heading inside a page |
+| `--check` | Mode of the build that changes nothing and fails if a page or link is wrong |
+| `{{ }}` | Encloses a placeholder the build fills in |
+
+Other terms are defined in the [Glossary](Glossary.md).

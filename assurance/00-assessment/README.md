@@ -5,3 +5,7 @@
 Baseline gap assessment of upstream Autoware against the target standards.
 
 This folder has no work products in the register.
+
+## Abbreviations, terms and symbols
+
+This page uses none. Terms are defined in the [Glossary](../../wiki/Glossary.md).

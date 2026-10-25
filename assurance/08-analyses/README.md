@@ -25,3 +25,23 @@ Standard clauses: UL 4600 §6, §10; 26262-9.
 | Folder | What it holds |
 |---|---|
 | [`stpa/`](stpa/) | — |
+
+## Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| 21434, 21448, 26262, PAS 8800 | ISO/SAE 21434 (cybersecurity), ISO 21448 (SOTIF), ISO 26262 (functional safety), ISO/PAS 8800 (AI safety). "26262-3" is part 3 of ISO 26262 |
+| ASIL | Automotive Safety Integrity Level, A (lowest) to D (highest), set by ISO 26262 for each safety goal |
+| DFA | Dependent failure analysis: one cause that could defeat several safety measures at once |
+| FMEA | Failure mode and effects analysis: how each part can fail and what follows |
+| FTA | Fault tree analysis: from a harmful event back to the faults that cause it |
+| G0 to G6 | Gates: project milestones with exit criteria, defined in WP-M-00 §2 |
+| ID | Identifier |
+| Skeleton, Draft, In review, Approved, Baselined | Status of a work product: structure only; written, not verified; in verification review; approved; approved and frozen |
+| STPA | System-theoretic process analysis: hazards from unsafe control actions and interactions |
+| UL 4600 | The standard for the safety of autonomous products; the main framework here |
+| WP | Work product: a document or record the assurance path needs. WP-M-00 is the register that lists them all |
+| § | Section or clause, as in "UL 4600 §5" |
+| — | The subfolder has no README of its own |
+
+Other terms are defined in the [Glossary](../../wiki/Glossary.md).

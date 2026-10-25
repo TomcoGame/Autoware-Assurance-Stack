@@ -783,6 +783,16 @@ class Generators(unittest.TestCase):
                     )
                     self.assertIn("prefers-color-scheme: dark", content, path)
 
+    def test_folder_page_defines_its_abbreviations(self):
+        rows = folder_index.terms("02-concept", ["HARA and SOTIF, see UL 4600 §6–8."])
+        self.assertIn(
+            "| HARA | Hazard analysis and risk assessment: finds the hazards and sets the safety goals |",
+            rows,
+        )
+        self.assertTrue(any(r.startswith("| § |") for r in rows))
+        with self.assertRaises(figkit.FigureError):
+            folder_index.terms("02-concept", ["An undefined XYZQ."])
+
     def test_figure_disagreeing_with_register_is_refused(self):
         self.assertEqual(sorted(fig_questions.FIGURES), ["DQ-001", "DQ-002"])
         orig = fig_questions.CHAIN

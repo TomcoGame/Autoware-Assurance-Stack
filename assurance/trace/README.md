@@ -38,3 +38,26 @@ rules of [WP-P-06](../07-supporting/WP-P-06-requirements-management-traceability
 | ID | Open item | Closes at |
 |---|---|---|
 | OI-1 | Define the trace data schema and its checks before the first safety goal is written | G1 |
+
+## 5. Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| AI | Artificial intelligence; here the AI assistant that drafted this page |
+| ASIL | Automotive Safety Integrity Level, A (lowest) to D (highest), from ISO 26262. "All" in the header means every level |
+| ASPICE 4.0, SYS, SWE | Automotive SPICE version 4.0, a process capability model; SYS and SWE are its system and software engineering processes ("SYS.2–5" means processes 2 to 5) |
+| CI | Continuous integration: the automated checks GitHub runs on every pull request and push |
+| DQ | A question in the [decision register](../01-management/decisions/README.md), as in DQ-004 |
+| G1 | Gate 1, the concept milestone ([WP-M-00 §2](../01-management/WP-M-00-work-product-register.md#2-gates)) |
+| HARA | Hazard analysis and risk assessment: finds the hazards and sets the safety goals |
+| I0 | Independence level 0: drafted with no independent review |
+| ID, OI | Identifier; open item, a known gap numbered per document |
+| ISO, ISO/SAE, UL | The standards bodies behind ISO 26262, ISO/SAE 21434 and UL 4600 |
+| TBD | To be decided |
+| Trace link | A recorded relation between two requirements or a requirement and a test (derives, allocates, verifies, mitigates) |
+| WP | Work product, as in WP-T-01 |
+| `ed48f39` | The short Git commit hash of upstream Autoware this work refers to |
+| `#anchor` | The part of a link after `#` that points to a heading inside a page |
+| § | Section or clause, as in "ISO 26262-8 §6" (part 8, clause 6) |
+
+Other terms are defined in the [Glossary](../../wiki/Glossary.md).

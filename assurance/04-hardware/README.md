@@ -21,3 +21,23 @@ Standard clauses: 26262-5; 26262-8 §13; HWE.1–4.
 | [WP-H-05](WP-H-05-random-hardware-failures-pmhf.md) | Random hardware failures (PMHF) | G3 | Skeleton |
 | [WP-H-06](WP-H-06-hardware-integration-verification.md) | Hardware integration and verification | G4 | Skeleton |
 | [WP-H-07](WP-H-07-hardware-element-evaluation.md) | Evaluation of hardware elements (compute, sensors, drive-by-wire kit) | G3 | Skeleton |
+
+## Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| 21434, 21448, 26262, PAS 8800 | ISO/SAE 21434 (cybersecurity), ISO 21448 (SOTIF), ISO 26262 (functional safety), ISO/PAS 8800 (AI safety). "26262-3" is part 3 of ISO 26262 |
+| ACQ, HWE, MAN, MLE, SUP, SWE, SYS, VAL | Automotive SPICE process groups: acquisition, hardware engineering, management, machine learning engineering, support, software engineering, system engineering, validation. "SWE.1–6" means processes 1 to 6 of the group |
+| FMEA | Failure mode and effects analysis: how each part can fail and what follows |
+| FMEDA | Failure modes, effects and diagnostic analysis: an FMEA that also counts how many failures the diagnostics catch |
+| G0 to G6 | Gates: project milestones with exit criteria, defined in WP-M-00 §2 |
+| ID | Identifier |
+| LFM | Latent fault metric: the share of latent (hidden) faults the design detects (ISO 26262-5) |
+| PMHF | Probabilistic metric for random hardware failures: the rate at which hardware faults could violate a safety goal (ISO 26262-5) |
+| Skeleton, Draft, In review, Approved, Baselined | Status of a work product: structure only; written, not verified; in verification review; approved; approved and frozen |
+| SPFM | Single-point fault metric: the share of single-point faults the design covers (ISO 26262-5) |
+| WP | Work product: a document or record the assurance path needs. WP-M-00 is the register that lists them all |
+| § | Section or clause, as in "UL 4600 §5" |
+| – (en dash) in a range | "through", as in "§5–8" (clauses 5 to 8) |
+
+Other terms are defined in the [Glossary](../../wiki/Glossary.md).
