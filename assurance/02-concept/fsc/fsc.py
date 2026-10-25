@@ -34,6 +34,7 @@ sys.path.insert(0, str(ASSURANCE / "02-concept" / "hara"))
 import check_decisions  # noqa: E402
 import figkit as fk  # noqa: E402
 import hara  # noqa: E402
+import terms  # noqa: E402
 
 sys.path.insert(0, str(HERE))
 import envelope  # noqa: E402
@@ -537,7 +538,7 @@ def build() -> dict[Path, str]:
         FIG: figure(m, sg),
         FIG2: envelope.sheet(m, sg, els),
         CSV: fsrs_csv(m, sg),
-        README: readme(m, sg, t, doc),
+        README: terms.close(readme(m, sg, t, doc), README),
     }
 
 

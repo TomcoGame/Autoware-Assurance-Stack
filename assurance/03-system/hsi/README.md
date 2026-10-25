@@ -179,3 +179,47 @@ Writing this work product added one requirement to WP-S-02. The safety channel p
 | [`fig-s05-1-2-interfaces.svg`](fig-s05-1-2-interfaces.svg) | Figure 1-2, what crosses each interface and how fast |
 | [`hsi.yaml`](hsi.yaml) | Interfaces, signals, clocks, hardware diagnostics and supplier-internal requirements |
 | [`hsi.py`](hsi.py), [`icards.py`](icards.py) | The generator: checks the model against the architecture, the technical safety requirements, the item definition and the timing budget, and writes WP-S-05's tables and everything here |
+
+## Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| 21434, 21448, 26262, PAS 8800 | ISO/SAE 21434 (cybersecurity), ISO 21448 (SOTIF), ISO 26262 (functional safety), ISO/PAS 8800 (AI safety). "26262-3" is part 3 of ISO 26262 |
+| AOU | Assumption of use: an assumption on the vehicle, infrastructure, people or environment, as in AOU-05 |
+| ASIL | Automotive Safety Integrity Level, A (lowest) to D (highest), set by ISO 26262 for each safety goal. B(D) means rated B as part of a decomposition of D |
+| AUTOSAR | AUTomotive Open System ARchitecture: an industry standard for vehicle software, whose E2E profiles protect messages |
+| CAN, CAN FD | Controller Area Network, and its flexible data-rate version: the common vehicle bus |
+| CI | Continuous integration: the automated checks GitHub runs on every pull request and push |
+| CK | Clock identifier, as in CK-01: a time source that signals are stamped against (WP-S-05) |
+| CMP | Component identifier, as in CMP-02: a part of the system architecture (WP-S-03) |
+| CSR | Cybersecurity requirement identifier, as in CSR-01 (WP-C-10) |
+| DQ | A question in the decision register, as in DQ-004. "DQ-015 B" means option B |
+| E2E | End-to-end protection: a checksum, counter and timeout on each message, checked by the receiver |
+| ECC | Error-correcting code: memory that detects and corrects bit errors |
+| G0 to G6 | Gates: project milestones with exit criteria, defined in WP-M-00 §2 |
+| GNSS | Global navigation satellite system, such as GPS; here also a source of exact time |
+| H | Hazard identifier, as in H-01 (WP-C-03) |
+| HD | Hardware diagnostic identifier, as in HD-01 (WP-S-05) |
+| HSI | Hardware–software interface |
+| I | Interface of the item identifier, as in I-08 (WP-C-01) |
+| I0 to I3 | Independence of a reviewer from the author, from none (I0) to an independent assessor (I3). Work drafted by the AI assistant is I0 |
+| ID | Identifier |
+| IEEE | Institute of Electrical and Electronics Engineers, which publishes standards such as IEEE 802.1AS (network time) and IEEE 2846 (driving behaviour assumptions) |
+| IF | Interface identifier of the hardware–software interface, as in IF-01 (WP-S-05) |
+| ISO | International Organization for Standardization |
+| MRM | Minimal risk manoeuvre: the manoeuvre that brings the vehicle to a minimal risk condition |
+| OI | Open item: a known gap recorded in a document, numbered per document |
+| P | Safety envelope parameter identifier, as in P-01 (WP-S-02) |
+| QM | Quality management: no ASIL is needed, ordinary quality processes are enough |
+| RAM | Random-access memory: a computer's working memory |
+| SIG | Signal identifier, as in SIG-01: one message that crosses an interface (WP-S-05) |
+| SM | Safety mechanism identifier, as in SM-01 (WP-S-03) |
+| TR | Fallback trigger identifier, as in TR-01: a condition that starts a minimal risk manoeuvre (WP-C-12) |
+| TSR | Technical safety requirement, as in TSR-01.01 (WP-S-02) |
+| WP | Work product: a document or record the assurance path needs. WP-M-00 is the register that lists them all |
+| YAML | A plain-text data format; the generator's source data is a `.yaml` file |
+| § | Section or clause, as in "UL 4600 §5" |
+| → | From one component to another, or leads to |
+| — | Nothing: no value, or the subfolder has no README of its own |
+
+Other terms are defined in the [Glossary](../../../wiki/Glossary.md).

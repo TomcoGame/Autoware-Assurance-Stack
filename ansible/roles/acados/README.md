@@ -86,3 +86,69 @@ The generated C code is then compiled as part of your normal CMake target, no Py
 ## Idempotency
 
 The role is safe to run multiple times. The git clone resets any local modifications, and the build steps re-run on each invocation to ensure correctness when the version is changed. The `.bashrc` entries use `lineinfile` with regex matching to avoid duplication. The venv creation is skipped if it already exists (`creates` guard).
+
+## Abbreviations, terms and symbols
+
+| Term                      | Meaning                                                                                                              |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| aarch64                   | The 64-bit ARM processor architecture, used by ARM servers and NVIDIA Jetson boards                                  |
+| acados                    | Open-source software that solves nonlinear optimal control problems fast enough to run on embedded computers         |
+| `ACADOS_SOURCE_DIR`       | Environment variable telling tools where the acados source tree is (`/opt/acados`)                                   |
+| `acados_template`         | acados' Python package that turns a control problem described in Python into C solver code                           |
+| Ansible                   | An automation tool that sets up a machine by running steps written in YAML files                                     |
+| ansible-galaxy            | Ansible's command for installing collections and roles that a project depends on                                     |
+| ansible-playbook          | Ansible's command that runs a playbook on the machine                                                                |
+| artifacts                 | Files produced by a build, such as libraries and headers                                                             |
+| `.bashrc`                 | A script in your home directory that the bash shell runs each time it starts; used here to set environment variables |
+| binary                    | A compiled program, ready to run                                                                                     |
+| C                         | The C programming language; acados generates C code for its solvers                                                  |
+| `casadi`                  | CasADi: a library for numerical optimisation with automatic differentiation, used to write the control problem       |
+| clang                     | A C and C++ compiler from the LLVM project, an alternative to gcc                                                    |
+| CMake                     | A cross-platform tool that generates build instructions for C and C++ projects                                       |
+| `CMAKE_PREFIX_PATH`       | Environment variable listing the folders where CMake looks for installed packages                                    |
+| code-generation           | Writing source code automatically with a program, here a Python script that writes the C solver                      |
+| `colcon build`            | colcon is the build tool for ROS 2 workspaces; `colcon build` compiles every package in the workspace                |
+| `creates` guard           | An Ansible option that skips a command when the file it would create already exists                                  |
+| editable                  | Installed as a Python package that points at the source folder, so edits take effect without reinstalling            |
+| `find_package`            | The CMake command that finds an installed library and its settings                                                   |
+| gcc                       | GNU Compiler Collection: the standard C and C++ compiler on Linux                                                    |
+| Git                       | The version control system used to track changes to source code                                                      |
+| headers                   | C or C++ files that declare a library's functions so other code can call them                                        |
+| idempotency               | Running something again gives the same result as running it once, with no extra changes                              |
+| in-tree                   | Built and installed inside the source folder rather than in a separate location                                      |
+| `LD_LIBRARY_PATH`         | Environment variable listing extra folders where Linux looks for shared libraries when a program starts              |
+| `lineinfile`              | An Ansible module that makes sure one line is present in a file, without adding duplicates                           |
+| `make`                    | A classic build tool that runs the compile commands described in a Makefile                                          |
+| nonlinear optimal control | Choosing a system's inputs over time to minimise a cost, when the system's equations are nonlinear                   |
+| position-independent code | Machine code that works at any memory address, which shared libraries need                                           |
+| `PRIVATE`                 | In CMake, a dependency used only to build this target and not passed on to targets that use it                       |
+| `python3-venv`            | The Ubuntu package that provides Python's `venv` module                                                              |
+| `QPOASES`                 | qpOASES: an open-source solver for quadratic programming problems that acados can use internally                     |
+| regex                     | Regular expression: a pattern for matching text                                                                      |
+| role                      | A reusable unit of Ansible tasks that installs or configures one thing; each folder under `ansible/roles/` is a role |
+| ROS 2                     | Robot Operating System 2: the second generation of ROS, which Autoware is built on                                   |
+| runtime                   | When the built program runs, as opposed to when it is built                                                          |
+| shallow                   | A Git clone that fetches only the latest history, to save time and space                                             |
+| shared libraries          | Compiled code (`.so` files) that programs load when they start                                                       |
+| solver                    | A program that computes the answer to a mathematical problem, here the best control inputs                           |
+| source                    | To run a script in the current shell so the settings it makes stay in effect                                         |
+| submodules                | Git repositories included inside another Git repository                                                              |
+| `sympy`                   | SymPy: a Python library for symbolic mathematics                                                                     |
+| target                    | In CMake, a library or program that the project builds                                                               |
+| tera renderer             | A small program acados uses to fill in code templates written in the Tera template language                          |
+| Ubuntu                    | The Linux distribution Autoware targets; versions are named year.month, such as 22.04 (April 2022)                   |
+| venv                      | Python virtual environment: a folder with its own Python packages, kept apart from the system's                      |
+| x86_64                    | The 64-bit Intel/AMD processor architecture used by most desktop and laptop PCs                                      |
+| `/opt`                    | The Linux folder for add-on software that is not part of the operating system                                        |
+| ⭐                        | Star: highlights the main section to follow                                                                          |
+| `~`                       | Shorthand for your home directory, for example `/home/<you>`                                                         |
+| `#`                       | In a shell or config block, starts a comment that is not run                                                         |
+| `-f`                      | For `ansible-galaxy`: reinstall even if already installed (force)                                                    |
+| `-r`                      | For `ansible-galaxy`: read the list of things to install from the named requirements file                            |
+| `--tags`                  | For `ansible-playbook`: run only the roles and tasks carrying the given tag                                          |
+| `--ask-become-pass`       | For `ansible-playbook`: asks for your sudo password once, so steps that need administrator rights can run            |
+| `├──`, `└──`              | Tree drawing: shows the files and folders inside the folder above                                                    |
+| `...`                     | More entries not listed                                                                                              |
+| `$ENV{...}`, `${...}`     | CMake syntax: `$ENV{X}` reads environment variable X, `${X}` reads CMake variable X                                  |
+
+Other project terms are defined in the [Glossary](../../../wiki/Glossary.md).

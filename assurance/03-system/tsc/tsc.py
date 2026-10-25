@@ -42,6 +42,7 @@ import check_decisions  # noqa: E402
 import fallback  # noqa: E402
 import figkit as fk  # noqa: E402
 import fsc  # noqa: E402
+import terms  # noqa: E402
 import triggering  # noqa: E402
 
 sys.path.insert(0, str(HERE))
@@ -556,7 +557,7 @@ def build() -> dict[Path, str]:
         FIG: figure(m, k),
         FIG3: cards.sheet(m, card_known(m, k)),
         CSV: mechanisms_csv(m, k),
-        README: readme(m, k, t, doc),
+        README: terms.close(readme(m, k, t, doc), README),
     }
 
 

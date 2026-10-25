@@ -280,3 +280,42 @@ One card for each safety-related guide word of each function: what the function 
 | [`hara.yaml`](hara.yaml) | Situations, hazards, named hazardous events and safety goals |
 | [`analysis.yaml`](analysis.yaml) | Functions, guide words, the class of every pair, conditions, severity rules |
 | [`hara.py`](hara.py), [`scenes.py`](scenes.py) | The generator: checks both YAML files, rates every row and writes everything else here |
+
+## Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| 21434, 21448, 26262, PAS 8800 | ISO/SAE 21434 (cybersecurity), ISO 21448 (SOTIF), ISO 26262 (functional safety), ISO/PAS 8800 (AI safety). "26262-3" is part 3 of ISO 26262 |
+| AD API | Autoware's autonomous driving API: the interface for trips, modes and requests |
+| API | Application programming interface: how one program asks another for something |
+| ASIL | Automotive Safety Integrity Level, A (lowest) to D (highest), set by ISO 26262 for each safety goal. B(D) means rated B as part of a decomposition of D |
+| C0–C3, E0–E4, S0–S3 | HARA ratings: controllability, exposure and severity classes of a hazardous event; higher is worse |
+| CI | Continuous integration: the automated checks GitHub runs on every pull request and push |
+| DQ | A question in the decision register, as in DQ-004. "DQ-015 B" means option B |
+| F | Function of the item identifier, as in F-01 (WP-C-01) |
+| H | Hazard identifier, as in H-01 (WP-C-03) |
+| HARA | Hazard analysis and risk assessment: finds the hazards and sets the safety goals |
+| HD map | High-definition map: the detailed lane-level map Autoware drives from |
+| HE | Hazardous event identifier: a hazard in one operational situation, as in HE-01.1 |
+| I | Interface of the item identifier, as in I-08 (WP-C-01) |
+| I0 to I3 | Independence of a reviewer from the author, from none (I0) to an independent assessor (I3). Work drafted by the AI assistant is I0 |
+| ID | Identifier |
+| ISO | International Organization for Standardization |
+| M01 to M14 | HARA guide words: the ways a function can malfunction, such as M01 "no function" |
+| MON | ODD monitoring function identifier, as in MON-04 (WP-C-02) |
+| MRC | Minimal risk condition: a stable, stopped state the vehicle reaches by itself |
+| MRM | Minimal risk manoeuvre: the manoeuvre that brings the vehicle to a minimal risk condition |
+| ODD | Operational design domain: the roads, conditions and traffic the system is designed for |
+| OEDR | Object and event detection and response |
+| OS (in OS-01) | Operational situation identifier: a driving situation the HARA rates hazards in |
+| QM | Quality management: no ASIL is needed, ordinary quality processes are enough |
+| REMOTE | The operating mode in which a remote operator drives the vehicle (WP-C-01) |
+| SG | Safety goal: a top-level safety requirement from the HARA, as in SG-01 |
+| W01 to W06 | HARA road and light conditions, such as W01 "dry road in daylight" |
+| WP | Work product: a document or record the assurance path needs. WP-M-00 is the register that lists them all |
+| YAML | A plain-text data format; the generator's source data is a `.yaml` file |
+| § | Section or clause, as in "UL 4600 §5" |
+| – (en dash) in a range | "through", as in "§5–8" (clauses 5 to 8) |
+| — | Nothing: no value, or the subfolder has no README of its own |
+
+Other terms are defined in the [Glossary](../../../wiki/Glossary.md).

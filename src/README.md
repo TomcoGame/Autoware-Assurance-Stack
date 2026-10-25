@@ -40,3 +40,20 @@ In the future, to update all source repositories to their latest versions as def
 ```bash
 vcs pull src
 ```
+
+## Abbreviations, terms and symbols
+
+| Term            | Meaning                                                                                                   |
+| --------------- | --------------------------------------------------------------------------------------------------------- |
+| apt             | Advanced Package Tool: Ubuntu's command for installing software packages                                  |
+| Git             | The version control system each Autoware repository uses                                                  |
+| Manifest file   | A `.repos` file listing each source repository, where to get it and which version to check out            |
+| Meta-repository | A repository that holds no code itself and instead lists the repositories that make up the project        |
+| `src/`          | Short for "source": the folder the source repositories are cloned into                                    |
+| sudo            | Runs a command with administrator rights                                                                  |
+| vcs, vcs2l      | The version control system tool that clones and updates every repository named in a manifest file at once |
+| ➡️              | "is": points from a path to what it holds                                                                 |
+| ⭐              | Marks a link worth following for more detail                                                              |
+| 🔗              | Marks a link to the external Autoware documentation                                                       |
+
+Other project terms are defined in the [Glossary](../wiki/Glossary.md).

@@ -113,3 +113,35 @@ The vehicles in the README figures are rendered from ["Kiri '10 - Low poly model
 by Daniel Zhabotinsky and ["Generic passenger car pack"](https://sketchfab.com/3d-models/generic-passenger-car-pack-20f9af9b8a404d5cb022ac6fe87f21f5)
 by Comrade1280, both licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). They are simplified,
 recoloured and partly removed; the changes are listed in [`CREDITS.md`](tools/readme/models/CREDITS.md).
+
+## Abbreviations, terms and symbols
+
+| Term                     | Meaning                                                                                                                                              |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AI                       | Artificial intelligence; here the AI assistant that drafts much of the work, and the machine-learned models in Autoware                              |
+| Apache-2.0               | Apache License 2.0, the open-source licence of Autoware                                                                                              |
+| ASIL                     | Automotive Safety Integrity Level, A (lowest) to D (highest), set by ISO 26262 for each safety goal                                                  |
+| Automotive SPICE 4.0     | Automotive Software Process Improvement and Capability dEtermination, version 4.0: a model for rating how capable the development process is         |
+| CC BY 4.0                | Creative Commons Attribution 4.0: the licence of the vehicle models, which requires crediting their authors                                          |
+| CI                       | Continuous integration: the automated checks GitHub runs on every pull request and push                                                              |
+| Drive-by-wire            | The vehicle's electronic interface for steering, braking and propulsion commands                                                                     |
+| Fork                     | A copy of another repository that adds its own work; here of `autowarefoundation/autoware`                                                           |
+| HARA                     | Hazard analysis and risk assessment: finds the hazards, rates them and sets the safety goals                                                         |
+| I0                       | Independence level 0: no review by anyone independent of the author yet                                                                              |
+| ISO, ISO/SAE, ISO/PAS    | International Organization for Standardization; a standard published jointly with SAE International; a Publicly Available Specification              |
+| Item                     | The system the safety work is about: the sensors, Autoware on its computer and the safety monitor                                                    |
+| Minimal risk condition   | A stable, stopped state the vehicle reaches by itself when it can no longer drive safely                                                             |
+| ODD                      | Operational design domain: the roads, conditions and traffic the system is designed for                                                              |
+| Robotaxi                 | A taxi with no driver on board                                                                                                                       |
+| Safety authority         | Who accepts risk and decides the questions of the decision register; the project lead until one is named                                             |
+| Safety case              | A structured argument, with evidence, that the system is acceptably safe                                                                             |
+| Safety monitor           | The independent controller between Autoware and the vehicle that checks every command and can stop the vehicle on its own (not built yet)            |
+| SOTIF                    | Safety of the intended functionality (ISO 21448): harm from a function working as designed but not well enough                                       |
+| UL 4600                  | The standard for the safety of autonomous products, from UL Standards & Engagement; the main framework here                                          |
+| WP                       | Work product: a document or record the assurance path needs, as in WP-C-03. The letter is its area (M management, C concept)                         |
+| Badges (top of the page) | The first three show whether the assurance checks, the README figures and the wiki build pass on `main` (green) or fail (red); the others are labels |
+| `Baseline`               | The header field of a work product naming the Autoware commit it refers to                                                                           |
+| WARNING box              | A GitHub callout that marks a warning to read before anything else                                                                                   |
+| §                        | Section, as in "WP-M-01 §4"                                                                                                                          |
+
+Every identifier and more terms are defined in the [Glossary](wiki/Glossary.md).

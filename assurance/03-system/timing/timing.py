@@ -33,6 +33,7 @@ for sub in ("01-management/figures", "02-concept/hara", "02-concept/fallback", "
 import fallback  # noqa: E402
 import figkit as fk  # noqa: E402
 import hara  # noqa: E402
+import terms  # noqa: E402
 import tsc  # noqa: E402
 
 sys.path.insert(0, str(HERE))
@@ -477,7 +478,7 @@ def build() -> dict[Path, str]:
         FIG: figure(m),
         FIG2: gcards.sheet(m, k, ftti, ms, bound),
         CSV: measurements_csv(m, k),
-        README: readme(t, doc),
+        README: terms.close(readme(t, doc), README),
     }
 
 

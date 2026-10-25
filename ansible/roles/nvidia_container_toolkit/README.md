@@ -76,3 +76,63 @@ sudo docker run --rm --gpus all nvcr.io/nvidia/cuda:12.8.1-runtime-ubuntu24.04 n
 # |  No running processes found                                                             |
 # +-----------------------------------------------------------------------------------------+
 ```
+
+## Abbreviations, terms and symbols
+
+| Term                          | Meaning                                                                                                               |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| apt-get                       | The older, script-friendly command-line front end of apt; it does the same job as `apt`                               |
+| Bus-Id                        | The address of the GPU on the computer's PCI bus                                                                      |
+| C                             | Degrees Celsius, in the GPU temperature column                                                                        |
+| container                     | An isolated environment, started from an image, with its own files and libraries                                      |
+| Container Toolkit             | NVIDIA's software that lets Docker containers use the host's NVIDIA GPUs                                              |
+| cspell                        | The spell checker this project runs; the hidden comment tells it to accept the listed words                           |
+| CUDA                          | Compute Unified Device Architecture: NVIDIA's toolkit for running general computation on its GPUs                     |
+| curl                          | A command-line tool that downloads data from a web address                                                            |
+| daemon                        | A program that runs in the background as a service; here the Docker service                                           |
+| `--dearmor`                   | For `gpg`: convert a key from text form to the binary form apt expects                                                |
+| Disp.A                        | Display Active: whether a display is using the GPU                                                                    |
+| Docker                        | A tool that runs software in containers, isolated environments that carry their own files and libraries               |
+| ECC                           | Error-Correcting Code memory; the column counts memory errors that could not be corrected                             |
+| GeForce RTX 3090              | An NVIDIA graphics card; the output shown is an example from one                                                      |
+| GI, CI                        | GPU Instance and Compute Instance: the ID columns used when a GPU is split with MIG                                   |
+| gnupg2, gpg                   | GNU Privacy Guard: the tool that handles the keys apt uses to trust a repository                                      |
+| GPU                           | Graphics Processing Unit: a processor built for parallel work, used here for graphics and for running neural networks |
+| GPU-Util                      | How busy the GPU is, as a percentage                                                                                  |
+| image                         | A packaged set of files and settings from which containers are started                                                |
+| Inputs                        | The role variables you can set to change what the role does                                                           |
+| keyring                       | A file holding the keys apt uses to trust a repository                                                                |
+| MiB                           | Mebibyte: 1,048,576 bytes                                                                                             |
+| MIG                           | Multi-Instance GPU: splitting one GPU into several isolated parts                                                     |
+| N/A                           | Not applicable or not available                                                                                       |
+| NGC                           | NVIDIA GPU Cloud: NVIDIA's catalogue of containers and models                                                         |
+| `nvcr.io`                     | NVIDIA's container image registry, where its images are downloaded from                                               |
+| NVIDIA                        | The company that makes the GPUs and GPU software (CUDA, TensorRT, drivers) used by Autoware                           |
+| `nvidia-ctk`                  | The command-line tool of the NVIDIA Container Toolkit                                                                 |
+| `nvidia-smi`                  | NVIDIA System Management Interface: a command that shows the GPUs, the driver and what is running                     |
+| Perf                          | Performance state, from P0 (fastest) to P12 (lowest power); P8 is a low-power idle state                              |
+| Persistence-M                 | Persistence mode: keeps the driver loaded even when no program uses the GPU                                           |
+| PID                           | Process ID: the number Linux gives each running program                                                               |
+| production repository         | NVIDIA's repository of stable releases, as opposed to test releases                                                   |
+| Pwr:Usage/Cap                 | Power the GPU draws now and its power limit, in watts (W)                                                             |
+| role                          | A reusable unit of Ansible tasks that installs or configures one thing; each folder under `ansible/roles/` is a role  |
+| runtime                       | The component that starts containers; NVIDIA's adds GPU access                                                        |
+| sed                           | Stream editor: a command that finds and replaces text in files or command output                                      |
+| sudo                          | A command that runs another command with administrator (root) rights, after asking for your password                  |
+| `systemctl`                   | The command that starts, stops and restarts system services                                                           |
+| Volatile                      | Counted since the last reboot                                                                                         |
+| ℹ️                            | Information: a note to read before continuing                                                                         |
+| `#`                           | In a shell or config block, starts a comment that is not run                                                          |
+| `&&`                          | Runs the next command only if the previous one succeeded                                                              |
+| `-y`                          | Answers yes to every question so the command runs without stopping to ask                                             |
+| `--no-install-recommends`     | For `apt-get`: install only the required packages, not the suggested extras                                           |
+| `\`                           | At the end of a line, continues the command on the next line                                                          |
+| `-fsSL`, `-s -L`              | For `curl`: fail on errors, stay quiet except for errors, and follow redirects                                        |
+| `\|`                          | Pipe: sends the output of one command into the next one                                                               |
+| `-o`                          | Save the output to the given file                                                                                     |
+| `s#...#...#g`                 | A `sed` replace command; `#` separates the text to find from its replacement, and `g` replaces every match            |
+| `--rm`                        | For `docker run`: delete the container when it exits                                                                  |
+| `--gpus all`                  | For `docker run`: give the container access to every GPU                                                              |
+| `:12.8.1-runtime-ubuntu24.04` | Image tag: CUDA 12.8.1, runtime-only variant, based on Ubuntu 24.04                                                   |
+
+Other project terms are defined in the [Glossary](../../../wiki/Glossary.md).
