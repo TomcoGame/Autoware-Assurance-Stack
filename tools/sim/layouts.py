@@ -9,8 +9,9 @@ scenario, the way the sketches of WP-V-03 Figure 2-1 are, and is not a measureme
 Motion is choreography: an actor goes along its path between two moments of the clip, given as
 fractions of it (0 at the start, 1 at the end). No speed or acceleration of another road user is
 stated anywhere, because the behaviour bounds that would give them (FSR-06.01, FSR-06.02) are not
-fixed yet. The ego vehicle's speed is the sampled ODD-20 value; it slows to a stop at the end of
-its path when `stops` is set.
+fixed yet. When `stops` is set, the last point of the ego's path is where it stands still; scene.py
+moves its first point back so that it cruises CRUISE_M at the sampled ODD-20 speed and then slows at
+the firm level of FSR-03.02 to that point. The clip lasts as long as that takes.
 
 A layout entry:
     road        the street and what is on it (see ROAD_KEYS)
@@ -38,7 +39,7 @@ ROAD_KEYS = {
     "parking",  # width of a parking strip on the ego side, 0 for none
     "sidewalk",  # sidewalk width
     "crosswalk",  # (y0, y1) of a marked crosswalk across the main street
-    "stop_line",  # y of the ego lane's stop line
+    "stop_line",  # y of the ego lane's stop line; a sampled feature `no_stop_line` removes it
     "cross",  # a cross street: {"y": centre, "width": w, "sides": ["left", "right"]}
     "speed_sign",  # (x, y) of a posted limit sign, showing the sampled ODD-03 value
 }
@@ -54,7 +55,7 @@ LAYOUTS: dict[str, dict] = {
             "stop_line": 28.0,
             "speed_sign": (4.4, 8.0),
         },
-        "ego": {"path": [(1.75, 0.0), (1.75, 26.0)], "stops": True},
+        "ego": {"path": [(1.75, 0.0), (1.75, 25.2)], "stops": True},
         "plan": [(1.75, 0.0), (1.75, 100.0)],
         "actors": [
             {
@@ -96,7 +97,7 @@ LAYOUTS: dict[str, dict] = {
             {"role": "other", "kind": "car", "path": [(4.75, 46.0)]},
         ],
         "occlusion": [(3.6, 21.6), (3.6, 26.4), (7.5, 32.0), (7.5, 21.6)],
-        "hazard": (0.0, 25.0, 3.5, 30.0),
+        "hazard": (0.0, 25.0, 9.0, 30.0),
         "still": 0.6,
         "camera": {"pos": (-1.5, -8.0, 5.0), "look": (2.5, 26.0, 0.0), "lens": 28},
         "pick": {"ODD-16": "child", "ODD-12": "day"},
@@ -134,7 +135,7 @@ LAYOUTS: dict[str, dict] = {
             "stop_line": 26.0,
             "cross": {"y": 32.0, "width": 7.0, "sides": ["left", "right"]},
         },
-        "ego": {"path": [(1.75, 0.0), (1.75, 25.0)], "stops": True},
+        "ego": {"path": [(1.75, 0.0), (1.75, 23.4)], "stops": True},
         "plan": [
             (1.75, 0.0),
             (1.75, 26.0),
@@ -160,7 +161,8 @@ LAYOUTS: dict[str, dict] = {
             "ODD-04": {
                 "signalised": ["signals"],
                 "stop-controlled": ["stop_sign"],
-                "t-junction": ["t_left"],
+                "unprotected-turn": ["no_stop_line"],
+                "t-junction": ["t_left", "no_stop_line"],
             }
         },
     },

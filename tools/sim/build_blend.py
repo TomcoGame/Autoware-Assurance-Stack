@@ -24,6 +24,7 @@ The functions above `build()` are plain Python, so the unit tests run without Bl
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -34,7 +35,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent / "readme"))
 
 ENVELOPE_M = 14.0  # drawn length of the monitor's envelope at the clip's start speed; not computed
-CRUISE_TO, STOP_AT = 0.45, 0.85  # the ego slows from CRUISE_TO and stands still from STOP_AT
+HOLD_S = 1.0  # seconds the ego stands still at the end of the clip
 W, H = 1600, 900
 AMBER, BLUE, RED, GREEN, VIOLET, GREY = (
     (1.0, 0.81, 0.43),
@@ -45,6 +46,15 @@ AMBER, BLUE, RED, GREEN, VIOLET, GREY = (
     (0.84, 0.85, 0.87),
 )
 HUD_TEXT = (0.91, 0.92, 0.93)
+LEGEND = (  # legend key of the description -> its colour in HEX
+    ("plan", "red"),
+    ("envelope", "blue"),
+    ("meant", "green"),
+    ("hazard", "orange"),
+    ("key", "amber"),
+    ("occlusion", "grey"),
+    ("odd_limit", "violet"),
+)
 
 # ---------------------------------------------------------------- geometry and motion (plain Python
 
@@ -69,35 +79,58 @@ def point_at(pts: list[list[float]], s: float) -> tuple[float, float, float]:
     raise AssertionError("unreachable")
 
 
-def ego_speed_factor(u: float, stops: bool) -> float:
+def ego_profile(desc: dict) -> tuple[float, float, float]:
+    """Seconds the ego cruises, slows and stands, and the clip's length is their sum.
+
+    The ego cruises at its sampled ODD-20 speed over the first `cruise_m` of its path, then slows at
+    the description's `decel` (a level the records state) to stand still at the end of its path, and
+    stands for HOLD_S. Without a sampled speed the clip lasts 6 s and nothing is to speed."""
+    e = desc["ego"]
+    v = (e.get("speed_kmh") or 0) / 3.6
+    total = length(e["path"])
+    if v <= 0 or total <= 0:
+        return 6.0, 0.0, 0.0
+    if not e["stops"]:
+        return total / v, 0.0, 0.0
+    brake = v / e["decel"]
+    cruise = max(0.0, total - v * brake / 2) / v
+    return cruise, brake, HOLD_S
+
+
+def clip_seconds(desc: dict) -> float:
+    return sum(ego_profile(desc))
+
+
+def ego_speed_factor(desc: dict, u: float) -> float:
     """The ego's speed as a share of its sampled speed at clip fraction u."""
-    if not stops or u <= CRUISE_TO:
+    cruise, brake, _ = ego_profile(desc)
+    t = u * clip_seconds(desc)
+    if not desc["ego"]["stops"] or t <= cruise:
         return 1.0
-    if u >= STOP_AT:
-        return 0.0
-    return 1.0 - (u - CRUISE_TO) / (STOP_AT - CRUISE_TO)
+    return max(0.0, 1.0 - (t - cruise) / brake)
 
 
-def ego_share(u: float, stops: bool) -> float:
-    """The share of its path the ego has covered at clip fraction u (the integral of the speed)."""
-    if not stops:
-        return u
-    ramp = STOP_AT - CRUISE_TO
-    total = CRUISE_TO + ramp / 2
-    if u <= CRUISE_TO:
-        return u / total
-    v = min(u, STOP_AT) - CRUISE_TO
-    return (CRUISE_TO + v - v * v / (2 * ramp)) / total
+def ego_distance(desc: dict, u: float) -> float:
+    """Metres the ego has covered along its path at clip fraction u."""
+    cruise, brake, _ = ego_profile(desc)
+    v = (desc["ego"].get("speed_kmh") or 0) / 3.6
+    total = length(desc["ego"]["path"])
+    if v <= 0:
+        return total * u
+    t = u * clip_seconds(desc)
+    if t <= cruise or not brake:
+        return min(total, v * t)
+    tb = min(t - cruise, brake)
+    return min(total, v * cruise + v * tb - v / brake * tb * tb / 2)
 
 
 def ego_at(desc: dict, u: float) -> tuple[float, float, float]:
-    pts = desc["ego"]["path"]
-    return point_at(pts, length(pts) * ego_share(u, desc["ego"]["stops"]))
+    return point_at(desc["ego"]["path"], ego_distance(desc, u))
 
 
 def envelope_at(desc: dict, u: float) -> float:
     """Drawn envelope length: ENVELOPE_M scaled by the square of the speed share, never below 1 m."""
-    return max(1.0, ENVELOPE_M * ego_speed_factor(u, desc["ego"]["stops"]) ** 2)
+    return max(1.0, ENVELOPE_M * ego_speed_factor(desc, u) ** 2)
 
 
 def actor_at(actor: dict, u: float) -> tuple[float, float, float]:
@@ -153,6 +186,7 @@ def hud_texts(desc: dict) -> list[dict]:
     y = put(x, y, 15, "One concrete scenario (seeded sample of the logical scenario)", AMBER, pw)
     for p in desc["sample"]["parameters"]:
         y = put(x, y + 2, 13, p["label"], width=pw)
+    y = put(x, y + 2, 13, desc["ego"]["motion_label"], width=pw)
     y = put(x, y + 12, 15, "Safety goals at stake", AMBER, pw)
     for g in sc["goals"]:
         y = put(x, y + 2, 13, f"{g['id']} (ASIL {g['asil']}): {g['statement']}", width=pw)
@@ -162,14 +196,10 @@ def hud_texts(desc: dict) -> list[dict]:
     put(x, y + 2, 13, sc["pass"] + " (" + ", ".join(sc["pass_refs"]) + ")", width=pw)
     lg = desc["legend"]
     y = 640
-    for key, colour in (
-        ("plan", RED),
-        ("envelope", BLUE),
-        ("meant", GREEN),
-        ("hazard", (1.0, 0.45, 0.2)),
-        ("key", AMBER),
-    ):
-        out.append({"swatch": colour, "x": 28, "y": y + 2, "size": 12})
+    for key, colour in LEGEND:
+        if key not in lg:
+            continue
+        out.append({"swatch": srgb(HEX[colour]), "x": 28, "y": y + 2, "size": 12})
         y = put(52, y, 13, lg[key], width=1040) + 3
     put(28, 812, 22, desc["stamp"].upper(), AMBER, 1500)
     put(28, 852, 12, desc["credits"] + " · " + desc["scenario"]["source"], (0.6, 0.62, 0.65))
@@ -186,6 +216,265 @@ def panels() -> list[tuple[float, float, float, float, float]]:
     ]
 
 
+# ---------------------------------------------------------------- the review dashboard (plain Python)
+
+DW, DH = 1920, 1080
+CHASE = (384, 72, 1048, 590)  # x, y, w, h of the chase view on the dashboard
+FORWARD = (1444, 96, 464, 261)
+TOP = (1444, 392, 464, 261)
+THUMB_W, THUMB_H, THUMB_Y = 200, 112, 830
+CHASE_RIG = (
+    (-2.2, -10.5, 4.6),
+    (0.6, 16.0, 0.0),
+)  # chase camera and the point it looks at, in the ego's frame
+INK, INK2, MUTED = "#f0efec", "#c3c2b7", "#898781"
+BG, PANEL, EDGE = "#111110", "#1a1a19", "#2c2c2a"
+HEX = {
+    "amber": "#ffcf6e",
+    "blue": "#5b9bff",
+    "red": "#ff4d40",
+    "green": "#43f08a",
+    "orange": "#ff7333",
+    "grey": "#9da1a8",
+    "violet": "#c38bff",
+}
+
+
+def moments(desc: dict) -> list[tuple[float, str]]:
+    """The moments of the clip the filmstrip shows: (clip fraction, what happens)."""
+    out = [(0.0, "start")]
+    for a in desc["actors"]:
+        if a["role"] == "key" and len(a["path"]) > 1 and a["move"][0] > 0:
+            out.append((a["move"][0], f"{a['label']} starts to move"))
+    cruise, brake, _ = ego_profile(desc)
+    t = clip_seconds(desc)
+    if desc["ego"]["stops"]:
+        out.append((cruise / t, "vehicle starts to slow"))
+    out.append((desc["still"], "the moment in the main view"))
+    out.append(
+        ((cruise + brake) / t, "vehicle stands still") if desc["ego"]["stops"] else (1.0, "end")
+    )
+    out.sort(key=lambda m: m[0])
+    kept: list[tuple[float, str]] = []
+    for u, label in out:
+        if kept and u - kept[-1][0] < 0.05:
+            if label == "the moment in the main view":
+                kept[-1] = (u, label)
+            continue
+        kept.append((u, label))
+    return kept[:5]
+
+
+def header_fields(desc: dict) -> list[tuple[str, str]]:
+    speed = next((p for p in desc["sample"]["parameters"] if p["parameter"] == "ODD-20"), None)
+    return [
+        ("Motion", "choreography (qualitative)"),
+        ("Condition", desc["condition_label"]),
+        ("Ego speed (sample)", f"{speed['value']:g} {speed['unit']}" if speed else "—"),
+        ("Methods (WP-V-03)", ", ".join(desc["scenario"]["methods"])),
+    ]
+
+
+def place_tags(tags: list[dict]) -> list[dict]:
+    """Tag boxes (x, y, w) in the chase view's pixels: above each road user, inside the view, and
+    moved up, one row at a time, until no two overlap."""
+    placed: list[dict] = []
+    for t in sorted(tags, key=lambda t: -t["y"]):
+        w = len(t["label"]) * 12 * 0.56 + 14
+        x = min(max(4, t["x"] - w / 2), CHASE[2] - w - 4)
+        y = min(max(4, t["y"] - 34), CHASE[3] - 26)
+        while any(
+            abs(y - p["box"][1]) < 25 and x < p["box"][0] + p["box"][2] and p["box"][0] < x + w
+            for p in placed
+        ):
+            y -= 26
+        placed.append({**t, "box": (x, max(4, y), w)})
+    return placed
+
+
+def chip_width(label: str) -> float:
+    return len(label) * 12 * 0.6 + 14
+
+
+def goal_chips(goals: list[dict], room: float) -> list[str]:
+    """The header chips of the safety goals at stake, as many as fit in `room` pixels; the rest are
+    counted in a last chip ("+2 more"), so no goal disappears without a trace."""
+    labels = [f"{g['id']} ASIL {g['asil']}" for g in goals]
+    for n in range(len(labels), -1, -1):
+        shown = labels[:n] + ([f"+{len(labels) - n} more"] if n < len(labels) else [])
+        if sum(chip_width(x) + 6 for x in shown) <= room:
+            return shown
+    return []
+
+
+def dashboard_layout(desc: dict, tags: list[dict]) -> list[dict]:
+    """Everything on the dashboard, in pixels (x right, y down): rects, images, texts.
+
+    `tags` are the road-user labels on the chase view, with their position in that view's pixels."""
+    sc = desc["scenario"]
+    el: list[dict] = [{"rect": (0, 0, DW, DH), "fill": BG}]
+
+    def rect(x, y, w, h, fill=PANEL, edge=EDGE):
+        el.append({"rect": (x, y, w, h), "fill": fill, "edge": edge})
+
+    def text(x, y, s, body, colour=INK, width=2000, key=None):
+        lines = wrap(body, s, width)
+        el.append({"text": lines, "x": x, "y": y, "size": s, "colour": colour, "key": key})
+        return y + len(lines) * s * 1.3
+
+    def flow(box, blocks, sizes=(14, 13, 12, 11, 10)):
+        """Headings and paragraphs in a panel, at the largest size that fits."""
+        x, y, w, h = box
+        rect(x, y, w, h)
+        for s in sizes:
+            yy, height = y + 12, 0.0
+            for kind, body, _ in blocks:
+                n = len(wrap(body, s + (1 if kind == "h" else 0), w - 24))
+                height += n * (s + 1) * 1.3 + (8 if kind == "h" else 3)
+            if height <= h - 18 or s == sizes[-1]:
+                break
+        for kind, body, colour in blocks:
+            if kind == "h":
+                yy = text(x + 12, yy + 5, s + 1, body, colour, w - 24) + 3
+            else:
+                yy = text(x + 12, yy, s, body, colour, w - 24) + 3
+
+    # header strip
+    text(16, 12, 24, f"{sc['id']} {sc['name']}", INK, 1060, key="title")
+    cx = 16 + min(1060, len(f"{sc['id']} {sc['name']}") * 24 * 0.52) + 16
+    for i, label in enumerate(goal_chips(sc["goals"], 1060 - cx)):
+        w = chip_width(label)
+        el.append({"rect": (cx, 16, w, 24), "fill": "#8f2a22", "edge": HEX["red"]})
+        text(cx + 7, 21, 12, label, INK)
+        cx += w + 6
+    hx = 1080
+    for (label, value), w in zip(header_fields(desc), (170, 330, 140, 190)):
+        text(hx, 8, 11, label, MUTED)
+        text(hx, 25, 13 if len(wrap(value, 13, w - 10)) <= 2 else 11, value, INK, w - 10)
+        hx += w
+
+    # left: the scenario as the records state it, and the concrete sample
+    blocks = [("p", sc["description"], INK2)]
+    if sc["events"]:
+        blocks.append(("h", "Hazardous events (WP-C-03)", HEX["orange"]))
+        blocks += [("p", f"{e['id']} {e['description']}", INK) for e in sc["events"]]
+    if sc["triggers"]:
+        blocks.append(("h", "Triggering conditions (WP-C-06)", HEX["amber"]))
+        blocks += [("p", f"{t['id']} {t['condition']}", INK) for t in sc["triggers"]]
+    refs = [
+        ("Situations", sc["situations"]),
+        ("Misuse (WP-C-08)", sc["misuse"]),
+        ("Loss scenarios (WP-A-05)", sc["losses"]),
+    ]
+    for label, ids in refs:
+        if ids:
+            blocks.append(("p", f"{label}: {', '.join(ids)}", INK2))
+    flow((12, 72, 360, 430), [("h", "Scenario (WP-V-03)", INK)] + blocks)
+    flow(
+        (12, 512, 360, 448),
+        [("h", "One concrete scenario (seeded sample)", HEX["amber"])]
+        + [("p", p["label"], INK) for p in desc["sample"]["parameters"]]
+        + [("p", desc["ego"]["motion_label"], INK2)],
+    )
+
+    # centre: the chase view with its tags, what the vehicle is meant to do, the filmstrip
+    rect(*CHASE)
+    el.append({"image": "chase", "box": CHASE})
+    for t in place_tags(tags):
+        x, y, w = t["box"]
+        el.append(
+            {"rect": (CHASE[0] + x, CHASE[1] + y, w, 22), "fill": "#0d0f12", "edge": t["colour"]}
+        )
+        text(CHASE[0] + x + 7, CHASE[1] + y + 5, 12, t["label"], t["colour"])
+    flow(
+        (384, 672, 1048, 146),
+        [
+            ("h", desc["legend"]["meant"], HEX["green"]),
+            ("p", f"Pass criterion: {sc['pass']} ({', '.join(sc['pass_refs'])})", INK),
+        ],
+        sizes=(13, 12, 11, 10),
+    )
+    for i, (u, label) in enumerate(moments(desc)):
+        x = 384 + i * (THUMB_W + 12)
+        rect(x, THUMB_Y - 2, THUMB_W, THUMB_H + 34)
+        el.append({"image": f"thumb{i}", "box": (x, THUMB_Y, THUMB_W, THUMB_H)})
+        text(x + 6, THUMB_Y + THUMB_H + 6, 11, label, INK2, THUMB_W - 12)
+
+    # right: forward and top views, the safety goals at stake
+    for box, title, key in (
+        (FORWARD, "Forward view", "forward"),
+        (TOP, "Top view: planned path, envelope, hazard", "top"),
+    ):
+        rect(box[0], box[1] - 24, box[2], box[3] + 24)
+        text(box[0] + 10, box[1] - 19, 13, title, INK)
+        el.append({"image": key, "box": box})
+    goals = [("h", "Safety goals at stake", HEX["red"])]
+    goals += [("p", f"{g['id']} (ASIL {g['asil']}): {g['statement']}", INK) for g in sc["goals"]]
+    if sc["monitors"]:
+        goals.append(("h", "ODD monitors the pass criterion cites (WP-C-02 §4)", HEX["blue"]))
+        goals += [("p", f"{m['id']} {m['name']}", INK) for m in sc["monitors"]]
+    flow((1444, 664, 464, 296), goals)
+
+    # footer: the stamp, the legend, the credits
+    text(16, 986, 22, desc["stamp"].upper(), HEX["amber"], 1900, key="stamp")
+    lx, ly = 16, 1018
+    for key, colour in LEGEND:
+        if key not in desc["legend"] or key == "meant":
+            continue
+        body = desc["legend"][key]
+        w = 20 + len(body) * 11 * 0.52
+        if lx > 16 and lx + w > DW - 16:
+            lx, ly = 16, ly + 18
+        el.append({"rect": (lx, ly + 2, 14, 10), "fill": HEX[colour], "edge": HEX[colour]})
+        text(lx + 20, ly, 11, body, INK2, DW - 52)
+        lx += w + 22
+    text(16, 1062, 10, desc["credits"] + " · " + sc["source"], MUTED, 1900)
+    return el
+
+
+def dashboard_texts(layout: list[dict]) -> list[str]:
+    return [" ".join(e["text"]) for e in layout if "text" in e]
+
+
+def srgb(hex_: str) -> tuple[float, float, float]:
+    """A #rrggbb colour as linear RGB, for an emission shader shown through the Standard view."""
+    c = [int(hex_[i : i + 2], 16) / 255 for i in (1, 3, 5)]
+    return tuple(v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055) ** 2.4 for v in c)
+
+
+def described(desc: dict) -> dict:
+    """What the scene should show of the conditions and features, as the manifest records it."""
+    c, rd, feats = desc["conditions"], desc["road"], set(desc["features"])
+    beyond = c.get("beyond") or {}
+    want = {
+        "light": c["light"],
+        "wet": c["surface"] == "wet",
+        "rain": bool(c.get("rain")),
+        "fog": bool(c.get("visibility")),
+        "beyond": sorted(
+            (["fog-beyond"] if "ODD-11" in beyond.get("attributes", []) else [])
+            + (["odd-limit"] if beyond else [])
+        ),
+        "features": sorted(feats),
+        "stop_line": "stop_line" in rd and "no_stop_line" not in feats,
+        "speed_sign": "speed_sign" in rd,
+        "occlusion": bool(desc["occlusion"]),
+    }
+    return want
+
+
+def drawn_errors(desc: dict, drawn: dict) -> list[str]:
+    """What the scene should show of the conditions and features, against what was built."""
+    want = described(desc)
+    if not drawn:
+        return ["the manifest does not say what was drawn"]
+    return [
+        f"{k}: drawn {drawn.get(k)!r}, described {v!r}"
+        for k, v in want.items()
+        if drawn.get(k) != v
+    ]
+
+
 def verify(desc: dict, manifest: dict, tol: float = 0.05) -> list[str]:
     """Differences between the built scene (its manifest) and the description."""
     errs = []
@@ -198,14 +487,22 @@ def verify(desc: dict, manifest: dict, tol: float = 0.05) -> list[str]:
             errs.append(f"{name}: not in the scene")
         elif math.dist(xy, built[name][:2]) > tol:
             errs.append(f"{name}: at {built[name][:2]}, the description puts it at {xy}")
-    texts = " ".join(" ".join(t.split()) for t in manifest.get("texts", []))
-    labels = [desc["stamp"].upper(), desc["scenario"]["id"], desc["scenario"]["name"]]
+    errs += [f"drawn: {e}" for e in drawn_errors(desc, manifest.get("drawn", {}))]
+    sc = desc["scenario"]
+    labels = [desc["stamp"].upper(), sc["id"], sc["name"], desc["credits"], sc["pass"]]
+    labels.append(desc["ego"]["motion_label"])
+    labels += [f"{m['id']} {m['name']}" for m in sc["monitors"]]
     labels += [p["label"] for p in desc["sample"]["parameters"]]
     labels += [f"{g['id']} (ASIL {g['asil']}): {g['statement']}" for g in desc["scenario"]["goals"]]
     labels += list(desc["legend"].values())
-    for lab in labels:
-        if " ".join(lab.split()) not in texts:
-            errs.append(f"label not on the frame: {lab!r}")
+    for frame in ("texts", "clip_texts"):
+        if frame not in manifest:
+            continue
+        texts = " ".join(" ".join(t.split()) for t in manifest[frame])
+        where = "the dashboard" if frame == "texts" else "the clip"
+        for lab in labels:
+            if " ".join(lab.split()) not in texts:
+                errs.append(f"label not on {where}: {lab!r}")
     return errs
 
 
@@ -226,7 +523,7 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
     scene.cycles.seed = 1
     scene.render.resolution_x, scene.render.resolution_y = W, H
     scene.render.resolution_percentage = args.scale
-    fps, frames = args.fps, max(2, round(args.fps * args.seconds))
+    fps, frames = args.fps, max(2, round(args.fps * clip_seconds(desc)))
     scene.render.fps = fps
     scene.frame_start, scene.frame_end = 0, frames - 1
     still = still_frame(desc, frames)
@@ -385,7 +682,7 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         while x < right - 0.3:
             quad(f"zebra-{x:.1f}", x, a, x + 0.5, b, 0.005, paint)
             x += 1.0
-    if "stop_line" in rd:
+    if "stop_line" in rd and "no_stop_line" not in desc["features"]:
         quad("stop-line", 0.1, rd["stop_line"] - 0.25, lane, rd["stop_line"] + 0.25, 0.005, paint)
     # buildings, seeded, for a sense of place
     concrete = [
@@ -735,6 +1032,7 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
     scene.collection.objects.link(sun)
     if cond.get("rain"):
         n = int(2500 * cond["rain"] / cond["rain_limit"]) + 300
+        rain_beyond = bool(beyond) and "ODD-10" in beyond["attributes"]
         drops = mat(
             "rain",
             (0.8, 0.85, 0.9),
@@ -744,8 +1042,8 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         )
         v, f = [], []
         for zone, count, ylo, yhi in (
-            ("in", n, -8.0, beyond["y"] if beyond else 80.0),
-            ("beyond", 3 * n if beyond else 0, beyond["y"] if beyond else 0, 110.0),
+            ("in", n, -8.0, beyond["y"] if rain_beyond else 80.0),
+            ("beyond", 3 * n if rain_beyond else 0, beyond["y"] if beyond else 0, 110.0),
         ):
             for _ in range(count):
                 x, y, z = rnd.uniform(-14, 14), rnd.uniform(ylo, yhi), rnd.uniform(0.0, 9.0)
@@ -799,32 +1097,36 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
     def at(px, py):
         return ((px / W - 0.5) * vw, (0.5 - py / H) * vh)
 
-    texts = []
+    texts, hud = [], []
     for i, (px, py, pw, ph, op) in enumerate(panels()):
         (x0, y0_), (x1, y1_) = at(px, py), at(px + pw, py + ph)
         pm = mat(f"panel-{i}", (0.03, 0.035, 0.04), 1.0, emit=1.0, alpha=op)
-        obj(
-            f"panel-{i}",
-            [(x0, y0_, -d), (x1, y0_, -d), (x1, y1_, -d), (x0, y1_, -d)],
-            [(0, 1, 2, 3)],
-            pm,
-            parent=cam,
+        hud.append(
+            obj(
+                f"panel-{i}",
+                [(x0, y0_, -d), (x1, y0_, -d), (x1, y1_, -d), (x0, y1_, -d)],
+                [(0, 1, 2, 3)],
+                pm,
+                parent=cam,
+            )
         )
     for i, t in enumerate(hud_texts(desc)):
         k = vw / W
         if "swatch" in t:
             (x0, y0_), (x1, y1_) = at(t["x"], t["y"]), at(t["x"] + 16, t["y"] + 12)
-            obj(
-                f"swatch-{i}",
-                [
-                    (x0, y0_, -d * 0.999),
-                    (x1, y0_, -d * 0.999),
-                    (x1, y1_, -d * 0.999),
-                    (x0, y1_, -d * 0.999),
-                ],
-                [(0, 1, 2, 3)],
-                mat(f"swatch-{i}", t["swatch"], 1.0, emit=2.0),
-                parent=cam,
+            hud.append(
+                obj(
+                    f"swatch-{i}",
+                    [
+                        (x0, y0_, -d * 0.999),
+                        (x1, y0_, -d * 0.999),
+                        (x1, y1_, -d * 0.999),
+                        (x0, y1_, -d * 0.999),
+                    ],
+                    [(0, 1, 2, 3)],
+                    mat(f"swatch-{i}", t["swatch"], 1.0, emit=2.0),
+                    parent=cam,
+                )
             )
             continue
         body = "\n".join(t["lines"])
@@ -836,6 +1138,7 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         x, y = at(t["x"], t["y"])
         o.location = (x, y, -d * 0.998)
         o.parent = cam
+        hud.append(o)
         texts.append(body)
 
     # -------- motion
@@ -859,7 +1162,22 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
     built = {"ego": [round(ego.location.x, 2), round(ego.location.y, 2)]}
     for o, a in actors:
         built[o.name] = [round(o.location.x, 2), round(o.location.y, 2)]
-    return {
+    weather = [o for o in scene.objects if o.name in ("rain", "fog", "fog-beyond")]
+    names = {o.name for o in scene.objects}
+    drawn = {
+        "light": light,
+        "wet": wet,
+        "rain": "rain" in names,
+        "fog": "fog" in names,
+        "beyond": sorted(n for n in ("fog-beyond", "odd-limit") if n in names),
+        "features": sorted(feats),
+        "stop_line": "stop-line" in names,
+        "speed_sign": "speed-sign" in names,
+        "occlusion": "occlusion" in names,
+    }
+    ctx = {"scene": scene, "camera": cam, "ego": ego, "actors": actors, "hud": hud}
+    ctx["weather"], ctx["ego_size"] = weather, (ego_w, hi_[1] - lo_[1], hi_[2])
+    return ctx, {
         "scenario": desc["scenario"]["id"],
         "blender": bpy.app.version_string,
         "render": {
@@ -871,44 +1189,228 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
             "fps": fps,
         },
         "objects": built,
+        "drawn": drawn,
         "texts": texts,
     }
 
 
-def text_obj(bpy, body: str, size: float, material):  # pragma: no cover - needs Blender
+def text_obj(bpy, body: str, size: float, material, scene=None):  # pragma: no cover - Blender
     cu = bpy.data.curves.new("text", "FONT")
     cu.body = body
     cu.size = size
     o = bpy.data.objects.new("text", cu)
     o.data.materials.append(material)
-    bpy.context.scene.collection.objects.link(o)
+    (scene or bpy.context.scene).collection.objects.link(o)
     return o
 
 
-def render(args, desc: dict, out: Path, manifest: dict) -> None:  # pragma: no cover - needs Blender
+def render_view(bpy, scene, cam, frame: int, size: tuple[int, int], samples: int, path: Path):
+    """One view of the 3D scene to a PNG."""  # pragma: no cover - needs Blender
+    scene.camera = cam
+    scene.frame_set(frame)
+    scene.render.resolution_x, scene.render.resolution_y = size
+    scene.render.resolution_percentage = 100
+    scene.cycles.samples = samples
+    scene.render.image_settings.file_format = "PNG"
+    scene.render.filepath = str(path)
+    bpy.ops.render.render(write_still=True, scene=scene.name)
+
+
+def tags_at(bpy, ctx: dict, desc: dict, cam, size: tuple[int, int]) -> list[dict]:
+    """The labels of the ego and the road users on the chase view, at the current frame."""
+    from bpy_extras.object_utils import world_to_camera_view  # pragma: no cover
+    from mathutils import Vector
+
+    scene = ctx["scene"]
+    heights = {"person": 2.0, "box": 3.4}
+    items = [(ctx["ego"], "Ego robotaxi (choreography)", HEX["blue"], ctx["ego_size"][2] + 0.5)]
+    for o, a in ctx["actors"]:
+        role = {"key": "", "parked": "parked ", "other": ""}[a["role"]]
+        label = f"{role}{a['label']} (qualitative)".capitalize()
+        colour = HEX["amber"] if a["role"] == "key" else INK2
+        items.append((o, label, colour, heights.get(a["drawn_as"].partition(":")[0], 1.9)))
+    out = []
+    for o, label, colour, h in items:
+        p = world_to_camera_view(scene, cam, Vector((o.location.x, o.location.y, h)))
+        if p.z <= 0 or not (0 <= p.x <= 1 and 0 <= p.y <= 1):
+            continue
+        out.append({"label": label, "colour": colour, "x": p.x * size[0], "y": (1 - p.y) * size[1]})
+    return out
+
+
+def dashboard(args, desc: dict, ctx: dict, work: Path, out: Path, manifest: dict):
+    """Render the views and lay them out as the review dashboard <id>.jpg."""  # pragma: no cover
+    import bpy
+    from mathutils import Vector
+
+    scene, ego = ctx["scene"], ctx["ego"]
+    sid = desc["scenario"]["id"]
+    work.mkdir(parents=True, exist_ok=True)
+    for o in ctx["hud"]:
+        o.hide_render = True
+    n_f = manifest["render"]["frames"]
+    still = manifest["render"]["still_frame"]
+
+    fwd_d = bpy.data.cameras.new("forward")
+    fwd_d.lens, fwd_d.clip_start = 18, 0.1
+    fwd = bpy.data.objects.new("forward", fwd_d)
+    fwd.parent = ego
+    fwd.location = (0, ctx["ego_size"][1] / 2 - 0.4, ctx["ego_size"][2] + 0.1)
+    fwd.rotation_euler = (math.radians(84), 0, 0)  # along +y, slightly down
+    scene.collection.objects.link(fwd)
+
+    top_d = bpy.data.cameras.new("top")
+    top_d.type = "ORTHO"
+    ys = [p[1] for p in desc["ego"]["path"]] + [desc["hazard"][1], desc["hazard"][3]]
+    lo, hi = min(ys) - 8, max(ys) + 10
+    top_d.ortho_scale = hi - lo
+    top_d.clip_end = 200
+    top = bpy.data.objects.new("top", top_d)
+    top.location = (0, (lo + hi) / 2, 80)
+    top.rotation_euler = (0, 0, math.pi / 2)  # the ego drives from left to right
+    scene.collection.objects.link(top)
+
+    rig_d = bpy.data.cameras.new("chase")
+    rig_d.lens, rig_d.clip_start, rig_d.clip_end = 26, 0.1, 600
+    rig = bpy.data.objects.new("chase", rig_d)
+    rig.parent = ego
+    rig.location = CHASE_RIG[0]
+    look = Vector(CHASE_RIG[1]) - Vector(CHASE_RIG[0])
+    rig.rotation_euler = look.to_track_quat("-Z", "Y").to_euler()
+    scene.collection.objects.link(rig)
+    chase = rig
+
+    views = {}
+    size = (CHASE[2], CHASE[3])
+    render_view(bpy, scene, chase, still, size, args.samples, work / "chase.png")
+    views["chase"] = work / "chase.png"
+    tags = tags_at(bpy, ctx, desc, chase, size)
+    render_view(bpy, scene, fwd, still, FORWARD[2:], args.samples, work / "forward.png")
+    views["forward"] = work / "forward.png"
+    for o in ctx["weather"]:
+        o.hide_render = True
+    render_view(bpy, scene, top, still, TOP[2:], max(8, args.samples // 2), work / "top.png")
+    views["top"] = work / "top.png"
+    for o in ctx["weather"]:
+        o.hide_render = False
+    for i, (u, _) in enumerate(moments(desc)):
+        f = round(u * (n_f - 1))
+        p = work / f"thumb{i}.png"
+        render_view(bpy, scene, chase, f, (THUMB_W, THUMB_H), max(8, args.samples // 3), p)
+        views[f"thumb{i}"] = p
+    scene.frame_set(still)
+    for o in ctx["hud"]:
+        o.hide_render = False
+
+    layout = dashboard_layout(desc, tags)
+    ds = bpy.data.scenes.new("dashboard")
+    ds.render.engine = "CYCLES"
+    ds.cycles.device = "CPU"
+    ds.cycles.samples = 8
+    ds.cycles.use_denoising = False
+    ds.cycles.seed = 1
+    ds.view_settings.view_transform = "Standard"
+    ds.render.resolution_x, ds.render.resolution_y = DW, DH
+    ds.render.resolution_percentage = 100
+    cam_d = bpy.data.cameras.new("dashboard")
+    cam_d.type, cam_d.ortho_scale, cam_d.sensor_fit = "ORTHO", DW, "HORIZONTAL"
+    cam_d.clip_end = 1000
+    cam = bpy.data.objects.new("dashboard", cam_d)
+    cam.location = (DW / 2, -DH / 2, 500)
+    ds.collection.objects.link(cam)
+    ds.camera = cam
+    mats: dict[str, object] = {}
+
+    def emission(key, colour=None, image=None):
+        if key in mats:
+            return mats[key]
+        m = bpy.data.materials.new(key)
+        m.use_nodes = True
+        nt = m.node_tree
+        nt.nodes.remove(nt.nodes["Principled BSDF"])
+        em = nt.nodes.new("ShaderNodeEmission")
+        if image is not None:
+            tex = nt.nodes.new("ShaderNodeTexImage")
+            tex.image = bpy.data.images.load(str(image))
+            nt.links.new(tex.outputs["Color"], em.inputs["Color"])
+        else:
+            em.inputs["Color"].default_value = (*srgb(colour), 1.0)
+        nt.links.new(em.outputs[0], nt.nodes["Material Output"].inputs["Surface"])
+        mats[key] = m
+        return m
+
+    def plane(name, x, y, w, h, z, material):
+        me = bpy.data.meshes.new(name)
+        me.from_pydata(
+            [(x, -y, z), (x + w, -y, z), (x + w, -y - h, z), (x, -y - h, z)], [], [(0, 1, 2, 3)]
+        )
+        uv = me.uv_layers.new()
+        for loop, co in zip(uv.data, ((0, 1), (1, 1), (1, 0), (0, 0))):
+            loop.uv = co
+        o = bpy.data.objects.new(name, me)
+        o.data.materials.append(material)
+        ds.collection.objects.link(o)
+
+    for i, e in enumerate(layout):
+        z = i * 0.01
+        if "rect" in e:
+            x, y, w, h = e["rect"]
+            if e.get("edge"):
+                plane(
+                    f"edge{i}",
+                    x - 1,
+                    y - 1,
+                    w + 2,
+                    h + 2,
+                    z - 0.005,
+                    emission(e["edge"], e["edge"]),
+                )
+            plane(f"rect{i}", x, y, w, h, z, emission(e["fill"], e["fill"]))
+        elif "image" in e:
+            x, y, w, h = e["box"]
+            plane(f"img{i}", x, y, w, h, z, emission(f"img-{e['image']}", image=views[e["image"]]))
+        else:
+            o = text_obj(
+                bpy, "\n".join(e["text"]), e["size"], emission(e["colour"], e["colour"]), ds
+            )
+            o.data.space_line = 1.3 / 1.2
+            o.data.align_y = "TOP"
+            o.location = (e["x"], -e["y"], z)
+    ds.render.image_settings.file_format = "JPEG"
+    ds.render.image_settings.quality = 85
+    ds.render.filepath = str(out / f"{sid}.jpg")
+    bpy.ops.render.render(write_still=True, scene=ds.name)
+    manifest["texts"] = dashboard_texts(layout)
+    manifest["tags"] = [t["label"] for t in tags]
+    manifest["moments"] = [label for _, label in moments(desc)]
+    manifest["dashboard"] = f"{sid}.jpg"
+    manifest["dashboard_sha256"] = hashlib.sha256((out / f"{sid}.jpg").read_bytes()).hexdigest()
+    manifest["render"]["dashboard_samples"] = {"chase": args.samples, "dashboard": 8}
+
+
+def clip(args, desc: dict, ctx: dict, out: Path, manifest: dict) -> None:  # pragma: no cover
+    """The chase view as an MP4, with the overlay of the description on the frame."""
     import bpy
 
-    scene = bpy.context.scene
+    scene = ctx["scene"]
     sid = desc["scenario"]["id"]
-    scene.render.image_settings.file_format = "PNG"
-    scene.render.filepath = str(out / f"{sid}.png")
-    bpy.ops.render.render(write_still=True)
-    if args.blend:
-        bpy.ops.wm.save_as_mainfile(filepath=str(out / f"{sid}.blend"))
-    if args.animate:
-        s = scene.render
-        if hasattr(s.image_settings, "media_type"):
-            s.image_settings.media_type = "VIDEO"
-        s.image_settings.file_format = "FFMPEG"
-        s.ffmpeg.format = "MPEG4"
-        s.ffmpeg.codec = "H264"
-        s.ffmpeg.constant_rate_factor = "MEDIUM"
-        s.filepath = str(out / f"{sid}-")
-        bpy.ops.render.render(animation=True)
-        made = sorted(out.glob(f"{sid}-*.mp4"))
-        if made:
-            made[-1].replace(out / f"{sid}.mp4")
-            manifest["animation"] = f"{sid}.mp4"
+    scene.camera = ctx["camera"]
+    scene.render.resolution_x, scene.render.resolution_y = W, H
+    scene.render.resolution_percentage = args.scale
+    scene.cycles.samples = args.samples
+    s = scene.render
+    if hasattr(s.image_settings, "media_type"):
+        s.image_settings.media_type = "VIDEO"
+    s.image_settings.file_format = "FFMPEG"
+    s.ffmpeg.format = "MPEG4"
+    s.ffmpeg.codec = "H264"
+    s.ffmpeg.constant_rate_factor = "MEDIUM"
+    s.filepath = str(out / f"{sid}-")
+    bpy.ops.render.render(animation=True, scene=scene.name)
+    made = sorted(out.glob(f"{sid}-*.mp4"))
+    if made:
+        made[-1].replace(out / f"{sid}.mp4")
+        manifest["animation"] = f"{sid}.mp4"
 
 
 def main(argv: list[str]) -> int:  # pragma: no cover - needs Blender
@@ -916,12 +1418,12 @@ def main(argv: list[str]) -> int:  # pragma: no cover - needs Blender
     ap.add_argument(
         "scene", type=Path, nargs="+", help="scene description(s), tools/sim/scenes/*.json"
     )
-    ap.add_argument("--out", type=Path, default=Path("build/sim"))
+    ap.add_argument("--out", type=Path, default=Path("build/sim"), help="dashboards and manifests")
+    ap.add_argument("--work", type=Path, default=Path("build/sim/work"), help="the separate views")
     ap.add_argument("--samples", type=int, default=48)
-    ap.add_argument("--scale", type=int, default=100, help="render size in percent of 1600 x 900")
+    ap.add_argument("--scale", type=int, default=100, help="clip size in percent of 1600 x 900")
     ap.add_argument("--animate", action="store_true", help="also render the clip as MP4")
     ap.add_argument("--fps", type=int, default=12)
-    ap.add_argument("--seconds", type=float, default=6.0)
     ap.add_argument("--blend", action="store_true", help="also save the .blend file")
     ap.add_argument(
         "--verify", action="store_true", help="fail when the scene differs from the description"
@@ -931,11 +1433,21 @@ def main(argv: list[str]) -> int:  # pragma: no cover - needs Blender
     args.out.mkdir(parents=True, exist_ok=True)
     failed = 0
     for path in args.scene:
-        desc = json.loads(path.read_text(encoding="utf-8"))
-        manifest = build(desc, args)
-        if not args.no_render:
-            render(args, desc, args.out, manifest)
+        raw = path.read_bytes()
+        desc = json.loads(raw)
         sid = desc["scenario"]["id"]
+        ctx, manifest = build(desc, args)
+        manifest["description"] = f"tools/sim/scenes/{path.name}"
+        manifest["description_sha256"] = hashlib.sha256(raw).hexdigest()
+        manifest["clip_texts"] = manifest.pop("texts")
+        if not args.no_render:
+            dashboard(args, desc, ctx, args.work / sid, args.out, manifest)
+            if args.animate:
+                clip(args, desc, ctx, args.out, manifest)
+        if args.blend:
+            import bpy
+
+            bpy.ops.wm.save_as_mainfile(filepath=str(args.out / f"{sid}.blend"))
         (args.out / f"{sid}.manifest.json").write_text(
             json.dumps(manifest, indent=1, ensure_ascii=False) + "\n", encoding="utf-8"
         )
@@ -946,7 +1458,7 @@ def main(argv: list[str]) -> int:  # pragma: no cover - needs Blender
             failed += 1
         print(
             f"{sid}: built"
-            + ("" if args.no_render else f", rendered to {args.out}")
+            + ("" if args.no_render else f", dashboard {args.out / (sid + '.jpg')}")
             + (f", {len(errs)} difference(s)" if errs else ", matches its description")
         )
     return 1 if failed else 0

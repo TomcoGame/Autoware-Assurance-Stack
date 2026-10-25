@@ -1,10 +1,11 @@
 name: sim-render
 
-# Renders the qualitative scenario scenes in Blender from the committed descriptions (tools/sim/scenes/*.json), checks
-# that each built scene matches its description (build_blend.py --verify: road users where the description puts
-# them, the stamp and every label on the frame), and publishes the stills and manifests as the workflow artifact
-# `scenario-scenes`. Renders are not byte-deterministic and are not committed; see tools/sim/README.md. Every render
-# is stamped "qualitative illustration · not a simulation result" and is not evidence.
+# Re-renders the qualitative scenario scenes in Blender from the committed descriptions (tools/sim/scenes/*.json),
+# checks that each built scene matches its description (build_blend.py --verify: road users where the description
+# puts them, the conditions drawn, the stamp, the credits and every label on the dashboard), and publishes the review
+# dashboards and manifests as the workflow artifact `scenario-scenes`. Advisory: the committed dashboards and their
+# state are checked by sim.yaml without Blender (tools/sim/README.md). Every dashboard is stamped "qualitative
+# illustration · not a simulation result" and is not evidence.
 
 on:
   pull_request:
@@ -52,7 +53,7 @@ jobs:
       - name: Build, verify and render every scene
         env:
           ANIMATE: ${{ inputs.animate && '--animate' || '' }}
-        run: python tools/sim/build_blend.py tools/sim/scenes/*.json --out "$RUNNER_TEMP/sim" --verify $ANIMATE
+        run: python tools/sim/build_blend.py tools/sim/scenes/*.json --out "$RUNNER_TEMP/sim" --work "$RUNNER_TEMP/work" --verify $ANIMATE
 
       - uses: actions/upload-artifact@v4
         with:

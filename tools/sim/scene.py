@@ -26,8 +26,10 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 from pathlib import Path
 import random
+import re
 import sys
 
 HERE = Path(__file__).resolve().parent
@@ -45,9 +47,13 @@ import scenarios as sc  # noqa: E402  (first: it puts the concept generators on 
 import scards  # noqa: E402  isort: skip
 
 OUT = HERE / "scenes"
+GALLERY = HERE / "dashboards"
 STAMP = "qualitative illustration · not a simulation result · draft for engineering review"
 SALT = "tools/sim sample 1"  # change it to draw a different concrete scenario for every layout
 VERSION = 1
+SLOWING = "FSR-03.02"  # the requirement whose firm level the ego is drawn slowing at
+CRUISE_M = 8.0  # metres the ego is drawn cruising before it slows: choreography
+VEHICLE = "DQ-008"  # the decision that chooses the vehicle, and with it the envelope's length
 
 # The vehicle a participant class of ODD-16 is drawn as: a car of the pack (models/CREDITS.md), or a
 # simple primitive where the pack has nothing. Classes without an entry cannot be drawn yet.
@@ -73,8 +79,10 @@ class SceneError(fk.FigureError):
     """A layout or a record does not give what a scene needs."""
 
 
-def rng(sid: str) -> random.Random:
-    seed = int(hashlib.sha256(f"{SALT}:{sid}".encode()).hexdigest()[:16], 16)
+def rng(sid: str, key: str) -> random.Random:
+    """The generator of one parameter of one scenario: a change to one parameter, or a pick, leaves
+    the draws of the others as they were."""
+    seed = int(hashlib.sha256(f"{SALT}:{sid}:{key}".encode()).hexdigest()[:16], 16)
     return random.Random(seed)
 
 
@@ -89,9 +97,9 @@ def sample(s: dict, m: dict, lay: dict, odd: dict) -> list[dict]:
     hardest case. A range that crosses the ODD limit: no value; the scene shows inside and beyond.
     Categorical: the layout's pick, or a seeded draw among the scenario's values. Behaviour bound: no
     value, since the requirement has not fixed one."""
-    r = rng(s["id"])
     out = []
     for p in s.get("parameters") or []:
+        r = rng(s["id"], p.get("odd") or p.get("name", ""))
         name, rng_text, src = sc.param_text(p, m)
         if "bound" in p:
             out.append(
@@ -128,7 +136,6 @@ def sample(s: dict, m: dict, lay: dict, odd: dict) -> list[dict]:
             )
             continue
         lo, hi, unit = p.get("min"), p.get("max"), a["unit"]
-        r.random()  # one draw per parameter, so a change to one range leaves the others as they were
         if p.get("crosses"):
             v, label = None, f"{title}: swept from inside the ODD to beyond its limit"
         elif lo is not None and hi is not None:
@@ -147,7 +154,26 @@ def sample(s: dict, m: dict, lay: dict, odd: dict) -> list[dict]:
                 "label": label,
             }
         )
+    cap(s, m, out)
     return out
+
+
+def cap(s: dict, m: dict, smp: list[dict]) -> None:
+    """Keep the sampled ego speed at or below the sampled posted limit (ODD-20 `capped_by`)."""
+    speed = value(smp, "ODD-20")
+    by = m["odd"]["ODD-20"].get("capped_by")
+    limit = value(smp, by) if by else None
+    if not speed or not limit or speed["value"] is None or limit["value"] is None:
+        return
+    top = limit["value"] * sc.MPH if (limit["unit"], speed["unit"]) == ("mph", "km/h") else None
+    if top is None:
+        raise SceneError(f"{s['id']}: no conversion from {limit['unit']} to {speed['unit']}")
+    if speed["value"] > top:
+        speed["value"] = math.floor(top * 10) / 10
+        speed["label"] = (
+            f"ODD-20 {speed['label'].split(':')[0].split(' ', 1)[1]}: {speed['value']:g} km/h "
+            f"(capped at the sampled {by} limit)"
+        )
 
 
 def value(smp: list[dict], attr: str):
@@ -187,6 +213,54 @@ def conditions(s: dict, m: dict, smp: list[dict], lay: dict) -> dict:
     return out
 
 
+def slowing(k: dict) -> tuple[float, str]:
+    """The level the ego is drawn slowing at, and where it comes from: the firm, non-emergency level
+    of FSR-03.02, the most a stop that the safety channel does not have to confirm may brake."""
+    fsr = next((x for x in sc.misuse.ai.fsc.load()["fsrs"] if x["id"] == SLOWING), None)
+    hit = re.search(r"firm, non-emergency level of ([\d.]+) m/s²", fsr["text"]) if fsr else None
+    if not hit:
+        raise SceneError(f"fsc.yaml: {SLOWING} no longer states its firm level in m/s²")
+    dq = re.findall(r"DQ-\d{3}", fsr["text"])
+    level = float(hit.group(1))
+    return level, (
+        f"Ego slows at {level:g} m/s², the firm level of {SLOWING} ({', '.join(dq)}); "
+        "choreography, not Autoware's planned braking"
+    )
+
+
+def ego_path(sid: str, lay: dict, speed: dict | None, decel: float) -> list[list[float]]:
+    """The ego's path: it ends where the layout stops it, and starts far enough back to cruise
+    CRUISE_M at the sampled speed and then slow at `decel` to that stop."""
+    pts = points(lay["ego"]["path"])
+    if not lay["ego"].get("stops") or not speed or len(pts) < 2:
+        return pts
+    (x0, y0), (x1, y1) = pts[0], pts[1]
+    seg = math.dist(pts[0], pts[1])
+    rest = sum(math.dist(pts[i], pts[i + 1]) for i in range(1, len(pts) - 1))
+    v = speed["value"] / 3.6
+    need = CRUISE_M + v * v / (2 * decel) - rest
+    if need <= 0:
+        raise SceneError(f"{sid}: the ego's path is longer than its cruise and stop need")
+    ux, uy = (x1 - x0) / seg, (y1 - y0) / seg
+    return [[round(x1 - ux * need, 2), round(y1 - uy * need, 2)]] + pts[1:]
+
+
+def condition_label(smp: list[dict]) -> str:
+    """The light, surface and weather of the sample, in a few words for the dashboard header."""
+    out = []
+    for attr in ("ODD-12", "ODD-13", "ODD-10", "ODD-11"):
+        v = value(smp, attr)
+        if not v:
+            continue
+        if v.get("crosses"):
+            out.append(f"{attr} across the limit")
+        elif "unit" in v:
+            out.append(f"{attr} {v['value']:g} {v['unit']}")
+        else:
+            out.append(f"{attr} {v['value']}")
+    return " · ".join(out) or "not set by the scenario"
+
+
 def actor_kind(s: dict, a: dict, smp: list[dict]) -> str:
     kind = a["kind"]
     if isinstance(kind, dict):
@@ -209,6 +283,24 @@ def features(s: dict, lay: dict, smp: list[dict]) -> list[str]:
             raise SceneError(f"{s['id']}: layout features depend on {attr}, not a parameter")
         out += by_value.get(v["value"], [])
     return sorted(set(out))
+
+
+def restricted(s: dict) -> str:
+    """Why a scenario must not be drawn, or "": one that rests on the remote operations link or a
+    cybersecurity requirement would show security architecture (CLAUDE.md, WP-M-09 §4)."""
+    link = [
+        v
+        for p in s.get("parameters") or []
+        if p.get("odd") == "ODD-15"
+        for v in p.get("values") or []
+        if v.startswith("link")
+    ]
+    if link:
+        return f"it varies the remote operations link (ODD-15 {', '.join(link)})"
+    cs = [r for r in s["pass"]["refs"] if r.startswith("CSR-")]
+    if cs:
+        return f"its pass criterion rests on {', '.join(cs)}"
+    return ""
 
 
 def check_layout(sid: str, lay: dict) -> list[str]:
@@ -237,6 +329,9 @@ def points(pts) -> list[list[float]]:
 def scene(s: dict, m: dict, k: dict, f: fx.Facts) -> dict:
     sid = s["id"]
     lay = LAYOUTS[sid]
+    why = restricted(s)
+    if why:
+        raise SceneError(f"{sid}: not drawn, because {why}; remove its layout")
     errs = check_layout(sid, lay)
     if errs:
         raise SceneError("; ".join(errs))
@@ -257,12 +352,18 @@ def scene(s: dict, m: dict, k: dict, f: fx.Facts) -> dict:
     call = scards.SCENES.get(sid, {}).get("call")
     if not call:
         raise SceneError(f"{sid}: WP-V-03 Figure 2-1 (scards.py) has no 'meant to do' line")
+    if VEHICLE in f.decisions:
+        raise SceneError(
+            f"{VEHICLE} is applied: the vehicle is chosen, so the envelope legend and ENVELOPE_M "
+            "of build_blend.py need revisiting"
+        )
     for eid in ("EL-01", "EL-02"):
         if eid not in f.elements:
             raise SceneError(f"WP-C-04: no element {eid}")
     aw, mon = f.elements["EL-01"], f.elements["EL-02"]
     speed = value(smp, "ODD-20")
     posted = value(smp, "ODD-03")
+    decel, motion_label = slowing(k)
     actors = []
     for a in lay.get("actors", []):
         kind = actor_kind(s, a, smp)
@@ -286,6 +387,17 @@ def scene(s: dict, m: dict, k: dict, f: fx.Facts) -> dict:
             "unit": posted["unit"],
         }
     cond = conditions(s, m, smp, lay)
+    legend_extra = {}
+    if any(a["role"] == "key" for a in actors):
+        legend_extra["key"] = "Amber, ringed: the road user the scenario is about"
+    if lay.get("occlusion"):
+        legend_extra["occlusion"] = "Grey area: what the parked vehicle hides from the ego"
+    if cond.get("beyond"):
+        legend_extra["odd_limit"] = (
+            "Violet curtain: where the drawing passes the ODD limit of "
+            + ", ".join(cond["beyond"]["attributes"])
+            + "; beyond it drawn denser, no value stated"
+        )
     return {
         "version": VERSION,
         "generator": "tools/sim/scene.py",
@@ -299,30 +411,36 @@ def scene(s: dict, m: dict, k: dict, f: fx.Facts) -> dict:
             "triggers": triggers,
             "goals": goals,
             "monitors": [{"id": x, "name": f.monitors[x]} for x in monitors],
+            "misuse": s.get("misuse") or [],
+            "losses": s.get("losses") or [],
+            "methods": [sc.METHODS[x] for x in s["methods"]],
             "meant": call[1],
             "pass": s["pass"]["criterion"],
             "pass_refs": s["pass"]["refs"],
             "source": "assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)",
         },
         "sample": {"salt": SALT, "parameters": smp},
+        "condition_label": condition_label(smp),
         "conditions": cond,
         "legend": {
             "plan": f"Autoware's planned path ({aw.eid} {aw.name}, rated {aw.asil})",
             "envelope": (
-                f"{mon.name}'s envelope ({mon.eid}, ASIL {mon.asil}); length not computed, "
-                "the vehicle is not chosen"
+                f"{mon.name}'s envelope ({mon.eid}, ASIL {mon.asil}); length not computed: "
+                f"the vehicle is not chosen yet ({VEHICLE})"
             ),
             "meant": f"Meant to do: {call[1]}",
             "hazard": "Where the hazard lies: "
             + ("; ".join(f"{e['id']} {e['description']}" for e in events) or s["name"]),
-            "key": "The road user or condition the scenario is about",
-        },
+        }
+        | legend_extra,
         "road": road,
         "features": features(s, lay, smp),
         "ego": {
-            "path": points(lay["ego"]["path"]),
+            "path": ego_path(sid, lay, speed, decel),
             "stops": bool(lay["ego"].get("stops")),
             "speed_kmh": speed["value"] if speed else None,
+            "decel": decel,
+            "motion_label": motion_label,
         },
         "plan": points(lay["plan"]),
         "occlusion": points(lay.get("occlusion", [])),
@@ -335,6 +453,82 @@ def scene(s: dict, m: dict, k: dict, f: fx.Facts) -> dict:
     }
 
 
+def render_state(sid: str, text: str) -> tuple[str, dict]:
+    """Whether the committed dashboard of a scene was rendered from its current description."""
+    mf = GALLERY / f"{sid}.manifest.json"
+    jpg = GALLERY / f"{sid}.jpg"
+    if not mf.exists() or not jpg.exists():
+        return "not rendered", {}
+    man = json.loads(mf.read_text(encoding="utf-8"))
+    if man.get("dashboard_sha256") != hashlib.sha256(jpg.read_bytes()).hexdigest():
+        return "**stale**: the picture is not the one its manifest records", man
+    if man.get("description_sha256") != hashlib.sha256(text.encode("utf-8")).hexdigest():
+        return "**stale**: the description changed since the render", man
+    errs = verify_manifest(sid, man)
+    if errs:
+        return "**stale**: " + "; ".join(errs), man
+    return "current", man
+
+
+def verify_manifest(sid: str, man: dict) -> list[str]:
+    import build_blend  # noqa: PLC0415  (plain Python above its Blender part)
+
+    desc = json.loads((OUT / f"{sid}.json").read_text(encoding="utf-8"))
+    return build_blend.verify(desc, man)
+
+
+def gallery(descs: dict[str, dict], texts: dict[str, str]) -> str:
+    """The page of the committed review dashboards, with the state of each render."""
+    rows = [
+        "| Dashboard | Scenario | Safety goals at stake | Events and triggering conditions | Condition (sample) | Render |",
+        "|---|---|---|---|---|---|",
+    ]
+    for sid, d in descs.items():
+        state, man = render_state(sid, texts[sid])
+        sc_ = d["scenario"]
+        goals = ", ".join(f"{g['id']} ({g['asil']})" for g in sc_["goals"]) or "—"
+        ev = ", ".join([e["id"] for e in sc_["events"]] + [t["id"] for t in sc_["triggers"]])
+        link = f"[{sid}]({sid}.jpg)" if man else sid
+        made = f"{state}; Blender {man.get('blender', '?')}" if man else state
+        rows.append(
+            f"| {link} | {sc_['name']} | {goals} | {ev or '—'} | {d['condition_label']} | {made} |"
+        )
+    first = next((s for s in descs if (GALLERY / f"{s}.jpg").exists()), None)
+    hero = (
+        [
+            f"![Review dashboard of {first}: {descs[first]['scenario']['name']}; the chase view in the "
+            "middle with the road users tagged, the forward and top views on the right, the scenario's "
+            "records on the left, the moments of the clip along the bottom]"
+            f"({first}.jpg)",
+            "",
+        ]
+        if first
+        else []
+    )
+    return "\n".join(
+        [
+            "# Scenario scene dashboards",
+            "",
+            f"> [!WARNING]\n> **{STAMP.capitalize()}.** Pictures for understanding and review only: no "
+            "simulation has been run, nothing here is verification or validation evidence, and no "
+            "scenario has been run (WP-V-03 §4).",
+            "",
+            "One review dashboard per scene of [`../scenes/`](../scenes/), rendered in Blender by "
+            "[`../build_blend.py`](../build_blend.py) and explained in [`../README.md`](../README.md). "
+            "This page is generated by [`../scene.py`](../scene.py); the Render column says whether "
+            "each committed dashboard was made from the current description of its scene (the "
+            "manifest beside it records the description's SHA-256, the picture's, and what was "
+            "built). Re-render a stale one with "
+            "`build_blend.py tools/sim/scenes/<id>.json --out tools/sim/dashboards --verify`, then "
+            "run `scene.py`.",
+            "",
+            *hero,
+            *rows,
+            "",
+        ]
+    )
+
+
 def build() -> dict[Path, str]:
     m, k, f = sc.load(), sc.known(), fx.load()
     errs = sc.check(m, k)
@@ -344,11 +538,14 @@ def build() -> dict[Path, str]:
     missing = sorted(set(LAYOUTS) - set(by_id))
     if missing:
         raise SceneError(f"layouts.py: no scenario {', '.join(missing)} in scenarios.yaml")
-    out = {}
+    out, descs = {}, {}
     for sid in sorted(LAYOUTS):
-        text = json.dumps(scene(by_id[sid], m, k, f), indent=1, ensure_ascii=False) + "\n"
+        descs[sid] = scene(by_id[sid], m, k, f)
+        text = json.dumps(descs[sid], indent=1, ensure_ascii=False) + "\n"
         out[OUT / f"{sid}.json"] = text
+    out[GALLERY / "README.md"] = gallery(descs, {s: out[OUT / f"{s}.json"] for s in descs})
     orphans = sorted(p.name for p in OUT.glob("*.json") if p not in out)
+    orphans += sorted(p.name for p in GALLERY.glob("SC-*.*") if p.name.split(".")[0] not in descs)
     if orphans:
         raise SceneError(f"scenes/: {', '.join(orphans)} has no layout; delete it")
     return out

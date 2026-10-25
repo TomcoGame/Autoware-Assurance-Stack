@@ -53,6 +53,18 @@
    }
   ],
   "monitors": [],
+  "misuse": [
+   "MU-14"
+  ],
+  "losses": [
+   "LS-03",
+   "LS-04"
+  ],
+  "methods": [
+   "Simulation",
+   "In the loop",
+   "Track"
+  ],
   "meant": "keeps a safe gap as it brakes",
   "pass": "No collision with the vehicle ahead; acceleration stays inside the envelope, the monitor restores the safe longitudinal distance, and a braking shortfall on a wet road switches to the secondary path",
   "pass_refs": [
@@ -74,10 +86,10 @@
    {
     "parameter": "ODD-20",
     "range": "0 to 48 km/h",
-    "value": 17.2,
+    "value": 19.9,
     "unit": "km/h",
     "crosses": false,
-    "label": "ODD-20 Ego speed: 17.2 km/h (range 0 to 48 km/h)"
+    "label": "ODD-20 Ego speed: 19.9 km/h (range 0 to 48 km/h)"
    },
    {
     "parameter": "ODD-03",
@@ -98,10 +110,10 @@
    {
     "parameter": "ODD-16",
     "range": "car, van, bus, truck, motorcycle",
-    "value": "car",
+    "value": "motorcycle",
     "chosen": "seeded",
     "outside": false,
-    "label": "ODD-16 Traffic participants: car"
+    "label": "ODD-16 Traffic participants: motorcycle"
    },
    {
     "parameter": "ODD-13",
@@ -114,10 +126,10 @@
    {
     "parameter": "ODD-10",
     "range": "0 to 2.5 mm/h",
-    "value": 2.2,
+    "value": 1.5,
     "unit": "mm/h",
     "crosses": false,
-    "label": "ODD-10 Precipitation: 2.2 mm/h (range 0 to 2.5 mm/h)"
+    "label": "ODD-10 Precipitation: 1.5 mm/h (range 0 to 2.5 mm/h)"
    },
    {
     "parameter": "Deceleration of the lead vehicle and cut-in gap",
@@ -127,20 +139,21 @@
    }
   ]
  },
+ "condition_label": "ODD-13 wet · ODD-10 1.5 mm/h",
  "conditions": {
   "light": "day",
   "surface": "wet",
-  "rain": 2.2,
+  "rain": 1.5,
   "visibility": null,
   "beyond": null,
   "rain_limit": 2.5
  },
  "legend": {
   "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
-  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed, the vehicle is not chosen",
+  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
   "meant": "Meant to do: keeps a safe gap as it brakes",
   "hazard": "Where the hazard lies: HE-01.2 Accelerates into the vehicle ahead; HE-02.2 Does not brake when the vehicle ahead slows or stops",
-  "key": "The road user or condition the scenario is about"
+  "key": "Amber, ringed: the road user the scenario is about"
  },
  "road": {
   "length": [
@@ -158,7 +171,7 @@
   "path": [
    [
     1.75,
-    0.0
+    7.91
    ],
    [
     1.75,
@@ -166,7 +179,9 @@
    ]
   ],
   "stops": true,
-  "speed_kmh": 17.2
+  "speed_kmh": 19.9,
+  "decel": 3.0,
+  "motion_label": "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking"
  },
  "plan": [
   [
@@ -188,9 +203,9 @@
  "actors": [
   {
    "role": "key",
-   "class": "car",
-   "drawn_as": "sedan",
-   "label": "car",
+   "class": "motorcycle",
+   "drawn_as": "box:motorcycle",
+   "label": "motorcycle",
    "path": [
     [
      1.75,

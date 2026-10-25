@@ -48,6 +48,15 @@
     "name": "Weather and visibility"
    }
   ],
+  "misuse": [],
+  "losses": [
+   "LS-07",
+   "LS-27"
+  ],
+  "methods": [
+   "Simulation",
+   "Road"
+  ],
   "meant": "sees the ODD exit and stops safely",
   "pass": "The weather monitor detects the exit, treats a reading it cannot tell from the limit as outside, and the vehicle reaches a minimal risk condition; detection inside the ODD still meets the safety channel's requirement",
   "pass_refs": [
@@ -69,10 +78,10 @@
    {
     "parameter": "ODD-20",
     "range": "0 to 48 km/h",
-    "value": 22.8,
+    "value": 30.7,
     "unit": "km/h",
     "crosses": false,
-    "label": "ODD-20 Ego speed: 22.8 km/h (range 0 to 48 km/h)"
+    "label": "ODD-20 Ego speed: 30.7 km/h (range 0 to 48 km/h)"
    },
    {
     "parameter": "ODD-10",
@@ -116,6 +125,7 @@
    }
   ]
  },
+ "condition_label": "ODD-12 dusk · ODD-13 wet · ODD-10 across the limit · ODD-11 across the limit",
  "conditions": {
   "light": "dusk",
   "surface": "wet",
@@ -133,10 +143,10 @@
  },
  "legend": {
   "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
-  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed, the vehicle is not chosen",
+  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
   "meant": "Meant to do: sees the ODD exit and stops safely",
   "hazard": "Where the hazard lies: Weather changing toward the ODD limits during a trip",
-  "key": "The road user or condition the scenario is about"
+  "odd_limit": "Violet curtain: where the drawing passes the ODD limit of ODD-10, ODD-11; beyond it drawn denser, no value stated"
  },
  "road": {
   "length": [
@@ -152,7 +162,7 @@
   "path": [
    [
     1.75,
-    0.0
+    19.88
    ],
    [
     1.75,
@@ -160,7 +170,9 @@
    ]
   ],
   "stops": true,
-  "speed_kmh": 22.8
+  "speed_kmh": 30.7,
+  "decel": 3.0,
+  "motion_label": "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking"
  },
  "plan": [
   [

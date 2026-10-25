@@ -1,0 +1,141 @@
+{
+ "scenario": "SC-03",
+ "blender": "5.2.3 LTS",
+ "render": {
+  "engine": "CYCLES",
+  "samples": 48,
+  "size": [
+   1600,
+   900
+  ],
+  "still_frame": 40,
+  "frames": 51,
+  "fps": 12,
+  "dashboard_samples": {
+   "chase": 48,
+   "dashboard": 8
+  }
+ },
+ "objects": {
+  "ego": [
+   1.75,
+   21.0
+  ],
+  "actor0-motorcycle": [
+   1.75,
+   29.0
+  ],
+  "actor1-car": [
+   -1.75,
+   32.0
+  ]
+ },
+ "drawn": {
+  "light": "day",
+  "wet": true,
+  "rain": true,
+  "fog": false,
+  "beyond": [],
+  "features": [
+   "queue"
+  ],
+  "stop_line": false,
+  "speed_sign": false,
+  "occlusion": false
+ },
+ "description": "tools/sim/scenes/SC-03.json",
+ "description_sha256": "ac2fd37dd767cbc5d202c07a37af3dd667fa399e26424e74efb49bcf7887382c",
+ "clip_texts": [
+  "SC-03 Vehicle ahead braking or stopping in congested traffic",
+  "The vehicle follows another in congestion or in free flow; the lead vehicle brakes hard, stops, or another vehicle cuts\nin",
+  "One concrete scenario (seeded sample of the logical\nscenario)",
+  "ODD-20 Ego speed: 19.9 km/h (range 0 to 48 km/h)",
+  "ODD-03 Posted speed limit: 30 mph (the stated bound)",
+  "ODD-17 Traffic density: congested",
+  "ODD-16 Traffic participants: motorcycle",
+  "ODD-13 Road surface condition: wet",
+  "ODD-10 Precipitation: 1.5 mm/h (range 0 to 2.5 mm/h)",
+  "Deceleration of the lead vehicle and cut-in gap: Bound stated by\nFSR-06.01, not yet fixed; the motion drawn is choreography",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033);\nchoreography, not Autoware's planned braking",
+  "Safety goals at stake",
+  "SG-01 (ASIL D): Avoid unintended acceleration",
+  "SG-02 (ASIL D): Decelerate at least as much as needed to avoid a\ncollision the planned trajectory avoids",
+  "SG-04 (ASIL D): Avoid unintended lateral motion out of the planned\npath",
+  "SG-06 (ASIL D): Do not enter an intersection, roundabout or\ncrosswalk against right of way",
+  "Pass criterion",
+  "No collision with the vehicle ahead; acceleration stays inside the\nenvelope, the monitor restores the safe longitudinal distance, and\na braking shortfall on a wet road switches to the secondary path\n(FSR-01.01, FSR-01.02, FSR-02.02, FSR-02.03, FSR-02.05, FSR-03.02,\nFSR-04.05, FSR-06.01, AC-02)",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Meant to do: keeps a safe gap as it brakes",
+  "Where the hazard lies: HE-01.2 Accelerates into the vehicle ahead; HE-02.2 Does not brake when the vehicle ahead slows or stops",
+  "Amber, ringed: the road user the scenario is about",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "texts": [
+  "SC-03 Vehicle ahead braking or stopping in congested traffic",
+  "SG-01 ASIL D",
+  "+3 more",
+  "Motion",
+  "choreography (qualitative)",
+  "Condition",
+  "ODD-13 wet · ODD-10 1.5 mm/h",
+  "Ego speed (sample)",
+  "19.9 km/h",
+  "Methods (WP-V-03)",
+  "Simulation, In the loop, Track",
+  "Scenario (WP-V-03)",
+  "The vehicle follows another in congestion or in free flow; the lead vehicle brakes hard, stops, or another vehicle cuts in",
+  "Hazardous events (WP-C-03)",
+  "HE-01.2 Accelerates into the vehicle ahead",
+  "HE-02.2 Does not brake when the vehicle ahead slows or stops",
+  "Triggering conditions (WP-C-06)",
+  "TC-11 Large vehicles alongside, blocking the LiDAR's view of the surroundings",
+  "TC-25 Wet road reducing grip during braking or turning",
+  "Situations: OS-08, OS-01",
+  "Misuse (WP-C-08): MU-14",
+  "Loss scenarios (WP-A-05): LS-03, LS-04",
+  "One concrete scenario (seeded sample)",
+  "ODD-20 Ego speed: 19.9 km/h (range 0 to 48 km/h)",
+  "ODD-03 Posted speed limit: 30 mph (the stated bound)",
+  "ODD-17 Traffic density: congested",
+  "ODD-16 Traffic participants: motorcycle",
+  "ODD-13 Road surface condition: wet",
+  "ODD-10 Precipitation: 1.5 mm/h (range 0 to 2.5 mm/h)",
+  "Deceleration of the lead vehicle and cut-in gap: Bound stated by FSR-06.01, not yet fixed; the motion drawn is choreography",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "Ego robotaxi (choreography)",
+  "Car (qualitative)",
+  "Motorcycle (qualitative)",
+  "Meant to do: keeps a safe gap as it brakes",
+  "Pass criterion: No collision with the vehicle ahead; acceleration stays inside the envelope, the monitor restores the safe longitudinal distance, and a braking shortfall on a wet road switches to the secondary path (FSR-01.01, FSR-01.02, FSR-02.02, FSR-02.03, FSR-02.05, FSR-03.02, FSR-04.05, FSR-06.01, AC-02)",
+  "start",
+  "vehicle starts to slow",
+  "the moment in the main view",
+  "Forward view",
+  "Top view: planned path, envelope, hazard",
+  "Safety goals at stake",
+  "SG-01 (ASIL D): Avoid unintended acceleration",
+  "SG-02 (ASIL D): Decelerate at least as much as needed to avoid a collision the planned trajectory avoids",
+  "SG-04 (ASIL D): Avoid unintended lateral motion out of the planned path",
+  "SG-06 (ASIL D): Do not enter an intersection, roundabout or crosswalk against right of way",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Where the hazard lies: HE-01.2 Accelerates into the vehicle ahead; HE-02.2 Does not brake when the vehicle ahead slows or stops",
+  "Amber, ringed: the road user the scenario is about",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "tags": [
+  "Ego robotaxi (choreography)",
+  "Motorcycle (qualitative)",
+  "Car (qualitative)"
+ ],
+ "moments": [
+  "start",
+  "vehicle starts to slow",
+  "the moment in the main view"
+ ],
+ "dashboard": "SC-03.jpg",
+ "dashboard_sha256": "1c30a22e5760932d09752b6240a744a400f7e07865d2c95227fb948d4edf6512"
+}

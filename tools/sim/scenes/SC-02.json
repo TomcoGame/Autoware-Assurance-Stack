@@ -44,6 +44,17 @@
    }
   ],
   "monitors": [],
+  "misuse": [
+   "MU-10"
+  ],
+  "losses": [
+   "LS-01",
+   "LS-02"
+  ],
+  "methods": [
+   "Simulation",
+   "Track"
+  ],
   "meant": "slow enough to stop for anyone emerging",
   "pass": "The vehicle's speed near the occlusion lets it stop for a road user emerging at the assumed speed; no contact, and no swerve out of the drivable area to avoid one",
   "pass_refs": [
@@ -62,10 +73,10 @@
    {
     "parameter": "ODD-20",
     "range": "0 to 48 km/h",
-    "value": 7.7,
+    "value": 42.7,
     "unit": "km/h",
     "crosses": false,
-    "label": "ODD-20 Ego speed: 7.7 km/h (range 0 to 48 km/h)"
+    "label": "ODD-20 Ego speed: 42.7 km/h (range 0 to 48 km/h)"
    },
    {
     "parameter": "ODD-05",
@@ -107,6 +118,7 @@
    }
   ]
  },
+ "condition_label": "ODD-12 day",
  "conditions": {
   "light": "day",
   "surface": "dry",
@@ -116,10 +128,11 @@
  },
  "legend": {
   "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
-  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed, the vehicle is not chosen",
+  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
   "meant": "Meant to do: slow enough to stop for anyone emerging",
   "hazard": "Where the hazard lies: HE-04.3 Steers onto the sidewalk at low speed",
-  "key": "The road user or condition the scenario is about"
+  "key": "Amber, ringed: the road user the scenario is about",
+  "occlusion": "Grey area: what the parked vehicle hides from the ego"
  },
  "road": {
   "length": [
@@ -135,7 +148,7 @@
   "path": [
    [
     1.75,
-    0.0
+    -10.45
    ],
    [
     1.75,
@@ -143,7 +156,9 @@
    ]
   ],
   "stops": true,
-  "speed_kmh": 7.7
+  "speed_kmh": 42.7,
+  "decel": 3.0,
+  "motion_label": "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking"
  },
  "plan": [
   [
@@ -176,7 +191,7 @@
  "hazard": [
   0.0,
   25.0,
-  3.5,
+  9.0,
   30.0
  ],
  "actors": [

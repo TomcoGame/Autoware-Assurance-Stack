@@ -51,6 +51,18 @@
    }
   ],
   "monitors": [],
+  "misuse": [
+   "MU-11"
+  ],
+  "losses": [
+   "LS-01",
+   "LS-02"
+  ],
+  "methods": [
+   "Simulation",
+   "Track",
+   "Road"
+  ],
   "meant": "yields before the crosswalk",
   "pass": "No contact with the pedestrian; the vehicle yields as the traffic rules require, and the monitor commands the deceleration that restores the safe distance whenever Autoware does not; unjustified hard braking counts against the SOTIF acceptance criteria",
   "pass_refs": [
@@ -70,10 +82,10 @@
    {
     "parameter": "ODD-20",
     "range": "0 to 48 km/h",
-    "value": 40.1,
+    "value": 47.9,
     "unit": "km/h",
     "crosses": false,
-    "label": "ODD-20 Ego speed: 40.1 km/h (range 0 to 48 km/h)"
+    "label": "ODD-20 Ego speed: 47.9 km/h (range 0 to 48 km/h)"
    },
    {
     "parameter": "ODD-03",
@@ -86,10 +98,10 @@
    {
     "parameter": "ODD-05",
     "range": "marked-crosswalk, signalised-crosswalk",
-    "value": "signalised-crosswalk",
+    "value": "marked-crosswalk",
     "chosen": "seeded",
     "outside": false,
-    "label": "ODD-05 Crossings: signalised-crosswalk"
+    "label": "ODD-05 Crossings: marked-crosswalk"
    },
    {
     "parameter": "ODD-16",
@@ -110,10 +122,10 @@
    {
     "parameter": "ODD-10",
     "range": "0 to 2.5 mm/h",
-    "value": 0.9,
+    "value": 0.6,
     "unit": "mm/h",
     "crosses": false,
-    "label": "ODD-10 Precipitation: 0.9 mm/h (range 0 to 2.5 mm/h)"
+    "label": "ODD-10 Precipitation: 0.6 mm/h (range 0 to 2.5 mm/h)"
    },
    {
     "parameter": "ODD-13",
@@ -131,20 +143,21 @@
    }
   ]
  },
+ "condition_label": "ODD-12 night · ODD-13 wet · ODD-10 0.6 mm/h",
  "conditions": {
   "light": "night",
   "surface": "wet",
-  "rain": 0.9,
+  "rain": 0.6,
   "visibility": null,
   "beyond": null,
   "rain_limit": 2.5
  },
  "legend": {
   "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
-  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed, the vehicle is not chosen",
+  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
   "meant": "Meant to do: yields before the crosswalk",
   "hazard": "Where the hazard lies: HE-02.1 Does not slow down for a pedestrian on the crosswalk; HE-06.4 Does not yield to a pedestrian on the crosswalk",
-  "key": "The road user or condition the scenario is about"
+  "key": "Amber, ringed: the road user the scenario is about"
  },
  "road": {
   "length": [
@@ -168,22 +181,22 @@
    "unit": "mph"
   }
  },
- "features": [
-  "ped_signals"
- ],
+ "features": [],
  "ego": {
   "path": [
    [
     1.75,
-    0.0
+    -12.31
    ],
    [
     1.75,
-    26.0
+    25.2
    ]
   ],
   "stops": true,
-  "speed_kmh": 40.1
+  "speed_kmh": 47.9,
+  "decel": 3.0,
+  "motion_label": "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking"
  },
  "plan": [
   [
