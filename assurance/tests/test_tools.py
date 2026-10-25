@@ -429,6 +429,18 @@ class Fsc(unittest.TestCase):
         self.assertEqual(sorted(re.findall(r'class="gid">(SG-\d\d)<', svg)), sorted(self.sg))
         self.assertIn("SG-99: no scene", fsc.envelope.check({**self.sg, "SG-99": {}})[0])
 
+    def test_safety_view_places_every_element_on_its_side_of_the_boundary(self):
+        self.assertEqual(fsc.safetyview.check(self.m), [])
+        svg = fsc.safetyview.figure(self.m, fsc.element_asil(self.m))
+        for e in self.m["elements"]:
+            self.assertIn(f">{e['id']}<", svg, e["id"])
+        bad = copy.deepcopy(self.m)
+        bad["elements"].append({"id": "EL-10", "name": "New", "in_item": True})
+        self.assertIn("EL-10: no place in the safety view", fsc.safetyview.check(bad)[0])
+        bad = copy.deepcopy(self.m)
+        next(e for e in bad["elements"] if e["id"] == "EL-04")["in_item"] = True
+        self.assertIn("EL-04: drawn on the wrong side", " ".join(fsc.safetyview.check(bad)))
+
     def test_fsrs_csv_traces_every_requirement(self):
         import csv
 
