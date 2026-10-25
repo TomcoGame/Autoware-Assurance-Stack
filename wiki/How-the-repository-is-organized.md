@@ -25,6 +25,10 @@ The Autoware repository holds no driving code itself: the packages live in the r
 
 ## Inside `assurance/`
 
+![Where each part is documented: the robotaxi with leader lines from its parts to six folders of assurance/ (hardware, concept, validation, production and operation, software, system) and what each holds.](../tools/readme/figures/repository-map.svg)
+
+*Illustration: positions are illustrative. Folder descriptions from the Layout table of [`assurance/README.md`](../assurance/README.md#layout). Labels read from the work products by [`figures.py`](../tools/readme/figures.py); vehicle models CC BY 4.0, see [credits](../tools/readme/models/CREDITS.md).*
+
 The numbered folders follow the lifecycle, from management and concept through system, hardware and software
 development to validation, operation and the safety case. The table of folders, with the standard clauses each one
 answers, is in [`assurance/README.md`](../assurance/README.md#layout). Each numbered folder has a README generated from
