@@ -314,3 +314,102 @@ If the pinned version is **not** reachable from any configured source, apt silen
 newest candidate instead — but the post-install verification (see `tasks/verify.yaml`) now catches
 that and fails the run. Keep the override list as small as possible and drop entries once the
 snapshot date catches up.
+
+## Abbreviations, terms and symbols
+
+| Term                                                  | Meaning                                                                                                                             |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| aarch64                                               | The 64-bit ARM processor architecture, used by ARM servers and NVIDIA Jetson boards                                                 |
+| amd64                                                 | Debian and Ubuntu's name for the 64-bit Intel/AMD processor architecture (the same as `x86_64`)                                     |
+| APT                                                   | Advanced Package Tool: Ubuntu's package manager, used to install, update and remove system software                                 |
+| apt-get                                               | The older, script-friendly command-line front end of apt; it does the same job as `apt`                                             |
+| apt-helper                                            | An internal apt program the script calls to read package indexes                                                                    |
+| apt-mark hold                                         | An apt command that freezes a package at its installed version so upgrades leave it alone                                           |
+| `apt-mark showmanual`                                 | An apt command that lists the packages installed on purpose rather than as dependencies                                             |
+| arch                                                  | Short for architecture: the processor family, such as amd64 or arm64                                                                |
+| arm64                                                 | Debian and Ubuntu's name for the 64-bit ARM processor architecture (the same as `aarch64`)                                          |
+| atomically                                            | All in one step, so no part changes without the others                                                                              |
+| bare metal                                            | Installed directly on a physical machine rather than inside a container                                                             |
+| base image                                            | The container image a Dockerfile starts from                                                                                        |
+| `BASE_IMAGE_DIGESTS`                                  | The map in `docker-bake.hcl` that records the exact digest of each base image                                                       |
+| candidate                                             | The version apt would install if asked now                                                                                          |
+| canonicalizes                                         | Rewrites into the standard form                                                                                                     |
+| CI                                                    | Continuous Integration: the automatic builds and checks that run on every change                                                    |
+| closure                                               | The complete set of packages pulled in together, including everything they depend on                                                |
+| container                                             | An isolated environment, started from an image, with its own files and libraries                                                    |
+| CPU                                                   | Central Processing Unit: the computer's main processor                                                                              |
+| CUDA                                                  | Compute Unified Device Architecture: NVIDIA's toolkit for running general computation on its GPUs                                   |
+| Debian architecture name                              | The processor name Debian and Ubuntu use in package names, such as amd64                                                            |
+| `Depends`                                             | The field of a package that lists the packages it cannot work without                                                               |
+| digest                                                | A content hash that identifies one exact version of a container image                                                               |
+| distro                                                | Short for distribution: a release of Ubuntu or of ROS 2                                                                             |
+| Docker                                                | A tool that runs software in containers, isolated environments that carry their own files and libraries                             |
+| `docker-bake.hcl`                                     | A Docker Bake file, in HashiCorp Configuration Language, that describes several image builds                                        |
+| Dockerfile                                            | A file of instructions Docker follows to build a container image                                                                    |
+| downgrade                                             | Install an older version than the one present                                                                                       |
+| dpkg                                                  | The low-level Debian/Ubuntu tool that installs and queries `.deb` package files; apt uses it underneath                             |
+| `dpkg-query`                                          | A command that shows which packages and versions are installed                                                                      |
+| drift                                                 | An installed version that differs from the one in the lockfile                                                                      |
+| freeze                                                | Holding every covered package at its locked version                                                                                 |
+| `gdown`                                               | A tool for downloading files from Google Drive, formerly used by this project                                                       |
+| hold                                                  | An apt setting that freezes one package at its installed version                                                                    |
+| idiom                                                 | The usual way of writing something                                                                                                  |
+| index                                                 | The list of packages and versions a repository offers                                                                               |
+| `install_dev_env`, `install_docker`, `install_nvidia` | This collection's playbooks for the development environment, Docker and the NVIDIA software                                         |
+| kernel                                                | The core of the Linux operating system                                                                                              |
+| Launchpad                                             | Ubuntu's code hosting site, which hosts PPAs                                                                                        |
+| locked mode                                           | A run with `use_locked_versions=true`, which installs the lockfile's versions                                                       |
+| lockfile                                              | A file listing the exact version of every package to install                                                                        |
+| mapping                                               | In YAML, a set of key: value pairs                                                                                                  |
+| metapackage                                           | A package that contains nothing itself but pulls in other packages                                                                  |
+| noble                                                 | The code name of Ubuntu 24.04                                                                                                       |
+| NVIDIA                                                | The company that makes the GPUs and GPU software (CUDA, TensorRT, drivers) used by Autoware                                         |
+| operator                                              | The person running and maintaining the machine                                                                                      |
+| origin                                                | The repository a package comes from, as apt names it                                                                                |
+| `package.xml`                                         | The file that describes a ROS package and its dependencies                                                                          |
+| pin                                                   | An APT preference that makes apt install one exact version or prefer one source                                                     |
+| `Pin-Priority`                                        | How strongly apt prefers a pinned version; above 1000 apt installs it even if that means a downgrade, and 500 is the normal default |
+| pip                                                   | Python's package installer                                                                                                          |
+| pipx                                                  | A tool that installs Python command-line applications, each in its own isolated environment                                         |
+| playbook                                              | An Ansible file that lists which roles and tasks to run; this repository's main one is `install_dev_env`                            |
+| PPA                                                   | Personal Package Archive: a third-party apt repository hosted on Launchpad, Ubuntu's code hosting site                              |
+| PR                                                    | Pull Request: a proposed change submitted for review on GitHub                                                                      |
+| preferences file                                      | A file in `/etc/apt/preferences.d/` that tells apt which versions to prefer                                                         |
+| Python package index                                  | PyPI, the public site that pip downloads Python packages from                                                                       |
+| reconcile                                             | Changing installed packages to the versions the snapshot serves                                                                     |
+| reproducible                                          | Giving the same result each time it is installed                                                                                    |
+| role                                                  | A reusable unit of Ansible tasks that installs or configures one thing; each folder under `ansible/roles/` is a role                |
+| rolling                                               | Continuously updated, always serving the newest build                                                                               |
+| ROS                                                   | Robot Operating System: the open-source framework of tools and libraries that robot software such as Autoware is built on           |
+| rosdep                                                | A tool that installs the system packages ROS packages depend on                                                                     |
+| rosdistro                                             | The variable that names the ROS 2 release (distribution) to use, such as `humble` or `jazzy`                                        |
+| snapshot                                              | A dated, unchanging copy of the ROS package repository, served from `snapshots.ros.org`                                             |
+| stanza                                                | One block of lines in an APT preferences file                                                                                       |
+| `state: latest`, `state: present`                     | Ansible package settings: latest updates to the newest allowed version, present only checks it is installed                         |
+| `tags: [never]`                                       | An Ansible setting that skips a role unless its tag is asked for by name                                                            |
+| TensorRT                                              | NVIDIA's library that optimises trained neural networks and runs them fast on NVIDIA GPUs                                           |
+| top-level                                             | Installed directly, not as a dependency of something else; or a key at the outermost level of a file                                |
+| transitive                                            | Pulled in indirectly, as a dependency of a dependency                                                                               |
+| Ubuntu-archive                                        | Ubuntu's own official package repositories                                                                                          |
+| verbatim                                              | Exactly as written, unchanged                                                                                                       |
+| wildcard                                              | A pattern such as `*` that matches any name                                                                                         |
+| workflow                                              | An automated job that runs on GitHub, such as `regenerate-lockfiles`                                                                |
+| x86_64                                                | The 64-bit Intel/AMD processor architecture used by most desktop and laptop PCs                                                     |
+| YAML                                                  | YAML Ain't Markup Language: a human-readable text format for configuration files                                                    |
+| `--extra-vars`                                        | For `ansible-playbook`: sets variables for this run, overriding their defaults                                                      |
+| `--ask-become-pass`                                   | For `ansible-playbook`: asks for your sudo password once, so steps that need administrator rights can run                           |
+| `<rosdistro>`, `<arch>`, `<distro>`                   | Placeholders: replace with your own value                                                                                           |
+| `->`                                                  | Maps to                                                                                                                             |
+| `\`                                                   | At the end of a line, continues the command on the next line                                                                        |
+| `*`                                                   | Wildcard: matches any text, so `cuda-*` means every package whose name starts with `cuda-`                                          |
+| `YYYY-MM-DD`                                          | A date written as year-month-day                                                                                                    |
+| `&&`                                                  | Runs the next command only if the previous one succeeded                                                                            |
+| `#`                                                   | In a shell or config block, starts a comment that is not run                                                                        |
+| `\n`                                                  | A new line, inside the `printf` text                                                                                                |
+| `{}`                                                  | An empty YAML mapping                                                                                                               |
+| `>closure.yaml`                                       | Writes the command's output to the file `closure.yaml`                                                                              |
+| `{{ }}`                                               | Jinja2 template expression: Ansible replaces it with the value inside                                                               |
+| `:1-2`                                                | After a file name, lines 1 to 2 of that file                                                                                        |
+| `2.2.4-1noble.20260520.083000`                        | Version notation: upstream version 2.2.4, package revision 1, built for noble on 2026-05-20 at 08:30:00                             |
+
+Other project terms are defined in the [Glossary](../../../wiki/Glossary.md).

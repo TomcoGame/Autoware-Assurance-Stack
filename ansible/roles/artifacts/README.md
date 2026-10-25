@@ -94,3 +94,64 @@ mv ~/autoware_data/!(ml_models|maps|recordings|scenarios|assets) ~/autoware_data
 
 Re-running the playbook is also safe: it will populate the new `ml_models/` directory and you
 can delete the old top-level model folders afterwards.
+
+## Abbreviations, terms and symbols
+
+| Term                                       | Meaning                                                                                                                                |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Ansible                                    | An automation tool that sets up a machine by running steps written in YAML files                                                       |
+| ansible-galaxy                             | Ansible's command for installing collections and roles that a project depends on                                                       |
+| ansible-playbook                           | Ansible's command that runs a playbook on the machine                                                                                  |
+| artifacts                                  | Here, the trained machine learning model files that Autoware downloads                                                                 |
+| asset-typed                                | Organised into one subfolder per kind of data (assets, maps, models, recordings, scenarios)                                            |
+| Autoware                                   | An open-source software stack for self-driving vehicles; this repository sets up its development environment                           |
+| `autoware.repos`, `autoware-nightly.repos` | Files listing the source repositories to download into the Autoware workspace; the nightly one follows the latest development versions |
+| branch                                     | A line of development in Git; `main` is the main one                                                                                   |
+| checksum                                   | A short fingerprint of a file used to detect corruption or tampering                                                                   |
+| collection                                 | A bundle of Ansible playbooks and roles distributed together; this repository's collection is `autoware.dev_env`                       |
+| commit hash                                | The unique ID of a saved change (commit) in Git                                                                                        |
+| `data_dir`                                 | The variable that sets the folder the models are downloaded to                                                                         |
+| dependencies                               | Here, other roles that this role runs first                                                                                            |
+| `extglob`                                  | A bash option that turns on extended patterns such as `!(a\|b)`                                                                        |
+| Git                                        | The version control system used to track changes to source code                                                                        |
+| Hub                                        | The Hugging Face Hub, the service that stores the models                                                                               |
+| Hugging Face                               | A website that hosts machine learning models and datasets for download                                                                 |
+| inference                                  | Running a trained model on new data to get its output, such as detected objects                                                        |
+| integrity                                  | That a downloaded file is complete and unchanged                                                                                       |
+| legacy                                     | The older, no longer recommended way                                                                                                   |
+| mermaid                                    | Mermaid: a text-based diagram language that GitHub draws as a chart                                                                    |
+| ML                                         | Machine Learning: software that learns its behaviour from data; here, the trained models Autoware runs                                 |
+| model                                      | A trained neural network saved as files                                                                                                |
+| perception stack                           | The part of Autoware that interprets sensor data to find objects and the surroundings                                                  |
+| pinned                                     | Fixed to one exact version                                                                                                             |
+| pipx                                       | A tool that installs Python command-line applications, each in its own isolated environment                                            |
+| playbook                                   | An Ansible file that lists which roles and tasks to run; this repository's main one is `install_dev_env`                               |
+| release tag                                | A Git tag that marks an official release                                                                                               |
+| role                                       | A reusable unit of Ansible tasks that installs or configures one thing; each folder under `ansible/roles/` is a role                   |
+| root                                       | The Linux administrator account, which can change any file on the system                                                               |
+| `shopt`                                    | A bash command that turns shell options on and off                                                                                     |
+| sudo                                       | A command that runs another command with administrator (root) rights, after asking for your password                                   |
+| tag                                        | A named label attached to one version, such as a Git commit or a model revision                                                        |
+| task                                       | A single step in an Ansible role, such as installing one package                                                                       |
+| transport                                  | The network connection used for the download                                                                                           |
+| `--tags`                                   | For `ansible-playbook`: run only the roles and tasks carrying the given tag                                                            |
+| `~`                                        | Shorthand for your home directory, for example `/home/<you>`                                                                           |
+| `{{ }}`, `( )`, `((( )))`                  | Mermaid shapes: a decision, an option and a final outcome                                                                              |
+| `-->`                                      | Mermaid arrow from one diagram box to the next                                                                                         |
+| ✅                                         | Check mark: no action needed                                                                                                           |
+| 🔄                                         | Arrows in a circle: switch to a different version                                                                                      |
+| `%%`                                       | Starts a comment in a Mermaid diagram                                                                                                  |
+| `#FFF3CD`                                  | A colour written as a hexadecimal code (red, green, blue)                                                                              |
+| `&&`                                       | Runs the next command only if the previous one succeeded                                                                               |
+| `$(...)`                                   | Command substitution: runs the command inside and puts its output in its place                                                         |
+| `#`                                        | In a shell or config block, starts a comment that is not run                                                                           |
+| `-f`                                       | For `ansible-galaxy`: reinstall even if already installed (force)                                                                      |
+| `-r`                                       | For `ansible-galaxy`: read the list of things to install from the named requirements file                                              |
+| `-e`                                       | For `ansible-playbook`: sets a variable for this run, overriding its default (short for `--extra-vars`)                                |
+| `$HOME`                                    | The environment variable holding the path of your home directory                                                                       |
+| `--ask-become-pass`                        | For `ansible-playbook`: asks for your sudo password once, so steps that need administrator rights can run                              |
+| `-p`                                       | For `mkdir`: create the folder and any missing parent folders, with no error if it exists                                              |
+| `!(...)`                                   | With `extglob`, matches every name except those listed                                                                                 |
+| `[ -d ... ]`                               | A shell test that is true when the folder exists                                                                                       |
+
+Other project terms are defined in the [Glossary](../../../wiki/Glossary.md).
