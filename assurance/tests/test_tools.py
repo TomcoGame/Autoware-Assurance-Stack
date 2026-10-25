@@ -1009,6 +1009,33 @@ class Hsi(unittest.TestCase):
     def test_real_model_passes(self):
         self.assertEqual(hsi.check(hsi.load(), hsi.known()), [])
 
+    def test_every_interface_has_a_card_with_its_signals(self):
+        m, k = hsi.load(), hsi.known()
+        data = hsi.card_data(m, k)
+        self.assertEqual([f["id"] for f in data], [f["id"] for f in m["interfaces"]])
+        self.assertEqual(sum(len(f["signals"]) for f in data), len(m["signals"]))
+        sig = next(s for f in data for s in f["signals"] if s["id"] == "SIG-01")
+        self.assertEqual((sig["timeout"], sig["by"], sig["period"]), ("143 ms", "SM-05", "48 ms"))
+        svg = hsi.icards.sheet(data, m["frames_per_timeout"])
+        self.assertEqual(re.findall(r'class="gid">(IF-\d\d)<', svg), [f["id"] for f in data])
+
+    def test_signals_csv_lists_every_signal(self):
+        import csv
+
+        m, k = hsi.load(), hsi.known()
+        rows = list(csv.DictReader(io.StringIO(hsi.signals_csv(m, k))))
+        self.assertEqual([r["ID"] for r in rows], [s["id"] for s in m["signals"]])
+        r = rows[0]
+        self.assertEqual((r["Receive timeout (WP-S-04)"], r["Maximum period"]), ("143 ms", "48 ms"))
+
+    def test_folder_page_links_every_file_in_the_folder(self):
+        page = hsi.build()[hsi.README]
+        for p in hsi.HERE.iterdir():
+            if p.suffix in (".csv", ".svg", ".yaml", ".py"):
+                self.assertIn(f"]({p.name})", page, p.name)
+        self.assertNotIn("](hsi/", page)
+        self.assertEqual(page.count("signals cross the"), 1)  # the summary, once
+
     def test_timeout_is_the_receivers_detection_budget(self):
         m, k = hsi.load(), hsi.known()
         by = {s["id"]: s for s in m["signals"]}
