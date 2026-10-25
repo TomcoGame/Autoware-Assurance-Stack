@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-S-02 Technical safety requirements specification |
 | Standard reference | UL 4600 §10; ISO 26262-4 §6; ASPICE 4.0 SYS.2 |
-| Version | 0.4 (TSR-09.07: the safety channel processor detects its own faults, found while writing WP-S-05; 2026-10-24). 0.3 (firm braking level 3 m/s² (DQ-033 A); cautious assumptions about other road users (DQ-034 A); each safety sensor carries ASIL C for false detections (DQ-035 A); 2026-10-24). 0.2 (first content: technical safety requirements per safety mechanism, the envelope parameters, allocation to components and to hardware or software, and verification criteria, generated from `tsr/tsr.yaml`; 2026-10-24). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.5 (folder page `tsr/README.md` with all the requirements on one page, Figure 2-1 on what each envelope parameter bounds, and `tsr/tsrs.csv` tracing every requirement to its FSRs, budget and test cases; 2026-10-25). 0.4 (TSR-09.07: the safety channel processor detects its own faults, found while writing WP-S-05; 2026-10-24). 0.3 (firm braking level 3 m/s² (DQ-033 A); cautious assumptions about other road users (DQ-034 A); each safety sensor carries ASIL C for false detections (DQ-035 A); 2026-10-24). 0.2 (first content: technical safety requirements per safety mechanism, the envelope parameters, allocation to components and to hardware or software, and verification criteria, generated from `tsr/tsr.yaml`; 2026-10-24). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | ASIL D |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -55,6 +55,14 @@ The requirements name their parameters rather than repeating values. A parameter
 | P-13 | Allowed rate of false detections in the swept path, per sensor | The share of AC-02 allotted to unjustified monitor braking (WP-V-02), split across LiDAR and radar (DQ-031 A) | TSR-09.04, TSR-09.05, TSR-09.06 |
 
 <!-- END GENERATED: tsr-parameters -->
+
+<!-- BEGIN GENERATED: tsr-parameter-cards (assurance/03-system/tsr/tsr.py) -->
+
+![Figure 2-1: one card per envelope parameter P-01 to P-13. Each shows a schematic of what the parameter bounds (a distance on the road, a level or a time on a chart), the parameter's value or source as the table above states it, where that comes from (the timing model, a decision of the lead, or still to be set), and the requirements that use it.](tsr/fig-s02-2-1-parameters.svg)
+
+*Figure 2-1. What each envelope parameter bounds. The drawings carry no numbers; the values are the text under them, from the table above. Drawn by [`tsr/tsr.py`](tsr/tsr.py); CI fails if it is stale.*
+
+<!-- END GENERATED: tsr-parameter-cards -->
 
 Two of these set how the vehicle behaves and were decided by the lead on 2026-10-24: the monitor brakes at no more than 3 m/s² when its sensors cannot see the reason, which is also the level of its own stop (P-05, DQ-033 A), and it assumes the vehicle ahead may brake as hard as a car can and that pedestrians may run and cyclists ride fast out of an occlusion (P-06 and P-07, DQ-034 A). The rest follow from WP-S-04 or from the vehicle.
 

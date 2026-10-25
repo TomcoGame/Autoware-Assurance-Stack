@@ -885,6 +885,37 @@ class Tsr(unittest.TestCase):
     def test_real_model_passes(self):
         self.assertEqual(tsr.check(tsr.load(), tsr.known()), [])
 
+    def test_every_parameter_has_a_card_with_its_value(self):
+        m, k = tsr.load(), tsr.known()
+        self.assertEqual(tsr.pcards.check(m), [])
+        values = {p["id"]: tsr.value(p, m, k) for p in m["parameters"]}
+        svg = tsr.pcards.sheet(m, values)
+        self.assertEqual(
+            re.findall(r'class="gid">(P-\d\d)<', svg), [p["id"] for p in m["parameters"]]
+        )
+        self.assertIn("3 m/s²", svg)
+        bad = copy.deepcopy(m)
+        bad["parameters"].append({"id": "P-14", "name": "New", "source": "x"})
+        self.assertIn("P-14: no drawing", tsr.pcards.check(bad)[0])
+
+    def test_tsrs_csv_traces_every_requirement(self):
+        import csv
+
+        m, k = tsr.load(), tsr.known()
+        rows = list(csv.DictReader(io.StringIO(tsr.tsrs_csv(m, k))))
+        self.assertEqual([r["ID"] for r in rows], [r["id"] for r in m["tsrs"]])
+        r = next(r for r in rows if r["ID"] == "TSR-01.02")
+        self.assertEqual(r["Time (WP-S-04)"], "React within 200 ms to 283 ms")
+        self.assertIn("IT-03", r["Integration test cases (WP-S-08)"])
+        self.assertTrue(all(r["Integration test cases (WP-S-08)"] != "—" for r in rows))
+
+    def test_folder_page_links_every_file_in_the_folder(self):
+        page = tsr.build()[tsr.README]
+        for p in tsr.HERE.iterdir():
+            if p.suffix in (".csv", ".svg", ".yaml", ".py"):
+                self.assertIn(f"]({p.name})", page, p.name)
+        self.assertNotIn("](tsr/", page)
+
     def test_asil_follows_fsrs_and_decomposition(self):
         m, k = tsr.load(), tsr.known()
         by = {r["id"]: r for r in m["tsrs"]}
