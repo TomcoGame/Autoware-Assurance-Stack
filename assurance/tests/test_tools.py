@@ -1261,6 +1261,34 @@ class Integ(unittest.TestCase):
     def test_real_model_passes(self):
         self.assertEqual(integ.check(integ.load(), integ.known()), [])
 
+    def test_every_case_has_a_card_on_the_architecture_at_its_step(self):
+        m, k = integ.load(), integ.known()
+        data = integ.card_data(m, k)
+        self.assertEqual([c["id"] for c in data], [c["id"] for c in m["cases"]])
+        it01 = data[0]
+        self.assertEqual(it01["state"]["CMP-02"], "ex")
+        self.assertEqual(it01["state"]["CMP-06"], "not")  # the vehicle comes at IS-4
+        it13 = next(c for c in data if c["id"] == "IT-13")
+        self.assertNotIn("not", it13["state"].values())
+        svg = integ.ccards.sheet(data, integ.tsc.load()["components"])
+        self.assertEqual(re.findall(r'class="gid">(IT-\d\d)<', svg), [c["id"] for c in data])
+
+    def test_cases_csv_lists_every_case_not_run(self):
+        import csv
+
+        m, k = integ.load(), integ.known()
+        rows = list(csv.DictReader(io.StringIO(integ.cases_csv(m, k))))
+        self.assertEqual([r["ID"] for r in rows], [c["id"] for c in m["cases"]])
+        self.assertTrue(all(r["Result"] == "Not run" for r in rows))
+
+    def test_folder_page_links_every_file_in_the_folder(self):
+        page = integ.build()[integ.README]
+        for p in integ.HERE.iterdir():
+            if p.suffix in (".csv", ".svg", ".yaml", ".py"):
+                self.assertIn(f"]({p.name})", page, p.name)
+        self.assertNotIn("](integ/", page)
+        self.assertEqual(page.count("integration test cases in"), 1)  # the summary, once
+
     def test_budgets_come_from_the_timing_model(self):
         m, k = integ.load(), integ.known()
         case = next(c for c in m["cases"] if c["id"] == "IT-06")

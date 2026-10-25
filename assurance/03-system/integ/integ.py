@@ -46,9 +46,15 @@ import secarch  # noqa: E402
 import tsc  # noqa: E402
 import tsr  # noqa: E402
 
+sys.path.insert(0, str(HERE))
+import ccards  # noqa: E402
+
 MODEL = HERE / "integ.yaml"
 DOC = ASSURANCE / "03-system" / "WP-S-08-system-integration-test.md"
 FIG = HERE / "fig-s08-2-1-steps.svg"
+FIG2 = HERE / "fig-s08-4-1-cases.svg"
+CSV = HERE / "cases.csv"
+README = HERE / "README.md"
 W = 640
 
 
@@ -231,6 +237,16 @@ def tables(m: dict, k: dict) -> dict[str, str]:
             f"| {', '.join(c['covers'])} | {budgets(c, k)} | {cell(c['pass'])} |"
         )
     t["integ-cases"] = "\n".join(rows)
+    t["integ-case-cards"] = (
+        "![Figure 4-1: one card per integration test case IT-01 to IT-18. Each shows the architecture of "
+        "WP-S-03 as it stands at the case's integration step, with components not yet integrated faint, those "
+        "already integrated grey, those the step adds outlined and those the case exercises filled; then its "
+        "environment, methods, how many requirements, signals and cybersecurity requirements it covers, the time "
+        f"budgets it measures and its pass criterion. The same data are in the table above.](integ/{FIG2.name})\n\n"
+        "*Figure 4-1. What each integration test runs on, and what it proves. No case has been run. Drawn by "
+        "[`integ/integ.py`](integ/integ.py); CI fails if it is stale. Every case is also in "
+        f"[`integ/{CSV.name}`](integ/{CSV.name}).*"
+    )
     rows = ["| Method | Cases |", "|---|---|"]
     for meth, name in m["methods"].items():
         cs = [c["id"] for c in m["cases"] if meth in c["methods"]]
@@ -317,12 +333,188 @@ def figure(m: dict, k: dict) -> str:
     return fk.svg(W, int(y), "WP-S-08 Figure 2-1: integration steps", desc + ".", body, EXTRA)
 
 
+def card_data(m: dict, k: dict) -> list[dict]:
+    """Each case with the state of every component at its step, for the case cards."""
+    order = [s["id"] for s in m["steps"]]
+    envs = {e["id"]: e for e in m["environments"]}
+    out = []
+    for c in m["cases"]:
+        i = order.index(c["step"])
+        before, _ = integrated(m, order[i - 1]) if i else (set(), set())
+        now, _ = integrated(m, c["step"])
+        used = set()
+        for x in c["covers"]:
+            used |= needs(x, k)[0]
+        state = {}
+        for cid in k["components"]:
+            state[cid] = (
+                "ex"
+                if cid in used
+                else "add" if cid in now - before else "has" if cid in now else "not"
+            )
+        n = {
+            "TSR": sum(x in k["tsrs"] for x in c["covers"]),
+            "signal": sum(x in k["signals"] for x in c["covers"]),
+            "CSTR": sum(x in k["cstrs"] for x in c["covers"]),
+        }
+        out.append(
+            {
+                "id": c["id"],
+                "name": c["name"],
+                "step": c["step"],
+                "env": c["env"],
+                "env_name": f"{c['env']} {envs[c['env']]['name']}",
+                "methods": [x.replace("-", " ") for x in c["methods"]],
+                "asil": asil(c, k),
+                "covers": "Covers "
+                + " · ".join(f"{v} {name}{'s' if v != 1 else ''}" for name, v in n.items() if v),
+                "budgets": (
+                    "Time: " + budgets(c, k) if budgets(c, k) != "—" else "No time budget measured"
+                ),
+                "pass": c["pass"],
+                "state": state,
+            }
+        )
+    return out
+
+
+def cases_csv(m: dict, k: dict) -> str:
+    """Every integration test case with its step, environment, coverage, budgets, pass criterion and result."""
+    import csv
+    import io
+
+    buf = io.StringIO()
+    w = csv.writer(buf, lineterminator="\n")
+    w.writerow(
+        [
+            "ID",
+            "Test case",
+            "Step",
+            "Environment",
+            "Methods",
+            "ASIL",
+            "Technical safety requirements (WP-S-02)",
+            "Signals (WP-S-05)",
+            "Cybersecurity requirements (WP-S-07)",
+            "Time budgets (WP-S-04)",
+            "Pass criterion",
+            "Result",
+        ]
+    )
+    for c in m["cases"]:
+        w.writerow(
+            [
+                c["id"],
+                c["name"],
+                c["step"],
+                c["env"],
+                ", ".join(m["methods"][x] for x in c["methods"]),
+                asil(c, k),
+                ", ".join(x for x in c["covers"] if x in k["tsrs"]) or "—",
+                ", ".join(x for x in c["covers"] if x in k["signals"]) or "—",
+                ", ".join(x for x in c["covers"] if x in k["cstrs"]) or "—",
+                budgets(c, k),
+                c["pass"],
+                "Not run",
+            ]
+        )
+    return buf.getvalue()
+
+
+def here(md: str) -> str:
+    """Text of WP-S-08 with its relative links rewritten to work from this folder."""
+    md = md.replace("](integ/", "](")
+    return re.sub(r"\]\((?!https?:|#|fig-|cases\.csv|integ\.|README)", "](../", md)
+
+
+def readme(t: dict[str, str], doc: str) -> str:
+    """The folder page: the whole system integration test plan on one page."""
+
+    def part(heading: str) -> str:
+        return here(fk.section(doc, heading).strip())
+
+    files = [
+        "| File | What it holds |",
+        "|---|---|",
+        f"| [`{CSV.name}`]({CSV.name}) | Every integration test case with its step, environment, methods, ASIL, the requirements, signals and cybersecurity requirements it covers, its time budgets, pass criterion and result |",
+        f"| [`{FIG.name}`]({FIG.name}) | Figure 2-1, the integration steps and the cases run at each |",
+        f"| [`{FIG2.name}`]({FIG2.name}) | Figure 4-1, what each case runs on and what it proves |",
+        "| [`integ.yaml`](integ.yaml) | Environments, integration steps, methods and test cases |",
+        "| [`integ.py`](integ.py), [`ccards.py`](ccards.py) | The generator: checks the model against the architecture, the technical safety and cybersecurity requirements, the interfaces and the timing budget, and writes WP-S-08's tables and everything here |",
+    ]
+    lines = [
+        "<!-- Generated by assurance/03-system/integ/integ.py; do not edit by hand. -->",
+        "",
+        "# System integration and test",
+        "",
+        "The whole integration test plan of [WP-S-08](../WP-S-08-system-integration-test.md) on one page: how "
+        "the item is put together from the safety monitor alone to the item in the vehicle, where each step is "
+        "tested, and every test case with what it covers and when it passes. The cases test the "
+        "[technical safety requirements](../tsr/README.md), the signals of the "
+        "[hardware-software interface](../hsi/README.md) and the "
+        "[cybersecurity requirements](../secarch/README.md), against the [timing budget](../timing/README.md). "
+        "Everything here is generated by `integ.py` from `integ.yaml`; CI fails if it is stale. Everything is a "
+        "draft by Claude (I0); no test has been run.",
+        "",
+        t["integ-summary"],
+        "",
+        "1. [What this covers](#1-what-this-covers)",
+        "2. [Integration strategy and steps](#2-integration-strategy-and-steps)",
+        "3. [Test environments](#3-test-environments)",
+        "4. [Test cases](#4-test-cases)",
+        "5. [Results](#5-results)",
+        "6. [Files in this folder](#6-files-in-this-folder)",
+        "",
+        "## 1. What this covers",
+        "",
+        re.sub(
+            r"<!-- BEGIN GENERATED: integ-summary .*?END GENERATED: integ-summary -->\n\n",
+            "",
+            part("## 1. Purpose"),
+            flags=re.S,
+        ),
+        "",
+        "## 2. Integration strategy and steps",
+        "",
+        part("## 2. Integration strategy and levels"),
+        "",
+        "## 3. Test environments",
+        "",
+        part("## 3. Test environment"),
+        "",
+        "## 4. Test cases",
+        "",
+        f"Every case is also in [`{CSV.name}`]({CSV.name}), which GitHub shows as a table that can be searched.",
+        "",
+        part("## 4. Test specification"),
+        "",
+        "## 5. Results",
+        "",
+        part("## 5. Results"),
+        "",
+        "## 6. Files in this folder",
+        "",
+        *files,
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def build() -> dict[Path, str]:
     m, k = load(), known()
     errs = check(m, k)
     if errs:
         raise fk.FigureError("integ.yaml: " + "; ".join(errs))
-    return {DOC: fill(DOC.read_text(encoding="utf-8"), tables(m, k)), FIG: figure(m, k)}
+    t = tables(m, k)
+    doc = fill(DOC.read_text(encoding="utf-8"), t)
+    comps = tsc.load()["components"]
+    return {
+        DOC: doc,
+        FIG: figure(m, k),
+        FIG2: ccards.sheet(card_data(m, k), comps),
+        CSV: cases_csv(m, k),
+        README: readme(t, doc),
+    }
 
 
 if __name__ == "__main__":

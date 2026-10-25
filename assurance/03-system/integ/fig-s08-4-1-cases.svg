@@ -1,0 +1,867 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1070" height="2812" viewBox="0 0 1070 2812" role="img" aria-labelledby="t d">
+<title id="t">WP-S-08 Figure 4-1: integration test cases</title>
+<desc id="d">Integration test cases: IT-01 Monitor self-diagnostics, secure boot and fail-silent output at IS-1 in ENV-2, exercising CMP-02; IT-02 Monitor supply after a fault of the Autoware computer's supply at IS-1 in ENV-2, exercising CMP-10; IT-03 Longitudinal envelope against its model at IS-1 in ENV-2, exercising CMP-02; IT-04 Lateral envelope against its model at IS-1 in ENV-2, exercising CMP-02; IT-05 Stop, hold, release and indicator logic at IS-1 in ENV-2, exercising CMP-02; IT-06 Command streams from Autoware and remote operations at IS-3 in ENV-2, exercising CMP-01, CMP-02, CMP-11; IT-07 Safety channel detection at IS-2 in ENV-3, exercising CMP-02, CMP-03, CMP-04, CMP-05; IT-08 Safety channel false detections, per sensor at IS-2 in ENV-3, exercising CMP-03, CMP-04, CMP-05; IT-09 Safety channel diagnostics and secure boot at IS-2 in ENV-2, exercising CMP-02, CMP-03; IT-10 Physical attacks on the safety sensors at IS-2 in ENV-3, exercising CMP-03; IT-11 Autoware's stop when the safety channel fails at IS-3 in ENV-2, exercising CMP-01, CMP-02; IT-12 Autoware computer's cybersecurity functions at IS-3 in ENV-2, exercising CMP-01; IT-13 Bounded command and the vehicle's own stop at IS-4 in ENV-4, exercising CMP-02, CMP-06; IT-14 Achieved against commanded on the vehicle at IS-4 in ENV-4, exercising CMP-02, CMP-07; IT-15 Park brake and doors at IS-4 in ENV-4, exercising CMP-02, CMP-08, CMP-09; IT-16 Collision signal at IS-4 in ENV-4, exercising CMP-02, CMP-07; IT-17 Minimal risk manoeuvre and the sensing-to-actuation chain on the track at IS-4 in ENV-4, exercising CMP-02; IT-18 Remote driving over the real cellular links at IS-4 in ENV-4, exercising CMP-01, CMP-02, CMP-11.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg { --mon:#2d55c8; --monsoft:#e7ecfb; --a3:#d4644a; }
+@media (prefers-color-scheme: dark) { svg { --mon:#86a2ff; --monsoft:#232c48; --a3:#bb4f34; } }
+svg .verge { fill:var(--bg); stroke:var(--grid); stroke-width:1; }
+svg .ax { font:10.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .hd { font:600 11px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .gid { font:700 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .ps { fill:var(--monsoft); stroke:var(--mon); stroke-width:1; } svg .pst { font:600 10px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--mon); }
+svg .pn { fill:var(--card); stroke:var(--ink3); stroke-width:1; } svg .pnt { font:600 10px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink2); }
+svg .pa { fill:var(--a3); } svg .pat { font:600 10px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:#ffffff; }
+svg .ex { fill:var(--mon); } svg .ext { font:600 9.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--bg); }
+svg .add { fill:var(--monsoft); stroke:var(--mon); stroke-width:1.4; } svg .addt { font:600 9.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--mon); }
+svg .has { fill:var(--card); stroke:var(--ink3); stroke-width:1; } svg .hast { font:9.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .not { fill:none; stroke:var(--grid); stroke-width:1; stroke-dasharray:3 2; } svg .nott { font:9.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--grid); }
+svg .mp { fill:var(--card); stroke:var(--grid); stroke-width:1; } svg .mpt { font:10px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+</style>
+<rect class="bg" width="1070" height="2812"/>
+<text x="24" y="34" class="h">What each integration test runs on, and what it proves</text>
+<text x="24" y="56" class="t">WP-S-08 §4, Figure 4-1: each case on the architecture as it stands at its step (faint not yet integrated, grey integrated, outlined added at</text>
+<text x="24" y="73" class="t">the step, filled exercised by the case), its environment, methods, coverage, time budgets and pass criterion. No case has been run.</text>
+<rect x="24" y="96" width="330" height="430" rx="8" class="card"/>
+<text x="38" y="120" class="gid">IT-01</text>
+<rect x="290.1" y="107" width="49.9" height="18" rx="4" class="pa"/>
+<text x="315" y="120" class="pat" text-anchor="middle">ASIL D</text>
+<rect x="240.4" y="107" width="43.6" height="18" rx="4" class="pn"/>
+<text x="262.2" y="120" class="pnt" text-anchor="middle">ENV-2</text>
+<rect x="197.1" y="107" width="37.3" height="18" rx="4" class="ps"/>
+<text x="215.8" y="120" class="pst" text-anchor="middle">IS-1</text>
+<text x="38" y="142" class="tb">Monitor self-diagnostics, secure boot</text>
+<text x="38" y="158" class="tb">and fail-silent output</text>
+<rect x="33" y="172" width="312" height="162" rx="6" class="verge"/>
+<rect x="122" y="178" width="132" height="24" rx="3" class="not"/>
+<text x="188" y="193.5" class="nott" text-anchor="middle">Autoware</text>
+<rect x="39" y="222" width="225" height="25.6" rx="3" class="ex"/>
+<text x="151.5" y="238.3" class="ext" text-anchor="middle">Safety monitor</text>
+<rect x="272" y="222" width="63" height="25.6" rx="3" class="not"/>
+<text x="303.5" y="238.3" class="nott" text-anchor="middle">Channel</text>
+<rect x="264" y="178" width="34" height="24" rx="3" class="not"/>
+<text x="281" y="193.5" class="nott" text-anchor="middle">LiDAR</text>
+<rect x="301" y="178" width="34" height="24" rx="3" class="not"/>
+<text x="318" y="193.5" class="nott" text-anchor="middle">Radar</text>
+<rect x="39" y="266.8" width="95" height="24" rx="3" class="not"/>
+<text x="86.5" y="282.3" class="nott" text-anchor="middle">Drive-by-wire</text>
+<rect x="140" y="266.8" width="50" height="24" rx="3" class="not"/>
+<text x="165" y="282.3" class="nott" text-anchor="middle">State</text>
+<rect x="196" y="266.8" width="45" height="24" rx="3" class="not"/>
+<text x="218.5" y="282.3" class="nott" text-anchor="middle">Brake</text>
+<rect x="247" y="266.8" width="50" height="24" rx="3" class="not"/>
+<text x="272" y="282.3" class="nott" text-anchor="middle">Doors</text>
+<rect x="39" y="308.4" width="150" height="17.6" rx="3" class="add"/>
+<text x="114" y="320.7" class="addt" text-anchor="middle">Monitor power</text>
+<rect x="39" y="178" width="75" height="24" rx="3" class="not"/>
+<text x="76.5" y="193.5" class="nott" text-anchor="middle">Remote ops</text>
+<text x="38" y="352" class="hd">ENV-2 Hardware in the loop</text>
+<rect x="38" y="356" width="96.2" height="16" rx="8" class="mp"/>
+<text x="86.1" y="368" class="mpt" text-anchor="middle">fault injection</text>
+<rect x="139.2" y="356" width="44.5" height="16" rx="8" class="mp"/>
+<text x="161.5" y="368" class="mpt" text-anchor="middle">timing</text>
+<rect x="188.8" y="356" width="56" height="16" rx="8" class="mp"/>
+<text x="216.8" y="368" class="mpt" text-anchor="middle">security</text>
+<text x="38" y="388" class="ax">Covers 2 TSRs · 4 CSTRs</text>
+<text x="38" y="402" class="ax">Time: TSR-08.01 detect within 179 ms to 283 ms;</text>
+<text x="38" y="416" class="ax">TSR-08.02 react within 179 ms to 283 ms</text>
+<text x="38" y="436" class="hd">Passes when</text>
+<text x="38" y="451" class="s">Every injected processor, memory, clock and boot</text>
+<text x="38" y="465" class="s">fault is detected and the outputs fall silent; keys</text>
+<text x="38" y="479" class="s">cannot be read out; unsigned, altered and older</text>
+<text x="38" y="493" class="s">images do not run</text>
+<rect x="370" y="96" width="330" height="430" rx="8" class="card"/>
+<text x="384" y="120" class="gid">IT-02</text>
+<rect x="636.1" y="107" width="49.9" height="18" rx="4" class="pa"/>
+<text x="661" y="120" class="pat" text-anchor="middle">ASIL D</text>
+<rect x="586.4" y="107" width="43.6" height="18" rx="4" class="pn"/>
+<text x="608.2" y="120" class="pnt" text-anchor="middle">ENV-2</text>
+<rect x="543.1" y="107" width="37.3" height="18" rx="4" class="ps"/>
+<text x="561.8" y="120" class="pst" text-anchor="middle">IS-1</text>
+<text x="384" y="142" class="tb">Monitor supply after a fault of the</text>
+<text x="384" y="158" class="tb">Autoware computer's supply</text>
+<rect x="379" y="172" width="312" height="162" rx="6" class="verge"/>
+<rect x="468" y="178" width="132" height="24" rx="3" class="not"/>
+<text x="534" y="193.5" class="nott" text-anchor="middle">Autoware</text>
+<rect x="385" y="222" width="225" height="25.6" rx="3" class="add"/>
+<text x="497.5" y="238.3" class="addt" text-anchor="middle">Safety monitor</text>
+<rect x="618" y="222" width="63" height="25.6" rx="3" class="not"/>
+<text x="649.5" y="238.3" class="nott" text-anchor="middle">Channel</text>
+<rect x="610" y="178" width="34" height="24" rx="3" class="not"/>
+<text x="627" y="193.5" class="nott" text-anchor="middle">LiDAR</text>
+<rect x="647" y="178" width="34" height="24" rx="3" class="not"/>
+<text x="664" y="193.5" class="nott" text-anchor="middle">Radar</text>
+<rect x="385" y="266.8" width="95" height="24" rx="3" class="not"/>
+<text x="432.5" y="282.3" class="nott" text-anchor="middle">Drive-by-wire</text>
+<rect x="486" y="266.8" width="50" height="24" rx="3" class="not"/>
+<text x="511" y="282.3" class="nott" text-anchor="middle">State</text>
+<rect x="542" y="266.8" width="45" height="24" rx="3" class="not"/>
+<text x="564.5" y="282.3" class="nott" text-anchor="middle">Brake</text>
+<rect x="593" y="266.8" width="50" height="24" rx="3" class="not"/>
+<text x="618" y="282.3" class="nott" text-anchor="middle">Doors</text>
+<rect x="385" y="308.4" width="150" height="17.6" rx="3" class="ex"/>
+<text x="460" y="320.7" class="ext" text-anchor="middle">Monitor power</text>
+<rect x="385" y="178" width="75" height="24" rx="3" class="not"/>
+<text x="422.5" y="193.5" class="nott" text-anchor="middle">Remote ops</text>
+<text x="384" y="352" class="hd">ENV-2 Hardware in the loop</text>
+<rect x="384" y="356" width="96.2" height="16" rx="8" class="mp"/>
+<text x="432.1" y="368" class="mpt" text-anchor="middle">fault injection</text>
+<text x="384" y="388" class="ax">Covers 1 TSR</text>
+<text x="384" y="402" class="ax">No time budget measured</text>
+<text x="384" y="422" class="hd">Passes when</text>
+<text x="384" y="437" class="s">The monitor, the channel and the actuation path stay</text>
+<text x="384" y="451" class="s">powered through every single supply fault, for at</text>
+<text x="384" y="465" class="s">least the time of MRM-4</text>
+<rect x="716" y="96" width="330" height="430" rx="8" class="card"/>
+<text x="730" y="120" class="gid">IT-03</text>
+<rect x="982.1" y="107" width="49.9" height="18" rx="4" class="pa"/>
+<text x="1007" y="120" class="pat" text-anchor="middle">ASIL D</text>
+<rect x="932.4" y="107" width="43.6" height="18" rx="4" class="pn"/>
+<text x="954.2" y="120" class="pnt" text-anchor="middle">ENV-2</text>
+<rect x="889.1" y="107" width="37.3" height="18" rx="4" class="ps"/>
+<text x="907.8" y="120" class="pst" text-anchor="middle">IS-1</text>
+<text x="730" y="142" class="tb">Longitudinal envelope against its model</text>
+<rect x="725" y="172" width="312" height="162" rx="6" class="verge"/>
+<rect x="814" y="178" width="132" height="24" rx="3" class="not"/>
+<text x="880" y="193.5" class="nott" text-anchor="middle">Autoware</text>
+<rect x="731" y="222" width="225" height="25.6" rx="3" class="ex"/>
+<text x="843.5" y="238.3" class="ext" text-anchor="middle">Safety monitor</text>
+<rect x="964" y="222" width="63" height="25.6" rx="3" class="not"/>
+<text x="995.5" y="238.3" class="nott" text-anchor="middle">Channel</text>
+<rect x="956" y="178" width="34" height="24" rx="3" class="not"/>
+<text x="973" y="193.5" class="nott" text-anchor="middle">LiDAR</text>
+<rect x="993" y="178" width="34" height="24" rx="3" class="not"/>
+<text x="1010" y="193.5" class="nott" text-anchor="middle">Radar</text>
+<rect x="731" y="266.8" width="95" height="24" rx="3" class="not"/>
+<text x="778.5" y="282.3" class="nott" text-anchor="middle">Drive-by-wire</text>
+<rect x="832" y="266.8" width="50" height="24" rx="3" class="not"/>
+<text x="857" y="282.3" class="nott" text-anchor="middle">State</text>
+<rect x="888" y="266.8" width="45" height="24" rx="3" class="not"/>
+<text x="910.5" y="282.3" class="nott" text-anchor="middle">Brake</text>
+<rect x="939" y="266.8" width="50" height="24" rx="3" class="not"/>
+<text x="964" y="282.3" class="nott" text-anchor="middle">Doors</text>
+<rect x="731" y="308.4" width="150" height="17.6" rx="3" class="add"/>
+<text x="806" y="320.7" class="addt" text-anchor="middle">Monitor power</text>
+<rect x="731" y="178" width="75" height="24" rx="3" class="not"/>
+<text x="768.5" y="193.5" class="nott" text-anchor="middle">Remote ops</text>
+<text x="730" y="352" class="hd">ENV-2 Hardware in the loop</text>
+<rect x="730" y="356" width="79" height="16" rx="8" class="mp"/>
+<text x="769.5" y="368" class="mpt" text-anchor="middle">requirements</text>
+<rect x="814" y="356" width="79" height="16" rx="8" class="mp"/>
+<text x="853.5" y="368" class="mpt" text-anchor="middle">back to back</text>
+<rect x="898" y="356" width="96.2" height="16" rx="8" class="mp"/>
+<text x="946.1" y="368" class="mpt" text-anchor="middle">fault injection</text>
+<rect x="730" y="376" width="44.5" height="16" rx="8" class="mp"/>
+<text x="752.2" y="388" class="mpt" text-anchor="middle">timing</text>
+<text x="730" y="408" class="ax">Covers 6 TSRs</text>
+<text x="730" y="422" class="ax">Time: TSR-01.02 react within 200 ms to 283 ms;</text>
+<text x="730" y="436" class="ax">TSR-01.03 react within 200 ms to 283 ms</text>
+<text x="730" y="456" class="hd">Passes when</text>
+<text x="730" y="471" class="s">Commands and limits agree with the formal model of</text>
+<text x="730" y="485" class="s">the envelope (P-01, P-05 to P-07) over the speed</text>
+<text x="730" y="499" class="s">range; injected unsafe commands are bounded</text>
+<rect x="24" y="542" width="330" height="430" rx="8" class="card"/>
+<text x="38" y="566" class="gid">IT-04</text>
+<rect x="290.1" y="553" width="49.9" height="18" rx="4" class="pa"/>
+<text x="315" y="566" class="pat" text-anchor="middle">ASIL D</text>
+<rect x="240.4" y="553" width="43.6" height="18" rx="4" class="pn"/>
+<text x="262.2" y="566" class="pnt" text-anchor="middle">ENV-2</text>
+<rect x="197.1" y="553" width="37.3" height="18" rx="4" class="ps"/>
+<text x="215.8" y="566" class="pst" text-anchor="middle">IS-1</text>
+<text x="38" y="588" class="tb">Lateral envelope against its model</text>
+<rect x="33" y="618" width="312" height="162" rx="6" class="verge"/>
+<rect x="122" y="624" width="132" height="24" rx="3" class="not"/>
+<text x="188" y="639.5" class="nott" text-anchor="middle">Autoware</text>
+<rect x="39" y="668" width="225" height="25.6" rx="3" class="ex"/>
+<text x="151.5" y="684.3" class="ext" text-anchor="middle">Safety monitor</text>
+<rect x="272" y="668" width="63" height="25.6" rx="3" class="not"/>
+<text x="303.5" y="684.3" class="nott" text-anchor="middle">Channel</text>
+<rect x="264" y="624" width="34" height="24" rx="3" class="not"/>
+<text x="281" y="639.5" class="nott" text-anchor="middle">LiDAR</text>
+<rect x="301" y="624" width="34" height="24" rx="3" class="not"/>
+<text x="318" y="639.5" class="nott" text-anchor="middle">Radar</text>
+<rect x="39" y="712.8" width="95" height="24" rx="3" class="not"/>
+<text x="86.5" y="728.3" class="nott" text-anchor="middle">Drive-by-wire</text>
+<rect x="140" y="712.8" width="50" height="24" rx="3" class="not"/>
+<text x="165" y="728.3" class="nott" text-anchor="middle">State</text>
+<rect x="196" y="712.8" width="45" height="24" rx="3" class="not"/>
+<text x="218.5" y="728.3" class="nott" text-anchor="middle">Brake</text>
+<rect x="247" y="712.8" width="50" height="24" rx="3" class="not"/>
+<text x="272" y="728.3" class="nott" text-anchor="middle">Doors</text>
+<rect x="39" y="754.4" width="150" height="17.6" rx="3" class="add"/>
+<text x="114" y="766.7" class="addt" text-anchor="middle">Monitor power</text>
+<rect x="39" y="624" width="75" height="24" rx="3" class="not"/>
+<text x="76.5" y="639.5" class="nott" text-anchor="middle">Remote ops</text>
+<text x="38" y="798" class="hd">ENV-2 Hardware in the loop</text>
+<rect x="38" y="802" width="79" height="16" rx="8" class="mp"/>
+<text x="77.5" y="814" class="mpt" text-anchor="middle">requirements</text>
+<rect x="122" y="802" width="79" height="16" rx="8" class="mp"/>
+<text x="161.5" y="814" class="mpt" text-anchor="middle">back to back</text>
+<rect x="206" y="802" width="96.2" height="16" rx="8" class="mp"/>
+<text x="254.1" y="814" class="mpt" text-anchor="middle">fault injection</text>
+<rect x="38" y="822" width="44.5" height="16" rx="8" class="mp"/>
+<text x="60.2" y="834" class="mpt" text-anchor="middle">timing</text>
+<text x="38" y="854" class="ax">Covers 2 TSRs</text>
+<text x="38" y="868" class="ax">Time: TSR-02.01 react within 179 ms to 310 ms;</text>
+<text x="38" y="882" class="ax">TSR-02.02 detect within 179 ms to 310 ms</text>
+<text x="38" y="902" class="hd">Passes when</text>
+<text x="38" y="917" class="s">Steering limits and rejections agree with the model</text>
+<text x="38" y="931" class="s">of the envelope (P-02, P-10); injected unsafe</text>
+<text x="38" y="945" class="s">steering is bounded or rejected</text>
+<rect x="370" y="542" width="330" height="430" rx="8" class="card"/>
+<text x="384" y="566" class="gid">IT-05</text>
+<rect x="636.1" y="553" width="49.9" height="18" rx="4" class="pa"/>
+<text x="661" y="566" class="pat" text-anchor="middle">ASIL D</text>
+<rect x="586.4" y="553" width="43.6" height="18" rx="4" class="pn"/>
+<text x="608.2" y="566" class="pnt" text-anchor="middle">ENV-2</text>
+<rect x="543.1" y="553" width="37.3" height="18" rx="4" class="ps"/>
+<text x="561.8" y="566" class="pst" text-anchor="middle">IS-1</text>
+<text x="384" y="588" class="tb">Stop, hold, release and indicator logic</text>
+<rect x="379" y="618" width="312" height="162" rx="6" class="verge"/>
+<rect x="468" y="624" width="132" height="24" rx="3" class="not"/>
+<text x="534" y="639.5" class="nott" text-anchor="middle">Autoware</text>
+<rect x="385" y="668" width="225" height="25.6" rx="3" class="ex"/>
+<text x="497.5" y="684.3" class="ext" text-anchor="middle">Safety monitor</text>
+<rect x="618" y="668" width="63" height="25.6" rx="3" class="not"/>
+<text x="649.5" y="684.3" class="nott" text-anchor="middle">Channel</text>
+<rect x="610" y="624" width="34" height="24" rx="3" class="not"/>
+<text x="627" y="639.5" class="nott" text-anchor="middle">LiDAR</text>
+<rect x="647" y="624" width="34" height="24" rx="3" class="not"/>
+<text x="664" y="639.5" class="nott" text-anchor="middle">Radar</text>
+<rect x="385" y="712.8" width="95" height="24" rx="3" class="not"/>
+<text x="432.5" y="728.3" class="nott" text-anchor="middle">Drive-by-wire</text>
+<rect x="486" y="712.8" width="50" height="24" rx="3" class="not"/>
+<text x="511" y="728.3" class="nott" text-anchor="middle">State</text>
+<rect x="542" y="712.8" width="45" height="24" rx="3" class="not"/>
+<text x="564.5" y="728.3" class="nott" text-anchor="middle">Brake</text>
+<rect x="593" y="712.8" width="50" height="24" rx="3" class="not"/>
+<text x="618" y="728.3" class="nott" text-anchor="middle">Doors</text>
+<rect x="385" y="754.4" width="150" height="17.6" rx="3" class="add"/>
+<text x="460" y="766.7" class="addt" text-anchor="middle">Monitor power</text>
+<rect x="385" y="624" width="75" height="24" rx="3" class="not"/>
+<text x="422.5" y="639.5" class="nott" text-anchor="middle">Remote ops</text>
+<text x="384" y="798" class="hd">ENV-2 Hardware in the loop</text>
+<rect x="384" y="802" width="79" height="16" rx="8" class="mp"/>
+<text x="423.5" y="814" class="mpt" text-anchor="middle">requirements</text>
+<rect x="468" y="802" width="96.2" height="16" rx="8" class="mp"/>
+<text x="516.1" y="814" class="mpt" text-anchor="middle">fault injection</text>
+<rect x="569.2" y="802" width="44.5" height="16" rx="8" class="mp"/>
+<text x="591.5" y="814" class="mpt" text-anchor="middle">timing</text>
+<rect x="618.8" y="802" width="56" height="16" rx="8" class="mp"/>
+<text x="646.8" y="814" class="mpt" text-anchor="middle">security</text>
+<text x="384" y="834" class="ax">Covers 6 TSRs · 1 CSTR</text>
+<text x="384" y="848" class="ax">Time: TSR-06.01 react within 207 ms to 358 ms;</text>
+<text x="384" y="862" class="ax">TSR-06.03 detect within 207 ms to 358 ms</text>
+<text x="384" y="882" class="hd">Passes when</text>
+<text x="384" y="897" class="s">The hold is released only with every condition met;</text>
+<text x="384" y="911" class="s">motion while holding is caught within the creep</text>
+<text x="384" y="925" class="s">distance (P-03); mismatched indicators switch to</text>
+<text x="384" y="939" class="s">hazard lights; a local release needs valid</text>
+<text x="384" y="953" class="s">credentials</text>
+<rect x="716" y="542" width="330" height="430" rx="8" class="card"/>
+<text x="730" y="566" class="gid">IT-06</text>
+<rect x="982.1" y="553" width="49.9" height="18" rx="4" class="pa"/>
+<text x="1007" y="566" class="pat" text-anchor="middle">ASIL D</text>
+<rect x="932.4" y="553" width="43.6" height="18" rx="4" class="pn"/>
+<text x="954.2" y="566" class="pnt" text-anchor="middle">ENV-2</text>
+<rect x="889.1" y="553" width="37.3" height="18" rx="4" class="ps"/>
+<text x="907.8" y="566" class="pst" text-anchor="middle">IS-3</text>
+<text x="730" y="588" class="tb">Command streams from Autoware and remote</text>
+<text x="730" y="604" class="tb">operations</text>
+<rect x="725" y="618" width="312" height="162" rx="6" class="verge"/>
+<rect x="814" y="624" width="132" height="24" rx="3" class="ex"/>
+<text x="880" y="639.5" class="ext" text-anchor="middle">Autoware</text>
+<rect x="731" y="668" width="225" height="25.6" rx="3" class="ex"/>
+<text x="843.5" y="684.3" class="ext" text-anchor="middle">Safety monitor</text>
+<rect x="964" y="668" width="63" height="25.6" rx="3" class="has"/>
+<text x="995.5" y="684.3" class="hast" text-anchor="middle">Channel</text>
+<rect x="956" y="624" width="34" height="24" rx="3" class="has"/>
+<text x="973" y="639.5" class="hast" text-anchor="middle">LiDAR</text>
+<rect x="993" y="624" width="34" height="24" rx="3" class="has"/>
+<text x="1010" y="639.5" class="hast" text-anchor="middle">Radar</text>
+<rect x="731" y="712.8" width="95" height="24" rx="3" class="not"/>
+<text x="778.5" y="728.3" class="nott" text-anchor="middle">Drive-by-wire</text>
+<rect x="832" y="712.8" width="50" height="24" rx="3" class="not"/>
+<text x="857" y="728.3" class="nott" text-anchor="middle">State</text>
+<rect x="888" y="712.8" width="45" height="24" rx="3" class="not"/>
+<text x="910.5" y="728.3" class="nott" text-anchor="middle">Brake</text>
+<rect x="939" y="712.8" width="50" height="24" rx="3" class="not"/>
+<text x="964" y="728.3" class="nott" text-anchor="middle">Doors</text>
+<rect x="731" y="754.4" width="150" height="17.6" rx="3" class="has"/>
+<text x="806" y="766.7" class="hast" text-anchor="middle">Monitor power</text>
+<rect x="731" y="624" width="75" height="24" rx="3" class="ex"/>
+<text x="768.5" y="639.5" class="ext" text-anchor="middle">Remote ops</text>
+<text x="730" y="798" class="hd">ENV-2 Hardware in the loop</text>
+<rect x="730" y="802" width="61.8" height="16" rx="8" class="mp"/>
+<text x="760.9" y="814" class="mpt" text-anchor="middle">interface</text>
+<rect x="796.8" y="802" width="96.2" height="16" rx="8" class="mp"/>
+<text x="844.9" y="814" class="mpt" text-anchor="middle">fault injection</text>
+<rect x="898" y="802" width="44.5" height="16" rx="8" class="mp"/>
+<text x="920.2" y="814" class="mpt" text-anchor="middle">timing</text>
+<rect x="947.5" y="802" width="56" height="16" rx="8" class="mp"/>
+<text x="975.5" y="814" class="mpt" text-anchor="middle">security</text>
+<text x="730" y="834" class="ax">Covers 5 TSRs · 5 signals · 3 CSTRs</text>
+<text x="730" y="848" class="ax">Time: TSR-05.01 detect within 143 ms; TSR-05.02</text>
+<text x="730" y="862" class="ax">detect within 143 ms</text>
+<text x="730" y="882" class="hd">Passes when</text>
+<text x="730" y="897" class="s">Lost, late, repeated, corrupted, unsigned,</text>
+<text x="730" y="911" class="s">misaddressed and aged messages are rejected and</text>
+<text x="730" y="925" class="s">start MRM-4; remote commands are bounded like</text>
+<text x="730" y="939" class="s">Autoware's; the link accepts nothing but SIG-03 to</text>
+<text x="730" y="953" class="s">SIG-05</text>
+<rect x="24" y="988" width="330" height="430" rx="8" class="card"/>
+<text x="38" y="1012" class="gid">IT-07</text>
+<rect x="290.1" y="999" width="49.9" height="18" rx="4" class="pa"/>
+<text x="315" y="1012" class="pat" text-anchor="middle">ASIL D</text>
+<rect x="240.4" y="999" width="43.6" height="18" rx="4" class="pn"/>
+<text x="262.2" y="1012" class="pnt" text-anchor="middle">ENV-3</text>
+<rect x="197.1" y="999" width="37.3" height="18" rx="4" class="ps"/>
+<text x="215.8" y="1012" class="pst" text-anchor="middle">IS-2</text>
+<text x="38" y="1034" class="tb">Safety channel detection</text>
+<rect x="33" y="1064" width="312" height="162" rx="6" class="verge"/>
+<rect x="122" y="1070" width="132" height="24" rx="3" class="not"/>
+<text x="188" y="1085.5" class="nott" text-anchor="middle">Autoware</text>
+<rect x="39" y="1114" width="225" height="25.6" rx="3" class="ex"/>
+<text x="151.5" y="1130.3" class="ext" text-anchor="middle">Safety monitor</text>
+<rect x="272" y="1114" width="63" height="25.6" rx="3" class="ex"/>
+<text x="303.5" y="1130.3" class="ext" text-anchor="middle">Channel</text>
+<rect x="264" y="1070" width="34" height="24" rx="3" class="ex"/>
+<text x="281" y="1085.5" class="ext" text-anchor="middle">LiDAR</text>
+<rect x="301" y="1070" width="34" height="24" rx="3" class="ex"/>
+<text x="318" y="1085.5" class="ext" text-anchor="middle">Radar</text>
+<rect x="39" y="1158.8" width="95" height="24" rx="3" class="not"/>
+<text x="86.5" y="1174.3" class="nott" text-anchor="middle">Drive-by-wire</text>
+<rect x="140" y="1158.8" width="50" height="24" rx="3" class="not"/>
+<text x="165" y="1174.3" class="nott" text-anchor="middle">State</text>
+<rect x="196" y="1158.8" width="45" height="24" rx="3" class="not"/>
+<text x="218.5" y="1174.3" class="nott" text-anchor="middle">Brake</text>
+<rect x="247" y="1158.8" width="50" height="24" rx="3" class="not"/>
+<text x="272" y="1174.3" class="nott" text-anchor="middle">Doors</text>
+<rect x="39" y="1200.4" width="150" height="17.6" rx="3" class="has"/>
+<text x="114" y="1212.7" class="hast" text-anchor="middle">Monitor power</text>
+<rect x="39" y="1070" width="75" height="24" rx="3" class="not"/>
+<text x="76.5" y="1085.5" class="nott" text-anchor="middle">Remote ops</text>
+<text x="38" y="1244" class="hd">ENV-3 Sensor bench and closed track</text>
+<rect x="38" y="1248" width="79" height="16" rx="8" class="mp"/>
+<text x="77.5" y="1260" class="mpt" text-anchor="middle">requirements</text>
+<rect x="122" y="1248" width="61.8" height="16" rx="8" class="mp"/>
+<text x="152.9" y="1260" class="mpt" text-anchor="middle">interface</text>
+<rect x="188.8" y="1248" width="44.5" height="16" rx="8" class="mp"/>
+<text x="211" y="1260" class="mpt" text-anchor="middle">timing</text>
+<text x="38" y="1280" class="ax">Covers 5 TSRs · 3 signals</text>
+<text x="38" y="1294" class="ax">Time: TSR-09.01 detect within 200 ms to 283 ms</text>
+<text x="38" y="1314" class="hd">Passes when</text>
+<text x="38" y="1329" class="s">Every reference target of the smallest size (P-12)</text>
+<text x="38" y="1343" class="s">is reported out to its range, with position and</text>
+<text x="38" y="1357" class="s">velocity, within the budget, in each light and</text>
+<text x="38" y="1371" class="s">weather condition of the ODD</text>
+<rect x="370" y="988" width="330" height="430" rx="8" class="card"/>
+<text x="384" y="1012" class="gid">IT-08</text>
+<rect x="636.1" y="999" width="49.9" height="18" rx="4" class="pa"/>
+<text x="661" y="1012" class="pat" text-anchor="middle">ASIL C</text>
+<rect x="586.4" y="999" width="43.6" height="18" rx="4" class="pn"/>
+<text x="608.2" y="1012" class="pnt" text-anchor="middle">ENV-3</text>
+<rect x="543.1" y="999" width="37.3" height="18" rx="4" class="ps"/>
+<text x="561.8" y="1012" class="pst" text-anchor="middle">IS-2</text>
+<text x="384" y="1034" class="tb">Safety channel false detections, per</text>
+<text x="384" y="1050" class="tb">sensor</text>
+<rect x="379" y="1064" width="312" height="162" rx="6" class="verge"/>
+<rect x="468" y="1070" width="132" height="24" rx="3" class="not"/>
+<text x="534" y="1085.5" class="nott" text-anchor="middle">Autoware</text>
+<rect x="385" y="1114" width="225" height="25.6" rx="3" class="has"/>
+<text x="497.5" y="1130.3" class="hast" text-anchor="middle">Safety monitor</text>
+<rect x="618" y="1114" width="63" height="25.6" rx="3" class="ex"/>
+<text x="649.5" y="1130.3" class="ext" text-anchor="middle">Channel</text>
+<rect x="610" y="1070" width="34" height="24" rx="3" class="ex"/>
+<text x="627" y="1085.5" class="ext" text-anchor="middle">LiDAR</text>
+<rect x="647" y="1070" width="34" height="24" rx="3" class="ex"/>
+<text x="664" y="1085.5" class="ext" text-anchor="middle">Radar</text>
+<rect x="385" y="1158.8" width="95" height="24" rx="3" class="not"/>
+<text x="432.5" y="1174.3" class="nott" text-anchor="middle">Drive-by-wire</text>
+<rect x="486" y="1158.8" width="50" height="24" rx="3" class="not"/>
+<text x="511" y="1174.3" class="nott" text-anchor="middle">State</text>
+<rect x="542" y="1158.8" width="45" height="24" rx="3" class="not"/>
+<text x="564.5" y="1174.3" class="nott" text-anchor="middle">Brake</text>
+<rect x="593" y="1158.8" width="50" height="24" rx="3" class="not"/>
+<text x="618" y="1174.3" class="nott" text-anchor="middle">Doors</text>
+<rect x="385" y="1200.4" width="150" height="17.6" rx="3" class="has"/>
+<text x="460" y="1212.7" class="hast" text-anchor="middle">Monitor power</text>
+<rect x="385" y="1070" width="75" height="24" rx="3" class="not"/>
+<text x="422.5" y="1085.5" class="nott" text-anchor="middle">Remote ops</text>
+<text x="384" y="1244" class="hd">ENV-3 Sensor bench and closed track</text>
+<rect x="384" y="1248" width="79" height="16" rx="8" class="mp"/>
+<text x="423.5" y="1260" class="mpt" text-anchor="middle">requirements</text>
+<rect x="468" y="1248" width="44.5" height="16" rx="8" class="mp"/>
+<text x="490.2" y="1260" class="mpt" text-anchor="middle">stress</text>
+<text x="384" y="1280" class="ax">Covers 3 TSRs</text>
+<text x="384" y="1294" class="ax">No time budget measured</text>
+<text x="384" y="1314" class="hd">Passes when</text>
+<text x="384" y="1329" class="s">The false-detection rate of each sensor and of the</text>
+<text x="384" y="1343" class="s">channel stays below its share of P-13 over the</text>
+<text x="384" y="1357" class="s">replayed and recorded data</text>
+<rect x="716" y="988" width="330" height="430" rx="8" class="card"/>
+<text x="730" y="1012" class="gid">IT-09</text>
+<rect x="982.1" y="999" width="49.9" height="18" rx="4" class="pa"/>
+<text x="1007" y="1012" class="pat" text-anchor="middle">ASIL D</text>
+<rect x="932.4" y="999" width="43.6" height="18" rx="4" class="pn"/>
+<text x="954.2" y="1012" class="pnt" text-anchor="middle">ENV-2</text>
+<rect x="889.1" y="999" width="37.3" height="18" rx="4" class="ps"/>
+<text x="907.8" y="1012" class="pst" text-anchor="middle">IS-2</text>
+<text x="730" y="1034" class="tb">Safety channel diagnostics and secure</text>
+<text x="730" y="1050" class="tb">boot</text>
+<rect x="725" y="1064" width="312" height="162" rx="6" class="verge"/>
+<rect x="814" y="1070" width="132" height="24" rx="3" class="not"/>
+<text x="880" y="1085.5" class="nott" text-anchor="middle">Autoware</text>
+<rect x="731" y="1114" width="225" height="25.6" rx="3" class="ex"/>
+<text x="843.5" y="1130.3" class="ext" text-anchor="middle">Safety monitor</text>
+<rect x="964" y="1114" width="63" height="25.6" rx="3" class="ex"/>
+<text x="995.5" y="1130.3" class="ext" text-anchor="middle">Channel</text>
+<rect x="956" y="1070" width="34" height="24" rx="3" class="add"/>
+<text x="973" y="1085.5" class="addt" text-anchor="middle">LiDAR</text>
+<rect x="993" y="1070" width="34" height="24" rx="3" class="add"/>
+<text x="1010" y="1085.5" class="addt" text-anchor="middle">Radar</text>
+<rect x="731" y="1158.8" width="95" height="24" rx="3" class="not"/>
+<text x="778.5" y="1174.3" class="nott" text-anchor="middle">Drive-by-wire</text>
+<rect x="832" y="1158.8" width="50" height="24" rx="3" class="not"/>
+<text x="857" y="1174.3" class="nott" text-anchor="middle">State</text>
+<rect x="888" y="1158.8" width="45" height="24" rx="3" class="not"/>
+<text x="910.5" y="1174.3" class="nott" text-anchor="middle">Brake</text>
+<rect x="939" y="1158.8" width="50" height="24" rx="3" class="not"/>
+<text x="964" y="1174.3" class="nott" text-anchor="middle">Doors</text>
+<rect x="731" y="1200.4" width="150" height="17.6" rx="3" class="has"/>
+<text x="806" y="1212.7" class="hast" text-anchor="middle">Monitor power</text>
+<rect x="731" y="1070" width="75" height="24" rx="3" class="not"/>
+<text x="768.5" y="1085.5" class="nott" text-anchor="middle">Remote ops</text>
+<text x="730" y="1244" class="hd">ENV-2 Hardware in the loop</text>
+<rect x="730" y="1248" width="96.2" height="16" rx="8" class="mp"/>
+<text x="778.1" y="1260" class="mpt" text-anchor="middle">fault injection</text>
+<rect x="831.2" y="1248" width="44.5" height="16" rx="8" class="mp"/>
+<text x="853.5" y="1260" class="mpt" text-anchor="middle">timing</text>
+<rect x="880.8" y="1248" width="56" height="16" rx="8" class="mp"/>
+<text x="908.8" y="1260" class="mpt" text-anchor="middle">security</text>
+<text x="730" y="1280" class="ax">Covers 2 TSRs · 1 signal · 1 CSTR</text>
+<text x="730" y="1294" class="ax">Time: TSR-10.01 detect within 200 ms to 283 ms;</text>
+<text x="730" y="1308" class="ax">TSR-09.07 detect within 200 ms to 283 ms</text>
+<text x="730" y="1328" class="hd">Passes when</text>
+<text x="730" y="1343" class="s">Every injected sensor and processor fault is</text>
+<text x="730" y="1357" class="s">reported in SIG-10, or SIG-10 stops, within the</text>
+<text x="730" y="1371" class="s">budget; unsigned images do not run</text>
+<rect x="24" y="1434" width="330" height="430" rx="8" class="card"/>
+<text x="38" y="1458" class="gid">IT-10</text>
+<rect x="296.4" y="1445" width="43.6" height="18" rx="4" class="pn"/>
+<text x="318.2" y="1458" class="pnt" text-anchor="middle">ENV-3</text>
+<rect x="253.1" y="1445" width="37.3" height="18" rx="4" class="ps"/>
+<text x="271.7" y="1458" class="pst" text-anchor="middle">IS-2</text>
+<text x="38" y="1480" class="tb">Physical attacks on the safety sensors</text>
+<rect x="33" y="1510" width="312" height="162" rx="6" class="verge"/>
+<rect x="122" y="1516" width="132" height="24" rx="3" class="not"/>
+<text x="188" y="1531.5" class="nott" text-anchor="middle">Autoware</text>
+<rect x="39" y="1560" width="225" height="25.6" rx="3" class="has"/>
+<text x="151.5" y="1576.3" class="hast" text-anchor="middle">Safety monitor</text>
+<rect x="272" y="1560" width="63" height="25.6" rx="3" class="ex"/>
+<text x="303.5" y="1576.3" class="ext" text-anchor="middle">Channel</text>
+<rect x="264" y="1516" width="34" height="24" rx="3" class="add"/>
+<text x="281" y="1531.5" class="addt" text-anchor="middle">LiDAR</text>
+<rect x="301" y="1516" width="34" height="24" rx="3" class="add"/>
+<text x="318" y="1531.5" class="addt" text-anchor="middle">Radar</text>
+<rect x="39" y="1604.8" width="95" height="24" rx="3" class="not"/>
+<text x="86.5" y="1620.3" class="nott" text-anchor="middle">Drive-by-wire</text>
+<rect x="140" y="1604.8" width="50" height="24" rx="3" class="not"/>
+<text x="165" y="1620.3" class="nott" text-anchor="middle">State</text>
+<rect x="196" y="1604.8" width="45" height="24" rx="3" class="not"/>
+<text x="218.5" y="1620.3" class="nott" text-anchor="middle">Brake</text>
+<rect x="247" y="1604.8" width="50" height="24" rx="3" class="not"/>
+<text x="272" y="1620.3" class="nott" text-anchor="middle">Doors</text>
+<rect x="39" y="1646.4" width="150" height="17.6" rx="3" class="has"/>
+<text x="114" y="1658.7" class="hast" text-anchor="middle">Monitor power</text>
+<rect x="39" y="1516" width="75" height="24" rx="3" class="not"/>
+<text x="76.5" y="1531.5" class="nott" text-anchor="middle">Remote ops</text>
+<text x="38" y="1690" class="hd">ENV-3 Sensor bench and closed track</text>
+<rect x="38" y="1694" width="56" height="16" rx="8" class="mp"/>
+<text x="66" y="1706" class="mpt" text-anchor="middle">security</text>
+<text x="38" y="1726" class="ax">Covers 1 CSTR</text>
+<text x="38" y="1740" class="ax">No time budget measured</text>
+<text x="38" y="1760" class="hd">Passes when</text>
+<text x="38" y="1775" class="s">Spoofed, jammed and relayed returns from the attack</text>
+<text x="38" y="1789" class="s">list do not create or hide road users beyond the</text>
+<text x="38" y="1803" class="s">rates of IT-07 and IT-08, or the sensor is reported</text>
+<text x="38" y="1817" class="s">degraded</text>
+<rect x="370" y="1434" width="330" height="430" rx="8" class="card"/>
+<text x="384" y="1458" class="gid">IT-11</text>
+<rect x="636.1" y="1445" width="49.9" height="18" rx="4" class="pa"/>
+<text x="661" y="1458" class="pat" text-anchor="middle">ASIL D</text>
+<rect x="586.4" y="1445" width="43.6" height="18" rx="4" class="pn"/>
+<text x="608.2" y="1458" class="pnt" text-anchor="middle">ENV-2</text>
+<rect x="543.1" y="1445" width="37.3" height="18" rx="4" class="ps"/>
+<text x="561.8" y="1458" class="pst" text-anchor="middle">IS-3</text>
+<text x="384" y="1480" class="tb">Autoware's stop when the safety channel</text>
+<text x="384" y="1496" class="tb">fails</text>
+<rect x="379" y="1510" width="312" height="162" rx="6" class="verge"/>
+<rect x="468" y="1516" width="132" height="24" rx="3" class="ex"/>
+<text x="534" y="1531.5" class="ext" text-anchor="middle">Autoware</text>
+<rect x="385" y="1560" width="225" height="25.6" rx="3" class="ex"/>
+<text x="497.5" y="1576.3" class="ext" text-anchor="middle">Safety monitor</text>
+<rect x="618" y="1560" width="63" height="25.6" rx="3" class="has"/>
+<text x="649.5" y="1576.3" class="hast" text-anchor="middle">Channel</text>
+<rect x="610" y="1516" width="34" height="24" rx="3" class="has"/>
+<text x="627" y="1531.5" class="hast" text-anchor="middle">LiDAR</text>
+<rect x="647" y="1516" width="34" height="24" rx="3" class="has"/>
+<text x="664" y="1531.5" class="hast" text-anchor="middle">Radar</text>
+<rect x="385" y="1604.8" width="95" height="24" rx="3" class="not"/>
+<text x="432.5" y="1620.3" class="nott" text-anchor="middle">Drive-by-wire</text>
+<rect x="486" y="1604.8" width="50" height="24" rx="3" class="not"/>
+<text x="511" y="1620.3" class="nott" text-anchor="middle">State</text>
+<rect x="542" y="1604.8" width="45" height="24" rx="3" class="not"/>
+<text x="564.5" y="1620.3" class="nott" text-anchor="middle">Brake</text>
+<rect x="593" y="1604.8" width="50" height="24" rx="3" class="not"/>
+<text x="618" y="1620.3" class="nott" text-anchor="middle">Doors</text>
+<rect x="385" y="1646.4" width="150" height="17.6" rx="3" class="has"/>
+<text x="460" y="1658.7" class="hast" text-anchor="middle">Monitor power</text>
+<rect x="385" y="1516" width="75" height="24" rx="3" class="add"/>
+<text x="422.5" y="1531.5" class="addt" text-anchor="middle">Remote ops</text>
+<text x="384" y="1690" class="hd">ENV-2 Hardware in the loop</text>
+<rect x="384" y="1694" width="96.2" height="16" rx="8" class="mp"/>
+<text x="432.1" y="1706" class="mpt" text-anchor="middle">fault injection</text>
+<rect x="485.2" y="1694" width="61.8" height="16" rx="8" class="mp"/>
+<text x="516.1" y="1706" class="mpt" text-anchor="middle">interface</text>
+<rect x="552" y="1694" width="44.5" height="16" rx="8" class="mp"/>
+<text x="574.2" y="1706" class="mpt" text-anchor="middle">timing</text>
+<text x="384" y="1726" class="ax">Covers 1 TSR · 1 signal</text>
+<text x="384" y="1740" class="ax">Time: TSR-03.04 react within 179 ms to 283 ms</text>
+<text x="384" y="1760" class="hd">Passes when</text>
+<text x="384" y="1775" class="s">With the channel failed, Autoware is told and stops</text>
+<text x="384" y="1789" class="s">comfortably; if it does not slow as expected, the</text>
+<text x="384" y="1803" class="s">monitor stops the vehicle within the budget</text>
+<rect x="716" y="1434" width="330" height="430" rx="8" class="card"/>
+<text x="730" y="1458" class="gid">IT-12</text>
+<rect x="988.4" y="1445" width="43.6" height="18" rx="4" class="pn"/>
+<text x="1010.2" y="1458" class="pnt" text-anchor="middle">ENV-2</text>
+<rect x="945.1" y="1445" width="37.3" height="18" rx="4" class="ps"/>
+<text x="963.7" y="1458" class="pst" text-anchor="middle">IS-3</text>
+<text x="730" y="1480" class="tb">Autoware computer's cybersecurity</text>
+<text x="730" y="1496" class="tb">functions</text>
+<rect x="725" y="1510" width="312" height="162" rx="6" class="verge"/>
+<rect x="814" y="1516" width="132" height="24" rx="3" class="ex"/>
+<text x="880" y="1531.5" class="ext" text-anchor="middle">Autoware</text>
+<rect x="731" y="1560" width="225" height="25.6" rx="3" class="has"/>
+<text x="843.5" y="1576.3" class="hast" text-anchor="middle">Safety monitor</text>
+<rect x="964" y="1560" width="63" height="25.6" rx="3" class="has"/>
+<text x="995.5" y="1576.3" class="hast" text-anchor="middle">Channel</text>
+<rect x="956" y="1516" width="34" height="24" rx="3" class="has"/>
+<text x="973" y="1531.5" class="hast" text-anchor="middle">LiDAR</text>
+<rect x="993" y="1516" width="34" height="24" rx="3" class="has"/>
+<text x="1010" y="1531.5" class="hast" text-anchor="middle">Radar</text>
+<rect x="731" y="1604.8" width="95" height="24" rx="3" class="not"/>
+<text x="778.5" y="1620.3" class="nott" text-anchor="middle">Drive-by-wire</text>
+<rect x="832" y="1604.8" width="50" height="24" rx="3" class="not"/>
+<text x="857" y="1620.3" class="nott" text-anchor="middle">State</text>
+<rect x="888" y="1604.8" width="45" height="24" rx="3" class="not"/>
+<text x="910.5" y="1620.3" class="nott" text-anchor="middle">Brake</text>
+<rect x="939" y="1604.8" width="50" height="24" rx="3" class="not"/>
+<text x="964" y="1620.3" class="nott" text-anchor="middle">Doors</text>
+<rect x="731" y="1646.4" width="150" height="17.6" rx="3" class="has"/>
+<text x="806" y="1658.7" class="hast" text-anchor="middle">Monitor power</text>
+<rect x="731" y="1516" width="75" height="24" rx="3" class="add"/>
+<text x="768.5" y="1531.5" class="addt" text-anchor="middle">Remote ops</text>
+<text x="730" y="1690" class="hd">ENV-2 Hardware in the loop</text>
+<rect x="730" y="1694" width="56" height="16" rx="8" class="mp"/>
+<text x="758" y="1706" class="mpt" text-anchor="middle">security</text>
+<rect x="791" y="1694" width="79" height="16" rx="8" class="mp"/>
+<text x="830.5" y="1706" class="mpt" text-anchor="middle">requirements</text>
+<text x="730" y="1726" class="ax">Covers 9 CSTRs</text>
+<text x="730" y="1740" class="ax">No time budget measured</text>
+<text x="730" y="1760" class="hd">Passes when</text>
+<text x="730" y="1775" class="s">Each requirement holds under its attack or fault</text>
+<text x="730" y="1789" class="s">(link loss, unsigned package, mixed versions,</text>
+<text x="730" y="1803" class="s">spoofed GNSS, siren without lights, unsigned route</text>
+<text x="730" y="1817" class="s">change, fuzzed passenger commands)</text>
+<rect x="24" y="1880" width="330" height="430" rx="8" class="card"/>
+<text x="38" y="1904" class="gid">IT-13</text>
+<rect x="290.1" y="1891" width="49.9" height="18" rx="4" class="pa"/>
+<text x="315" y="1904" class="pat" text-anchor="middle">ASIL D</text>
+<rect x="240.4" y="1891" width="43.6" height="18" rx="4" class="pn"/>
+<text x="262.2" y="1904" class="pnt" text-anchor="middle">ENV-4</text>
+<rect x="197.1" y="1891" width="37.3" height="18" rx="4" class="ps"/>
+<text x="215.8" y="1904" class="pst" text-anchor="middle">IS-4</text>
+<text x="38" y="1926" class="tb">Bounded command and the vehicle's own</text>
+<text x="38" y="1942" class="tb">stop</text>
+<rect x="33" y="1956" width="312" height="162" rx="6" class="verge"/>
+<rect x="122" y="1962" width="132" height="24" rx="3" class="has"/>
+<text x="188" y="1977.5" class="hast" text-anchor="middle">Autoware</text>
+<rect x="39" y="2006" width="225" height="25.6" rx="3" class="ex"/>
+<text x="151.5" y="2022.3" class="ext" text-anchor="middle">Safety monitor</text>
+<rect x="272" y="2006" width="63" height="25.6" rx="3" class="has"/>
+<text x="303.5" y="2022.3" class="hast" text-anchor="middle">Channel</text>
+<rect x="264" y="1962" width="34" height="24" rx="3" class="has"/>
+<text x="281" y="1977.5" class="hast" text-anchor="middle">LiDAR</text>
+<rect x="301" y="1962" width="34" height="24" rx="3" class="has"/>
+<text x="318" y="1977.5" class="hast" text-anchor="middle">Radar</text>
+<rect x="39" y="2050.8" width="95" height="24" rx="3" class="ex"/>
+<text x="86.5" y="2066.3" class="ext" text-anchor="middle">Drive-by-wire</text>
+<rect x="140" y="2050.8" width="50" height="24" rx="3" class="add"/>
+<text x="165" y="2066.3" class="addt" text-anchor="middle">State</text>
+<rect x="196" y="2050.8" width="45" height="24" rx="3" class="add"/>
+<text x="218.5" y="2066.3" class="addt" text-anchor="middle">Brake</text>
+<rect x="247" y="2050.8" width="50" height="24" rx="3" class="add"/>
+<text x="272" y="2066.3" class="addt" text-anchor="middle">Doors</text>
+<rect x="39" y="2092.4" width="150" height="17.6" rx="3" class="has"/>
+<text x="114" y="2104.7" class="hast" text-anchor="middle">Monitor power</text>
+<rect x="39" y="1962" width="75" height="24" rx="3" class="has"/>
+<text x="76.5" y="1977.5" class="hast" text-anchor="middle">Remote ops</text>
+<text x="38" y="2136" class="hd">ENV-4 Vehicle on a closed track</text>
+<rect x="38" y="2140" width="61.8" height="16" rx="8" class="mp"/>
+<text x="68.9" y="2152" class="mpt" text-anchor="middle">interface</text>
+<rect x="104.8" y="2140" width="96.2" height="16" rx="8" class="mp"/>
+<text x="152.9" y="2152" class="mpt" text-anchor="middle">fault injection</text>
+<rect x="206" y="2140" width="44.5" height="16" rx="8" class="mp"/>
+<text x="228.2" y="2152" class="mpt" text-anchor="middle">timing</text>
+<text x="38" y="2172" class="ax">Covers 5 TSRs · 3 signals · 1 CSTR</text>
+<text x="38" y="2186" class="ax">Time: TSR-03.05 react within 179 ms to 283 ms;</text>
+<text x="38" y="2200" class="ax">TSR-14.01 detect within 179 ms to 283 ms</text>
+<text x="38" y="2220" class="hd">Passes when</text>
+<text x="38" y="2235" class="s">Propulsion cut and the switch to the secondary brake</text>
+<text x="38" y="2249" class="s">path act within the reaction budget; with the</text>
+<text x="38" y="2263" class="s">monitor silenced the vehicle stops on its own after</text>
+<text x="38" y="2277" class="s">P-08; no message from the Autoware computer reaches</text>
+<text x="38" y="2291" class="s">the by-wire bus</text>
+<rect x="370" y="1880" width="330" height="430" rx="8" class="card"/>
+<text x="384" y="1904" class="gid">IT-14</text>
+<rect x="636.1" y="1891" width="49.9" height="18" rx="4" class="pa"/>
+<text x="661" y="1904" class="pat" text-anchor="middle">ASIL D</text>
+<rect x="586.4" y="1891" width="43.6" height="18" rx="4" class="pn"/>
+<text x="608.2" y="1904" class="pnt" text-anchor="middle">ENV-4</text>
+<rect x="543.1" y="1891" width="37.3" height="18" rx="4" class="ps"/>
+<text x="561.8" y="1904" class="pst" text-anchor="middle">IS-4</text>
+<text x="384" y="1926" class="tb">Achieved against commanded on the</text>
+<text x="384" y="1942" class="tb">vehicle</text>
+<rect x="379" y="1956" width="312" height="162" rx="6" class="verge"/>
+<rect x="468" y="1962" width="132" height="24" rx="3" class="has"/>
+<text x="534" y="1977.5" class="hast" text-anchor="middle">Autoware</text>
+<rect x="385" y="2006" width="225" height="25.6" rx="3" class="ex"/>
+<text x="497.5" y="2022.3" class="ext" text-anchor="middle">Safety monitor</text>
+<rect x="618" y="2006" width="63" height="25.6" rx="3" class="has"/>
+<text x="649.5" y="2022.3" class="hast" text-anchor="middle">Channel</text>
+<rect x="610" y="1962" width="34" height="24" rx="3" class="has"/>
+<text x="627" y="1977.5" class="hast" text-anchor="middle">LiDAR</text>
+<rect x="647" y="1962" width="34" height="24" rx="3" class="has"/>
+<text x="664" y="1977.5" class="hast" text-anchor="middle">Radar</text>
+<rect x="385" y="2050.8" width="95" height="24" rx="3" class="add"/>
+<text x="432.5" y="2066.3" class="addt" text-anchor="middle">Drive-by-wire</text>
+<rect x="486" y="2050.8" width="50" height="24" rx="3" class="ex"/>
+<text x="511" y="2066.3" class="ext" text-anchor="middle">State</text>
+<rect x="542" y="2050.8" width="45" height="24" rx="3" class="add"/>
+<text x="564.5" y="2066.3" class="addt" text-anchor="middle">Brake</text>
+<rect x="593" y="2050.8" width="50" height="24" rx="3" class="add"/>
+<text x="618" y="2066.3" class="addt" text-anchor="middle">Doors</text>
+<rect x="385" y="2092.4" width="150" height="17.6" rx="3" class="has"/>
+<text x="460" y="2104.7" class="hast" text-anchor="middle">Monitor power</text>
+<rect x="385" y="1962" width="75" height="24" rx="3" class="has"/>
+<text x="422.5" y="1977.5" class="hast" text-anchor="middle">Remote ops</text>
+<text x="384" y="2136" class="hd">ENV-4 Vehicle on a closed track</text>
+<rect x="384" y="2140" width="96.2" height="16" rx="8" class="mp"/>
+<text x="432.1" y="2152" class="mpt" text-anchor="middle">fault injection</text>
+<rect x="485.2" y="2140" width="44.5" height="16" rx="8" class="mp"/>
+<text x="507.5" y="2152" class="mpt" text-anchor="middle">timing</text>
+<rect x="534.8" y="2140" width="61.8" height="16" rx="8" class="mp"/>
+<text x="565.6" y="2152" class="mpt" text-anchor="middle">interface</text>
+<text x="384" y="2172" class="ax">Covers 6 TSRs · 2 signals</text>
+<text x="384" y="2186" class="ax">Time: TSR-03.01 detect within 179 ms to 283 ms;</text>
+<text x="384" y="2200" class="ax">TSR-03.02 detect within 179 ms to 283 ms; TSR-03.03</text>
+<text x="384" y="2220" class="hd">Passes when</text>
+<text x="384" y="2235" class="s">Injected propulsion, braking and steering deviations</text>
+<text x="384" y="2249" class="s">beyond P-11 are detected within the budget; vehicle</text>
+<text x="384" y="2263" class="s">state arrives on its own path with its fault flags</text>
+<rect x="716" y="1880" width="330" height="430" rx="8" class="card"/>
+<text x="730" y="1904" class="gid">IT-15</text>
+<rect x="982.1" y="1891" width="49.9" height="18" rx="4" class="pa"/>
+<text x="1007" y="1904" class="pat" text-anchor="middle">ASIL D</text>
+<rect x="932.4" y="1891" width="43.6" height="18" rx="4" class="pn"/>
+<text x="954.2" y="1904" class="pnt" text-anchor="middle">ENV-4</text>
+<rect x="889.1" y="1891" width="37.3" height="18" rx="4" class="ps"/>
+<text x="907.8" y="1904" class="pst" text-anchor="middle">IS-4</text>
+<text x="730" y="1926" class="tb">Park brake and doors</text>
+<rect x="725" y="1956" width="312" height="162" rx="6" class="verge"/>
+<rect x="814" y="1962" width="132" height="24" rx="3" class="has"/>
+<text x="880" y="1977.5" class="hast" text-anchor="middle">Autoware</text>
+<rect x="731" y="2006" width="225" height="25.6" rx="3" class="ex"/>
+<text x="843.5" y="2022.3" class="ext" text-anchor="middle">Safety monitor</text>
+<rect x="964" y="2006" width="63" height="25.6" rx="3" class="has"/>
+<text x="995.5" y="2022.3" class="hast" text-anchor="middle">Channel</text>
+<rect x="956" y="1962" width="34" height="24" rx="3" class="has"/>
+<text x="973" y="1977.5" class="hast" text-anchor="middle">LiDAR</text>
+<rect x="993" y="1962" width="34" height="24" rx="3" class="has"/>
+<text x="1010" y="1977.5" class="hast" text-anchor="middle">Radar</text>
+<rect x="731" y="2050.8" width="95" height="24" rx="3" class="add"/>
+<text x="778.5" y="2066.3" class="addt" text-anchor="middle">Drive-by-wire</text>
+<rect x="832" y="2050.8" width="50" height="24" rx="3" class="add"/>
+<text x="857" y="2066.3" class="addt" text-anchor="middle">State</text>
+<rect x="888" y="2050.8" width="45" height="24" rx="3" class="ex"/>
+<text x="910.5" y="2066.3" class="ext" text-anchor="middle">Brake</text>
+<rect x="939" y="2050.8" width="50" height="24" rx="3" class="ex"/>
+<text x="964" y="2066.3" class="ext" text-anchor="middle">Doors</text>
+<rect x="731" y="2092.4" width="150" height="17.6" rx="3" class="has"/>
+<text x="806" y="2104.7" class="hast" text-anchor="middle">Monitor power</text>
+<rect x="731" y="1962" width="75" height="24" rx="3" class="has"/>
+<text x="768.5" y="1977.5" class="hast" text-anchor="middle">Remote ops</text>
+<text x="730" y="2136" class="hd">ENV-4 Vehicle on a closed track</text>
+<rect x="730" y="2140" width="79" height="16" rx="8" class="mp"/>
+<text x="769.5" y="2152" class="mpt" text-anchor="middle">requirements</text>
+<rect x="814" y="2140" width="96.2" height="16" rx="8" class="mp"/>
+<text x="862.1" y="2152" class="mpt" text-anchor="middle">fault injection</text>
+<rect x="915.2" y="2140" width="61.8" height="16" rx="8" class="mp"/>
+<text x="946.1" y="2152" class="mpt" text-anchor="middle">interface</text>
+<text x="730" y="2172" class="ax">Covers 2 TSRs · 3 signals · 1 CSTR</text>
+<text x="730" y="2186" class="ax">No time budget measured</text>
+<text x="730" y="2206" class="hd">Passes when</text>
+<text x="730" y="2221" class="s">The park brake holds on the steepest gradient of the</text>
+<text x="730" y="2235" class="s">geofence; the vehicle does not move with any door</text>
+<text x="730" y="2249" class="s">open, whatever is commanded</text>
+<rect x="24" y="2326" width="330" height="430" rx="8" class="card"/>
+<text x="38" y="2350" class="gid">IT-16</text>
+<rect x="296.4" y="2337" width="43.6" height="18" rx="4" class="pn"/>
+<text x="318.2" y="2350" class="pnt" text-anchor="middle">ENV-4</text>
+<rect x="253.1" y="2337" width="37.3" height="18" rx="4" class="ps"/>
+<text x="271.7" y="2350" class="pst" text-anchor="middle">IS-4</text>
+<text x="38" y="2372" class="tb">Collision signal</text>
+<rect x="33" y="2402" width="312" height="162" rx="6" class="verge"/>
+<rect x="122" y="2408" width="132" height="24" rx="3" class="has"/>
+<text x="188" y="2423.5" class="hast" text-anchor="middle">Autoware</text>
+<rect x="39" y="2452" width="225" height="25.6" rx="3" class="ex"/>
+<text x="151.5" y="2468.3" class="ext" text-anchor="middle">Safety monitor</text>
+<rect x="272" y="2452" width="63" height="25.6" rx="3" class="has"/>
+<text x="303.5" y="2468.3" class="hast" text-anchor="middle">Channel</text>
+<rect x="264" y="2408" width="34" height="24" rx="3" class="has"/>
+<text x="281" y="2423.5" class="hast" text-anchor="middle">LiDAR</text>
+<rect x="301" y="2408" width="34" height="24" rx="3" class="has"/>
+<text x="318" y="2423.5" class="hast" text-anchor="middle">Radar</text>
+<rect x="39" y="2496.8" width="95" height="24" rx="3" class="add"/>
+<text x="86.5" y="2512.3" class="addt" text-anchor="middle">Drive-by-wire</text>
+<rect x="140" y="2496.8" width="50" height="24" rx="3" class="ex"/>
+<text x="165" y="2512.3" class="ext" text-anchor="middle">State</text>
+<rect x="196" y="2496.8" width="45" height="24" rx="3" class="add"/>
+<text x="218.5" y="2512.3" class="addt" text-anchor="middle">Brake</text>
+<rect x="247" y="2496.8" width="50" height="24" rx="3" class="add"/>
+<text x="272" y="2512.3" class="addt" text-anchor="middle">Doors</text>
+<rect x="39" y="2538.4" width="150" height="17.6" rx="3" class="has"/>
+<text x="114" y="2550.7" class="hast" text-anchor="middle">Monitor power</text>
+<rect x="39" y="2408" width="75" height="24" rx="3" class="has"/>
+<text x="76.5" y="2423.5" class="hast" text-anchor="middle">Remote ops</text>
+<text x="38" y="2582" class="hd">ENV-4 Vehicle on a closed track</text>
+<rect x="38" y="2586" width="61.8" height="16" rx="8" class="mp"/>
+<text x="68.9" y="2598" class="mpt" text-anchor="middle">interface</text>
+<text x="38" y="2618" class="ax">Covers 1 signal</text>
+<text x="38" y="2632" class="ax">No time budget measured</text>
+<text x="38" y="2652" class="hd">Passes when</text>
+<text x="38" y="2667" class="s">A collision flag from the vehicle reaches the</text>
+<text x="38" y="2681" class="s">monitor and starts TR-15</text>
+<rect x="370" y="2326" width="330" height="430" rx="8" class="card"/>
+<text x="384" y="2350" class="gid">IT-17</text>
+<rect x="636.1" y="2337" width="49.9" height="18" rx="4" class="pa"/>
+<text x="661" y="2350" class="pat" text-anchor="middle">ASIL D</text>
+<rect x="586.4" y="2337" width="43.6" height="18" rx="4" class="pn"/>
+<text x="608.2" y="2350" class="pnt" text-anchor="middle">ENV-4</text>
+<rect x="543.1" y="2337" width="37.3" height="18" rx="4" class="ps"/>
+<text x="561.8" y="2350" class="pst" text-anchor="middle">IS-4</text>
+<text x="384" y="2372" class="tb">Minimal risk manoeuvre and the</text>
+<text x="384" y="2388" class="tb">sensing-to-actuation chain on the track</text>
+<rect x="379" y="2402" width="312" height="162" rx="6" class="verge"/>
+<rect x="468" y="2408" width="132" height="24" rx="3" class="has"/>
+<text x="534" y="2423.5" class="hast" text-anchor="middle">Autoware</text>
+<rect x="385" y="2452" width="225" height="25.6" rx="3" class="ex"/>
+<text x="497.5" y="2468.3" class="ext" text-anchor="middle">Safety monitor</text>
+<rect x="618" y="2452" width="63" height="25.6" rx="3" class="has"/>
+<text x="649.5" y="2468.3" class="hast" text-anchor="middle">Channel</text>
+<rect x="610" y="2408" width="34" height="24" rx="3" class="has"/>
+<text x="627" y="2423.5" class="hast" text-anchor="middle">LiDAR</text>
+<rect x="647" y="2408" width="34" height="24" rx="3" class="has"/>
+<text x="664" y="2423.5" class="hast" text-anchor="middle">Radar</text>
+<rect x="385" y="2496.8" width="95" height="24" rx="3" class="add"/>
+<text x="432.5" y="2512.3" class="addt" text-anchor="middle">Drive-by-wire</text>
+<rect x="486" y="2496.8" width="50" height="24" rx="3" class="add"/>
+<text x="511" y="2512.3" class="addt" text-anchor="middle">State</text>
+<rect x="542" y="2496.8" width="45" height="24" rx="3" class="add"/>
+<text x="564.5" y="2512.3" class="addt" text-anchor="middle">Brake</text>
+<rect x="593" y="2496.8" width="50" height="24" rx="3" class="add"/>
+<text x="618" y="2512.3" class="addt" text-anchor="middle">Doors</text>
+<rect x="385" y="2538.4" width="150" height="17.6" rx="3" class="has"/>
+<text x="460" y="2550.7" class="hast" text-anchor="middle">Monitor power</text>
+<rect x="385" y="2408" width="75" height="24" rx="3" class="has"/>
+<text x="422.5" y="2423.5" class="hast" text-anchor="middle">Remote ops</text>
+<text x="384" y="2582" class="hd">ENV-4 Vehicle on a closed track</text>
+<rect x="384" y="2586" width="44.5" height="16" rx="8" class="mp"/>
+<text x="406.2" y="2598" class="mpt" text-anchor="middle">timing</text>
+<rect x="433.5" y="2586" width="79" height="16" rx="8" class="mp"/>
+<text x="473" y="2598" class="mpt" text-anchor="middle">requirements</text>
+<text x="384" y="2618" class="ax">Covers 1 TSR</text>
+<text x="384" y="2632" class="ax">Time: TSR-06.01 react within 207 ms to 358 ms</text>
+<text x="384" y="2652" class="hd">Passes when</text>
+<text x="384" y="2667" class="s">MRM-4 brings the vehicle to a held stop at the firm</text>
+<text x="384" y="2681" class="s">level P-05 from the speed range; the measured chain</text>
+<text x="384" y="2695" class="s">from a target appearing to brake pressure stays</text>
+<text x="384" y="2709" class="s">within the response time of P-06 (WP-S-04 §3)</text>
+<rect x="716" y="2326" width="330" height="430" rx="8" class="card"/>
+<text x="730" y="2350" class="gid">IT-18</text>
+<rect x="982.1" y="2337" width="49.9" height="18" rx="4" class="pa"/>
+<text x="1007" y="2350" class="pat" text-anchor="middle">ASIL C</text>
+<rect x="932.4" y="2337" width="43.6" height="18" rx="4" class="pn"/>
+<text x="954.2" y="2350" class="pnt" text-anchor="middle">ENV-4</text>
+<rect x="889.1" y="2337" width="37.3" height="18" rx="4" class="ps"/>
+<text x="907.8" y="2350" class="pst" text-anchor="middle">IS-4</text>
+<text x="730" y="2372" class="tb">Remote driving over the real cellular</text>
+<text x="730" y="2388" class="tb">links</text>
+<rect x="725" y="2402" width="312" height="162" rx="6" class="verge"/>
+<rect x="814" y="2408" width="132" height="24" rx="3" class="ex"/>
+<text x="880" y="2423.5" class="ext" text-anchor="middle">Autoware</text>
+<rect x="731" y="2452" width="225" height="25.6" rx="3" class="ex"/>
+<text x="843.5" y="2468.3" class="ext" text-anchor="middle">Safety monitor</text>
+<rect x="964" y="2452" width="63" height="25.6" rx="3" class="has"/>
+<text x="995.5" y="2468.3" class="hast" text-anchor="middle">Channel</text>
+<rect x="956" y="2408" width="34" height="24" rx="3" class="has"/>
+<text x="973" y="2423.5" class="hast" text-anchor="middle">LiDAR</text>
+<rect x="993" y="2408" width="34" height="24" rx="3" class="has"/>
+<text x="1010" y="2423.5" class="hast" text-anchor="middle">Radar</text>
+<rect x="731" y="2496.8" width="95" height="24" rx="3" class="add"/>
+<text x="778.5" y="2512.3" class="addt" text-anchor="middle">Drive-by-wire</text>
+<rect x="832" y="2496.8" width="50" height="24" rx="3" class="add"/>
+<text x="857" y="2512.3" class="addt" text-anchor="middle">State</text>
+<rect x="888" y="2496.8" width="45" height="24" rx="3" class="add"/>
+<text x="910.5" y="2512.3" class="addt" text-anchor="middle">Brake</text>
+<rect x="939" y="2496.8" width="50" height="24" rx="3" class="add"/>
+<text x="964" y="2512.3" class="addt" text-anchor="middle">Doors</text>
+<rect x="731" y="2538.4" width="150" height="17.6" rx="3" class="has"/>
+<text x="806" y="2550.7" class="hast" text-anchor="middle">Monitor power</text>
+<rect x="731" y="2408" width="75" height="24" rx="3" class="ex"/>
+<text x="768.5" y="2423.5" class="ext" text-anchor="middle">Remote ops</text>
+<text x="730" y="2582" class="hd">ENV-4 Vehicle on a closed track</text>
+<rect x="730" y="2586" width="44.5" height="16" rx="8" class="mp"/>
+<text x="752.2" y="2598" class="mpt" text-anchor="middle">timing</text>
+<rect x="779.5" y="2586" width="61.8" height="16" rx="8" class="mp"/>
+<text x="810.4" y="2598" class="mpt" text-anchor="middle">interface</text>
+<text x="730" y="2618" class="ax">Covers 1 TSR · 1 signal · 1 CSTR</text>
+<text x="730" y="2632" class="ax">Time: TSR-05.02 detect within 143 ms</text>
+<text x="730" y="2652" class="hd">Passes when</text>
+<text x="730" y="2667" class="s">The age of remote commands at the monitor stays</text>
+<text x="730" y="2681" class="s">within P-09 over both links, in the worst hours</text>
+<text x="730" y="2695" class="s">measured in the geofence (WP-S-04 §6); older</text>
+<text x="730" y="2709" class="s">commands stop the vehicle</text>
+<rect x="24" y="2774" width="22" height="14" rx="3" class="ex"/>
+<text x="54" y="2786" class="t">exercised by the case</text>
+<rect x="214.5" y="2774" width="22" height="14" rx="3" class="add"/>
+<text x="244.5" y="2786" class="t">added at its step</text>
+<rect x="379.0" y="2774" width="22" height="14" rx="3" class="has"/>
+<text x="409" y="2786" class="t">already integrated</text>
+<rect x="550.0" y="2774" width="22" height="14" rx="3" class="not"/>
+<text x="580" y="2786" class="t">not yet integrated</text>
+</svg>
