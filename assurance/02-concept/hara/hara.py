@@ -40,6 +40,7 @@ HERE = Path(__file__).resolve().parent
 ASSURANCE = HERE.parents[1]
 sys.path.insert(0, str(ASSURANCE / "01-management" / "figures"))
 import figkit as fk  # noqa: E402
+import terms  # noqa: E402
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import scenes  # noqa: E402
@@ -1127,7 +1128,7 @@ def build() -> dict[Path, str]:
     out[FIG_HAZOP] = figure_hazop(m, a)
     figs = scene_files(m, a)
     out.update({p: svg for p, (_, svg) in figs.items()})
-    out[README] = readme(m, a, tables(m), {p: f for p, (f, _) in figs.items()})
+    out[README] = terms.close(readme(m, a, tables(m), {p: f for p, (f, _) in figs.items()}), README)
     return out
 
 

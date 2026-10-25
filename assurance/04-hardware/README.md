@@ -31,6 +31,7 @@ Standard clauses: 26262-5; 26262-8 §13; HWE.1–4.
 | FMEA | Failure mode and effects analysis: how each part can fail and what follows |
 | FMEDA | Failure modes, effects and diagnostic analysis: an FMEA that also counts how many failures the diagnostics catch |
 | G0 to G6 | Gates: project milestones with exit criteria, defined in WP-M-00 §2 |
+| H | Hazard identifier, as in H-01 (WP-C-03) |
 | ID | Identifier |
 | LFM | Latent fault metric: the share of latent (hidden) faults the design detects (ISO 26262-5) |
 | PMHF | Probabilistic metric for random hardware failures: the rate at which hardware faults could violate a safety goal (ISO 26262-5) |

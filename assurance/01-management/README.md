@@ -54,6 +54,6 @@ Standard clauses: UL 4600 §5, §17; 26262-2; 21448 §4; 21434 §5–8; MAN.3/5,
 | § | Section or clause, as in "UL 4600 §5" |
 | – (en dash) in a range | "through", as in "§5–8" (clauses 5 to 8) |
 | / between numbers | "and", as in "MAN.3/5" (MAN.3 and MAN.5) |
-| — | The subfolder has no README of its own |
+| — | Nothing: no value, or the subfolder has no README of its own |
 
 Other terms are defined in the [Glossary](../../wiki/Glossary.md).

@@ -7,7 +7,7 @@ A page is built only from records that already exist, so it never needs editing 
 - its section of the WP-M-00 §3 register: the figure (one row per work product, a chip at each gate
   it is needed for, coloured by status) and a table linking each work product;
 - its subfolders, with the title of their README when they have one;
-- a closing table of the abbreviations, terms and symbols the page uses, from TERMS below.
+- a closing table of the abbreviations, terms and symbols the page uses, from terms.py.
 
 Files are not listed (GitHub shows them above the page), so adding a file never makes a page stale.
 
@@ -24,6 +24,7 @@ import sys
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import figkit as fk  # noqa: E402
+import terms  # noqa: E402
 import wpregister  # noqa: E402
 
 README = fk.ASSURANCE / "README.md"
@@ -33,152 +34,6 @@ GENERATED = (
 )
 W = 640
 X0, XG, ROW = 24, 360, 40
-GLOSSARY = "../../wiki/Glossary.md"  # from assurance/<folder>/README.md
-
-# The abbreviations, terms and symbols a folder page may use, as (pattern, term, meaning). A page's
-# closing table lists those its text matches; an abbreviation with no entry here fails the build.
-TERMS = [
-    (
-        r"\b(?:21434|21448|26262)\b|\bPAS 8800",
-        "21434, 21448, 26262, PAS 8800",
-        "ISO/SAE 21434 (cybersecurity), ISO 21448 (SOTIF), ISO 26262 (functional safety), ISO/PAS 8800 "
-        '(AI safety). "26262-3" is part 3 of ISO 26262',
-    ),
-    (
-        r"\b(?:ACQ|HWE|MAN|MLE|SUP|SWE|SYS|VAL)\.\d",
-        "ACQ, HWE, MAN, MLE, SUP, SWE, SYS, VAL",
-        "Automotive SPICE process groups: acquisition, hardware engineering, management, machine learning "
-        'engineering, support, software engineering, system engineering, validation. "SWE.1–6" means '
-        "processes 1 to 6 of the group",
-    ),
-    (
-        r"\bAI\b",
-        "AI",
-        "Artificial intelligence; here the machine-learned perception and prediction models",
-    ),
-    (
-        r"\bASIL\b",
-        "ASIL",
-        "Automotive Safety Integrity Level, A (lowest) to D (highest), set by ISO 26262 for each safety goal",
-    ),
-    (
-        r"\bASPICE\b",
-        "ASPICE",
-        "Automotive SPICE: a model for rating how capable the development process is",
-    ),
-    (
-        r"\bDDT\b",
-        "DDT",
-        "Dynamic driving task: steering, braking, accelerating and watching the road",
-    ),
-    (
-        r"\bDFA\b",
-        "DFA",
-        "Dependent failure analysis: one cause that could defeat several safety measures at once",
-    ),
-    (
-        r"\bFMEA\b",
-        "FMEA",
-        "Failure mode and effects analysis: how each part can fail and what follows",
-    ),
-    (
-        r"\bFMEDA\b",
-        "FMEDA",
-        "Failure modes, effects and diagnostic analysis: an FMEA that also counts how many "
-        "failures the diagnostics catch",
-    ),
-    (r"\bFSCs?\b", "FSC", "Functional safety concept: how the safety goals are met"),
-    (r"\bFSRs?\b", "FSR", "Functional safety requirement"),
-    (
-        r"\bFTA\b",
-        "FTA",
-        "Fault tree analysis: from a harmful event back to the faults that cause it",
-    ),
-    (
-        r"\bFTTI\b",
-        "FTTI",
-        "Fault tolerant time interval: how long a fault can last before it can lead to harm",
-    ),
-    (r"\bG\d\b", "G0 to G6", "Gates: project milestones with exit criteria, defined in WP-M-00 §2"),
-    (
-        r"\bHARA\b",
-        "HARA",
-        "Hazard analysis and risk assessment: finds the hazards and sets the safety goals",
-    ),
-    (r"\bHD\b", "HD map", "High-definition map: the detailed lane-level map Autoware drives from"),
-    (r"\bHSI\b", "HSI", "Hardware–software interface"),
-    (
-        r"\bI[0-3]\b",
-        "I0 to I3",
-        "Independence of a reviewer from the author, from none (I0) to an independent "
-        "assessor (I3)",
-    ),
-    (r"\bIDs?\b", "ID", "Identifier"),
-    (r"\bISO\b", "ISO", "International Organization for Standardization"),
-    (
-        r"\bLFM\b",
-        "LFM",
-        "Latent fault metric: the share of latent (hidden) faults the design detects (ISO 26262-5)",
-    ),
-    (r"\bML\b", "ML", "Machine learning"),
-    (
-        r"\bODD\b",
-        "ODD",
-        "Operational design domain: the roads, conditions and traffic the system is designed for",
-    ),
-    (r"\bOEDR\b", "OEDR", "Object and event detection and response"),
-    (r"\bOS\b", "OS", "Operating system"),
-    (
-        r"\bPMHF\b",
-        "PMHF",
-        "Probabilistic metric for random hardware failures: the rate at which hardware faults "
-        "could violate a safety goal (ISO 26262-5)",
-    ),
-    (r"\bROS\b", "ROS 2", "Robot Operating System 2: the middleware Autoware is built on"),
-    (
-        r"\| (?:Skeleton|Draft|In review|Approved|Baselined) \|",
-        "Skeleton, Draft, In review, Approved, Baselined",
-        "Status of a work product: structure only; written, not verified; in verification review; approved; "
-        "approved and frozen",
-    ),
-    (
-        r"\bSOTIF\b",
-        "SOTIF",
-        "Safety of the intended functionality (ISO 21448): harm from a function working as "
-        "designed but not well enough",
-    ),
-    (
-        r"\bSPFM\b",
-        "SPFM",
-        "Single-point fault metric: the share of single-point faults the design covers "
-        "(ISO 26262-5)",
-    ),
-    (
-        r"\bSTPA\b",
-        "STPA",
-        "System-theoretic process analysis: hazards from unsafe control actions and "
-        "interactions",
-    ),
-    (r"\bTARA\b", "TARA", "Threat analysis and risk assessment (ISO/SAE 21434)"),
-    (
-        r"\bUL 4600\b",
-        "UL 4600",
-        "The standard for the safety of autonomous products; the main framework here",
-    ),
-    (r"\bWBS\b", "WBS", "Work breakdown structure: the project's work split into tasks"),
-    (
-        r"\bWP-",
-        "WP",
-        "Work product: a document or record the assurance path needs. WP-M-00 is the register "
-        "that lists them all",
-    ),
-    (r"§", "§", 'Section or clause, as in "UL 4600 §5"'),
-    (r"\d–\d", "– (en dash) in a range", '"through", as in "§5–8" (clauses 5 to 8)'),
-    (r"\d/\d", "/ between numbers", '"and", as in "MAN.3/5" (MAN.3 and MAN.5)'),
-    (r"\| — \|", "—", "The subfolder has no README of its own"),
-]
-# Capitalised words that are not abbreviations needing a definition.
-NOT_ABBREVIATIONS = {"README"}
 
 
 def folders() -> list[str]:
@@ -299,23 +154,6 @@ def figure(folder: str, title: str, items: list[wpregister.Product], gates: list
     return fk.svg(W, int(y), f"{folder}: work products by gate and status", desc, body)
 
 
-def terms(folder: str, body: list[str]) -> list[str]:
-    """The closing table: every abbreviation, term and symbol the page uses, from TERMS."""
-    text = "\n".join(fk.plain(ln) if not ln.startswith("|") else ln for ln in body)
-    known = [(t, m) for pat, t, m in TERMS if re.search(pat, text)]
-    words = re.sub(r"\bWP-[A-Z]-\d+\b|\bG\d\b|\bI[0-3]\b", "", text)
-    for tok in sorted(set(re.findall(r"\b[A-Z]{2,}s?\b", words)) - NOT_ABBREVIATIONS):
-        if not any(tok.rstrip("s") in re.split(r"[ ,]+", t) for t, _ in known):
-            raise fk.FigureError(
-                f"{folder}/README.md uses {tok}, which folder_index.py TERMS does not define"
-            )
-    out = ["## Abbreviations, terms and symbols", ""]
-    if not known:
-        return out + [f"This page uses none. Terms are defined in the [Glossary]({GLOSSARY}).", ""]
-    out += ["| Term | Meaning |", "|---|---|"] + [f"| {t} | {m} |" for t, m in known]
-    return out + ["", f"Other terms are defined in the [Glossary]({GLOSSARY}).", ""]
-
-
 def page(folder: str, lay: dict, reg: wpregister.Register) -> tuple[str, str | None]:
     if folder not in lay:
         raise fk.FigureError(f"assurance/README.md Layout table has no row for {folder}/")
@@ -370,8 +208,7 @@ def page(folder: str, lay: dict, reg: wpregister.Register) -> tuple[str, str | N
         out.append("")
     if not items:
         out += ["This folder has no work products in the register.", ""]
-    out += terms(folder, out[1:])
-    return "\n".join(out), svg
+    return terms.close("\n".join(out), fk.ASSURANCE / folder / "README.md"), svg
 
 
 def build() -> dict[Path, str]:

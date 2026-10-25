@@ -51,7 +51,7 @@ Standard clauses: UL 4600 §6–8; 26262-3; 21448 §5–8; 21434 §9, §15; PAS 
 | AI | Artificial intelligence; here the machine-learned perception and prediction models |
 | DDT | Dynamic driving task: steering, braking, accelerating and watching the road |
 | FSC | Functional safety concept: how the safety goals are met |
-| FSR | Functional safety requirement |
+| FSR | Functional safety requirement, as in FSR-08.01 (WP-C-04) |
 | G0 to G6 | Gates: project milestones with exit criteria, defined in WP-M-00 §2 |
 | HARA | Hazard analysis and risk assessment: finds the hazards and sets the safety goals |
 | ID | Identifier |
@@ -64,6 +64,6 @@ Standard clauses: UL 4600 §6–8; 26262-3; 21448 §5–8; 21434 §9, §15; PAS 
 | WP | Work product: a document or record the assurance path needs. WP-M-00 is the register that lists them all |
 | § | Section or clause, as in "UL 4600 §5" |
 | – (en dash) in a range | "through", as in "§5–8" (clauses 5 to 8) |
-| — | The subfolder has no README of its own |
+| — | Nothing: no value, or the subfolder has no README of its own |
 
 Other terms are defined in the [Glossary](../../wiki/Glossary.md).

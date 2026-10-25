@@ -145,3 +145,43 @@ The architecture itself is verified by review against the functional safety conc
 | [`fig-s03-3-1-mechanisms.svg`](fig-s03-3-1-mechanisms.svg) | Figure 3-1, where each safety mechanism runs and how fast it must act |
 | [`tsc.yaml`](tsc.yaml) | Components, links, safety mechanisms and redundancies |
 | [`tsc.py`](tsc.py), [`cards.py`](cards.py) | The generator: checks the model against the functional safety concept, the fallback concept and the triggering conditions, and writes WP-S-03's tables and everything here |
+
+## Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| 21434, 21448, 26262, PAS 8800 | ISO/SAE 21434 (cybersecurity), ISO 21448 (SOTIF), ISO 26262 (functional safety), ISO/PAS 8800 (AI safety). "26262-3" is part 3 of ISO 26262 |
+| AI | Artificial intelligence; here the machine-learned perception and prediction models |
+| AISR | AI safety requirement identifier, as in AISR-01 (WP-C-11) |
+| AOU | Assumption of use: an assumption on the vehicle, infrastructure, people or environment, as in AOU-05 |
+| ASIL | Automotive Safety Integrity Level, A (lowest) to D (highest), set by ISO 26262 for each safety goal. B(D) means rated B as part of a decomposition of D |
+| CI | Continuous integration: the automated checks GitHub runs on every pull request and push |
+| CMP | Component identifier, as in CMP-02: a part of the system architecture (WP-S-03) |
+| CSR | Cybersecurity requirement identifier, as in CSR-01 (WP-C-10) |
+| DIA | Development interface agreement: who does which safety work, between this project and a supplier |
+| DQ | A question in the decision register, as in DQ-004. "DQ-015 B" means option B |
+| EL | Element of the functional safety concept, as in EL-02 (WP-C-04) |
+| FI | Functional insufficiency identifier, as in FI-01 (WP-C-06) |
+| FMEA | Failure mode and effects analysis: how each part can fail and what follows |
+| FSR | Functional safety requirement, as in FSR-08.01 (WP-C-04) |
+| FTA | Fault tree analysis: from a harmful event back to the faults that cause it |
+| H | Hazard identifier, as in H-01 (WP-C-03) |
+| HIL | Hardware in the loop: testing the real controller against a simulated vehicle |
+| I0 to I3 | Independence of a reviewer from the author, from none (I0) to an independent assessor (I3). Work drafted by the AI assistant is I0 |
+| ID | Identifier |
+| ISO | International Organization for Standardization |
+| MRM | Minimal risk manoeuvre: the manoeuvre that brings the vehicle to a minimal risk condition |
+| ODD | Operational design domain: the roads, conditions and traffic the system is designed for |
+| QM | Quality management: no ASIL is needed, ordinary quality processes are enough |
+| RD | Redundancy identifier, as in RD-01: a pair of channels that cover each other (WP-S-03) |
+| SG | Safety goal: a top-level safety requirement from the HARA, as in SG-01 |
+| SM | Safety mechanism identifier, as in SM-01 (WP-S-03) |
+| SOTIF | Safety of the intended functionality (ISO 21448): harm from a function working as designed but not well enough |
+| TC | Triggering condition identifier, as in TC-12 (WP-C-06) |
+| TR | Fallback trigger identifier, as in TR-01: a condition that starts a minimal risk manoeuvre (WP-C-12) |
+| WP | Work product: a document or record the assurance path needs. WP-M-00 is the register that lists them all |
+| YAML | A plain-text data format; the generator's source data is a `.yaml` file |
+| § | Section or clause, as in "UL 4600 §5" |
+| — | Nothing: no value, or the subfolder has no README of its own |
+
+Other terms are defined in the [Glossary](../../../wiki/Glossary.md).

@@ -45,6 +45,7 @@ for sub in (
 import fallback  # noqa: E402
 import figkit as fk  # noqa: E402
 import fsc  # noqa: E402
+import terms  # noqa: E402
 import timing  # noqa: E402
 import tsc  # noqa: E402
 import tsr  # noqa: E402
@@ -593,7 +594,7 @@ def build() -> dict[Path, str]:
         FIG: figure(m, k),
         FIG2: icards.sheet(card_data(m, k), m["frames_per_timeout"]),
         CSV: signals_csv(m, k),
-        README: readme(t, doc),
+        README: terms.close(readme(t, doc), README),
     }
 
 

@@ -51,6 +51,6 @@ Standard clauses: UL 4600 §9–10; 26262-4; SYS.1–5.
 | WP | Work product: a document or record the assurance path needs. WP-M-00 is the register that lists them all |
 | § | Section or clause, as in "UL 4600 §5" |
 | – (en dash) in a range | "through", as in "§5–8" (clauses 5 to 8) |
-| — | The subfolder has no README of its own |
+| — | Nothing: no value, or the subfolder has no README of its own |
 
 Other terms are defined in the [Glossary](../../wiki/Glossary.md).

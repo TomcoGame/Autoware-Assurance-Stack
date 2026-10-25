@@ -168,3 +168,38 @@ The elements outside the item carry rated requirements through the assumptions o
 | [`fig-c04-4-2-goals.svg`](fig-c04-4-2-goals.svg) | Figure 4-2, how the concept holds each safety goal |
 | [`fsc.yaml`](fsc.yaml) | The elements and the functional safety requirements |
 | [`fsc.py`](fsc.py), [`envelope.py`](envelope.py), [`safetyview.py`](safetyview.py) | The generator: checks the model against the HARA, the item definition and the decision register, and writes WP-C-04's tables and everything here |
+
+## Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| AOU | Assumption of use: an assumption on the vehicle, infrastructure, people or environment, as in AOU-05 |
+| ASIL | Automotive Safety Integrity Level, A (lowest) to D (highest), set by ISO 26262 for each safety goal. B(D) means rated B as part of a decomposition of D |
+| CI | Continuous integration: the automated checks GitHub runs on every pull request and push |
+| DIA | Development interface agreement: who does which safety work, between this project and a supplier |
+| DQ | A question in the decision register, as in DQ-004. "DQ-015 B" means option B |
+| EL | Element of the functional safety concept, as in EL-02 (WP-C-04) |
+| FSR | Functional safety requirement, as in FSR-08.01 (WP-C-04) |
+| FTTI | Fault tolerant time interval: how long a fault can last before it can lead to harm |
+| G0 to G6 | Gates: project milestones with exit criteria, defined in WP-M-00 §2 |
+| HARA | Hazard analysis and risk assessment: finds the hazards and sets the safety goals |
+| HD map | High-definition map: the detailed lane-level map Autoware drives from |
+| HIL | Hardware in the loop: testing the real controller against a simulated vehicle |
+| I | Interface of the item identifier, as in I-08 (WP-C-01) |
+| I0 to I3 | Independence of a reviewer from the author, from none (I0) to an independent assessor (I3). Work drafted by the AI assistant is I0 |
+| ID | Identifier |
+| IEEE | Institute of Electrical and Electronics Engineers, which publishes standards such as IEEE 802.1AS (network time) and IEEE 2846 (driving behaviour assumptions) |
+| MON | ODD monitoring function identifier, as in MON-04 (WP-C-02) |
+| MRM | Minimal risk manoeuvre: the manoeuvre that brings the vehicle to a minimal risk condition |
+| ODD | Operational design domain: the roads, conditions and traffic the system is designed for |
+| OEDR | Object and event detection and response |
+| QM | Quality management: no ASIL is needed, ordinary quality processes are enough |
+| REMOTE | The operating mode in which a remote operator drives the vehicle (WP-C-01) |
+| SG | Safety goal: a top-level safety requirement from the HARA, as in SG-01 |
+| SOTIF | Safety of the intended functionality (ISO 21448): harm from a function working as designed but not well enough |
+| WP | Work product: a document or record the assurance path needs. WP-M-00 is the register that lists them all |
+| YAML | A plain-text data format; the generator's source data is a `.yaml` file |
+| § | Section or clause, as in "UL 4600 §5" |
+| — | Nothing: no value, or the subfolder has no README of its own |
+
+Other terms are defined in the [Glossary](../../../wiki/Glossary.md).

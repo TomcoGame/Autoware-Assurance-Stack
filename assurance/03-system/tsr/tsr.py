@@ -44,6 +44,7 @@ for sub in (
 import check_decisions  # noqa: E402
 import figkit as fk  # noqa: E402
 import fsc  # noqa: E402
+import terms  # noqa: E402
 import timing  # noqa: E402
 import tsc  # noqa: E402
 
@@ -566,7 +567,7 @@ def build() -> dict[Path, str]:
         FIG: figure(m, k),
         FIG2: pcards.sheet(m, {p["id"]: value(p, m, k) for p in m["parameters"]}),
         CSV: tsrs_csv(m, k),
-        README: readme(m, k, t, doc),
+        README: terms.close(readme(m, k, t, doc), README),
     }
 
 

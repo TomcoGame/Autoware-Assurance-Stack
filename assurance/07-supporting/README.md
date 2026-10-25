@@ -35,6 +35,7 @@ Standard clauses: UL 4600 §13–14; 26262-8; SUP.1/8/9/10.
 | ID | Identifier |
 | ISO | International Organization for Standardization |
 | OS | Operating system |
+| P | Safety envelope parameter identifier, as in P-01 (WP-S-02) |
 | ROS 2 | Robot Operating System 2: the middleware Autoware is built on |
 | Skeleton, Draft, In review, Approved, Baselined | Status of a work product: structure only; written, not verified; in verification review; approved; approved and frozen |
 | UL 4600 | The standard for the safety of autonomous products; the main framework here |

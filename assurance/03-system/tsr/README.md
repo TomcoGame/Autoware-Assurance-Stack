@@ -244,3 +244,40 @@ Each requirement is verified at system level ([WP-S-08](../WP-S-08-system-integr
 | [`fig-s02-4-1-allocation.svg`](fig-s02-4-1-allocation.svg) | Figure 4-1, requirements per component and ASIL |
 | [`tsr.yaml`](tsr.yaml) | The envelope parameters and the technical safety requirements |
 | [`tsr.py`](tsr.py), [`pcards.py`](pcards.py) | The generator: checks the model against the technical safety concept, the timing budget and the decision register, and writes WP-S-02's tables and everything here |
+
+## Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| AC | SOTIF acceptance criterion identifier, as in AC-01 (WP-C-05) |
+| ASIL | Automotive Safety Integrity Level, A (lowest) to D (highest), set by ISO 26262 for each safety goal. B(D) means rated B as part of a decomposition of D |
+| CI | Continuous integration: the automated checks GitHub runs on every pull request and push |
+| CMP | Component identifier, as in CMP-02: a part of the system architecture (WP-S-03) |
+| CSR | Cybersecurity requirement identifier, as in CSR-01 (WP-C-10) |
+| DIA | Development interface agreement: who does which safety work, between this project and a supplier |
+| DQ | A question in the decision register, as in DQ-004. "DQ-015 B" means option B |
+| ECC | Error-correcting code: memory that detects and corrects bit errors |
+| EL | Element of the functional safety concept, as in EL-02 (WP-C-04) |
+| FM | Functional modification identifier, as in FM-01 (WP-C-07) |
+| FSR | Functional safety requirement, as in FSR-08.01 (WP-C-04) |
+| FTTI | Fault tolerant time interval: how long a fault can last before it can lead to harm |
+| G0 to G6 | Gates: project milestones with exit criteria, defined in WP-M-00 §2 |
+| H | Hazard identifier, as in H-01 (WP-C-03) |
+| HIL | Hardware in the loop: testing the real controller against a simulated vehicle |
+| I0 to I3 | Independence of a reviewer from the author, from none (I0) to an independent assessor (I3). Work drafted by the AI assistant is I0 |
+| ID | Identifier |
+| MRM | Minimal risk manoeuvre: the manoeuvre that brings the vehicle to a minimal risk condition |
+| ODD | Operational design domain: the roads, conditions and traffic the system is designed for |
+| OI | Open item: a known gap recorded in a document, numbered per document |
+| P | Safety envelope parameter identifier, as in P-01 (WP-S-02) |
+| REMOTE | The operating mode in which a remote operator drives the vehicle (WP-C-01) |
+| SG | Safety goal: a top-level safety requirement from the HARA, as in SG-01 |
+| SM | Safety mechanism identifier, as in SM-01 (WP-S-03) |
+| TR | Fallback trigger identifier, as in TR-01: a condition that starts a minimal risk manoeuvre (WP-C-12) |
+| TSR | Technical safety requirement, as in TSR-01.01 (WP-S-02) |
+| WP | Work product: a document or record the assurance path needs. WP-M-00 is the register that lists them all |
+| YAML | A plain-text data format; the generator's source data is a `.yaml` file |
+| § | Section or clause, as in "UL 4600 §5" |
+| — | Nothing: no value, or the subfolder has no README of its own |
+
+Other terms are defined in the [Glossary](../../../wiki/Glossary.md).
