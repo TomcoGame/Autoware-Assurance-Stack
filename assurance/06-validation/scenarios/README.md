@@ -330,3 +330,47 @@ These are counts of what the catalogue *exercises*, not of what has been shown. 
 | [`fig-v08-4-1-coverage.svg`](fig-v08-4-1-coverage.svg) | WP-V-08 Figure 4-1, which ODD attributes each scenario varies |
 | [`scenarios.yaml`](scenarios.yaml) | The structured reading of the ODD and the logical scenarios |
 | [`scenarios.py`](scenarios.py), [`scards.py`](scards.py) | The generator: checks the model against the ODD and the analyses, and writes the tables of WP-V-03 and WP-V-08 §4 and everything here |
+
+## Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| 21434, 21448, 26262, PAS 8800 | ISO/SAE 21434 (cybersecurity), ISO 21448 (SOTIF), ISO 26262 (functional safety), ISO/PAS 8800 (AI safety). "26262-3" is part 3 of ISO 26262 |
+| AC | SOTIF acceptance criterion identifier, as in AC-01 (WP-C-05) |
+| AOU | Assumption of use: an assumption on the vehicle, infrastructure, people or environment, as in AOU-05 |
+| CI | Continuous integration: the automated checks GitHub runs on every pull request and push |
+| CR | Cybersecurity control identifier from the TARA, as in CR-01 (WP-C-09) |
+| CSR | Cybersecurity requirement identifier, as in CSR-01 (WP-C-10) |
+| DQ | A question in the decision register, as in DQ-004. "DQ-015 B" means option B |
+| FM | Functional modification identifier, as in FM-01 (WP-C-07) |
+| FSR | Functional safety requirement, as in FSR-08.01 (WP-C-04) |
+| G0 to G6 | Gates: project milestones with exit criteria, defined in WP-M-00 §2 |
+| HARA | Hazard analysis and risk assessment: finds the hazards and sets the safety goals |
+| HE | Hazardous event identifier: a hazard in one operational situation, as in HE-01.1 |
+| HR | Requirement identifier of the misuse and interaction analysis, as in HR-01 (WP-C-08) |
+| I0 to I3 | Independence of a reviewer from the author, from none (I0) to an independent assessor (I3). Work drafted by the AI assistant is I0 |
+| ID | Identifier |
+| ISO | International Organization for Standardization |
+| LS | Loss scenario identifier of the STPA, as in LS-01 (WP-A-05) |
+| MAN (in MAN-01) | Manoeuvre identifier of the ODD, as in MAN-03 (WP-C-02) |
+| MON | ODD monitoring function identifier, as in MON-04 (WP-C-02) |
+| MRM | Minimal risk manoeuvre: the manoeuvre that brings the vehicle to a minimal risk condition |
+| MU | Misuse or interaction entry identifier, as in MU-01 (WP-C-08) |
+| ODD | Operational design domain: the roads, conditions and traffic the system is designed for |
+| OEDR | Object and event detection and response |
+| OI | Open item: a known gap recorded in a document, numbered per document |
+| OS (in OS-01) | Operational situation identifier: a driving situation the HARA rates hazards in |
+| P | Safety envelope parameter identifier, as in P-01 (WP-S-02) |
+| SC | Known hazardous scenario identifier, as in SC-01 (WP-V-03) |
+| SG | Safety goal: a top-level safety requirement from the HARA, as in SG-01 |
+| SOTIF | Safety of the intended functionality (ISO 21448): harm from a function working as designed but not well enough |
+| SR | Requirement identifier of the STPA, as in SR-01 (WP-A-05) |
+| STPA | System-theoretic process analysis: hazards from unsafe control actions and interactions |
+| TC | Triggering condition identifier, as in TC-12 (WP-C-06) |
+| TR | Fallback trigger identifier, as in TR-01: a condition that starts a minimal risk manoeuvre (WP-C-12) |
+| WP | Work product: a document or record the assurance path needs. WP-M-00 is the register that lists them all |
+| YAML | A plain-text data format; the generator's source data is a `.yaml` file |
+| § | Section or clause, as in "UL 4600 §5" |
+| — | Nothing: no value, or the subfolder has no README of its own |
+
+Other terms are defined in the [Glossary](../../../wiki/Glossary.md).
