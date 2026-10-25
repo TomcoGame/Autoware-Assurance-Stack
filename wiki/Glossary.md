@@ -71,3 +71,7 @@ Identifiers are never reused; a withdrawn item keeps its identifier and is marke
 ![When it can no longer drive on safely: left, the robotaxi pulled over to the kerb, Autoware's own manoeuvre; right, the robotaxi stopped in its lane with hazard lights on, the rated minimal risk condition of SG-07. Below, the safe state as WP-C-03 states it.](../tools/readme/figures/minimal-risk-condition.svg)
 
 *Illustration. Labels read from the work products by [`figures.py`](../tools/readme/figures.py); vehicle models CC BY 4.0, see [credits](../tools/readme/models/CREDITS.md).*
+
+![Inside and outside the ODD: three panels of the robotaxi on a city street, for the posted speed limit (a speed sign inside the geofence and a higher one beyond it), precipitation (rain) and visibility (fog). Under each, what is inside and outside the ODD as WP-C-02 states it, and the monitor that detects it.](../tools/readme/figures/odd.svg)
+
+*Illustration. Labels read from the work products by [`figures.py`](../tools/readme/figures.py); vehicle model CC BY 4.0, see [credits](../tools/readme/models/CREDITS.md).*
