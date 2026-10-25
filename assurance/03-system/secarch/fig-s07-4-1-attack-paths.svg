@@ -1,0 +1,267 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1070" height="1264" viewBox="0 0 1070 1264" role="img" aria-labelledby="t d">
+<title id="t">WP-S-07 Figure 4-1: attack paths</title>
+<desc id="d">Exposed interfaces: EX-01 Cellular links to remote operations and the fleet backend, network, into SZ-2: threats TS-01, TS-02, TS-04, TS-06, TS-13, TS-14; controls CSTR-01.01, CSTR-01.02, CSTR-03.01, CSTR-03.02, CSTR-05.03, CSTR-11.01, CSR-04, CSR-10; EX-02 GNSS antenna and receiver, adjacent, into SZ-2: threats TS-09; controls CSTR-08.01; EX-03 The physical scene as the sensors and microphones receive it (light, radio, sound, markings), adjacent, into SZ-2: threats TS-08, TS-10; controls CSTR-07.01, CSTR-07.02, CSTR-09.01; EX-04 Passenger interface (cabin screen, stop button) and the passenger app through the backend, local, into SZ-2: threats TS-14, TS-15; controls CSTR-11.01, CSTR-12.01, CSTR-12.02; EX-05 Service and debug ports (safety monitor, Autoware computer, vehicle diagnostic connector), physical, into SZ-3: threats TS-05, TS-11, TS-16; controls CR-03, CSTR-05.01, CSTR-05.02, CSTR-05.05, CSTR-03.03, CSTR-05.07; EX-06 Remote operations centre and fleet backend, off-board, network, into SZ-1: threats TS-03, TS-07, TS-12; controls CSR-02, CSR-06, CSR-10; EX-07 Short-range wireless on the vehicle (Wi-Fi, Bluetooth); none is fitted, adjacent, into SZ-2: no threat, decision DQ-037 A.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg { --mon:#2d55c8; --monsoft:#e7ecfb; --perf:#c2412b; --perfsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --mon:#86a2ff; --monsoft:#232c48; --perf:#ff7a63; --perfsoft:#3d1c1a; } }
+svg .ax { font:10.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .hd { font:600 11px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .gid { font:700 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .vp { fill:var(--bg); stroke:var(--perf); stroke-width:1; } svg .vpt { font:600 10.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--perf); }
+svg .cal { fill:var(--card); stroke:var(--ink3); stroke-width:1; } svg .calt { font:700 10px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink2); }
+svg .zn { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; }
+svg .ze { fill:var(--perfsoft); stroke:var(--perf); stroke-width:1.4; }
+svg .zs { fill:var(--monsoft); stroke:var(--mon); stroke-width:2; }
+svg .zid { font:700 10px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink2); }
+svg .zt { font:10px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .atk { fill:var(--perf); } svg .atkt { font:700 9.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--bg); }
+svg .ap { stroke:var(--perf); stroke-width:2; stroke-dasharray:5 3; } svg .aph { fill:var(--perf); }
+svg .sh { fill:var(--mon); }
+svg .xo { stroke:var(--ink3); stroke-width:2; }
+</style>
+<rect class="bg" width="1070" height="1264"/>
+<text x="24" y="34" class="h">Where an attacker can reach the item, and what stops them</text>
+<text x="24" y="56" class="t">WP-S-07 §4, Figure 4-1: each interface exposed outside the vehicle, the trust zone it opens into and its attack vector, the path toward the safety zone</text>
+<text x="24" y="73" class="t">and where its controls stand, the TARA's threats that use it, and its controls with their highest CAL.</text>
+<rect x="24" y="96" width="330" height="360" rx="8" class="card"/>
+<text x="38" y="120" class="gid">EX-01</text>
+<rect x="285.8" y="107" width="54.2" height="18" rx="4" class="vp"/>
+<text x="312.9" y="120" class="vpt" text-anchor="middle">network</text>
+<rect x="242.5" y="107" width="37.3" height="18" rx="4" class="cal"/>
+<text x="261.1" y="120" class="calt" text-anchor="middle">CAL4</text>
+<text x="38" y="140" class="tb">Cellular links to remote operations and</text>
+<text x="38" y="156" class="tb">the fleet backend</text>
+<rect x="38" y="220" width="69.5" height="60" rx="5" class="zn"/>
+<text x="72.8" y="236" class="zid" text-anchor="middle">SZ-1</text>
+<text x="72.8" y="250" class="zt" text-anchor="middle">Off-board</text>
+<rect x="115.5" y="220" width="69.5" height="60" rx="5" class="ze"/>
+<text x="150.2" y="236" class="zid" text-anchor="middle">SZ-2</text>
+<text x="150.2" y="250" class="zt" text-anchor="middle">Autoware</text>
+<rect x="193" y="220" width="69.5" height="60" rx="5" class="zs"/>
+<text x="227.8" y="236" class="zid" text-anchor="middle">SZ-3</text>
+<text x="227.8" y="250" class="zt" text-anchor="middle">Safety</text>
+<rect x="270.5" y="220" width="69.5" height="60" rx="5" class="zn"/>
+<text x="305.2" y="236" class="zid" text-anchor="middle">SZ-4</text>
+<text x="305.2" y="250" class="zt" text-anchor="middle">Vehicle</text>
+<circle cx="150.2" cy="194" r="7" class="atk"/>
+<text x="150.2" y="197.5" class="atkt" text-anchor="middle">A</text>
+<line x1="150.2" y1="202" x2="150.2" y2="218" class="ap"/>
+<path d="M150.2 220 L146.2 213 L154.2 213 Z" class="aph"/>
+<line x1="150.2" y1="274" x2="191" y2="274" class="ap"/>
+<rect x="183" y="262" width="12" height="24" rx="3" class="sh"/>
+<text x="38" y="304" class="hd">Threats (TARA)</text>
+<text x="38" y="319" class="ax">TS-01 Inject or alter remote driving commands on th…</text>
+<text x="38" y="332" class="ax">TS-02 Replay or forge a release from a minimal risk…</text>
+<text x="38" y="345" class="ax">TS-04 Jam the vehicles' radio links, or flood the b…</text>
+<text x="38" y="358" class="ax">TS-06 Deliver malicious software, models or maps th…</text>
+<text x="38" y="371" class="ax">TS-13 Track the fleet from its telemetry (claim)</text>
+<text x="38" y="384" class="ax">and 1 more</text>
+<text x="38" y="403" class="hd">Controls (8)</text>
+<text x="38" y="418" class="ax">CSTR-01.01, CSTR-01.02, CSTR-03.01, CSTR-03.02,</text>
+<text x="38" y="431" class="ax">CSTR-05.03, CSTR-11.01, CSR-04, CSR-10</text>
+<rect x="370" y="96" width="330" height="360" rx="8" class="card"/>
+<text x="384" y="120" class="gid">EX-02</text>
+<rect x="626" y="107" width="60" height="18" rx="4" class="vp"/>
+<text x="656" y="120" class="vpt" text-anchor="middle">adjacent</text>
+<rect x="582.7" y="107" width="37.3" height="18" rx="4" class="cal"/>
+<text x="601.4" y="120" class="calt" text-anchor="middle">CAL4</text>
+<text x="384" y="140" class="tb">GNSS antenna and receiver</text>
+<rect x="384" y="220" width="69.5" height="60" rx="5" class="zn"/>
+<text x="418.8" y="236" class="zid" text-anchor="middle">SZ-1</text>
+<text x="418.8" y="250" class="zt" text-anchor="middle">Off-board</text>
+<rect x="461.5" y="220" width="69.5" height="60" rx="5" class="ze"/>
+<text x="496.2" y="236" class="zid" text-anchor="middle">SZ-2</text>
+<text x="496.2" y="250" class="zt" text-anchor="middle">Autoware</text>
+<rect x="539" y="220" width="69.5" height="60" rx="5" class="zs"/>
+<text x="573.8" y="236" class="zid" text-anchor="middle">SZ-3</text>
+<text x="573.8" y="250" class="zt" text-anchor="middle">Safety</text>
+<rect x="616.5" y="220" width="69.5" height="60" rx="5" class="zn"/>
+<text x="651.2" y="236" class="zid" text-anchor="middle">SZ-4</text>
+<text x="651.2" y="250" class="zt" text-anchor="middle">Vehicle</text>
+<circle cx="496.2" cy="194" r="7" class="atk"/>
+<text x="496.2" y="197.5" class="atkt" text-anchor="middle">A</text>
+<line x1="496.2" y1="202" x2="496.2" y2="218" class="ap"/>
+<path d="M496.2 220 L492.2 213 L500.2 213 Z" class="aph"/>
+<line x1="496.2" y1="274" x2="537" y2="274" class="ap"/>
+<rect x="529" y="262" width="12" height="24" rx="3" class="sh"/>
+<text x="384" y="304" class="hd">Threats (TARA)</text>
+<text x="384" y="319" class="ax">TS-09 Spoof GNSS where it is used to initialise the…</text>
+<text x="384" y="338" class="hd">Controls (1)</text>
+<text x="384" y="353" class="ax">CSTR-08.01</text>
+<rect x="716" y="96" width="330" height="360" rx="8" class="card"/>
+<text x="730" y="120" class="gid">EX-03</text>
+<rect x="972" y="107" width="60" height="18" rx="4" class="vp"/>
+<text x="1002" y="120" class="vpt" text-anchor="middle">adjacent</text>
+<rect x="928.7" y="107" width="37.3" height="18" rx="4" class="cal"/>
+<text x="947.4" y="120" class="calt" text-anchor="middle">CAL4</text>
+<text x="730" y="140" class="tb">The physical scene as the sensors and</text>
+<text x="730" y="156" class="tb">microphones receive it (light, radio,</text>
+<text x="730" y="172" class="tb">sound, markings)</text>
+<rect x="730" y="220" width="69.5" height="60" rx="5" class="zn"/>
+<text x="764.8" y="236" class="zid" text-anchor="middle">SZ-1</text>
+<text x="764.8" y="250" class="zt" text-anchor="middle">Off-board</text>
+<rect x="807.5" y="220" width="69.5" height="60" rx="5" class="ze"/>
+<text x="842.2" y="236" class="zid" text-anchor="middle">SZ-2</text>
+<text x="842.2" y="250" class="zt" text-anchor="middle">Autoware</text>
+<rect x="885" y="220" width="69.5" height="60" rx="5" class="zs"/>
+<text x="919.8" y="236" class="zid" text-anchor="middle">SZ-3</text>
+<text x="919.8" y="250" class="zt" text-anchor="middle">Safety</text>
+<rect x="962.5" y="220" width="69.5" height="60" rx="5" class="zn"/>
+<text x="997.2" y="236" class="zid" text-anchor="middle">SZ-4</text>
+<text x="997.2" y="250" class="zt" text-anchor="middle">Vehicle</text>
+<circle cx="842.2" cy="194" r="7" class="atk"/>
+<text x="842.2" y="197.5" class="atkt" text-anchor="middle">A</text>
+<line x1="842.2" y1="202" x2="842.2" y2="218" class="ap"/>
+<path d="M842.2 220 L838.2 213 L846.2 213 Z" class="aph"/>
+<line x1="842.2" y1="274" x2="883" y2="274" class="ap"/>
+<rect x="875" y="262" width="12" height="24" rx="3" class="sh"/>
+<text x="730" y="304" class="hd">Threats (TARA)</text>
+<text x="730" y="319" class="ax">TS-08 Spoof LiDAR or camera inputs (laser spoofing…</text>
+<text x="730" y="332" class="ax">TS-10 Play a siren or show emergency lights to make…</text>
+<text x="730" y="351" class="hd">Controls (3)</text>
+<text x="730" y="366" class="ax">CSTR-07.01, CSTR-07.02, CSTR-09.01</text>
+<rect x="24" y="472" width="330" height="360" rx="8" class="card"/>
+<text x="38" y="496" class="gid">EX-04</text>
+<rect x="297.2" y="483" width="42.8" height="18" rx="4" class="vp"/>
+<text x="318.6" y="496" class="vpt" text-anchor="middle">local</text>
+<rect x="254" y="483" width="37.3" height="18" rx="4" class="cal"/>
+<text x="272.6" y="496" class="calt" text-anchor="middle">CAL4</text>
+<text x="38" y="516" class="tb">Passenger interface (cabin screen, stop</text>
+<text x="38" y="532" class="tb">button) and the passenger app through</text>
+<text x="38" y="548" class="tb">the backend</text>
+<rect x="38" y="596" width="69.5" height="60" rx="5" class="zn"/>
+<text x="72.8" y="612" class="zid" text-anchor="middle">SZ-1</text>
+<text x="72.8" y="626" class="zt" text-anchor="middle">Off-board</text>
+<rect x="115.5" y="596" width="69.5" height="60" rx="5" class="ze"/>
+<text x="150.2" y="612" class="zid" text-anchor="middle">SZ-2</text>
+<text x="150.2" y="626" class="zt" text-anchor="middle">Autoware</text>
+<rect x="193" y="596" width="69.5" height="60" rx="5" class="zs"/>
+<text x="227.8" y="612" class="zid" text-anchor="middle">SZ-3</text>
+<text x="227.8" y="626" class="zt" text-anchor="middle">Safety</text>
+<rect x="270.5" y="596" width="69.5" height="60" rx="5" class="zn"/>
+<text x="305.2" y="612" class="zid" text-anchor="middle">SZ-4</text>
+<text x="305.2" y="626" class="zt" text-anchor="middle">Vehicle</text>
+<circle cx="150.2" cy="570" r="7" class="atk"/>
+<text x="150.2" y="573.5" class="atkt" text-anchor="middle">A</text>
+<line x1="150.2" y1="578" x2="150.2" y2="594" class="ap"/>
+<path d="M150.2 596 L146.2 589 L154.2 589 Z" class="aph"/>
+<line x1="150.2" y1="650" x2="191" y2="650" class="ap"/>
+<rect x="183" y="638" width="12" height="24" rx="3" class="sh"/>
+<text x="38" y="680" class="hd">Threats (TARA)</text>
+<text x="38" y="695" class="ax">TS-14 Send a vehicle with a passenger aboard to ano…</text>
+<text x="38" y="708" class="ax">TS-15 Fake a stop request or door command through t…</text>
+<text x="38" y="727" class="hd">Controls (3)</text>
+<text x="38" y="742" class="ax">CSTR-11.01, CSTR-12.01, CSTR-12.02</text>
+<rect x="370" y="472" width="330" height="360" rx="8" class="card"/>
+<text x="384" y="496" class="gid">EX-05</text>
+<rect x="626" y="483" width="60" height="18" rx="4" class="vp"/>
+<text x="656" y="496" class="vpt" text-anchor="middle">physical</text>
+<rect x="582.7" y="483" width="37.3" height="18" rx="4" class="cal"/>
+<text x="601.4" y="496" class="calt" text-anchor="middle">CAL4</text>
+<text x="384" y="516" class="tb">Service and debug ports (safety monitor,</text>
+<text x="384" y="532" class="tb">Autoware computer, vehicle diagnostic</text>
+<text x="384" y="548" class="tb">connector)</text>
+<rect x="384" y="596" width="69.5" height="60" rx="5" class="zn"/>
+<text x="418.8" y="612" class="zid" text-anchor="middle">SZ-1</text>
+<text x="418.8" y="626" class="zt" text-anchor="middle">Off-board</text>
+<rect x="461.5" y="596" width="69.5" height="60" rx="5" class="zn"/>
+<text x="496.2" y="612" class="zid" text-anchor="middle">SZ-2</text>
+<text x="496.2" y="626" class="zt" text-anchor="middle">Autoware</text>
+<rect x="539" y="596" width="69.5" height="60" rx="5" class="zs"/>
+<text x="573.8" y="612" class="zid" text-anchor="middle">SZ-3</text>
+<text x="573.8" y="626" class="zt" text-anchor="middle">Safety</text>
+<rect x="616.5" y="596" width="69.5" height="60" rx="5" class="zn"/>
+<text x="651.2" y="612" class="zid" text-anchor="middle">SZ-4</text>
+<text x="651.2" y="626" class="zt" text-anchor="middle">Vehicle</text>
+<circle cx="573.8" cy="570" r="7" class="atk"/>
+<text x="573.8" y="573.5" class="atkt" text-anchor="middle">A</text>
+<line x1="573.8" y1="578" x2="573.8" y2="594" class="ap"/>
+<path d="M573.8 596 L569.8 589 L577.8 589 Z" class="aph"/>
+<rect x="561.8" y="581" width="24" height="10" rx="3" class="sh"/>
+<text x="384" y="680" class="hd">Threats (TARA)</text>
+<text x="384" y="695" class="ax">TS-05 Alter the safety monitor's firmware or envelo…</text>
+<text x="384" y="708" class="ax">TS-11 Reach the drive-by-wire bus past the safety m…</text>
+<text x="384" y="721" class="ax">TS-16 Tamper with the command path between Autoware…</text>
+<text x="384" y="740" class="hd">Controls (6)</text>
+<text x="384" y="755" class="ax">CR-03, CSTR-05.01, CSTR-05.02, CSTR-05.05,</text>
+<text x="384" y="768" class="ax">CSTR-03.03, CSTR-05.07</text>
+<rect x="716" y="472" width="330" height="360" rx="8" class="card"/>
+<text x="730" y="496" class="gid">EX-06</text>
+<rect x="977.8" y="483" width="54.2" height="18" rx="4" class="vp"/>
+<text x="1004.9" y="496" class="vpt" text-anchor="middle">network</text>
+<rect x="934.5" y="483" width="37.3" height="18" rx="4" class="cal"/>
+<text x="953.1" y="496" class="calt" text-anchor="middle">CAL4</text>
+<text x="730" y="516" class="tb">Remote operations centre and fleet</text>
+<text x="730" y="532" class="tb">backend, off-board</text>
+<rect x="730" y="596" width="69.5" height="60" rx="5" class="ze"/>
+<text x="764.8" y="612" class="zid" text-anchor="middle">SZ-1</text>
+<text x="764.8" y="626" class="zt" text-anchor="middle">Off-board</text>
+<rect x="807.5" y="596" width="69.5" height="60" rx="5" class="zn"/>
+<text x="842.2" y="612" class="zid" text-anchor="middle">SZ-2</text>
+<text x="842.2" y="626" class="zt" text-anchor="middle">Autoware</text>
+<rect x="885" y="596" width="69.5" height="60" rx="5" class="zs"/>
+<text x="919.8" y="612" class="zid" text-anchor="middle">SZ-3</text>
+<text x="919.8" y="626" class="zt" text-anchor="middle">Safety</text>
+<rect x="962.5" y="596" width="69.5" height="60" rx="5" class="zn"/>
+<text x="997.2" y="612" class="zid" text-anchor="middle">SZ-4</text>
+<text x="997.2" y="626" class="zt" text-anchor="middle">Vehicle</text>
+<circle cx="764.8" cy="570" r="7" class="atk"/>
+<text x="764.8" y="573.5" class="atkt" text-anchor="middle">A</text>
+<line x1="764.8" y1="578" x2="764.8" y2="594" class="ap"/>
+<path d="M764.8 596 L760.8 589 L768.8 589 Z" class="aph"/>
+<line x1="764.8" y1="650" x2="883" y2="650" class="ap"/>
+<rect x="875" y="638" width="12" height="24" rx="3" class="sh"/>
+<text x="730" y="680" class="hd">Threats (TARA)</text>
+<text x="730" y="695" class="ax">TS-03 Take over a remote operator's account</text>
+<text x="730" y="708" class="ax">TS-07 An insider alters a map or model before it is…</text>
+<text x="730" y="721" class="ax">TS-12 Read passengers' trip data or cabin video fro…</text>
+<text x="730" y="740" class="hd">Controls (3)</text>
+<text x="730" y="755" class="ax">CSR-02, CSR-06, CSR-10</text>
+<rect x="24" y="848" width="330" height="360" rx="8" class="card"/>
+<text x="38" y="872" class="gid">EX-07</text>
+<rect x="280" y="859" width="60" height="18" rx="4" class="vp"/>
+<text x="310" y="872" class="vpt" text-anchor="middle">adjacent</text>
+<text x="38" y="892" class="tb">Short-range wireless on the vehicle</text>
+<text x="38" y="908" class="tb">(Wi-Fi, Bluetooth); none is fitted</text>
+<rect x="38" y="972" width="69.5" height="60" rx="5" class="zn"/>
+<text x="72.8" y="988" class="zid" text-anchor="middle">SZ-1</text>
+<text x="72.8" y="1002" class="zt" text-anchor="middle">Off-board</text>
+<rect x="115.5" y="972" width="69.5" height="60" rx="5" class="zn"/>
+<text x="150.2" y="988" class="zid" text-anchor="middle">SZ-2</text>
+<text x="150.2" y="1002" class="zt" text-anchor="middle">Autoware</text>
+<rect x="193" y="972" width="69.5" height="60" rx="5" class="zs"/>
+<text x="227.8" y="988" class="zid" text-anchor="middle">SZ-3</text>
+<text x="227.8" y="1002" class="zt" text-anchor="middle">Safety</text>
+<rect x="270.5" y="972" width="69.5" height="60" rx="5" class="zn"/>
+<text x="305.2" y="988" class="zid" text-anchor="middle">SZ-4</text>
+<text x="305.2" y="1002" class="zt" text-anchor="middle">Vehicle</text>
+<circle cx="150.2" cy="946" r="7" class="atk"/>
+<text x="150.2" y="949.5" class="atkt" text-anchor="middle">A</text>
+<line x1="141.2" y1="937" x2="159.2" y2="955" class="xo"/>
+<line x1="159.2" y1="937" x2="141.2" y2="955" class="xo"/>
+<text x="38" y="1056" class="hd">No threat in the TARA: none is fitted</text>
+<text x="38" y="1071" class="ax">Decision DQ-037 A</text>
+<circle cx="32" cy="1234" r="7" class="atk"/>
+<text x="48" y="1238" class="t">attacker</text>
+<rect x="124.0" y="1226" width="16" height="16" rx="3" class="ze"/>
+<text x="148" y="1238" class="t">zone the interface opens into</text>
+<rect x="360.5" y="1226" width="16" height="16" rx="3" class="zs"/>
+<text x="384.5" y="1238" class="t">safety zone</text>
+<rect x="480.0" y="1226" width="10" height="16" rx="3" class="sh"/>
+<text x="504" y="1238" class="t">controls</text>
+<line x1="580.0" y1="1234" x2="606.0" y2="1234" class="ap"/>
+<text x="614" y="1238" class="t">attack path</text>
+</svg>

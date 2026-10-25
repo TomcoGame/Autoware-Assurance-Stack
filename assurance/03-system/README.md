@@ -30,7 +30,7 @@ Standard clauses: UL 4600 §9–10; 26262-4; SYS.1–5.
 |---|---|
 | [`hsi/`](hsi/README.md) | Hardware-software interface |
 | [`integ/`](integ/) | — |
-| [`secarch/`](secarch/) | — |
+| [`secarch/`](secarch/README.md) | Cybersecurity requirements and architecture |
 | [`timing/`](timing/README.md) | Timing: FTTI, detection and reaction budget |
 | [`tsc/`](tsc/README.md) | Technical safety concept |
 | [`tsr/`](tsr/README.md) | Technical safety requirements |
