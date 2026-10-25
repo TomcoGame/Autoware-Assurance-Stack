@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-S-07 Cybersecurity requirements and architectural design |
 | Standard reference | UL 4600 §11; ISO/SAE 21434 §10; ASPICE 4.0 SEC.1, SYS.3 |
-| Version | 0.3 (no short-range wireless on the vehicle (DQ-037 A); 2026-10-24). 0.2 (first content: technical cybersecurity requirements refined from WP-C-10 with their CAL, trust zones and conduits over the WP-S-05 interfaces, and the interfaces exposed outside the vehicle, generated from `secarch/secarch.yaml`; 2026-10-24). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.4 (folder page `secarch/README.md` with the whole of WP-S-07 on one page, Figure 4-1 on where an attacker can reach the item and what stops them, and `secarch/requirements.csv` tracing every technical cybersecurity requirement; 2026-10-25). 0.3 (no short-range wireless on the vehicle (DQ-037 A); 2026-10-24). 0.2 (first content: technical cybersecurity requirements refined from WP-C-10 with their CAL, trust zones and conduits over the WP-S-05 interfaces, and the interfaces exposed outside the vehicle, generated from `secarch/secarch.yaml`; 2026-10-24). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | CS (up to CAL4) |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -144,6 +144,14 @@ Every way the item can be reached from outside the vehicle, with the attack vect
 | EX-07 | Short-range wireless on the vehicle (Wi-Fi, Bluetooth); none is fitted | SZ-2 | adjacent | None in the TARA | — | DQ-037 A |
 
 <!-- END GENERATED: secarch-external -->
+
+<!-- BEGIN GENERATED: secarch-attack-cards (assurance/03-system/secarch/secarch.py) -->
+
+![Figure 4-1: one card per interface exposed outside the vehicle, EX-01 to EX-07. Each shows the four trust zones in a row, the attacker at the zone the interface opens into with its attack vector, the attack path toward the safety zone and where the controls stand on it, then the threats of the TARA that use the interface and its controls with their highest CAL. EX-07 has no threat because none is fitted (DQ-037 A). The same data are in the table above.](secarch/fig-s07-4-1-attack-paths.svg)
+
+*Figure 4-1. Where an attacker can reach the item, and what stops them. Drawn by [`secarch/secarch.py`](secarch/secarch.py); CI fails if it is stale. Every technical cybersecurity requirement with its trace is in [`secarch/requirements.csv`](secarch/requirements.csv).*
+
+<!-- END GENERATED: secarch-attack-cards -->
 
 **Short-range wireless.** The lead decided that the vehicle has none (DQ-037 A, 2026-10-24): passengers use the app through the fleet backend, which reaches the vehicle over the signed cellular path. The TARA therefore has no threat through it (EX-07), and a radio scan of the vehicle is part of its verification (WP-S-09). Adding one later is a change under the impact analysis, with its threats added to the TARA and its stack kept out of the safety and vehicle zones.
 

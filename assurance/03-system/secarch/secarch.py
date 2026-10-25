@@ -48,9 +48,15 @@ import figkit as fk  # noqa: E402
 import hsi  # noqa: E402
 import tsc  # noqa: E402
 
+sys.path.insert(0, str(HERE))
+import acards  # noqa: E402
+
 MODEL = HERE / "secarch.yaml"
 DOC = ASSURANCE / "03-system" / "WP-S-07-cybersecurity-requirements-architecture.md"
 FIG = HERE / "fig-s07-3-1-zones.svg"
+FIG2 = HERE / "fig-s07-4-1-attack-paths.svg"
+CSV = HERE / "requirements.csv"
+README = HERE / "README.md"
 ALLOC = ("software", "hardware", "both")
 W = 640
 
@@ -283,6 +289,16 @@ def tables(m: dict, k: dict) -> dict[str, str]:
             f"| {', '.join(e['controls']) or '—'} | {decided(e, k)} |"
         )
     t["secarch-external"] = "\n".join(rows)
+    t["secarch-attack-cards"] = (
+        "![Figure 4-1: one card per interface exposed outside the vehicle, EX-01 to EX-07. Each shows the four "
+        "trust zones in a row, the attacker at the zone the interface opens into with its attack vector, the "
+        "attack path toward the safety zone and where the controls stand on it, then the threats of the TARA "
+        "that use the interface and its controls with their highest CAL. EX-07 has no threat because none is "
+        f"fitted (DQ-037 A). The same data are in the table above.](secarch/{FIG2.name})\n\n"
+        "*Figure 4-1. Where an attacker can reach the item, and what stops them. Drawn by "
+        "[`secarch/secarch.py`](secarch/secarch.py); CI fails if it is stale. Every technical cybersecurity "
+        f"requirement with its trace is in [`secarch/{CSV.name}`](secarch/{CSV.name}).*"
+    )
     item = [i for i, r in k["csrs"].items() if r["scope"] == "item"]
     cals = [cal(r, k) for r in m["tcsrs"]]
     top = max((c for c in cals if c), key=cybersecurity.CALS.index)
@@ -401,12 +417,184 @@ def figure(m: dict, k: dict) -> str:
     )
 
 
+def control_cal(c: str, m: dict, k: dict) -> str | None:
+    """The CAL a control carries: a technical requirement's, or the highest of a requirement's goals."""
+    tc = {r["id"]: r for r in m["tcsrs"]}
+    if c in tc:
+        return cal(tc[c], k)
+    if c in k["csrs"]:
+        cals = [
+            cybersecurity.cal(k["cyber"], k["cyber_known"], k["goals"][g])
+            for g in k["csrs"][c]["goals"]
+        ]
+        cals = [x for x in cals if x]
+        return max(cals, key=cybersecurity.CALS.index) if cals else None
+    return None
+
+
+def card_data(m: dict, k: dict) -> tuple[list[dict], list[dict]]:
+    """The exposed interfaces with their threats and controls worked out, and the zones in drawing order."""
+    zones = sorted(m["zones"], key=lambda z: z["box"][0])
+    out = []
+    for e in m["external"]:
+        cals = [x for x in (control_cal(c, m, k) for c in e["controls"]) if x]
+        out.append(
+            {
+                "id": e["id"],
+                "name": e["name"],
+                "zone": e["zone"],
+                "vector": e["vector"],
+                "threats": [
+                    {"id": ts, "text": k["threats"][ts]["text"], "claim": ts in k["claimed"]}
+                    for ts in e["threats"]
+                ],
+                "controls": e["controls"],
+                "cal": max(cals, key=cybersecurity.CALS.index) if cals else "",
+                "decision": decided(e, k),
+            }
+        )
+    return out, [{"id": z["id"], "name": z["name"]} for z in zones]
+
+
+def requirements_csv(m: dict, k: dict) -> str:
+    """Every technical cybersecurity requirement with its placement, CAL and trace."""
+    import csv
+    import io
+
+    import yaml
+
+    its = yaml.safe_load((HERE.parent / "integ" / "integ.yaml").read_text(encoding="utf-8"))[
+        "cases"
+    ]
+    comps = k["components"]
+    zof = zone_of(m)
+    buf = io.StringIO()
+    w = csv.writer(buf, lineterminator="\n")
+    w.writerow(
+        [
+            "ID",
+            "Technical cybersecurity requirement",
+            "CAL",
+            "Component",
+            "Zone",
+            "Allocation",
+            "Refines (WP-C-10)",
+            "Cybersecurity goals",
+            "Guards exposed interfaces",
+            "Guards conduits",
+            "Verification",
+            "Integration test cases (WP-S-08)",
+        ]
+    )
+    for r in sorted(m["tcsrs"], key=lambda r: r["id"]):
+        c = r["component"]
+        w.writerow(
+            [
+                r["id"],
+                r["text"],
+                cal(r, k) or "—",
+                f"{c} {comps[c]['name']}",
+                zof[c],
+                r["alloc"],
+                r["csr"],
+                ", ".join(k["csrs"][r["csr"]]["goals"]),
+                ", ".join(e["id"] for e in m["external"] if r["id"] in e["controls"]) or "—",
+                ", ".join(x["interface"] for x in m["conduits"] if r["id"] in x["controls"]) or "—",
+                r["verify"],
+                ", ".join(x["id"] for x in its if r["id"] in x["covers"]) or "—",
+            ]
+        )
+    return buf.getvalue()
+
+
+def here(md: str) -> str:
+    """Text of WP-S-07 with its relative links rewritten to work from this folder."""
+    md = md.replace("](secarch/", "](")
+    return re.sub(r"\]\((?!https?:|#|fig-|requirements\.csv|secarch\.|README)", "](../", md)
+
+
+def readme(t: dict[str, str], doc: str) -> str:
+    """The folder page: the whole cybersecurity requirements and architecture on one page."""
+
+    def part(heading: str) -> str:
+        return here(fk.section(doc, heading).strip())
+
+    files = [
+        "| File | What it holds |",
+        "|---|---|",
+        f"| [`{CSV.name}`]({CSV.name}) | Every technical cybersecurity requirement with its CAL, component, zone, allocation, the requirement and goals it refines, the exposed interfaces and conduits it guards, and the integration test cases that cover it |",
+        f"| [`{FIG.name}`]({FIG.name}) | Figure 3-1, the trust zones, conduits and exposed interfaces |",
+        f"| [`{FIG2.name}`]({FIG2.name}) | Figure 4-1, where an attacker can reach the item and what stops them |",
+        "| [`secarch.yaml`](secarch.yaml) | Trust zones, conduits, exposed interfaces and the technical cybersecurity requirements |",
+        "| [`secarch.py`](secarch.py), [`acards.py`](acards.py) | The generator: checks the model against the cybersecurity concept, the TARA, the architecture and the hardware-software interface, and writes WP-S-07's tables and everything here |",
+    ]
+    lines = [
+        "<!-- Generated by assurance/03-system/secarch/secarch.py; do not edit by hand. -->",
+        "",
+        "# Cybersecurity requirements and architecture",
+        "",
+        "The whole of [WP-S-07](../WP-S-07-cybersecurity-requirements-architecture.md) on one page: the "
+        "technical cybersecurity requirements refined from the cybersecurity concept, the trust zones the "
+        "components of the [technical safety concept](../tsc/README.md) sit in, the conduits over the "
+        "[hardware-software interface](../hsi/README.md) that cross them, and every interface through which "
+        "the item can be reached from outside the vehicle. Everything here is generated by `secarch.py` from "
+        "`secarch.yaml`; CI fails if it is stale. Everything is a draft by Claude (I0) until it is reviewed.",
+        "",
+        t["secarch-summary"],
+        "",
+        "1. [What this covers](#1-what-this-covers)",
+        "2. [Cybersecurity requirements](#2-cybersecurity-requirements)",
+        "3. [Trust zones and conduits](#3-trust-zones-and-conduits)",
+        "4. [Interfaces exposed outside the vehicle](#4-interfaces-exposed-outside-the-vehicle)",
+        "5. [Files in this folder](#5-files-in-this-folder)",
+        "",
+        "## 1. What this covers",
+        "",
+        re.sub(
+            r"<!-- BEGIN GENERATED: secarch-summary .*?END GENERATED: secarch-summary -->\n\n",
+            "",
+            part("## 1. Purpose"),
+            flags=re.S,
+        ),
+        "",
+        "## 2. Cybersecurity requirements",
+        "",
+        f"Every technical requirement, with what it guards and the tests that cover it, is in [`{CSV.name}`]"
+        f"({CSV.name}), which GitHub shows as a table that can be searched.",
+        "",
+        part("## 2. Cybersecurity requirements"),
+        "",
+        "## 3. Trust zones and conduits",
+        "",
+        part("## 3. Security architecture and controls"),
+        "",
+        "## 4. Interfaces exposed outside the vehicle",
+        "",
+        part("## 4. Interfaces exposed outside the vehicle"),
+        "",
+        "## 5. Files in this folder",
+        "",
+        *files,
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def build() -> dict[Path, str]:
     m, k = load(), known()
     errs = check(m, k)
     if errs:
         raise fk.FigureError("secarch.yaml: " + "; ".join(errs))
-    return {DOC: fill(DOC.read_text(encoding="utf-8"), tables(m, k)), FIG: figure(m, k)}
+    t = tables(m, k)
+    doc = fill(DOC.read_text(encoding="utf-8"), t)
+    exposed, zones = card_data(m, k)
+    return {
+        DOC: doc,
+        FIG: figure(m, k),
+        FIG2: acards.sheet(exposed, zones),
+        CSV: requirements_csv(m, k),
+        README: readme(t, doc),
+    }
 
 
 if __name__ == "__main__":
