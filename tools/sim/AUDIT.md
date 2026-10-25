@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Item audited | [`tools/sim/`](README.md) (scene descriptions, Blender builder, review dashboards, gallery), the workflows [`sim.yaml`](../../.github/workflows/sim.yaml) and [`sim-render.yaml`](../../.github/workflows/sim-render.yaml), the added section of [`tools/readme/models/CREDITS.md`](../readme/models/CREDITS.md) and the added line of `CLAUDE.md` |
-| Baseline | First commit of the change, `4295f6b`, on `origin/main` `310b1be`; the fixes are in the commit that adds this record (pull request #57) |
+| Baseline | First round: `4295f6b` on `origin/main` `310b1be`, fixed in `a9dc860`. Second round (picture quality): `a9dc860`, fixed in the commit after it (pull request #57) |
 | Review type | Pre-review audit (author-side self-check), in the form of the LionDriver review records. **Not** a verification review: WP-P-05 (verification and review procedure) is still a skeleton, and this record does not count as one |
 | Checklist | The brief of the task (below, C-01 to C-14) and the rules of `CLAUDE.md` |
 | Date | 2026-10-25 |
@@ -62,16 +62,58 @@ before it was fixed; F-17 to F-22 are the author's, F-19 to F-22 from reading th
 | F-21 | Motion (after F-01) | With the cruise at the sampled speed, the fixed slowing share of the clip made SC-02 stop from 42.7 km/h in about 6.5 m (over 1 g): a picture of an impossible stop | Major | **Fixed:** the ego slows at the firm level of FSR-03.02 (3 m/s², DQ-019 A, DQ-033 A), read from `fsc.yaml`, and its start is placed far enough back for that stop; the dashboard says the slowing is choreography, not Autoware's planned braking. `test_the_ego_slows_at_the_level_the_records_state` |
 | F-22 | Dashboard header | The goal chips stopped silently when they ran out of room (SC-14 showed three of its four goals) and could run into the first header field (SC-03) | Minor | **Fixed:** the chips stop before the header fields, and a last chip counts the goals not shown; every goal is also listed in the right panel. `test_goal_chips_fit_or_say_how_many_are_left` |
 
+## Second round: picture quality against LionDriver (2026-10-25)
+
+The lead asked why the graphics look lower in resolution than LionDriver's. Same form: the finding, measured, then
+fixed in this change.
+
+**How it was measured.** Resolution was not the cause: the dashboards are 1920 × 1080, LionDriver's 1600 × 900. Fine
+detail was measured as the variance of the Laplacian of the grey image (×10⁴; higher means more fine detail), over the
+inner part of the 3D view, clear of the tags (ours x 534 to 1282, y 112 to 512; LionDriver's x 420 to 1132, y 94 to
+494), on the committed JPEGs. The same measure on the raw chase render before compositing gave 31, against 45 for the
+same region of the dashboard, so the loss was in the 3D scene and its render, not in the compositing.
+
+| Dashboard | Fine detail of the 3D view |
+|---|---|
+| LionDriver `sh-11-pedestrian-occluded` | 193 |
+| LionDriver `he-01-2-hardover-adjacent` | 144 |
+| LionDriver `he-03-2-queue-pedestrian` | 157 |
+| SC-02 at `a9dc860` (flat colours, rendered at panel size) | 89 |
+| SC-02, procedural look, rendered at 1.5× and scaled down | 194 |
+| SC-02, CC0 look, rendered at 1.5× and scaled down | 245 |
+
+The committed dashboards, before (`a9dc860`) and after this change (32 samples, CC0 look), same region:
+
+| Scene | Before | After |
+|---|---|---|
+| SC-01 (night, rain) | 84 | 218 |
+| SC-02 (day) | 89 | 246 |
+| SC-03 (wet, rain) | 70 | 207 |
+| SC-06 (dusk) | 61 | 180 |
+| SC-14 (dusk, rain and mist past the ODD limit) | 40 | 101 |
+
+SC-14 stays lowest because its mist hides detail, as it should.
+
+| # | Location | Description | Severity | Disposition |
+|---|---|---|---|---|
+| F-23 | `build_blend.py` materials, world, render | The 3D views carried roughly half LionDriver's fine detail: every surface was one flat colour, the sky a flat colour, the buildings plain boxes, the pedestrians primitives, and the views rendered at their size on the dashboard with no supersampling. LionDriver uses CC0 HDRIs, scanned PBR textures and street furniture (Poly Haven, ambientCG), CC0 pedestrians, CC-BY building kits, and renders its chase view larger than its panel | Major | **Fixed:** [`fetch_assets.py`](fetch_assets.py) fetches the CC0 skies, asphalt, concrete, grass, three facades, a street tree, bins and hydrants (the IDs LionDriver chose and checked, plus the facades), pinned by SHA-256 in [`assets.lock.json`](assets.lock.json); [`look.py`](look.py) draws with them, with a textured procedural fallback; the Quaternius pedestrians walk; views render at 1.5× and are box-filtered down. Table above |
+| F-24 | `build_blend.py` dashboard | The compositing pass drew the views pixel on pixel through Cycles' default 1.5 px filter, softening them and the text | Minor | **Fixed:** views box-filtered to their exact size, sampled nearest, and a 0.5 px filter; the text panels' fine detail doubled (SC-02 left panel 1258 to 2368) |
+| F-25 | `look.py` pedestrians | The Quaternius file carries a helper icosphere, which landed at the origin as a white ball in the lane (seen in the top view and the filmstrip of the first render) | Minor | **Fixed:** only the rig and the meshes under it are kept |
+| F-26 | `look.py` procedural facade | Without the assets, the facades showed vertical stripes: the brick pattern read the wrong axes on vertical walls | Minor | **Fixed:** the pattern runs along the wall and up it |
+| F-27 | Buildings | LionDriver's urban buildings are CC-BY kits in its private assets repository; they are not this project's to use, so the buildings here are boxes with CC0 facade textures, plainer than LionDriver's | Note | **Open, the lead's call:** licensing kits for this repository, or keeping the textured boxes |
+| F-28 | Road users | Cyclists, scooter riders, wheelchair users, buses, trucks and motorcycles are still primitives; only pedestrians and children use the CC0 figures | Note | **Open:** no CC0 models for them were chosen in this change |
+| F-29 | `sim-render.yaml` | The CI render fetches the assets at run time from two third-party sites; if they are unreachable it renders the procedural look | Note | **By design:** the lock pins every file by SHA-256, the manifest records which assets a dashboard used, and the gallery shows the look of each committed dashboard |
+
 ## Checks run before pushing
 
-Run on the commit that adds this record, in the session's container (Python 3.13, PyYAML 6.0.2, `bpy` 5.2.3):
+Run on the commit of the second round, in the session's container (Python 3.13, PyYAML 6.0.2, `bpy` 5.2.3):
 
 | Check | Result |
 |---|---|
 | Everything `CLAUDE.md` lists: the decision register, the safety case records, headers, links, tables, `check_restricted.py`, every generator with `--check`, the assurance tests, the README figures | All pass |
 | `python3 tools/sim/scene.py --check` | 6 generated files current |
-| `python3 -m unittest discover -s tools/sim -p 'test_*.py'` | 30 tests pass |
-| `build_blend.py tools/sim/scenes/*.json --out tools/sim/dashboards --verify` (48 samples) | All five scenes match their descriptions; the gallery shows each dashboard as current |
+| `python3 -m unittest discover -s tools/sim -p 'test_*.py'` | 33 tests pass |
+| `build_blend.py tools/sim/scenes/*.json --out tools/sim/dashboards --verify` (32 samples, CC0 look after `fetch_assets.py --locked`) | All five scenes match their descriptions; the gallery shows each dashboard as current |
 | The wiki's tests and `build_wiki.py --check` | Pass |
 | black and isort at line length 100 | Clean |
 | `git diff origin/main -- assurance/` | Empty |
@@ -79,4 +121,4 @@ Run on the commit that adds this record, in the session's container (Python 3.13
 ## What this record does not do
 
 It does not verify the tool in the sense of WP-P-05, accept anything, or make any picture evidence. The open items
-(F-10 for the clip's overlay, F-16, F-17) wait on the lead's review of pull request #57.
+(F-10 for the clip's overlay, F-16, F-17, F-27, F-28) wait on the lead's review of pull request #57.

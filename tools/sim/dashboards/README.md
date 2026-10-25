@@ -9,8 +9,8 @@ One review dashboard per scene of [`../scenes/`](../scenes/), rendered in Blende
 
 | Dashboard | Scenario | Safety goals at stake | Events and triggering conditions | Condition (sample) | Render |
 |---|---|---|---|---|---|
-| [SC-01](SC-01.jpg) | Pedestrian on or stepping onto a marked crosswalk | SG-02 (D), SG-03 (C), SG-06 (D) | HE-02.1, HE-06.4, TC-02, TC-03, TC-15 | ODD-12 night · ODD-13 wet · ODD-10 0.6 mm/h | current; Blender 5.2.3 LTS |
-| [SC-02](SC-02.jpg) | Pedestrian emerging from behind a parked vehicle | SG-02 (D), SG-04 (D), SG-06 (D) | HE-04.3, TC-10, TC-17 | ODD-12 day | current; Blender 5.2.3 LTS |
-| [SC-03](SC-03.jpg) | Vehicle ahead braking or stopping in congested traffic | SG-01 (D), SG-02 (D), SG-04 (D), SG-06 (D) | HE-01.2, HE-02.2, TC-11, TC-25 | ODD-13 wet · ODD-10 1.5 mm/h | current; Blender 5.2.3 LTS |
-| [SC-06](SC-06.jpg) | Unprotected left turn across oncoming traffic | SG-02 (D), SG-06 (D) | HE-06.2, TC-12, TC-20 | ODD-12 dusk | current; Blender 5.2.3 LTS |
-| [SC-14](SC-14.jpg) | Weather changing toward the ODD limits during a trip | SG-02 (D), SG-03 (C), SG-06 (D), SG-07 (D) | TC-05, TC-28 | ODD-12 dusk · ODD-13 wet · ODD-10 across the limit · ODD-11 across the limit | current; Blender 5.2.3 LTS |
+| [SC-01](SC-01.jpg) | Pedestrian on or stepping onto a marked crosswalk | SG-02 (D), SG-03 (C), SG-06 (D) | HE-02.1, HE-06.4, TC-02, TC-03, TC-15 | ODD-12 night · ODD-13 wet · ODD-10 0.6 mm/h | current; Blender 5.2.3 LTS, CC0 assets |
+| [SC-02](SC-02.jpg) | Pedestrian emerging from behind a parked vehicle | SG-02 (D), SG-04 (D), SG-06 (D) | HE-04.3, TC-10, TC-17 | ODD-12 day | current; Blender 5.2.3 LTS, CC0 assets |
+| [SC-03](SC-03.jpg) | Vehicle ahead braking or stopping in congested traffic | SG-01 (D), SG-02 (D), SG-04 (D), SG-06 (D) | HE-01.2, HE-02.2, TC-11, TC-25 | ODD-13 wet · ODD-10 1.5 mm/h | current; Blender 5.2.3 LTS, CC0 assets |
+| [SC-06](SC-06.jpg) | Unprotected left turn across oncoming traffic | SG-02 (D), SG-06 (D) | HE-06.2, TC-12, TC-20 | ODD-12 dusk | current; Blender 5.2.3 LTS, CC0 assets |
+| [SC-14](SC-14.jpg) | Weather changing toward the ODD limits during a trip | SG-02 (D), SG-03 (C), SG-06 (D), SG-07 (D) | TC-05, TC-28 | ODD-12 dusk · ODD-13 wet · ODD-10 across the limit · ODD-11 across the limit | current; Blender 5.2.3 LTS, CC0 assets |

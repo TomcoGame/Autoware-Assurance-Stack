@@ -39,6 +39,23 @@ The dashboard (1920 × 1080, laid out like the LionDriver hazard-scene dashboard
 There is no metric panel (gap, time to collision, speed traces): with the behaviour bounds not fixed and the vehicle
 not chosen, any such number would be made up.
 
+### The look
+
+The scene is drawn with CC0 assets when they have been fetched, as the LionDriver scenes are:
+
+| Part | With the assets (`fetch_assets.py`) | Without them (CI, offline, `--procedural`) |
+|---|---|---|
+| Sky | An HDRI for the light: clear, low sun, night; overcast under rain or mist (Poly Haven) | A flat colour |
+| Road, sidewalks, verges | Scanned asphalt, concrete and grass, 2K PBR maps in world metres (Poly Haven, ambientCG) | Noise textures with a bump |
+| Buildings | Three brick and window facades, 13 m tiles (ambientCG), with roofs | A procedural grid of windows |
+| Street furniture | Street trees, bins and hydrants, seeded, kept clear of crosswalks, junctions, signs, poles and every road user's path | None |
+| Pedestrians | Two CC0 Quaternius figures walking by the distance they cover ([`models/people/`](models/people/README.md), committed) | The same; cyclists, scooter riders and wheelchair users stay primitives |
+
+The views render at 1.5 times their size on the dashboard and are box-filtered down, and the dashboard is laid out
+with a narrow pixel filter so the pictures sit pixel on pixel. The look never moves anything the description places,
+and `--verify` checks a scene the same way under either look. Each manifest records which assets a dashboard was
+drawn with, the dashboard's credit line names them, and the gallery says which look each one has.
+
 Scenes exist for SC-01, SC-02, SC-03, SC-06 and SC-14. The others have no layout yet.
 [`layouts.py`](layouts.py) lists what a layout holds; adding one is enough for a scenario to be drawn.
 
@@ -53,6 +70,8 @@ cybersecurity requirement (`CSR-`) is never drawn: its scene would show security
 | [`scene.py`](scene.py) | Python, PyYAML | Reads the records and writes [`scenes/<id>.json`](scenes/), the scene description, and the gallery page [`dashboards/README.md`](dashboards/README.md); `--check` fails if one is stale |
 | [`layouts.py`](layouts.py) | (data) | Road geometry and choreography of each scene, in metres; holds no fact |
 | [`build_blend.py`](build_blend.py) | Blender (`bpy`) | Builds the Blender scene from one description, renders the views and lays out the dashboard (in Blender too: no imaging library), writes a manifest of what it built, and with `--verify` fails when the built scene differs from the description |
+| [`look.py`](look.py) | Blender (`bpy`) | The skies, surfaces, street furniture and pedestrians, from the CC0 assets or procedural |
+| [`fetch_assets.py`](fetch_assets.py) | Python | Fetches the CC0 assets into `assets/` (git-ignored) and records them in [`assets.lock.json`](assets.lock.json); `--locked` checks every file's SHA-256 |
 | [`test_sim.py`](test_sim.py) | Python, PyYAML | Unit tests; Blender not needed |
 
 ### Where the labels come from
@@ -150,6 +169,7 @@ python3 tools/sim/scene.py                       # regenerate the descriptions a
 python3 tools/sim/scene.py --check
 python3 -m unittest discover -s tools/sim -p 'test_*.py' -v
 
+python3 tools/sim/fetch_assets.py --locked        # the CC0 assets (about 200 MB, git-ignored); optional
 python3.13 -m venv build/bpy && build/bpy/bin/pip install bpy==5.2.3
 build/bpy/bin/python tools/sim/build_blend.py tools/sim/scenes/*.json --out tools/sim/dashboards --verify
 python3 tools/sim/scene.py                       # the gallery page now shows the new renders as current
@@ -166,4 +186,6 @@ round in Blender. The separate views go to `--work` (default `build/sim/work`, g
 
 The vehicles are the CC BY 4.0 models of [`tools/readme/models/`](../readme/models/CREDITS.md), loaded through
 [`mesh.py`](../readme/mesh.py). Every dashboard and clip names their authors and the licence on its face. The changes
-made for these scenes are listed in [CREDITS.md](../readme/models/CREDITS.md).
+made for these scenes are listed in [CREDITS.md](../readme/models/CREDITS.md). The skies, textures and street
+furniture are CC0 (Poly Haven, ambientCG; [`assets.lock.json`](assets.lock.json)), and so are the pedestrians
+(Quaternius; [`models/people/`](models/people/README.md)).

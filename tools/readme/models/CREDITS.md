@@ -35,4 +35,12 @@ known scenarios:
 
 Every render names both models, their authors and the licence on its face.
 
+The scenes also use CC0 1.0 assets, which need no credit; the dashboards name their sources all the same:
+
+- skies (HDRIs), road, sidewalk, verge and facade textures, street trees, bins and hydrants from
+  [Poly Haven](https://polyhaven.com) and [ambientCG](https://ambientcg.com), fetched by
+  [`tools/sim/fetch_assets.py`](../../sim/fetch_assets.py) and recorded with their SHA-256 in
+  [`tools/sim/assets.lock.json`](../../sim/assets.lock.json) (the files themselves are not committed);
+- two pedestrian figures by Quaternius, in [`tools/sim/models/people/`](../../sim/models/people/README.md).
+
 Their use here does not mean that either author endorses this project or its figures.

@@ -8,6 +8,7 @@ python3 -m unittest discover -s tools/sim -p 'test_*.py' -v
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -248,6 +249,32 @@ class Motion(unittest.TestCase):
         self.assertEqual(len(chips) - 1 + int(chips[-1][1]), 4)
         self.assertLessEqual(sum(bb.chip_width(c) + 6 for c in chips), 400)
         self.assertEqual(len(bb.goal_chips(goals, 2000)), 4)
+
+    def test_the_dashboard_credits_the_look_it_was_drawn_with(self):
+        cc0 = {
+            "assets": [{"slot": "asphalt", "id": "asphalt_02", "source": "polyhaven"}],
+            "pedestrians": "Quaternius (CC0)",
+        }
+        self.assertIn("Poly Haven", bb.look_credit(cc0))
+        self.assertIn("Quaternius", bb.look_credit(cc0))
+        self.assertIn("procedural", bb.look_credit({}))
+        texts = bb.dashboard_texts(bb.dashboard_layout(describe("SC-01"), [], cc0))
+        self.assertTrue(any("Poly Haven" in t for t in texts))
+
+    def test_the_asset_lock_names_only_cc0_sources(self):
+        lock = json.loads((HERE / "assets.lock.json").read_text(encoding="utf-8"))
+        self.assertIn("CC0", lock["licence"])
+        for name, slot in lock["slots"].items():
+            self.assertIn(slot["source"], ("polyhaven", "ambientcg"), name)
+            for rel, f in slot["files"].items():
+                self.assertRegex(f["sha256"], r"^[0-9a-f]{64}$", f"{name}/{rel}")
+                self.assertTrue(f["url"].startswith("https://"), f"{name}/{rel}")
+
+    def test_the_pedestrian_models_are_the_recorded_files(self):
+        readme = (HERE / "models" / "people" / "README.md").read_text(encoding="utf-8")
+        for f in ("pedestrian_male.glb", "pedestrian_female.glb"):
+            digest = hashlib.sha256((HERE / "models" / "people" / f).read_bytes()).hexdigest()
+            self.assertIn(digest, readme, f)
 
     def test_wrap_keeps_every_word(self):
         text = "No contact with the pedestrian; the vehicle yields as the traffic rules require"

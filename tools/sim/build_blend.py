@@ -36,6 +36,9 @@ sys.path.insert(0, str(HERE.parent / "readme"))
 
 ENVELOPE_M = 14.0  # drawn length of the monitor's envelope at the clip's start speed; not computed
 HOLD_S = 1.0  # seconds the ego stands still at the end of the clip
+SUPERSAMPLE = (
+    1.5  # views render at this multiple of their size on the dashboard, then are scaled down
+)
 W, H = 1600, 900
 AMBER, BLUE, RED, GREEN, VIOLET, GREY = (
     (1.0, 0.81, 0.43),
@@ -307,7 +310,19 @@ def goal_chips(goals: list[dict], room: float) -> list[str]:
     return []
 
 
-def dashboard_layout(desc: dict, tags: list[dict]) -> list[dict]:
+def look_credit(look_: dict) -> str:
+    """The credit line of the assets a dashboard was drawn with (all CC0, credited all the same)."""
+    sources = sorted({a["source"] for a in look_.get("assets", [])})
+    names = {"polyhaven": "Poly Haven", "ambientcg": "ambientCG"}
+    out = []
+    if sources:
+        out.append("sky, textures and street furniture: " + ", ".join(names[x] for x in sources))
+    if look_.get("pedestrians", "").startswith("Quaternius"):
+        out.append("pedestrians: Quaternius")
+    return ("; ".join(out) + " (CC0)") if out else "procedural look (no fetched assets)"
+
+
+def dashboard_layout(desc: dict, tags: list[dict], look_: dict | None = None) -> list[dict]:
     """Everything on the dashboard, in pixels (x right, y down): rects, images, texts.
 
     `tags` are the road-user labels on the chase view, with their position in that view's pixels."""
@@ -428,7 +443,8 @@ def dashboard_layout(desc: dict, tags: list[dict]) -> list[dict]:
         el.append({"rect": (lx, ly + 2, 14, 10), "fill": HEX[colour], "edge": HEX[colour]})
         text(lx + 20, ly, 11, body, INK2, DW - 52)
         lx += w + 22
-    text(16, 1062, 10, desc["credits"] + " · " + sc["source"], MUTED, 1900)
+    credit = desc["credits"] + " · " + look_credit(look_ or {}) + " · " + sc["source"]
+    text(16, 1062, 10, credit, MUTED, 1900)
     return el
 
 
@@ -511,11 +527,17 @@ def verify(desc: dict, manifest: dict, tol: float = 0.05) -> list[str]:
 
 def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
     import bpy
+    import look
     from mathutils import Vector
     import mesh
 
     bpy.ops.wm.read_factory_settings(use_empty=True)
     scene = bpy.context.scene
+    assets = look.Assets(use=not args.procedural)
+    try:
+        scene.view_settings.look = "AgX - Medium High Contrast"
+    except TypeError:
+        pass
     scene.render.engine = "CYCLES"
     scene.cycles.device = "CPU"
     scene.cycles.samples = args.samples
@@ -626,11 +648,13 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
     y0, y1 = rd["length"]
     lane, park, walk = rd["lane"], rd.get("parking", 0), rd["sidewalk"]
     wet = cond["surface"] == "wet"
-    asphalt = mat(
-        "asphalt", (0.05, 0.055, 0.06) if wet else (0.09, 0.095, 0.1), 0.12 if wet else 0.75
+    asphalt = look.surface(
+        bpy, assets, "asphalt", "asphalt", "asphalt", (0.09, 0.095, 0.1), 0.75, wet
     )
-    paving = mat("sidewalk", (0.32, 0.32, 0.31), 0.35 if wet else 0.8)
-    verge = mat("verge", (0.12, 0.16, 0.1), 0.9)
+    paving = look.surface(
+        bpy, assets, "sidewalk", "concrete", "concrete", (0.32, 0.32, 0.31), 0.8, wet
+    )
+    verge = look.surface(bpy, assets, "verge", "grass", "grass", (0.12, 0.16, 0.1), 0.9)
     paint = mat("paint", (0.85, 0.85, 0.82), 0.5)
     yellow = mat("yellow-paint", (0.85, 0.66, 0.12), 0.5)
     quad("ground", -80, y0 - 20, 80, y1 + 40, -0.02, verge)
@@ -686,9 +710,16 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         quad("stop-line", 0.1, rd["stop_line"] - 0.25, lane, rd["stop_line"] + 0.25, 0.005, paint)
     # buildings, seeded, for a sense of place
     concrete = [
-        mat(f"building-{i}", c, 0.85)
-        for i, c in enumerate(((0.36, 0.35, 0.34), (0.26, 0.28, 0.31), (0.42, 0.38, 0.33)))
+        look.surface(bpy, assets, f"building-{i}", slot, "facade", c, 0.85)
+        for i, (slot, c) in enumerate(
+            (
+                ("facade_a", (0.36, 0.35, 0.34)),
+                ("facade_b", (0.26, 0.28, 0.31)),
+                ("facade_c", (0.42, 0.38, 0.33)),
+            )
+        )
     ]
+    roof = mat("roof", (0.2, 0.2, 0.21), 0.9)
     for side, xa in (("left", left - walk - 2.5), ("right", right + walk + 2.5)):
         s = y0
         while s < y1:
@@ -696,7 +727,7 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
             if not any(g0 - 4 < s + d and s < g1 + 4 for g0, g1 in gaps if side in sides):
                 h_ = rnd.uniform(6, 14)
                 xb = xa - 12 if side == "left" else xa + 12
-                box(
+                b_ = box(
                     f"building-{side}-{s:.0f}",
                     min(xa, xb),
                     s,
@@ -706,6 +737,8 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
                     h_,
                     rnd.choice(concrete),
                 )
+                b_.data.materials.append(roof)
+                b_.data.polygons[1].material_index = 1  # the top face
             s += d
     # street lamps
     pole = mat("pole", (0.2, 0.21, 0.22), 0.5, metal=0.6)
@@ -915,14 +948,27 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
             ho.rotation_euler = (math.radians(85), 0, 0)  # along +y, slightly down
             ho.parent = ego
             scene.collection.objects.link(ho)
-    actors = []
+    actors, walkers = [], {}
     for i, a in enumerate(desc["actors"]):
         colour = (
             AMBER if a["role"] == "key" else GREY if a["role"] == "other" else (0.55, 0.57, 0.6)
         )
         name = f"actor{i}-{a['class']}"
         kind, _, variant = a["drawn_as"].partition(":")
-        if kind == "person":
+        fig = None
+        if kind == "person" and variant in ("adult", "child") and not args.procedural:
+            fig = look.pedestrian(
+                bpy,
+                scene,
+                name,
+                desc["scenario"]["id"],
+                1.2 if variant == "child" else 1.72,
+                colour if a["role"] == "key" else (0.25, 0.3, 0.4),
+            )
+        if fig:
+            o, rig, action = fig
+            walkers[name] = (rig, action)
+        elif kind == "person":
             o = person(name, variant, colour)
         elif kind == "box":
             o = boxed(name, variant, colour)
@@ -947,6 +993,48 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
                 (0.55, 0.57, 0.6),
             )
             q.location, q.rotation_euler = (x, y, 0), (0, 0, hd)
+
+    # -------- street furniture, kept clear of what the description places
+    avoid = []  # (x, y, r): points nothing may stand near
+    for a in desc["actors"]:
+        for i in range(21):
+            x, y, _ = point_at(a["path"], length(a["path"]) * i / 20)
+            avoid.append((x, y, 2.0))
+    for i in range(41):
+        x, y, _ = point_at(desc["ego"]["path"], length(desc["ego"]["path"]) * i / 40)
+        avoid.append((x, y, 1.0))
+    if "crosswalk" in rd:
+        avoid += [(x, y, 2.5) for x in (left - walk / 2, right + walk / 2) for y in rd["crosswalk"]]
+    if "speed_sign" in rd:
+        avoid.append((*rd["speed_sign"]["at"], 1.5))
+    lamp_ys = list(range(int(y0) + 10, int(y1), 28))
+    for side_x in (left - walk + 0.5, right + walk - 0.5):
+        avoid += [(side_x, ly, 2.0) for ly in lamp_ys]
+    sx_ = rd.get("stop_line")
+    if sx_ is not None:
+        avoid += [(x, sx_, 2.0) for x in (left - walk / 2, right + walk / 2)]
+    occ = desc["occlusion"]
+
+    def keep_clear(x, y, r):
+        if any(g0 - 3 < y < g1 + 3 for g0, g1 in gaps):
+            return False
+        if "crosswalk" in rd and rd["crosswalk"][0] - 3 < y < rd["crosswalk"][1] + 3:
+            return False
+        if occ and min(p[1] for p in occ) - 3 < y < max(p[1] for p in occ) + 3 and x > 0:
+            return False
+        return all(math.dist((x, y), (ax, ay)) > r + ar for ax, ay, ar in avoid)
+
+    furniture = look.street_furniture(
+        bpy,
+        scene,
+        assets,
+        random.Random(desc["scenario"]["id"] + ":furniture"),
+        [
+            ("left", left - walk + 0.9, y0 + 4, y1 - 4),
+            ("right", right + walk - 0.9, y0 + 4, y1 - 4),
+        ],
+        keep_clear,
+    )
 
     # -------- overlays
     plan_m = mat("plan", RED, 0.5, emit=1.6, alpha=0.55)
@@ -1004,20 +1092,17 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         )
 
     # -------- the ODD conditions
-    world = bpy.data.worlds.new("world")
-    scene.world = world
-    world.use_nodes = True
-    bg = world.node_tree.nodes["Background"]
     light = cond["light"]
-    sky = {
+    flat = {
         "day": ((0.5, 0.66, 0.9), 1.0),
         "low-sun": ((0.75, 0.62, 0.45), 1.2),
         "dusk": ((0.28, 0.22, 0.32), 0.45),
         "night": ((0.015, 0.02, 0.035), 0.5),
         "unlit": ((0.01, 0.012, 0.02), 0.35),
     }[light]
-    bg.inputs["Color"].default_value = (*sky[0], 1.0)
-    bg.inputs["Strength"].default_value = sky[1]
+    sky_slot = look.sky(
+        bpy, scene, assets, light, bool(cond.get("rain") or cond.get("visibility")), flat
+    )
     sun_d = bpy.data.lights.new("sun", "SUN")
     sun_d.energy, sun_d.color, elev, az = {
         "day": (3.5, (1.0, 0.97, 0.92), 50, 30),
@@ -1086,8 +1171,8 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
     cam_d.clip_end = 600
     cam = bpy.data.objects.new("camera", cam_d)
     cam.location = desc["camera"]["pos"]
-    look = Vector(desc["camera"]["look"]) - Vector(desc["camera"]["pos"])
-    cam.rotation_euler = look.to_track_quat("-Z", "Y").to_euler()
+    aim = Vector(desc["camera"]["look"]) - Vector(desc["camera"]["pos"])
+    cam.rotation_euler = aim.to_track_quat("-Z", "Y").to_euler()
     scene.collection.objects.link(cam)
     scene.camera = cam
     d = 1.0
@@ -1143,6 +1228,7 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
 
     # -------- motion
     n_f = scene.frame_end + 1
+    walked = {name: [] for name in walkers}
     for fr in range(n_f):
         u = fr / (n_f - 1)
         x, y, hd = ego_at(desc, u)
@@ -1153,11 +1239,17 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         env.keyframe_insert("scale", frame=fr)
         for o, a in actors:
             x, y, hd = actor_at(a, u)
+            if o.name in walked:
+                d0 = walked[o.name][-1] if walked[o.name] else 0.0
+                p0 = o.location.copy() if walked[o.name] else None
+                walked[o.name].append(d0 + (math.dist((x, y), (p0.x, p0.y)) if p0 else 0.0))
             o.location = (x, y, 0)
             if len(a["path"]) > 1:
                 o.rotation_euler = (0, 0, hd)
                 o.keyframe_insert("rotation_euler", frame=fr)
             o.keyframe_insert("location", frame=fr)
+    for name, (rig, action) in walkers.items():
+        look.walk(rig, action, walked[name])
     scene.frame_set(still)
     built = {"ego": [round(ego.location.x, 2), round(ego.location.y, 2)]}
     for o, a in actors:
@@ -1190,6 +1282,14 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         },
         "objects": built,
         "drawn": drawn,
+        "look": {
+            "assets": assets.used(
+                {"asphalt", "concrete", "grass", "facade_a", "facade_b", "facade_c", sky_slot}
+                | set(furniture)
+            ),
+            "furniture": furniture,
+            "pedestrians": "Quaternius (CC0)" if walkers else "primitives",
+        },
         "texts": texts,
     }
 
@@ -1205,10 +1305,10 @@ def text_obj(bpy, body: str, size: float, material, scene=None):  # pragma: no c
 
 
 def render_view(bpy, scene, cam, frame: int, size: tuple[int, int], samples: int, path: Path):
-    """One view of the 3D scene to a PNG."""  # pragma: no cover - needs Blender
-    scene.camera = cam
+    """One view of the 3D scene to a PNG, at SUPERSAMPLE times its size on the dashboard."""
+    scene.camera = cam  # pragma: no cover - needs Blender
     scene.frame_set(frame)
-    scene.render.resolution_x, scene.render.resolution_y = size
+    scene.render.resolution_x, scene.render.resolution_y = (round(v * SUPERSAMPLE) for v in size)
     scene.render.resolution_percentage = 100
     scene.cycles.samples = samples
     scene.render.image_settings.file_format = "PNG"
@@ -1275,8 +1375,8 @@ def dashboard(args, desc: dict, ctx: dict, work: Path, out: Path, manifest: dict
     rig = bpy.data.objects.new("chase", rig_d)
     rig.parent = ego
     rig.location = CHASE_RIG[0]
-    look = Vector(CHASE_RIG[1]) - Vector(CHASE_RIG[0])
-    rig.rotation_euler = look.to_track_quat("-Z", "Y").to_euler()
+    aim = Vector(CHASE_RIG[1]) - Vector(CHASE_RIG[0])
+    rig.rotation_euler = aim.to_track_quat("-Z", "Y").to_euler()
     scene.collection.objects.link(rig)
     chase = rig
 
@@ -1302,11 +1402,12 @@ def dashboard(args, desc: dict, ctx: dict, work: Path, out: Path, manifest: dict
     for o in ctx["hud"]:
         o.hide_render = False
 
-    layout = dashboard_layout(desc, tags)
+    layout = dashboard_layout(desc, tags, manifest.get("look"))
     ds = bpy.data.scenes.new("dashboard")
     ds.render.engine = "CYCLES"
     ds.cycles.device = "CPU"
-    ds.cycles.samples = 8
+    ds.cycles.samples = 16
+    ds.cycles.filter_width = 0.5  # images sit pixel on pixel: a wide filter would blur them
     ds.cycles.use_denoising = False
     ds.cycles.seed = 1
     ds.view_settings.view_transform = "Standard"
@@ -1331,7 +1432,9 @@ def dashboard(args, desc: dict, ctx: dict, work: Path, out: Path, manifest: dict
         em = nt.nodes.new("ShaderNodeEmission")
         if image is not None:
             tex = nt.nodes.new("ShaderNodeTexImage")
-            tex.image = bpy.data.images.load(str(image))
+            tex.image = bpy.data.images.load(str(image[0]))
+            tex.image.scale(*image[1])  # box filter down to its size on the dashboard
+            tex.interpolation = "Closest"
             nt.links.new(tex.outputs["Color"], em.inputs["Color"])
         else:
             em.inputs["Color"].default_value = (*srgb(colour), 1.0)
@@ -1368,7 +1471,8 @@ def dashboard(args, desc: dict, ctx: dict, work: Path, out: Path, manifest: dict
             plane(f"rect{i}", x, y, w, h, z, emission(e["fill"], e["fill"]))
         elif "image" in e:
             x, y, w, h = e["box"]
-            plane(f"img{i}", x, y, w, h, z, emission(f"img-{e['image']}", image=views[e["image"]]))
+            img = emission(f"img-{e['image']}", image=(views[e["image"]], (round(w), round(h))))
+            plane(f"img{i}", x, y, w, h, z, img)
         else:
             o = text_obj(
                 bpy, "\n".join(e["text"]), e["size"], emission(e["colour"], e["colour"]), ds
@@ -1385,7 +1489,8 @@ def dashboard(args, desc: dict, ctx: dict, work: Path, out: Path, manifest: dict
     manifest["moments"] = [label for _, label in moments(desc)]
     manifest["dashboard"] = f"{sid}.jpg"
     manifest["dashboard_sha256"] = hashlib.sha256((out / f"{sid}.jpg").read_bytes()).hexdigest()
-    manifest["render"]["dashboard_samples"] = {"chase": args.samples, "dashboard": 8}
+    manifest["render"]["dashboard_samples"] = {"chase": args.samples, "dashboard": 16}
+    manifest["render"]["supersample"] = SUPERSAMPLE
 
 
 def clip(args, desc: dict, ctx: dict, out: Path, manifest: dict) -> None:  # pragma: no cover
@@ -1429,6 +1534,9 @@ def main(argv: list[str]) -> int:  # pragma: no cover - needs Blender
         "--verify", action="store_true", help="fail when the scene differs from the description"
     )
     ap.add_argument("--no-render", action="store_true", help="build and verify only")
+    ap.add_argument(
+        "--procedural", action="store_true", help="ignore the fetched assets: the procedural look"
+    )
     args = ap.parse_args(argv)
     args.out.mkdir(parents=True, exist_ok=True)
     failed = 0

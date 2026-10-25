@@ -3,7 +3,7 @@
  "blender": "5.2.3 LTS",
  "render": {
   "engine": "CYCLES",
-  "samples": 48,
+  "samples": 32,
   "size": [
    1600,
    900
@@ -12,9 +12,10 @@
   "frames": 72,
   "fps": 12,
   "dashboard_samples": {
-   "chase": 48,
-   "dashboard": 8
-  }
+   "chase": 32,
+   "dashboard": 16
+  },
+  "supersample": 1.5
  },
  "objects": {
   "ego": [
@@ -40,6 +41,66 @@
   "stop_line": true,
   "speed_sign": true,
   "occlusion": false
+ },
+ "look": {
+  "assets": [
+   {
+    "slot": "asphalt",
+    "id": "asphalt_02",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "bin",
+    "id": "metal_trash_can",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "concrete",
+    "id": "Concrete034",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_a",
+    "id": "Facade018A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_b",
+    "id": "Facade019A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_c",
+    "id": "Facade020A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "grass",
+    "id": "Grass004",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "hdri_night",
+    "id": "dikhololo_night",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "hydrant",
+    "id": "fire_hydrant",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "tree",
+    "id": "tree_small_02",
+    "source": "polyhaven"
+   }
+  ],
+  "furniture": {
+   "tree": 10,
+   "bin": 4,
+   "hydrant": 3
+  },
+  "pedestrians": "Quaternius (CC0)"
  },
  "description": "tools/sim/scenes/SC-01.json",
  "description_sha256": "9de5ea254385586bf7ca8edbaf78c67b3dfe4620ed1712aae7105daa722e51f4",
@@ -126,7 +187,7 @@
   "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
   "Where the hazard lies: HE-02.1 Does not slow down for a pedestrian on the crosswalk; HE-06.4 Does not yield to a pedestrian on the crosswalk",
   "Amber, ringed: the road user the scenario is about",
-  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven; pedestrians: Quaternius (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
  ],
  "tags": [
   "Ego robotaxi (choreography)",
@@ -141,5 +202,5 @@
   "vehicle stands still"
  ],
  "dashboard": "SC-01.jpg",
- "dashboard_sha256": "82527ff7adc082e96b5ea945761ee58755986ec5fcfe731e30dea5dbe014df55"
+ "dashboard_sha256": "e0afd7308351d942c99b70e8763237624a0ce82e1344c1f2847d6e92e30f8934"
 }

@@ -489,7 +489,8 @@ def gallery(descs: dict[str, dict], texts: dict[str, str]) -> str:
         goals = ", ".join(f"{g['id']} ({g['asil']})" for g in sc_["goals"]) or "—"
         ev = ", ".join([e["id"] for e in sc_["events"]] + [t["id"] for t in sc_["triggers"]])
         link = f"[{sid}]({sid}.jpg)" if man else sid
-        made = f"{state}; Blender {man.get('blender', '?')}" if man else state
+        drawn_with = "CC0 assets" if (man.get("look") or {}).get("assets") else "procedural look"
+        made = f"{state}; Blender {man.get('blender', '?')}, {drawn_with}" if man else state
         rows.append(
             f"| {link} | {sc_['name']} | {goals} | {ev or '—'} | {d['condition_label']} | {made} |"
         )
