@@ -130,6 +130,7 @@
   "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
   "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
   "meant": "Meant to do: slow enough to stop for anyone emerging",
+  "meant_mark": "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
   "hazard": "Where the hazard lies: HE-04.3 Steers onto the sidewalk at low speed",
   "key": "Amber, ringed: the road user the scenario is about",
   "occlusion": "Grey area: what the parked vehicle hides from the ego"

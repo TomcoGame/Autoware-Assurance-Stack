@@ -39,7 +39,8 @@
   ],
   "stop_line": false,
   "speed_sign": false,
-  "occlusion": false
+  "occlusion": false,
+  "overlay_top_m": 0.05
  },
  "look": {
   "assets": [
@@ -102,7 +103,7 @@
   "pedestrians": "primitives"
  },
  "description": "tools/sim/scenes/SC-06.json",
- "description_sha256": "9e4b17707437ca7179d80ac6ef252e1260b33c1bc3f32a3da920296e845f8635",
+ "description_sha256": "5a75561a5a24f94bad3bbfa2cbed4374859a90adec7eced813a08bc1a5806aaf",
  "clip_texts": [
   "SC-06 Unprotected left turn across oncoming traffic",
   "Left turn on a permissive green or at an uncontrolled junction, with an oncoming lane hidden by a turning vehicle, or a\nmotorcycle approaching fast",
@@ -121,6 +122,7 @@
   "Autoware's planned path (EL-01 Autoware computer, rated QM)",
   "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
   "Meant to do: turns only with a safe gap",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
   "Where the hazard lies: HE-06.2 Turns left in front of an oncoming vehicle",
   "Amber, ringed: the road user the scenario is about",
   "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
@@ -170,6 +172,7 @@
   "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
   "Autoware's planned path (EL-01 Autoware computer, rated QM)",
   "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
   "Where the hazard lies: HE-06.2 Turns left in front of an oncoming vehicle",
   "Amber, ringed: the road user the scenario is about",
   "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
@@ -185,5 +188,5 @@
   "vehicle stands still"
  ],
  "dashboard": "SC-06.jpg",
- "dashboard_sha256": "40c108eae2225a94182658da5f029cbebf0329b451c40ab503d977ef05a653bc"
+ "dashboard_sha256": "97ab2afa04d232b0b0f0e2ee17d4557ae3950fd5d891b1ffd10a3e5a382eae87"
 }

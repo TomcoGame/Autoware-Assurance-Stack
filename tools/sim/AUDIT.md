@@ -104,15 +104,31 @@ SC-14 stays lowest because its mist hides detail, as it should.
 | F-28 | Road users | Cyclists, scooter riders, wheelchair users, buses, trucks and motorcycles are still primitives; only pedestrians and children use the CC0 figures | Note | **Open:** no CC0 models for them were chosen in this change |
 | F-29 | `sim-render.yaml` | The CI render fetches the assets at run time from two third-party sites; if they are unreachable it renders the procedural look | Note | **By design:** the lock pins every file by SHA-256, the manifest records which assets a dashboard used, and the gallery shows the look of each committed dashboard |
 
+## Third round: overlays that stand in front of the scene (2026-10-25)
+
+The lead asked what the boxes in front of the vehicle are. They were overlays drawn for the analysis, and three of
+them read as solid objects standing in the scene, hiding what is behind them. LionDriver's renderer has the rule this
+broke ("the ghosts and the path read from above; from the road they block the view", `hazard_scene.py`): in its
+road-level views only flat marks on the road are drawn.
+
+| # | Location | Description | Severity | Disposition |
+|---|---|---|---|---|
+| F-30 | `build_blend.py` envelope | The safety monitor's envelope was a translucent slab ending in a 0.9 m wall. Glowing, it rendered as a white box in front of the vehicle in the chase and forward views, hiding the road and what the scene is about; nothing on the frame said what the box was | Major | **Fixed:** the envelope is a flat blue outline on the road with a faint fill; its far edge moves with it as it shortens |
+| F-31 | `build_blend.py` ODD limit | The ODD limit (SC-14) was a violet panel 7 m high and 60 m wide across the street, hiding everything beyond it | Major | **Fixed:** a flat violet band across the carriageway at the limit; the denser rain and mist beyond it still show the change |
+| F-32 | `build_blend.py` hazard area | The hazard area was a glowing orange slab, opaque enough to read as an object on the road | Minor | **Fixed:** an orange outline with a light fill |
+| F-33 | `verify()` | Nothing checked that overlays stay on the road, so all three got through the first two rounds | Minor | **Fixed:** the manifest records the highest point of every overlay at the still frame, and `--verify` fails above OVERLAY_TOP_M (0.25 m, a sidewalk's height); `test_an_overlay_standing_up_fails` |
+| F-34 | Review | The first two rounds checked labels, positions, motion and picture detail, but not whether the overlays were legible to someone seeing the frames cold. The question came from the lead, not from the audit | Note | **Applied in this round:** each dashboard was read as a first-time reviewer would; F-35 is what that found. Carried as a check for later rounds |
+| F-35 | Dashboard legend | The dashed green path and the green ring had no legend line on the dashboard (only the green "Meant to do" heading hinted at them) | Minor | **Fixed:** a legend line from the description says what both mean; the footer is re-spaced for it, and `test_footer_lines_do_not_overlap` checks it |
+
 ## Checks run before pushing
 
-Run on the commit of the second round, in the session's container (Python 3.13, PyYAML 6.0.2, `bpy` 5.2.3):
+Run on the commit of the third round, in the session's container (Python 3.13, PyYAML 6.0.2, `bpy` 5.2.3):
 
 | Check | Result |
 |---|---|
 | Everything `CLAUDE.md` lists: the decision register, the safety case records, headers, links, tables, `check_restricted.py`, every generator with `--check`, the assurance tests, the README figures | All pass |
 | `python3 tools/sim/scene.py --check` | 6 generated files current |
-| `python3 -m unittest discover -s tools/sim -p 'test_*.py'` | 33 tests pass |
+| `python3 -m unittest discover -s tools/sim -p 'test_*.py'` | 35 tests pass |
 | `build_blend.py tools/sim/scenes/*.json --out tools/sim/dashboards --verify` (32 samples, CC0 look after `fetch_assets.py --locked`) | All five scenes match their descriptions; the gallery shows each dashboard as current |
 | The wiki's tests and `build_wiki.py --check` | Pass |
 | black and isort at line length 100 | Clean |

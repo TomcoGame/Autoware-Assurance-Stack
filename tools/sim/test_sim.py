@@ -242,6 +242,15 @@ class Motion(unittest.TestCase):
                     self.assertLessEqual(bottom, bb.DH, (sid, e["text"][:1]))
                     self.assertLessEqual(right, bb.DW, (sid, e["text"][:1]))
 
+    def test_footer_lines_do_not_overlap(self):
+        for sid in scene.LAYOUTS:
+            texts = [
+                e for e in bb.dashboard_layout(describe(sid), []) if "text" in e and e["y"] >= 970
+            ]
+            rows = sorted({(e["y"], e["size"]) for e in texts})
+            for (y0, s0), (y1, _) in zip(rows, rows[1:]):
+                self.assertLessEqual(y0 + s0 * 1.2, y1, (sid, y0, y1))
+
     def test_goal_chips_fit_or_say_how_many_are_left(self):
         goals = [{"id": f"SG-0{i}", "asil": "D"} for i in range(1, 5)]
         chips = bb.goal_chips(goals, 400)
@@ -289,7 +298,7 @@ class Verification(unittest.TestCase):
         return {
             "render": {"frames": frames},
             "objects": bb.expected(d, frames),
-            "drawn": bb.described(d),
+            "drawn": {**bb.described(d), "overlay_top_m": 0.05},
             "texts": bb.dashboard_texts(bb.dashboard_layout(d, [])),
             "clip_texts": clip,
         }
@@ -317,6 +326,13 @@ class Verification(unittest.TestCase):
         m = self.manifest(d)
         m["clip_texts"] = [t for t in m["clip_texts"] if "CC BY" not in t]
         self.assertTrue(any("label not on the clip" in e for e in bb.verify(d, m)))
+
+    def test_an_overlay_standing_up_fails(self):
+        # As in LionDriver, nothing drawn for the analysis may stand in front of the road-level cameras.
+        d = describe("SC-14")
+        m = self.manifest(d)
+        m["drawn"] = {**m["drawn"], "overlay_top_m": 0.9}  # the old envelope wall
+        self.assertTrue(any("overlay stands" in e for e in bb.verify(d, m)))
 
     def test_a_condition_not_drawn_fails(self):
         d = describe("SC-14")

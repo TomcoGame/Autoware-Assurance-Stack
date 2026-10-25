@@ -152,6 +152,7 @@
   "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
   "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
   "meant": "Meant to do: keeps a safe gap as it brakes",
+  "meant_mark": "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
   "hazard": "Where the hazard lies: HE-01.2 Accelerates into the vehicle ahead; HE-02.2 Does not brake when the vehicle ahead slows or stops",
   "key": "Amber, ringed: the road user the scenario is about"
  },

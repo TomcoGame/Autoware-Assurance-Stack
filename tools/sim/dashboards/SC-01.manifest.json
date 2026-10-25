@@ -40,7 +40,8 @@
   "features": [],
   "stop_line": true,
   "speed_sign": true,
-  "occlusion": false
+  "occlusion": false,
+  "overlay_top_m": 0.05
  },
  "look": {
   "assets": [
@@ -103,7 +104,7 @@
   "pedestrians": "Quaternius (CC0)"
  },
  "description": "tools/sim/scenes/SC-01.json",
- "description_sha256": "9de5ea254385586bf7ca8edbaf78c67b3dfe4620ed1712aae7105daa722e51f4",
+ "description_sha256": "9cf0ade7f807e37297424eacf63bd556106dd3d1bde586800456daeb9c4fa1ee",
  "clip_texts": [
   "SC-01 Pedestrian on or stepping onto a marked crosswalk",
   "The vehicle approaches a marked crosswalk in lane while a pedestrian is on it or steps onto it",
@@ -126,6 +127,7 @@
   "Autoware's planned path (EL-01 Autoware computer, rated QM)",
   "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
   "Meant to do: yields before the crosswalk",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
   "Where the hazard lies: HE-02.1 Does not slow down for a pedestrian on the crosswalk; HE-06.4 Does not yield to a pedestrian on the crosswalk",
   "Amber, ringed: the road user the scenario is about",
   "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
@@ -185,6 +187,7 @@
   "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
   "Autoware's planned path (EL-01 Autoware computer, rated QM)",
   "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
   "Where the hazard lies: HE-02.1 Does not slow down for a pedestrian on the crosswalk; HE-06.4 Does not yield to a pedestrian on the crosswalk",
   "Amber, ringed: the road user the scenario is about",
   "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven; pedestrians: Quaternius (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
@@ -202,5 +205,5 @@
   "vehicle stands still"
  ],
  "dashboard": "SC-01.jpg",
- "dashboard_sha256": "e0afd7308351d942c99b70e8763237624a0ce82e1344c1f2847d6e92e30f8934"
+ "dashboard_sha256": "6993edc60e5682dc921e3647b09e9fb136e3c48ae6f4320a73452fe4176d7329"
 }

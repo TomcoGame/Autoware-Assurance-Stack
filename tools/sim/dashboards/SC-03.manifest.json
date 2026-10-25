@@ -42,7 +42,8 @@
   ],
   "stop_line": false,
   "speed_sign": false,
-  "occlusion": false
+  "occlusion": false,
+  "overlay_top_m": 0.05
  },
  "look": {
   "assets": [
@@ -105,7 +106,7 @@
   "pedestrians": "primitives"
  },
  "description": "tools/sim/scenes/SC-03.json",
- "description_sha256": "ac2fd37dd767cbc5d202c07a37af3dd667fa399e26424e74efb49bcf7887382c",
+ "description_sha256": "261da76be606a8a8ae9cb2239a78dc800761609bf618b76ba76dc7b698ba48c8",
  "clip_texts": [
   "SC-03 Vehicle ahead braking or stopping in congested traffic",
   "The vehicle follows another in congestion or in free flow; the lead vehicle brakes hard, stops, or another vehicle cuts\nin",
@@ -128,6 +129,7 @@
   "Autoware's planned path (EL-01 Autoware computer, rated QM)",
   "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
   "Meant to do: keeps a safe gap as it brakes",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
   "Where the hazard lies: HE-01.2 Accelerates into the vehicle ahead; HE-02.2 Does not brake when the vehicle ahead slows or stops",
   "Amber, ringed: the road user the scenario is about",
   "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
@@ -183,6 +185,7 @@
   "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
   "Autoware's planned path (EL-01 Autoware computer, rated QM)",
   "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
   "Where the hazard lies: HE-01.2 Accelerates into the vehicle ahead; HE-02.2 Does not brake when the vehicle ahead slows or stops",
   "Amber, ringed: the road user the scenario is about",
   "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
@@ -198,5 +201,5 @@
   "the moment in the main view"
  ],
  "dashboard": "SC-03.jpg",
- "dashboard_sha256": "b3cb6f67fc063dd72ad26b36bfba34b07cb88f05ccfc5bca65a39e01d6f845cd"
+ "dashboard_sha256": "9433d5c90f9bbf958c2011b2f5ae89ce2782989dfd43064e12625473c7387faa"
 }

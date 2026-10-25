@@ -44,7 +44,8 @@
   "features": [],
   "stop_line": false,
   "speed_sign": false,
-  "occlusion": true
+  "occlusion": true,
+  "overlay_top_m": 0.2
  },
  "look": {
   "assets": [
@@ -107,7 +108,7 @@
   "pedestrians": "Quaternius (CC0)"
  },
  "description": "tools/sim/scenes/SC-02.json",
- "description_sha256": "2992322d14ef0d88adfda95e17bf8dff3f49877b8841e7a3287db967ed35b44d",
+ "description_sha256": "0408ea15ee387908bffe9f79880f4b260522c6a773735c252724dc5b1f22a896",
  "clip_texts": [
   "SC-02 Pedestrian emerging from behind a parked vehicle",
   "A pedestrian, child or cyclist steps out from behind a parked van or bus away from a crossing, where pedestrians are\ndense",
@@ -128,6 +129,7 @@
   "Autoware's planned path (EL-01 Autoware computer, rated QM)",
   "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
   "Meant to do: slow enough to stop for anyone emerging",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
   "Where the hazard lies: HE-04.3 Steers onto the sidewalk at low speed",
   "Amber, ringed: the road user the scenario is about",
   "Grey area: what the parked vehicle hides from the ego",
@@ -185,6 +187,7 @@
   "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
   "Autoware's planned path (EL-01 Autoware computer, rated QM)",
   "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
   "Where the hazard lies: HE-04.3 Steers onto the sidewalk at low speed",
   "Amber, ringed: the road user the scenario is about",
   "Grey area: what the parked vehicle hides from the ego",
@@ -204,5 +207,5 @@
   "vehicle stands still"
  ],
  "dashboard": "SC-02.jpg",
- "dashboard_sha256": "5648c7c29f05549f3d9b882152dc905d4f4820ffe3bbf3364278269361e89c77"
+ "dashboard_sha256": "fa17d1ebcae6a839f1fa032042377b661be24fad931731fcbbf87120bfba3f32"
 }

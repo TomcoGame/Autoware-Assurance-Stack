@@ -39,7 +39,8 @@
   "features": [],
   "stop_line": false,
   "speed_sign": false,
-  "occlusion": false
+  "occlusion": false,
+  "overlay_top_m": 0.05
  },
  "look": {
   "assets": [
@@ -102,7 +103,7 @@
   "pedestrians": "primitives"
  },
  "description": "tools/sim/scenes/SC-14.json",
- "description_sha256": "48f1e2706abe2f444abdf0e79a1d0a06a9c4c941f902710a557b29d71b7f0bd5",
+ "description_sha256": "80f37424ca74c9476847e7d6154c43409e69485d636596eadd4d4671c0d3ede1",
  "clip_texts": [
   "SC-14 Weather changing toward the ODD limits during a trip",
   "Rain grows heavier or visibility falls during a trip, up to and past the limits of the ODD",
@@ -125,8 +126,9 @@
   "Autoware's planned path (EL-01 Autoware computer, rated QM)",
   "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
   "Meant to do: sees the ODD exit and stops safely",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
   "Where the hazard lies: Weather changing toward the ODD limits during a trip",
-  "Violet curtain: where the drawing passes the ODD limit of ODD-10, ODD-11; beyond it drawn denser, no value stated",
+  "Violet band across the road: where the drawing passes the ODD limit of ODD-10, ODD-11; beyond it drawn denser, no value stated",
   "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
   "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
  ],
@@ -178,8 +180,9 @@
   "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
   "Autoware's planned path (EL-01 Autoware computer, rated QM)",
   "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
   "Where the hazard lies: Weather changing toward the ODD limits during a trip",
-  "Violet curtain: where the drawing passes the ODD limit of ODD-10, ODD-11; beyond it drawn denser, no value stated",
+  "Violet band across the road: where the drawing passes the ODD limit of ODD-10, ODD-11; beyond it drawn denser, no value stated",
   "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
  ],
  "tags": [
@@ -193,5 +196,5 @@
   "vehicle stands still"
  ],
  "dashboard": "SC-14.jpg",
- "dashboard_sha256": "c994a49ce28c58f8b6eb9d5b1c4dc559e12c56125d2359ed8a069adc08a809dd"
+ "dashboard_sha256": "c43c873c59b97c3ee6e2c709910785096419a2b74ac76d3036eeb2f6a11833b3"
 }

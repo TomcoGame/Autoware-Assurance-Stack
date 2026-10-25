@@ -394,7 +394,7 @@ def scene(s: dict, m: dict, k: dict, f: fx.Facts) -> dict:
         legend_extra["occlusion"] = "Grey area: what the parked vehicle hides from the ego"
     if cond.get("beyond"):
         legend_extra["odd_limit"] = (
-            "Violet curtain: where the drawing passes the ODD limit of "
+            "Violet band across the road: where the drawing passes the ODD limit of "
             + ", ".join(cond["beyond"]["attributes"])
             + "; beyond it drawn denser, no value stated"
         )
@@ -429,6 +429,8 @@ def scene(s: dict, m: dict, k: dict, f: fx.Facts) -> dict:
                 f"the vehicle is not chosen yet ({VEHICLE})"
             ),
             "meant": f"Meant to do: {call[1]}",
+            "meant_mark": "Dashed green: the path the pass criterion asks of the vehicle; green ring: "
+            "where it is judged",
             "hazard": "Where the hazard lies: "
             + ("; ".join(f"{e['id']} {e['description']}" for e in events) or s["name"]),
         }

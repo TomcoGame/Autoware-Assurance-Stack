@@ -145,8 +145,9 @@
   "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
   "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
   "meant": "Meant to do: sees the ODD exit and stops safely",
+  "meant_mark": "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
   "hazard": "Where the hazard lies: Weather changing toward the ODD limits during a trip",
-  "odd_limit": "Violet curtain: where the drawing passes the ODD limit of ODD-10, ODD-11; beyond it drawn denser, no value stated"
+  "odd_limit": "Violet band across the road: where the drawing passes the ODD limit of ODD-10, ODD-11; beyond it drawn denser, no value stated"
  },
  "road": {
   "length": [

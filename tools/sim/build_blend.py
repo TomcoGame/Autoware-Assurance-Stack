@@ -36,9 +36,8 @@ sys.path.insert(0, str(HERE.parent / "readme"))
 
 ENVELOPE_M = 14.0  # drawn length of the monitor's envelope at the clip's start speed; not computed
 HOLD_S = 1.0  # seconds the ego stands still at the end of the clip
-SUPERSAMPLE = (
-    1.5  # views render at this multiple of their size on the dashboard, then are scaled down
-)
+SUPERSAMPLE = 1.5  # views render at this multiple of their dashboard size, then are scaled down
+OVERLAY_TOP_M = 0.25  # overlays lie on the road or a sidewalk (0.15 m): none stands up
 W, H = 1600, 900
 AMBER, BLUE, RED, GREEN, VIOLET, GREY = (
     (1.0, 0.81, 0.43),
@@ -53,6 +52,7 @@ LEGEND = (  # legend key of the description -> its colour in HEX
     ("plan", "red"),
     ("envelope", "blue"),
     ("meant", "green"),
+    ("meant_mark", "green"),
     ("hazard", "orange"),
     ("key", "amber"),
     ("occlusion", "grey"),
@@ -431,20 +431,20 @@ def dashboard_layout(desc: dict, tags: list[dict], look_: dict | None = None) ->
     flow((1444, 664, 464, 296), goals)
 
     # footer: the stamp, the legend, the credits
-    text(16, 986, 22, desc["stamp"].upper(), HEX["amber"], 1900, key="stamp")
-    lx, ly = 16, 1018
+    text(16, 980, 22, desc["stamp"].upper(), HEX["amber"], 1900, key="stamp")
+    lx, ly = 16, 1010
     for key, colour in LEGEND:
         if key not in desc["legend"] or key == "meant":
             continue
         body = desc["legend"][key]
         w = 20 + len(body) * 11 * 0.52
         if lx > 16 and lx + w > DW - 16:
-            lx, ly = 16, ly + 18
+            lx, ly = 16, ly + 16
         el.append({"rect": (lx, ly + 2, 14, 10), "fill": HEX[colour], "edge": HEX[colour]})
         text(lx + 20, ly, 11, body, INK2, DW - 52)
         lx += w + 22
     credit = desc["credits"] + " · " + look_credit(look_ or {}) + " · " + sc["source"]
-    text(16, 1062, 10, credit, MUTED, 1900)
+    text(16, 1064, 10, credit, MUTED, 1900)
     return el
 
 
@@ -484,7 +484,13 @@ def drawn_errors(desc: dict, drawn: dict) -> list[str]:
     want = described(desc)
     if not drawn:
         return ["the manifest does not say what was drawn"]
-    return [
+    top = drawn.get("overlay_top_m")
+    errs = (
+        [f"an overlay stands {top} m high; overlays lie flat (at most {OVERLAY_TOP_M} m)"]
+        if top is None or top > OVERLAY_TOP_M
+        else []
+    )
+    return errs + [
         f"{k}: drawn {drawn.get(k)!r}, described {v!r}"
         for k, v in want.items()
         if drawn.get(k) != v
@@ -1045,7 +1051,7 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         ex, ey, _ = point_at(desc["ego"]["path"], length(desc["ego"]["path"]))
         ring("meant-moment", ex, ey + ego_front + 0.6, 2.3, 2.6, meant_m)
     hx0, hy0, hx1, hy1 = desc["hazard"]
-    haz = mat("hazard", (1.0, 0.45, 0.2), 0.5, emit=1.4, alpha=0.38)
+    haz = mat("hazard", (1.0, 0.45, 0.2), 0.5, emit=0.5, alpha=0.16)
     quad("hazard", hx0, hy0, hx1, hy1, 0.04, haz)
     edge = mat("hazard-edge", (1.0, 0.45, 0.2), 0.5, emit=3.0)
     for k, (a_, b_) in enumerate(
@@ -1065,30 +1071,33 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
             [tuple(range(len(occ)))],
             mat("occlusion", (0.6, 0.62, 0.66), 0.5, emit=0.4, alpha=0.3),
         )
-    env_m = mat("envelope", BLUE, 0.4, emit=1.2, alpha=0.33)
-    env = box("envelope", -ego_w / 2 - 0.3, 0.0, 0.02, ego_w / 2 + 0.3, 1.0, 0.25, env_m)
+    # Every overlay lies flat on the road (OVERLAY_TOP_M): as in LionDriver, nothing drawn for the analysis may
+    # stand up in front of the road-level cameras and hide the scene.
+    half = ego_w / 2 + 0.3
+    env = quad(
+        "envelope", -half, 0.0, half, 1.0, 0.025, mat("envelope", BLUE, 0.4, emit=0.6, alpha=0.2)
+    )
     env.parent = ego
     env.location = (0, ego_front, 0)
-    env_wall = box(
-        "envelope-wall",
-        -ego_w / 2 - 0.3,
-        0.98,
-        0.02,
-        ego_w / 2 + 0.3,
-        1.0,
-        0.9,
-        mat("envelope-wall", BLUE, 0.4, emit=2.0, alpha=0.4),
-    )
-    env_wall.parent = env
+    rim = mat("envelope-rim", BLUE, 0.4, emit=2.5)
+    for k, sx in enumerate((-half, half)):  # the sides stretch with the envelope's length
+        side = quad(f"envelope-side-{k}", sx - 0.06, 0.0, sx + 0.06, 1.0, 0.035, rim)
+        side.parent = env
+    env_end = quad(
+        "envelope-end", -half, -0.06, half, 0.06, 0.035, rim
+    )  # moved each frame, not stretched
+    env_end.parent = ego
     beyond = cond.get("beyond")
     if beyond:
         by = beyond["y"]
-        curtain = mat("odd-limit", VIOLET, 0.5, emit=1.5, alpha=0.28)
-        obj(
+        quad(
             "odd-limit",
-            [(-30, by, 0), (30, by, 0), (30, by, 7), (-30, by, 7)],
-            [(0, 1, 2, 3)],
-            curtain,
+            left,
+            by - 0.3,
+            right,
+            by + 0.3,
+            0.04,
+            mat("odd-limit", VIOLET, 0.5, emit=1.2, alpha=0.85),
         )
 
     # -------- the ODD conditions
@@ -1237,6 +1246,8 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         ego.keyframe_insert("rotation_euler", frame=fr)
         env.scale = (1, envelope_at(desc, u), 1)
         env.keyframe_insert("scale", frame=fr)
+        env_end.location = (0, ego_front + envelope_at(desc, u), 0)
+        env_end.keyframe_insert("location", frame=fr)
         for o, a in actors:
             x, y, hd = actor_at(a, u)
             if o.name in walked:
@@ -1256,6 +1267,13 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         built[o.name] = [round(o.location.x, 2), round(o.location.y, 2)]
     weather = [o for o in scene.objects if o.name in ("rain", "fog", "fog-beyond")]
     names = {o.name for o in scene.objects}
+    overlays = [
+        o
+        for o in scene.objects
+        if o.type == "MESH"
+        and o.name.split("-")[0] in ("plan", "meant", "hazard", "occlusion", "envelope", "odd")
+    ] + [o for o in scene.objects if o.name.endswith("-ring")]
+    overlay_top = max((o.matrix_world @ Vector(c)).z for o in overlays for c in o.bound_box)
     drawn = {
         "light": light,
         "wet": wet,
@@ -1266,6 +1284,7 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         "stop_line": "stop-line" in names,
         "speed_sign": "speed-sign" in names,
         "occlusion": "occlusion" in names,
+        "overlay_top_m": round(overlay_top, 3),
     }
     ctx = {"scene": scene, "camera": cam, "ego": ego, "actors": actors, "hud": hud}
     ctx["weather"], ctx["ego_size"] = weather, (ego_w, hi_[1] - lo_[1], hi_[2])

@@ -22,10 +22,12 @@ builds it in Blender, and renders a review dashboard and, if asked, a short clip
 
 - the road layout (lanes, sidewalks, crosswalk, stop line, junction, signals, posted limit sign);
 - the ego robotaxi (the Kiri '10 model) and the other road users, of the participant classes the sample draws;
-- Autoware's planned path (red), the safety monitor's envelope (blue, moving with the vehicle), what the pass
-  criterion asks of the vehicle (dashed green, its moment ringed), and where the hazard lies (orange);
+- Autoware's planned path (red), the safety monitor's envelope (a blue outline ahead of the vehicle, moving with
+  it), what the pass criterion asks of the vehicle (dashed green, its moment ringed), and where the hazard lies (an
+  orange outline). Every overlay lies flat on the road, as in LionDriver, so none hides the scene from the road-level
+  cameras; `--verify` fails if one stands higher than OVERLAY_TOP_M;
 - the ODD conditions the sample sets: day, dusk, low sun, night or unlit streets; rain; mist at a visibility; a wet
-  road. A scenario that sweeps across the ODD limit (SC-14) shows the limit as a violet curtain, with the condition
+  road. A scenario that sweeps across the ODD limit (SC-14) shows the limit as a violet band across the road, with the condition
   drawn denser beyond it and no value stated there.
 
 The dashboard (1920 × 1080, laid out like the LionDriver hazard-scene dashboards) puts on one page:
@@ -139,7 +141,7 @@ the way the SVG figures are. The check has three parts:
 2. **A dashboard is checked against its description, not against pixels.** `build_blend.py --verify` builds the
    scene and compares it with the description:
    - every road user at the position the description gives it at the still frame (within 5 cm);
-   - the conditions and features drawn: light, wet road, rain, mist, the ODD-limit curtain and the denser mist
+   - the conditions and features drawn: light, wet road, rain, mist, the ODD-limit band and the denser mist
      beyond it, stop line, speed sign, occlusion, the sampled features;
    - on the dashboard and on the clip: the stamp, the scenario id and name, every sampled parameter, every safety
      goal, every monitor, the pass criterion, every legend line, the model credits.
