@@ -8,7 +8,9 @@
 > no scenario has been run (WP-V-03 §4). Every render carries this stamp on its face.
 
 **Gallery: [dashboards/README.md](dashboards/README.md)**, one review dashboard per scene with the state of its
-render. **Audit: [AUDIT.md](AUDIT.md)**, the pre-review audit of this tool (author-side, I0) and its findings.
+render. The same gallery as a web page, with filters by safety goal, light and weather and the dashboards in a viewer:
+**[Robotaxi Scenario Scenes](https://claude.ai/artifact/SWCvdEBXiHJyVWfAdh1XS8)** (a claude.ai page, private to the
+project lead; republished after each gallery change). **Audit: [AUDIT.md](AUDIT.md)**, the pre-review audit of this tool (author-side, I0) and its findings.
 
 ![Review dashboard of SC-01: the chase view in the middle with the road users tagged, the forward and top views on the right, the scenario's records and the concrete sample on the left, the moments of the clip along the bottom](dashboards/SC-01.jpg)
 
