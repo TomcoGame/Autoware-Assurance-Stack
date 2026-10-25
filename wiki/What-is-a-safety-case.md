@@ -63,3 +63,9 @@ and cybersecurity arguments have cases of their own
 ([WP-K-02](../assurance/10-safety-case/WP-K-02-sotif-release-argument.md),
 [WP-K-03](../assurance/10-safety-case/WP-K-03-cybersecurity-case.md)), and an independent UL 4600 assessment
 ([WP-K-07](../assurance/10-safety-case/WP-K-07-ul4600-assessment.md)) checks the whole.
+
+The safety goals the hazard analysis sets; the work products after it show how each is met:
+
+![The nine safety goals: one small scene of the robotaxi per safety goal of WP-C-03, drawn as the situation going wrong (unintended acceleration, braking too little, unintended hard braking, drifting out of the planned path, moving off from standstill, entering against right of way, failing to reach a minimal risk condition, acting on stale remote commands, signalling the wrong manoeuvre), each with its ASIL and safe state.](../tools/readme/figures/safety-goals.svg)
+
+*Illustration. Labels read from the work products by [`figures.py`](../tools/readme/figures.py); vehicle models CC BY 4.0, see [credits](../tools/readme/models/CREDITS.md).*

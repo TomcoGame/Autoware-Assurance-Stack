@@ -315,6 +315,25 @@ class Figures(unittest.TestCase):
         self.assertIn(v["dq_remote"], remote)
         self.assertIn("not built yet", remote)
 
+    def test_goals_figure_shows_every_goal_and_refuses_a_changed_one(self):
+        f = fx.load()
+        flat = " ".join(re.findall(r">([^<]*)</text>", self.out[figures.OUT / "safety-goals.svg"]))
+        for sg, (statement, asil, _) in f.goals.items():
+            self.assertIn(sg, flat)
+            self.assertIn(" ".join(escape(statement).split()), flat, sg)
+        goals = dict(f.goals)
+        goals["SG-01"] = ("Something else entirely", "D", "x")
+        changed = fx.Facts(**{**f.__dict__, "goals": goals})
+        with self.assertRaises(fx.FactError):
+            figures.goals_figure(changed, fx.need(f), {})
+
+    def test_gates_figure_shows_every_gate_and_the_state(self):
+        flat = " ".join(re.findall(r">([^<]*)</text>", self.out[figures.OUT / "gates.svg"]))
+        for g in fx.gates():
+            self.assertIn(escape(f"{g.gid} · {g.name}"), flat)
+            self.assertIn(f"{g.done} of {g.needed} approved · {g.drafted} drafted", flat)
+        self.assertIn(escape(fx.assurance_state()), flat)
+
     def test_sizes_stay_reasonable_for_a_readme(self):
         for path, text in self.out.items():
             self.assertLess(len(text.encode()), 450_000, path.name)

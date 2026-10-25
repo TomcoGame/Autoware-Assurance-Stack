@@ -330,11 +330,16 @@ def cylinder(cam, x, y, r, h, color, n=14):
     return out
 
 
-def vehicle(cam, model: mesh.Model, x, y, heading, paint, min_cell=0.03, ambient=0.42):
-    """A model simplified to what its size on screen can show, then rendered."""
+def vehicle(
+    cam, model: mesh.Model, x, y, heading, paint, min_cell=0.03, ambient=0.42, tones=12, bands=10
+):
+    """A model simplified to what its size on screen can show, then rendered. Small vehicles
+    can take fewer light tones and depth bands, which keeps their SVG small."""
     ppm = cam.focal / max(cam.depth((x, y, 0.8)), 1.0)  # pixels per metre at its distance
     m = mesh.simplify(model, max(min_cell, 3.0 / ppm))
-    return r3.render(m, cam, x, y, heading, paint, ambient=ambient, min_area=0.8)
+    return r3.render(
+        m, cam, x, y, heading, paint, ambient=ambient, min_area=0.8, tones=tones, bands=bands
+    )
 
 
 def roof_sensor(cam, x, y):
@@ -1488,6 +1493,290 @@ def remote_figure(f: fx.Facts, v: dict, models) -> str:
     return svg(W, H, "Remote driving", desc, b)
 
 
+# ---------------------------------------------------------------- wiki figures: the safety goals, the gates
+
+GOAL_KEYWORDS = {  # each vignette draws one situation; the goal's wording must still name it
+    "SG-01": "acceleration",
+    "SG-02": "decelerate",
+    "SG-03": "hard deceleration",
+    "SG-04": "lateral",
+    "SG-05": "standstill",
+    "SG-06": "right of way",
+    "SG-07": "minimal risk",
+    "SG-08": "remote",
+    "SG-09": "signalling",
+}
+
+
+def glow(cam, p, r, color, cls="pulse"):
+    x, y = cam(*p)
+    c = f' class="{cls}"' if cls else ""
+    return f'<circle{c} cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{color}" fill-opacity="0.6" filter="url(#soft)"/>'
+
+
+def ground_arrow(cam, pts, color, width=5, mid=""):
+    d = " ".join(
+        f"{'M' if i == 0 else 'L'}{x:.1f} {y:.1f}" for i, (x, y) in enumerate(cam(*p) for p in pts)
+    )
+    return (
+        f'<path d="{d}" stroke="{color}" stroke-width="{width}" stroke-opacity="0.85" fill="none" stroke-linecap="round" marker-end="url(#{mid})"/>'
+        if mid
+        else f'<path d="{d}" stroke="{color}" stroke-width="{width}" stroke-opacity="0.85" fill="none" stroke-linecap="round"/>'
+    )
+
+
+def goal_scene(sg, cam, models):
+    """One small scene per safety goal: what going wrong would look like."""
+    ego, paint, y0 = models["kiri10"], EGO_PAINT, 0.0
+    out = []
+    small = {"tones": 6, "bands": 4}
+
+    def car(name, x, y, h, p=None):
+        p = p or TRAFFIC_PAINT[name]
+        return vehicle(cam, models[name], x, y, h, p, min_cell=0.14, ambient=0.55, **small)[1]
+
+    def me(x=EGO[0], y=0.0, h=0.0, p=paint):
+        return vehicle(cam, ego, x, y, h, p, 0.18, **small)[1]
+
+    if sg == "SG-01":
+        out += car("sedan", EGO[0], 13.0, 0.0)
+        out.append(ground_arrow(cam, [(EGO[0], 3.0, 0.05), (EGO[0], 9.5, 0.05)], RED, 6, "ahr"))
+        out += me()
+    elif sg == "SG-02":
+        out += car("hatchback", EGO[0], 15.0, 0.0)
+        env = [(0.4, 2.4, 0), (3.1, 2.4, 0), (3.1, 12.4, 0), (0.4, 12.4, 0)]
+        out.append(poly(cam, env, f"fill:url(#env);stroke:{BLUE2};stroke-width:1.5"))
+        out += me()
+    elif sg == "SG-03":
+        out += me()
+        out += [glow(cam, (EGO[0] + dx, -2.3, 0.8), 9, RED) for dx in (-0.65, 0.65)]
+        out += car("wagon", EGO[0], -7.5, 0.0)  # the follower is nearer the camera, so drawn last
+    elif sg == "SG-04":
+        out += car("wagon", -1.75, 18.0, 180.0)
+        out.append(ground_arrow(cam, [(EGO[0], 2.5, 0.05), (EGO[0], 12.0, 0.05)], "#ffffff", 3))
+        out.append(
+            ground_arrow(
+                cam, [(EGO[0], 2.5, 0.05), (0.8, 7.0, 0.05), (-1.2, 11.5, 0.05)], RED, 5, "ahr"
+            )
+        )
+        out += me()
+    elif sg == "SG-05":
+        out += cylinder(cam, EGO[0], 3.6, 0.32, 1.7, RED)
+        out += me()
+        out.append(
+            ground_arrow(cam, [(EGO[0] + 1.3, 1.0, 0.05), (EGO[0] + 1.3, 2.6, 0.05)], RED, 4, "ahr")
+        )
+    elif sg == "SG-06":
+        y0 = STOP_Y - 2.3
+        out += car("compact", -6.0, 38.5, -90.0)
+        out.append(line(cam, (0.1, STOP_Y, 0), (3.4, STOP_Y, 0), "stroke:#ffffff;stroke-width:3"))
+        out.append(
+            ground_arrow(cam, [(EGO[0], y0 + 2.4, 0.05), (EGO[0], 37.0, 0.05)], RED, 5, "ahr")
+        )
+        out += me(y=y0)
+    elif sg == "SG-07":
+        hz = r3.Paint(body=EGO_PAINT.body, indicator=(255, 176, 32))
+        out += me(p=hz)
+        out += [
+            glow(cam, (EGO[0] + dx, dy, 0.75), 8, AMBER) for dx in (-0.8, 0.8) for dy in (2.1, -2.1)
+        ]
+    elif sg == "SG-08":
+        out += me()
+        ax, ay = cam(EGO[0], -0.2, 1.7)
+        out += [
+            f'<path class="pulse" d="M{ax - 14 * k:.1f} {ay - 10 * k:.1f} Q{ax:.1f} {ay - 22 * k:.1f} {ax + 14 * k:.1f} {ay - 10 * k:.1f}" stroke="{BLUE2}" stroke-width="2" fill="none"/>'
+            for k in (1, 2, 3)
+        ]
+        out.append(text(ax + 36, ay - 34, "stale?", 11, "#ffb4ae", 700))
+    elif sg == "SG-09":
+        out.append(
+            ground_arrow(
+                cam,
+                [(EGO[0], 2.5, 0.05), (EGO[0], 6.5, 0.05), (EGO[0] + 2.5, 9.5, 0.05)],
+                "#ffffff",
+                4,
+                "ahw",
+            )
+        )
+        out += me()
+        out += [glow(cam, (EGO[0] - 0.8, dy, 0.75), 8, AMBER) for dy in (2.1, -2.1)]
+    return out
+
+
+GOAL_DEFS = (
+    f'<defs><marker id="ahr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="{RED}"/></marker>'
+    '<marker id="ahw" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ffffff"/></marker></defs>'
+)
+
+
+def goals_figure(f: fx.Facts, v: dict, models) -> str:
+    goals = f.goals
+    if set(goals) != set(GOAL_KEYWORDS):
+        raise fx.FactError(
+            f"WP-C-03 has safety goals {', '.join(sorted(goals))}; the figure draws {', '.join(GOAL_KEYWORDS)}"
+        )
+    for sg, word in GOAL_KEYWORDS.items():
+        if word not in goals[sg][0].lower():
+            raise fx.FactError(
+                f"WP-C-03 {sg} no longer mentions '{word}': redraw its scene in figures.py"
+            )
+    W, top = 1260, 92
+    pw, vh, th = 404, 176, 104
+    H = top + 3 * (vh + th + 12) + 20
+    b = [f'<rect width="{W}" height="{H}" fill="url(#sky)"/>', GOAL_DEFS]
+    for i, sg in enumerate(GOAL_KEYWORDS):
+        statement, asil, safe = goals[sg]
+        ox, oy = 12 + (i % 3) * (pw + 12), top + (i // 3) * (vh + th + 12)
+        col = RED if asil == "D" else AMBER
+        border = panel_frame(b, i, ox, oy, pw, vh, col)
+        yc = STOP_Y - 2.3 if sg == "SG-06" else 0.0
+        back = -6.5 if sg == "SG-03" else 0.0
+        cam = r3.Camera(
+            pos=(1.4, yc - 10.5 + back, 6.4), pitch=21, focal=330, cx=ox + pw / 2, cy=oy + 96
+        )
+        b += road(cam)
+        b += goal_scene(sg, cam, models)
+        b.append(f'<rect x="{ox:.0f}" y="{oy}" width="{pw}" height="{vh}" fill="url(#vignette)"/>')
+        b.append("</g>")
+        b.append(border)
+        b.append(text(ox + 14, oy + 26, sg, 14, "#ffffff", 750))
+        b.append(
+            f'<rect x="{ox + pw - 72}" y="{oy + 11}" width="60" height="22" rx="11" fill="{col}" fill-opacity="0.18" stroke="{col}"/>'
+        )
+        b.append(
+            text(
+                ox + pw - 42,
+                oy + 26.5,
+                f"ASIL {asil}" if asil != "QM" else "QM",
+                11.5,
+                col,
+                750,
+                "middle",
+            )
+        )
+        y = oy + vh + 20
+        for k, ln in enumerate(wrap(statement, 13, pw - 8)[:2]):
+            b.append(text(ox + 4, y + 16 * k, ln, 13, "#f1f3f4", 650))
+        y += 16 * min(2, len(wrap(statement, 13, pw - 8))) + 4
+        safe_lines = wrap(f"Safe state: {safe}", 11.5, pw - 8)
+        if len(safe_lines) > 3:
+            safe_lines = safe_lines[:3]
+            safe_lines[-1] = safe_lines[-1].rstrip(".,;") + " …"
+        for k, ln in enumerate(safe_lines):
+            b.append(text(ox + 4, y + 14 * k, ln, 11.5, "#b9bfc8"))
+    b.append(text(28, 40, "The nine safety goals", 22, "#ffffff", 700))
+    b.append(
+        text(
+            28,
+            64,
+            "What each goal prevents, drawn as the situation going wrong, with its ASIL and safe state from WP-C-03 §7.",
+            13.5,
+            "#c9ced6",
+        )
+    )
+    b += stamp(
+        W - tw("ILLUSTRATION · draft for engineering review", 11) - 62,
+        22,
+        11,
+        "ILLUSTRATION · draft for engineering review",
+    )
+    desc = (
+        "Nine small scenes of the robotaxi, one per safety goal of WP-C-03, each with its ASIL and safe state. "
+        + " ".join(f"{sg}, ASIL {goals[sg][1]}: {goals[sg][0]}." for sg in GOAL_KEYWORDS)
+    )
+    return svg(W, H, "The nine safety goals", desc, b)
+
+
+def gates_figure(f: fx.Facts, v: dict, models) -> str:
+    gates = fx.gates()
+    state = fx.assurance_state()
+    m = re.match(r"Gate (G\d) passed", state)
+    passed = [g.gid for g in gates].index(m.group(1)) if m else -1
+    W, H = 1320, 600
+    cam = look_at((24.0, 30.0, 12.0), (0.0, 30.0), 24, 440, W / 2 + 70, 238)
+    ys = [3.0 + 8.6 * i for i in range(len(gates))]
+    b = [f'<rect width="{W}" height="{H}" fill="url(#sky)"/>']
+    b += ground_grid(cam, -14.0, 14.0, -12.0, 72.0, 2.0)
+    b.append(
+        poly(cam, [(-3.6, -12, 0), (3.6, -12, 0), (3.6, 72, 0), (-3.6, 72, 0)], "fill:#202328")
+    )
+    for x in (-3.6, 3.6):
+        b.append(line(cam, (x, -12), (x, 72), "stroke:#cfd3d9;stroke-width:1.4;stroke-opacity:.7"))
+    for y in range(-12, 72, 4):
+        b.append(line(cam, (0, y), (0, y + 2), "stroke:#e6c84a;stroke-width:1.4"))
+    for i, (g, y) in enumerate(zip(gates, ys)):
+        col = GREEN if i <= passed else (AMBER if i == passed + 1 else "#7f8792")
+        b.append(line(cam, (-4.4, y, 0), (-4.4, y, 3.2), f"stroke:{col};stroke-width:2.5"))
+        b.append(poly(cam, [(-4.4, y, 3.2), (-4.4, y + 1.6, 2.9), (-4.4, y, 2.5)], f"fill:{col}"))
+        b.append(
+            line(
+                cam,
+                (-3.6, y, 0.01),
+                (3.6, y, 0.01),
+                f"stroke:{col};stroke-width:2;stroke-dasharray:6 4;stroke-opacity:0.8",
+            )
+        )
+        b += tag(cam, (-4.4, y, 3.9), g.gid, col)
+    car_y = ys[0] - 4.8 if passed < 0 else ys[passed] + 4.3
+    b += vehicle(cam, models["kiri10"], 1.75, car_y, 0.0, EGO_PAINT, 0.04, tones=8, bands=6)[1]
+    b += tag(cam, (1.75, car_y, 2.4), "the project now", AMBER)
+    cw = (W - 24) / len(gates)
+    for i, (g, y) in enumerate(zip(gates, ys)):
+        x0 = 12 + i * cw
+        sx, sy = cam(-4.4, y, 0)
+        col = GREEN if i <= passed else (AMBER if i == passed + 1 else "#7f8792")
+        b.append(
+            f'<path d="M{sx:.1f} {sy:.1f} L{x0 + cw / 2:.1f} 330" stroke="{col}" stroke-opacity="0.5" stroke-dasharray="3 3"/>'
+        )
+        b.append(
+            f'<rect x="{x0 + 4:.1f}" y="330" width="{cw - 8:.1f}" height="250" rx="10" fill="#111418" stroke="{col}" stroke-opacity="0.7"/>'
+        )
+        head = wrap(f"{g.gid} · {g.name}", 13, cw - 30)[:2]
+        for k, ln in enumerate(head):
+            b.append(text(x0 + 16, 354 + 16 * k, ln, 13, "#ffffff", 700))
+        for k, ln in enumerate(wrap(g.criterion, 11, cw - 30)[: 12 - len(head)]):
+            b.append(text(x0 + 16, 360 + 16 * len(head) + 14.5 * k, ln, 11, "#c9ced6"))
+        frac = g.done / g.needed if g.needed else 0
+        draft = g.drafted / g.needed if g.needed else 0
+        bx, bw = x0 + 16, cw - 32
+        b.append(f'<rect x="{bx:.1f}" y="548" width="{bw:.1f}" height="8" rx="4" fill="#2a2f37"/>')
+        b.append(
+            f'<rect x="{bx:.1f}" y="548" width="{bw * draft:.1f}" height="8" rx="4" fill="{AMBER}" fill-opacity="0.55"/>'
+        )
+        b.append(
+            f'<rect x="{bx:.1f}" y="548" width="{bw * frac:.1f}" height="8" rx="4" fill="{GREEN}"/>'
+        )
+        b.append(
+            text(bx, 572, f"{g.done} of {g.needed} approved · {g.drafted} drafted", 10.5, "#9aa3ad")
+        )
+    b.append(text(28, 40, "The road to driverless operation", 22, "#ffffff", 700))
+    b.append(
+        text(
+            28,
+            64,
+            f"The gates of WP-M-00 §2. A gate passes only when every work product it needs is approved. Now: {state}.",
+            13.5,
+            "#c9ced6",
+        )
+    )
+    b += stamp(
+        W - tw("ILLUSTRATION · draft for engineering review", 11) - 62,
+        22,
+        11,
+        "ILLUSTRATION · draft for engineering review",
+    )
+    desc = (
+        f"The robotaxi on a road with seven gate posts, G0 to G6, standing at the project's current position: {state}. "
+        "Under each gate, its exit criterion from WP-M-00 §2 and how many of the work products it needs are approved "
+        "and drafted. "
+        + " ".join(
+            f"{g.gid} {g.name}: {g.done} of {g.needed} approved, {g.drafted} drafted."
+            for g in gates
+        )
+    )
+    return svg(W, H, "The road to driverless operation", desc, b)
+
+
 def build() -> dict[Path, str]:
     f = fx.load()
     v = fx.need(f)
@@ -1502,6 +1791,8 @@ def build() -> dict[Path, str]:
         OUT / "odd.svg": odd_figure(f, v, models),
         OUT / "two-ways-to-be-unsafe.svg": two_ways_figure(f, v, models),
         OUT / "remote-driving.svg": remote_figure(f, v, models),
+        OUT / "safety-goals.svg": goals_figure(f, v, models),
+        OUT / "gates.svg": gates_figure(f, v, models),
     }
 
 
