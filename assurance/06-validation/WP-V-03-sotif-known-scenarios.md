@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-V-03 Evaluation of known hazardous scenarios |
 | Standard reference | UL 4600 §12; ISO 21448 §10; ASPICE 4.0 SYS.5, VAL.1 |
-| Version | 0.3 (simulation takes credit only where checked against the real vehicle (DQ-036 A); 2026-10-24). 0.2 (first content: the scenario catalogue, its logical parameters and pass criteria, generated from `scenarios/scenarios.yaml`; evaluation method; 2026-10-24). 0.1 (skeleton: structure and clause mapping; 2026-10-22) |
+| Version | 0.4 (Figure 2-1, a card per scenario with what it sets up and when it passes; the folder page `scenarios/README.md` and `scenarios/scenarios.csv` with the verification cases that run each scenario; 2026-10-25). 0.3 (simulation takes credit only where checked against the real vehicle (DQ-036 A); 2026-10-24). 0.2 (first content: the scenario catalogue, its logical parameters and pass criteria, generated from `scenarios/scenarios.yaml`; evaluation method; 2026-10-24). 0.1 (skeleton: structure and clause mapping; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | SOTIF |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -26,13 +26,21 @@ Needed at gate G4 ([WP-M-00](../01-management/WP-M-00-work-product-register.md))
 
 **The catalogue is drafted before the vehicle is chosen (DQ-008), and nothing in it has been run.** It uses no measured value: every range comes from the ODD of [WP-C-02](../02-concept/WP-C-02-odd-and-intended-functionality.md), and every pass criterion points at a requirement that already exists. Where a requirement says the item assumes a bound on how other road users move (FSR-06.01, FSR-06.02) but no work product has fixed the bound, the parameter is listed without a number.
 
-The model is kept in `scenarios/scenarios.yaml`; `scenarios/scenarios.py` checks it and writes the tables below and the coverage tables and Figure 4-1 of [WP-V-08](WP-V-08-simulation-credibility.md#4-scenario-coverage-metrics-against-the-odd). The generator refuses a triggering condition, misuse entry or hazardous event that no scenario exercises, a reference to an identifier that does not exist, and a parameter outside the ODD.
+The model is kept in `scenarios/scenarios.yaml`; `scenarios/scenarios.py` checks it and writes the tables below, Figure 2-1 and the folder page `scenarios/README.md` with `scenarios/scenarios.csv`, and the coverage tables and Figure 4-1 of [WP-V-08](WP-V-08-simulation-credibility.md#4-scenario-coverage-metrics-against-the-odd). The generator refuses a triggering condition, misuse entry or hazardous event that no scenario exercises, a reference to an identifier that does not exist, and a parameter outside the ODD.
 
 ## 2. Scenario catalogue
 
 Each scenario is a *logical* scenario in the terms of ISO 34501: a functional description with parameter ranges. Running it means sampling *concrete* scenarios from the ranges (§3). The structure maps onto OpenSCENARIO: a parameter becomes a parameter declaration with its range as a constraint, a participant class becomes an entity of the matching category ([WP-V-08 §2](WP-V-08-simulation-credibility.md)). The YAML stays the source; an exporter to OpenSCENARIO 2 or to the format scenario_simulator_v2 reads is future work (OI-2).
 
 The safety goals at stake are computed, not typed: the goals of the hazards of a scenario's hazardous events, and those of the HARA hazards its triggering conditions can lead to, through the insufficiencies they expose (WP-C-06) and the SOTIF hazards those cause ([WP-C-05](../02-concept/WP-C-05-sotif-hazard-identification.md)).
+
+<!-- BEGIN GENERATED: scenarios-cards (assurance/06-validation/scenarios/scenarios.py) -->
+
+![Figure 2-1: one card per scenario SC-01 to SC-26. Each has a top-down sketch of one concrete instance of the logical scenario: the vehicle in blue, the road user or condition the scenario is about in amber, other road users grey, and the behaviour the pass criterion asks for as a dashed green path with its moment ringed. Under the sketch: the hazardous events, triggering conditions, misuse cases and loss scenarios it exercises, the safety goals at stake, the ODD attributes it varies (outlined red where it sweeps across the ODD boundary) and the behaviour bounds not yet fixed, its methods, its pass criterion with the requirements it is judged against, and the verification cases of WP-S-09 that run it. The same information is in the tables of §2.](scenarios/fig-v03-2-1-scenarios.svg)
+
+*Figure 2-1. What each known scenario sets up, and when it passes. Schematic: one instance chosen to explain each scenario; the ranges are in §2.2, and no scenario has been run. Drawn by [`scenarios/scenarios.py`](scenarios/scenarios.py) and `scenarios/scards.py`; CI fails if it is stale. Every scenario is also in [`scenarios/scenarios.csv`](scenarios/scenarios.csv).*
+
+<!-- END GENERATED: scenarios-cards -->
 
 ### 2.1 Scenarios and what they exercise
 

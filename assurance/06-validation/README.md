@@ -27,7 +27,7 @@ Standard clauses: UL 4600 §12; 26262-4 §8; 21448 §9–11; 21434 §11; VAL.1.
 
 | Folder | What it holds |
 |---|---|
-| [`scenarios/`](scenarios/) | — |
+| [`scenarios/`](scenarios/README.md) | Known scenarios |
 | [`simenv/`](simenv/) | — |
 
 ## Abbreviations, terms and symbols
