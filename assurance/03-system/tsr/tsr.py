@@ -47,9 +47,15 @@ import fsc  # noqa: E402
 import timing  # noqa: E402
 import tsc  # noqa: E402
 
+sys.path.insert(0, str(HERE))
+import pcards  # noqa: E402
+
 MODEL = HERE / "tsr.yaml"
 DOC = ASSURANCE / "03-system" / "WP-S-02-technical-safety-requirements.md"
 FIG = HERE / "fig-s02-4-1-allocation.svg"
+FIG2 = HERE / "fig-s02-2-1-parameters.svg"
+CSV = HERE / "tsrs.csv"
+README = HERE / "README.md"
 ALLOC = ("software", "hardware", "both")
 KEYS = {"id", "mechanism", "component", "alloc", "text", "fsrs", "timing", "params", "pending"}
 KEYS |= {"verify"}
@@ -234,6 +240,14 @@ def tables(m: dict, k: dict) -> dict[str, str]:
         users = [r["id"] for r in m["tsrs"] if p["id"] in (r.get("params") or [])]
         rows.append(f"| {p['id']} | {cell(p['name'])} | {value(p, m, k)} | {', '.join(users)} |")
     t["tsr-parameters"] = "\n".join(rows)
+    t["tsr-parameter-cards"] = (
+        "![Figure 2-1: one card per envelope parameter P-01 to P-13. Each shows a schematic of what the "
+        "parameter bounds (a distance on the road, a level or a time on a chart), the parameter's value or source "
+        "as the table above states it, where that comes from (the timing model, a decision of the lead, or still "
+        f"to be set), and the requirements that use it.](tsr/{FIG2.name})\n\n"
+        "*Figure 2-1. What each envelope parameter bounds. The drawings carry no numbers; the values are the "
+        "text under them, from the table above. Drawn by [`tsr/tsr.py`](tsr/tsr.py); CI fails if it is stale.*"
+    )
     rows = [
         "| ID | Technical safety requirement | Component | ASIL | Refines | Time | Waits on |",
         "|---|---|---|---|---|---|---|",
@@ -395,12 +409,165 @@ def figure(m: dict, k: dict) -> str:
     )
 
 
+def tsrs_csv(m: dict, k: dict) -> str:
+    """Every requirement with its placement, ASIL, budget and trace to WP-C-04, WP-S-08 and WP-S-09."""
+    import csv
+    import io
+
+    import yaml
+
+    sys.path.insert(0, str(ASSURANCE / "03-system" / "verif"))
+    import verif
+
+    its = yaml.safe_load((HERE.parent / "integ" / "integ.yaml").read_text(encoding="utf-8"))[
+        "cases"
+    ]
+    vm, vk = verif.load(), verif.known()
+    vcs = {c["id"]: verif.covered(c, vk) for c in vm["cases"]}
+    params = {p["id"]: p for p in m["parameters"]}
+    comps = k["components"]
+    buf = io.StringIO()
+    w = csv.writer(buf, lineterminator="\n")
+    w.writerow(
+        [
+            "ID",
+            "Technical safety requirement",
+            "ASIL",
+            "Safety mechanism (WP-S-03)",
+            "Component",
+            "Developed by",
+            "Hardware or software",
+            "Refines (WP-C-04)",
+            "Safety goals",
+            "Time (WP-S-04)",
+            "Parameters",
+            "Waits on",
+            "Verification",
+            "Integration test cases (WP-S-08)",
+            "Verification cases (WP-S-09)",
+        ]
+    )
+    for r in m["tsrs"]:
+        c = comps[r["component"]]
+        inside = k["elements"][c["element"]]["in_item"]
+        tm = (
+            f"{'Detect' if r['timing'] == 'detect' else 'React'} within {budget(m, k, r['mechanism'], r['timing'])}"
+            if r.get("timing")
+            else "—"
+        )
+        w.writerow(
+            [
+                r["id"],
+                r["text"],
+                asil(r, k),
+                f"{r['mechanism']} {k['mechanisms'][r['mechanism']]['name']}",
+                f"{r['component']} {c['name']}",
+                "The project" if inside else "Supplier, under the DIA",
+                r["alloc"],
+                ", ".join(r["fsrs"]),
+                ", ".join(sorted({k["fsrs"][f]["goal"] for f in r["fsrs"]})),
+                tm,
+                ", ".join(r.get("params") or []) or "—",
+                ", ".join(waits(r, params)) or "—",
+                r["verify"],
+                ", ".join(x["id"] for x in its if r["id"] in x["covers"]) or "—",
+                ", ".join(v for v, cov in vcs.items() if set(r["fsrs"]) & cov) or "—",
+            ]
+        )
+    return buf.getvalue()
+
+
+def here(md: str) -> str:
+    """Text of WP-S-02 with its relative links rewritten to work from this folder."""
+    md = md.replace("](tsr/", "](")
+    return re.sub(r"\]\((?!https?:|#|fig-|tsrs\.csv|tsr\.|README)", "](../", md)
+
+
+def readme(m: dict, k: dict, t: dict[str, str], doc: str) -> str:
+    """The folder page: all the technical safety requirements on one page."""
+
+    def part(heading: str) -> str:
+        return here(fk.section(doc, heading).strip())
+
+    files = [
+        "| File | What it holds |",
+        "|---|---|",
+        f"| [`{CSV.name}`]({CSV.name}) | Every technical safety requirement with its mechanism, component, ASIL, hardware or software, the FSRs it refines, its time budget and parameters, and the integration and verification cases that trace to it |",
+        f"| [`{FIG2.name}`]({FIG2.name}) | Figure 2-1, what each envelope parameter bounds |",
+        f"| [`{FIG.name}`]({FIG.name}) | Figure 4-1, requirements per component and ASIL |",
+        "| [`tsr.yaml`](tsr.yaml) | The envelope parameters and the technical safety requirements |",
+        "| [`tsr.py`](tsr.py), [`pcards.py`](pcards.py) | The generator: checks the model against the technical safety concept, the timing budget and the decision register, and writes WP-S-02's tables and everything here |",
+    ]
+    lines = [
+        "<!-- Generated by assurance/03-system/tsr/tsr.py; do not edit by hand. -->",
+        "",
+        "# Technical safety requirements",
+        "",
+        "All the technical safety requirements of "
+        "[WP-S-02](../WP-S-02-technical-safety-requirements.md) on one page: the parameters of the safety "
+        "envelope and what each bounds, every requirement with its component, ASIL and time, the safety "
+        "mechanisms they belong to, their allocation to hardware and software, and how each is verified. They "
+        "refine the [functional safety concept](../../02-concept/fsc/README.md) through the mechanisms of the "
+        "[technical safety concept](../tsc/README.md). Everything here is generated by `tsr.py` from "
+        "`tsr.yaml`; CI fails if it is stale. Everything is a draft by Claude (I0) until it is reviewed.",
+        "",
+        "1. [What these requirements are](#1-what-these-requirements-are)",
+        "2. [Envelope parameters](#2-envelope-parameters)",
+        "3. [Requirements](#3-requirements)",
+        "4. [Safety mechanisms: detection, reaction, fallback](#4-safety-mechanisms-detection-reaction-fallback)",
+        "5. [Allocation to hardware and software](#5-allocation-to-hardware-and-software)",
+        "6. [Verification criteria](#6-verification-criteria)",
+        "7. [Files in this folder](#7-files-in-this-folder)",
+        "",
+        "## 1. What these requirements are",
+        "",
+        part("## 1. Purpose"),
+        "",
+        "## 2. Envelope parameters",
+        "",
+        part("### 2.1 Envelope parameters"),
+        "",
+        "## 3. Requirements",
+        "",
+        "Every requirement, with its trace to the FSRs it refines and the integration and verification cases "
+        f"that test it, is in [`{CSV.name}`]({CSV.name}), which GitHub shows as a table that can be searched.",
+        "",
+        part("### 2.2 Requirements"),
+        "",
+        "## 4. Safety mechanisms: detection, reaction, fallback",
+        "",
+        part("## 3. Safety mechanisms"),
+        "",
+        "## 5. Allocation to hardware and software",
+        "",
+        part("## 4. Allocation to hardware and software"),
+        "",
+        "## 6. Verification criteria",
+        "",
+        part("## 5. Verification criteria"),
+        "",
+        "## 7. Files in this folder",
+        "",
+        *files,
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def build() -> dict[Path, str]:
     m, k = load(), known()
-    errs = check(m, k)
+    errs = check(m, k) + pcards.check(m)
     if errs:
         raise fk.FigureError("tsr.yaml: " + "; ".join(errs))
-    return {DOC: fill(DOC.read_text(encoding="utf-8"), tables(m, k)), FIG: figure(m, k)}
+    t = tables(m, k)
+    doc = fill(DOC.read_text(encoding="utf-8"), t)
+    return {
+        DOC: doc,
+        FIG: figure(m, k),
+        FIG2: pcards.sheet(m, {p["id"]: value(p, m, k) for p in m["parameters"]}),
+        CSV: tsrs_csv(m, k),
+        README: readme(m, k, t, doc),
+    }
 
 
 if __name__ == "__main__":
