@@ -858,6 +858,37 @@ class Timing(unittest.TestCase):
     def test_real_model_passes(self):
         self.assertEqual(timing.check(timing.load(), timing.known()), [])
 
+    def test_every_goal_has_a_card_and_derived_goals_show_what_binds_them(self):
+        m, k = timing.load(), timing.known()
+        svg = timing.gcards.sheet(m, k, timing.ftti, timing.ms, timing.bound)
+        self.assertEqual(re.findall(r'class="gid">(SG-\d\d)<', svg), [g["id"] for g in m["goals"]])
+        self.assertEqual(timing.gcards.binding(m, "SG-07", timing.ftti), "SG-04")
+        self.assertIsNone(timing.gcards.binding(m, "SG-03", timing.ftti))
+        self.assertIn(f"FTTI {timing.ms(timing.ftti(m, 'SG-08', 'high'))}", svg)
+
+    def test_measurements_csv_lists_every_budget_and_chain_stage(self):
+        import csv
+
+        m, k = timing.load(), timing.known()
+        rows = list(csv.DictReader(io.StringIO(timing.measurements_csv(m, k))))
+        self.assertEqual(len(rows), 2 * len(m["mechanisms"]) + len(m["chain"]))
+        self.assertTrue(all(r["Measured"] == "Not yet" for r in rows))
+        r = next(
+            r
+            for r in rows
+            if r["Mechanism or stage"].startswith("SM-05") and "detect" in r["What is measured"]
+        )
+        self.assertEqual(r["Budget"], "143 ms")
+        self.assertIn("IT-06", r["Integration test cases that time it (WP-S-08)"])
+
+    def test_folder_page_links_every_file_in_the_folder(self):
+        page = timing.build()[timing.README]
+        for p in timing.HERE.iterdir():
+            if p.suffix in (".csv", ".svg", ".yaml", ".py"):
+                self.assertIn(f"]({p.name})", page, p.name)
+        self.assertNotIn("](timing/", page)
+        self.assertEqual(page.count("time-critical mechanisms get"), 1)  # the summary, once
+
     def test_ftti_follows_the_kinematics(self):
         m = timing.load()
         g = next(x for x in m["goals"] if x["id"] == "SG-01")
