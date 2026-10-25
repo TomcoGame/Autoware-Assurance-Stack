@@ -262,6 +262,76 @@ def assurance_state() -> str:
     return m.group(1).strip()
 
 
+@dataclass(frozen=True)
+class Timing:
+    goal: str
+    kind: str  # deviation, drift, derived or limit
+    margin: float | None  # metres, proposed
+    ftti_short: float | None  # seconds, worst case (largest fault)
+    ftti_long: float | None  # seconds, smallest fault
+    detect: float  # share of the FTTI for detection
+    react: float  # share for the reaction
+    basis: str
+
+
+def timing() -> dict[str, Timing]:
+    """The FTTI of each safety goal, computed by WP-S-04's own timing.py from its timing.yaml."""
+    sys.path.insert(0, str(ASSURANCE / "03-system" / "timing"))
+    import timing as tm  # noqa: PLC0415
+
+    m = tm.load()
+    alloc = m["allocation"]
+    out = {}
+    for g in m["goals"]:
+        out[g["id"]] = Timing(
+            g["id"],
+            g["kind"],
+            g.get("margin"),
+            tm.ftti(m, g["id"], "high"),
+            tm.ftti(m, g["id"], "low"),
+            alloc["detect"],
+            alloc["react"],
+            str(g.get("basis", "")),
+        )
+    return out
+
+
+@dataclass(frozen=True)
+class Asset:
+    aid: str
+    name: str
+    threats: list[str]  # threat scenario ids
+    max_risk: int  # highest risk value of those threats (0 when none)
+
+
+def tara() -> tuple[list[Asset], int, int]:
+    """The assets of WP-C-09 with their threat scenarios and highest risk, computed by its own
+    tara.py; also the highest value of the risk scale and the value from which risk is reduced."""
+    sys.path.insert(0, str(ASSURANCE / "02-concept" / "tara"))
+    import tara as ta  # noqa: PLC0415
+
+    m = ta.load()
+    out = []
+    for a in m["assets"]:
+        ts = [t for t in m["threats"] if a["id"] in t.get("assets", [])]
+        out.append(
+            Asset(
+                a["id"],
+                str(a["name"]),
+                [t["id"] for t in ts],
+                max((ta.risk(m, t) for t in ts), default=0),
+            )
+        )
+    scale = max(v for row in m["method"]["matrix"] for v in row)
+    return out, scale, int(m["method"]["reduce_at"])
+
+
+def folders() -> dict[str, str]:
+    """Folder -> its content, from the Layout table of assurance/README.md."""
+    head, rows = _rows(ASSURANCE_README, "Folder", "## Layout")
+    return {fk.plain(r[0]).strip("/"): fk.plain(r[fk.col(head, "Content")]) for r in rows}
+
+
 def decisions() -> dict[str, str]:
     entries = yaml.safe_load(REGISTER.read_text(encoding="utf-8")) or []
     return {
