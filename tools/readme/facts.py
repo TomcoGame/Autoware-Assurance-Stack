@@ -28,6 +28,8 @@ WP_C03 = ASSURANCE / "02-concept" / "WP-C-03-hara.md"
 WP_C04 = ASSURANCE / "02-concept" / "WP-C-04-functional-safety-concept.md"
 WP_M01 = ASSURANCE / "01-management" / "WP-M-01-assurance-strategy.md"
 REGISTER = ASSURANCE / "01-management" / "decisions" / "register.yaml"
+WP_M00 = ASSURANCE / "01-management" / "WP-M-00-work-product-register.md"
+ASSURANCE_README = ASSURANCE / "README.md"
 
 
 class FactError(Exception):
@@ -211,6 +213,53 @@ def decision_titles() -> dict[str, str]:
                 if o.get("key") == choice:
                     out[d["id"]] = str(o.get("title", ""))
     return out
+
+
+@dataclass(frozen=True)
+class Gate:
+    gid: str
+    name: str
+    criterion: str
+    needed: int  # work products the gate needs (not tailored out)
+    done: int  # of those, approved or baselined
+    drafted: int  # of those, drafted or in review
+
+
+def gates() -> list[Gate]:
+    """The gates of WP-M-00 §2 with the work products each needs, from the §3 register."""
+    import wpregister  # noqa: PLC0415  (beside figkit, on the path set above)
+
+    head, rows = _rows(WP_M00, "Gate", "## 2.")
+    crit = {fk.plain(r[0]): fk.plain(r[fk.col(head, "Exit criterion (summary)")]) for r in rows}
+    reg = wpregister.load()
+    out = []
+    for gi, (gid, name) in enumerate(reg.gates):
+        need = [p for p in reg.products if gi in p.gates and p.status != "N/A"]
+        out.append(
+            Gate(
+                gid,
+                name,
+                crit.get(gid, ""),
+                len(need),
+                sum(p.status in ("A", "B") for p in need),
+                sum(p.status in ("D", "R") for p in need),
+            )
+        )
+    if not out:
+        raise FactError(f"{WP_M00.name}: no gates")
+    return out
+
+
+def assurance_state() -> str:
+    """The 'Assurance state' row of the generated summary in assurance/README.md."""
+    m = re.search(
+        r"^\| Assurance state \| (.+?) \|$", ASSURANCE_README.read_text(encoding="utf-8"), re.M
+    )
+    if not m:
+        raise FactError(
+            f"{ASSURANCE_README.name}: no 'Assurance state' row in the generated summary"
+        )
+    return m.group(1).strip()
 
 
 def decisions() -> dict[str, str]:
