@@ -334,6 +334,41 @@ class Figures(unittest.TestCase):
             self.assertIn(f"{g.done} of {g.needed} approved · {g.drafted} drafted", flat)
         self.assertIn(escape(fx.assurance_state()), flat)
 
+    def test_ftti_figure_uses_the_computed_timing(self):
+        tim = fx.timing()
+        flat = " ".join(re.findall(r">([^<]*)</text>", self.out[figures.OUT / "ftti.svg"]))
+        for sg, _, _ in figures.FTTI_PANELS:
+            t = tim[sg]
+            self.assertIn(f"FTTI {figures.ms(t.ftti_short)} to {figures.ms(t.ftti_long)}", flat)
+            self.assertIn(f"{t.margin:g} m (proposed)", flat)
+        self.assertIn("nothing measured", flat)
+
+    def test_attack_figure_lists_every_asset_and_refuses_a_renamed_one(self):
+        assets, scale, _ = fx.tara()
+        flat = " ".join(
+            re.findall(r">([^<]*)</text>", self.out[figures.OUT / "attack-surface.svg"])
+        )
+        for a in assets:
+            label = f"{len(a.threats)} threat{'s' if len(a.threats) != 1 else ''} · risk {a.max_risk}/{scale}"
+            self.assertIn(label, flat, a.aid)
+        renamed = [fx.Asset("A-01", "Something else", [], 0)] + assets[1:]
+        old = fx.tara
+        fx.tara = lambda: (renamed, scale, 3)
+        try:
+            with self.assertRaises(fx.FactError):
+                figures.attack_figure(fx.load(), {}, {})
+        finally:
+            fx.tara = old
+
+    def test_repository_map_names_its_folders(self):
+        folders = fx.folders()
+        flat = " ".join(
+            re.findall(r">([^<]*)</text>", self.out[figures.OUT / "repository-map.svg"])
+        )
+        for name, _, _ in figures.REPO_PARTS:
+            self.assertIn(f"assurance/{name}/", flat)
+            self.assertIn(" ".join(escape(folders[name]).split()), flat)
+
     def test_sizes_stay_reasonable_for_a_readme(self):
         for path, text in self.out.items():
             self.assertLess(len(text.encode()), 450_000, path.name)
