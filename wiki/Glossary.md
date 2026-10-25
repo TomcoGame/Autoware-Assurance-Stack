@@ -75,3 +75,11 @@ Identifiers are never reused; a withdrawn item keeps its identifier and is marke
 ![Inside and outside the ODD: three panels of the robotaxi on a city street, for the posted speed limit (a speed sign inside the geofence and a higher one beyond it), precipitation (rain) and visibility (fog). Under each, what is inside and outside the ODD as WP-C-02 states it, and the monitor that detects it.](../tools/readme/figures/odd.svg)
 
 *Illustration. Labels read from the work products by [`figures.py`](../tools/readme/figures.py); vehicle model CC BY 4.0, see [credits](../tools/readme/models/CREDITS.md).*
+
+![How long a fault may last: three panels of the robotaxi with the margin a safety goal keeps drawn in blue (SG-01 unintended acceleration, SG-04 unintended steering, SG-05 creeping from standstill), and under each a time line from the fault through detection and reaction to the FTTI, with the range WP-S-04 computes from proposed values.](../tools/readme/figures/ftti.svg)
+
+*Illustration: proposed values, nothing measured. FTTIs computed by WP-S-04's own `timing.py`. Labels read from the work products by [`figures.py`](../tools/readme/figures.py); vehicle models CC BY 4.0, see [credits](../tools/readme/models/CREDITS.md).*
+
+![Where an attacker could reach: the robotaxi with numbered markers where the assets of the threat analysis (WP-C-09) sit, and a list of the assets with their number of threat scenarios and highest risk.](../tools/readme/figures/attack-surface.svg)
+
+*Illustration: positions are illustrative. Risks computed by WP-C-09's own `tara.py`. Labels read from the work products by [`figures.py`](../tools/readme/figures.py); vehicle models CC BY 4.0, see [credits](../tools/readme/models/CREDITS.md).*

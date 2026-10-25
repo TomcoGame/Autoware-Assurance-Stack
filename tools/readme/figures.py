@@ -1777,6 +1777,342 @@ def gates_figure(f: fx.Facts, v: dict, models) -> str:
     return svg(W, H, "The road to driverless operation", desc, b)
 
 
+# ---------------------------------------------------------------- wiki figures: FTTI, attack surface, repository map
+
+FTTI_PANELS = [  # goal, what the fault does, how the margin is drawn
+    ("SG-01", "Unintended acceleration", "ahead"),
+    ("SG-04", "Unintended steering", "side"),
+    ("SG-05", "Creeping from standstill", "creep"),
+]
+
+
+def ms(t: float | None) -> str:
+    return "n/a" if t is None else f"{t * 1000:.0f} ms"
+
+
+def ftti_figure(f: fx.Facts, v: dict, models) -> str:
+    tim = fx.timing()
+    W, H, top, ph = 1200, 560, 92, 250
+    b = [f'<rect width="{W}" height="{H}" fill="url(#sky)"/>']
+    pw = (W - 48) / 3
+    for i, (sg, title, kind) in enumerate(FTTI_PANELS):
+        t = tim.get(sg)
+        if t is None or t.kind != "deviation" or t.margin is None:
+            raise fx.FactError(
+                f"WP-S-04 timing.yaml: {sg} is no longer a deviation goal with a margin"
+            )
+        ox = 12 + i * (pw + 12)
+        border = panel_frame(b, i, ox, top, pw, ph, BLUE)
+        y0 = 5.6 if kind == "creep" else 0.0
+        cam = look_at(
+            (EGO[0] + 5.0, y0 - 9.5, 5.2), (EGO[0] - 0.6, y0 + 2.6), 22, 560, ox + pw / 2, top + 120
+        )
+        b += road(cam)
+        if kind == "ahead":  # the margin ahead of the safe distance
+            zone = [
+                (0.5, 2.4, 0.01),
+                (3.0, 2.4, 0.01),
+                (3.0, 2.4 + t.margin, 0.01),
+                (0.5, 2.4 + t.margin, 0.01),
+            ]
+            b += vehicle(
+                cam, models["hatchback"], EGO[0], 8.4, 0.0, TRAFFIC_PAINT["hatchback"], ambient=0.55
+            )[1]
+        elif kind == "side":
+            zone = [
+                (EGO[0] - 0.95 - t.margin, -2.3, 0.01),
+                (EGO[0] - 0.95, -2.3, 0.01),
+                (EGO[0] - 0.95, 2.3, 0.01),
+                (EGO[0] - 0.95 - t.margin, 2.3, 0.01),
+            ]
+        else:
+            zone = [
+                (0.6, y0 + 2.3, 0.01),
+                (2.9, y0 + 2.3, 0.01),
+                (2.9, y0 + 2.3 + t.margin, 0.01),
+                (0.6, y0 + 2.3 + t.margin, 0.01),
+            ]
+            b += cylinder(cam, EGO[0], y0 + 2.3 + t.margin + 0.5, 0.3, 1.7, RED)
+        b.append(poly(cam, zone, f"fill:{BLUE};fill-opacity:0.55;stroke:{BLUE2};stroke-width:1.5"))
+        b += vehicle(cam, models["kiri10"], EGO[0], y0, 0.0, EGO_PAINT, 0.05, tones=8, bands=6)[1]
+        b.append(
+            f'<rect x="{ox + 14:.0f}" y="{top + ph - 30}" width="14" height="10" rx="2" fill="{BLUE}" fill-opacity="0.75" stroke="{BLUE2}"/>'
+        )
+        b.append(
+            text(
+                ox + 34,
+                top + ph - 21,
+                f"the margin the goal keeps: {t.margin:g} m (proposed)",
+                11.5,
+                BLUE2,
+                650,
+            )
+        )
+        b.append(
+            f'<rect x="{ox:.0f}" y="{top}" width="{pw:.0f}" height="{ph}" fill="url(#vignette)"/>'
+        )
+        b.append("</g>")
+        b.append(border)
+        b.append(text(ox + 16, top + 27, f"{sg} · {title}", 14.5, "#ffffff", 700))
+        # the time line: fault, detected, reacted, FTTI, for the worst case
+        lx, lw, ly = ox + 14, pw - 28, top + ph + 52
+        d, r = t.detect, t.react
+        for frac0, frac1, col, label in (
+            (0, d, AMBER, "detect"),
+            (d, d + r, RED, "react"),
+            (d + r, 1.0, "#7f8792", "reserve"),
+        ):
+            b.append(
+                f'<rect x="{lx + lw * frac0:.1f}" y="{ly}" width="{lw * (frac1 - frac0):.1f}" height="16" fill="{col}" fill-opacity="0.75"/>'
+            )
+            b.append(
+                text(lx + lw * (frac0 + frac1) / 2, ly + 12, label, 10.5, "#0d0f12", 700, "middle")
+            )
+        b.append(text(lx, ly - 10, "fault", 11, "#c9ced6"))
+        b.append(
+            text(
+                lx + lw,
+                ly - 10,
+                f"FTTI {ms(t.ftti_short)} to {ms(t.ftti_long)}",
+                12,
+                "#ffffff",
+                700,
+                "end",
+            )
+        )
+        for k, ln in enumerate(wrap(t.basis, 11.5, pw - 20)[:4]):
+            b.append(text(ox + 14, ly + 40 + 15 * k, ln, 11.5, "#b9bfc8"))
+    b.append(text(28, 40, "How long a fault may last", 22, "#ffffff", 700))
+    b.append(
+        text(
+            28,
+            64,
+            "The fault tolerant time interval: how long a fault may act before it uses up the margin a safety goal keeps. Computed, not measured.",
+            13.5,
+            "#c9ced6",
+        )
+    )
+    b += stamp(
+        W - tw("ILLUSTRATION · proposed values, nothing measured", 11) - 62,
+        22,
+        11,
+        "ILLUSTRATION · proposed values, nothing measured",
+    )
+    desc = (
+        "Three panels of the robotaxi with the margin a safety goal keeps drawn in blue, and under each a time line "
+        "from the fault through detection and reaction to the FTTI, with the range WP-S-04 computes from proposed "
+        "margins and fault sizes: "
+        + "; ".join(
+            f"{sg} {title.lower()}, margin {tim[sg].margin:g} m, FTTI {ms(tim[sg].ftti_short)} to {ms(tim[sg].ftti_long)}"
+            for sg, title, _ in FTTI_PANELS
+        )
+        + "."
+    )
+    return svg(W, H, "How long a fault may last", desc, b)
+
+
+ASSET_PLACES = (
+    {  # asset -> (keyword its name must contain, where on or off the vehicle it is drawn)
+        "A-01": ("remote driving", (0.0, -1.25, 1.52)),
+        "A-02": ("release", (0.0, -1.25, 1.52)),
+        "A-03": ("operator", None),
+        "A-04": ("fleet backend", None),
+        "A-05": ("safety monitor", (0.0, -0.95, 0.62)),
+        "A-06": ("autoware", (0.0, -1.6, 0.75)),
+        "A-07": ("map", (0.0, -1.6, 0.75)),
+        "A-08": ("update", (0.0, -1.25, 1.52)),
+        "A-09": ("sensor", (0.0, -0.2, 1.62)),
+        "A-10": ("command path", (0.0, 0.9, 0.3)),
+        "A-11": ("cabin", (0.0, 0.3, 1.15)),
+        "A-12": ("telemetry", None),
+        "A-13": ("passenger interface", (-0.86, 0.1, 0.9)),
+    }
+)
+
+
+def attack_figure(f: fx.Facts, v: dict, models) -> str:
+    assets, scale, reduce_at = fx.tara()
+    ids = {a.aid for a in assets}
+    if ids != set(ASSET_PLACES):
+        raise fx.FactError(
+            f"WP-C-09 lists assets {', '.join(sorted(ids))}; the figure places {', '.join(ASSET_PLACES)}"
+        )
+    for a in assets:
+        if ASSET_PLACES[a.aid][0] not in a.name.lower():
+            raise fx.FactError(f"WP-C-09 {a.aid} is now '{a.name}': place it again in figures.py")
+    W, H = 1240, 600
+    cam = look_at((-5.6, 6.4, 3.1), (0.0, 0.0), 15, 640, 330, 360)
+    b = [f'<rect width="{W}" height="{H}" fill="url(#sky)"/>']
+    b += ground_grid(cam, -4.0, 4.0, -4.0, 6.0)
+    sx, sy = cam(0, 0, 0)
+    b.append(
+        f'<ellipse cx="{sx:.1f}" cy="{sy + 6:.1f}" rx="150" ry="30" fill="#000" fill-opacity="0.5" filter="url(#soft)"/>'
+    )
+    b += vehicle(cam, models["kiri10"], 0.0, 0.0, 0.0, EGO_PAINT, 0.03)[1]
+
+    def risk_col(r):
+        return RED if r >= reduce_at + 1 else (AMBER if r >= reduce_at else GREEN)
+
+    seen: dict[tuple, int] = {}
+    for n, a in enumerate(assets, 1):
+        place = ASSET_PLACES[a.aid][1]
+        if place is None:
+            continue
+        px, py = cam(*place)
+        k = seen.get(place, 0)
+        seen[place] = k + 1
+        px, py = px + 22 * k, py - 4 * k
+        b.append(
+            f'<circle cx="{px:.1f}" cy="{py:.1f}" r="10" fill="{risk_col(a.max_risk)}" stroke="#0d0f12" stroke-width="1.5"/>'
+        )
+        b.append(text(px, py + 4, str(n), 10.5, "#0d0f12", 800, "middle"))
+    # the off-vehicle assets, drawn as a backend in the corner
+    b.append(
+        '<rect x="40" y="110" width="250" height="78" rx="10" fill="#141820" stroke="#2c3440"/>'
+    )
+    b.append(text(56, 132, "Off the vehicle", 12, "#9aa3ad", 700))
+    k = 0
+    for n, a in enumerate(assets, 1):
+        if ASSET_PLACES[a.aid][1] is None:
+            cx_ = 70 + 64 * k
+            b.append(
+                f'<circle cx="{cx_}" cy="164" r="10" fill="{risk_col(a.max_risk)}" stroke="#0d0f12" stroke-width="1.5"/>'
+            )
+            b.append(text(cx_, 168, str(n), 10.5, "#0d0f12", 800, "middle"))
+            k += 1
+    x0, y = 700, 104
+    b.append(
+        text(
+            x0,
+            y,
+            "ASSETS OF WP-C-09, WITH THEIR THREAT SCENARIOS",
+            11,
+            "#9aa3ad",
+            700,
+            extra='letter-spacing="1"',
+        )
+    )
+    y += 12
+    for n, a in enumerate(assets, 1):
+        col = risk_col(a.max_risk)
+        b.append(f'<circle cx="{x0 + 10}" cy="{y + 12}" r="9" fill="{col}"/>')
+        b.append(text(x0 + 10, y + 16, str(n), 10, "#0d0f12", 800, "middle"))
+        name = a.name if tw(a.name, 12) < 330 else wrap(a.name, 12, 320)[0] + " …"
+        b.append(text(x0 + 26, y + 16, name, 12, "#e3e6ea", 600))
+        b.append(
+            text(
+                x0 + 520,
+                y + 16,
+                f"{len(a.threats)} threat{'s' if len(a.threats) != 1 else ''} · risk {a.max_risk}/{scale}",
+                11.5,
+                col,
+                650,
+                "end",
+            )
+        )
+        y += 30
+    b.append(
+        text(
+            x0,
+            y + 14,
+            f"Risk {reduce_at} or more is reduced by a control (WP-C-09 method); positions on the car are illustrative.",
+            11,
+            "#9aa3ad",
+        )
+    )
+    b.append(text(28, 40, "Where an attacker could reach", 22, "#ffffff", 700))
+    b.append(
+        text(
+            28,
+            64,
+            "The assets the TARA protects, on and around the robotaxi, coloured by the highest risk of the threats against them.",
+            13.5,
+            "#c9ced6",
+        )
+    )
+    b += stamp(
+        28, H - 44, 11, "ILLUSTRATION · positions illustrative · draft for engineering review"
+    )
+    desc = (
+        "The robotaxi seen from the front left with numbered markers where the assets of the threat analysis "
+        "(WP-C-09) sit, and a list of the assets with their number of threat scenarios and highest risk: "
+        + "; ".join(
+            f"{a.aid} {a.name}, {len(a.threats)} threats, risk {a.max_risk} of {scale}"
+            for a in assets
+        )
+        + "."
+    )
+    return svg(W, H, "Where an attacker could reach", desc, b)
+
+
+REPO_PARTS = [  # folder, where on the robotaxi its subject is, card position (x, y)
+    ("04-hardware", (0.0, -0.2, 1.62), (40, 110)),
+    ("02-concept", (-0.86, 0.6, 0.85), (40, 222)),
+    ("06-validation", (-0.8, 1.4, 0.0), (40, 334)),
+    ("09-production-operation", (0.0, -1.25, 1.52), (850, 110)),
+    ("05-software", (0.0, -1.6, 0.75), (850, 222)),
+    ("03-system", (0.0, -0.95, 0.62), (850, 334)),
+]
+
+
+def repo_map_figure(f: fx.Facts, v: dict, models) -> str:
+    folders = fx.folders()
+    for name, _, _ in REPO_PARTS:
+        if name not in folders:
+            raise fx.FactError(f"assurance/README.md: the Layout table has no folder {name}/")
+    W, H = 1240, 520
+    cam = look_at((-5.4, 6.2, 3.0), (0.0, 0.0), 14, 600, 620, 330)
+    b = [f'<rect width="{W}" height="{H}" fill="url(#sky)"/>']
+    b += ground_grid(cam, -4.0, 4.0, -4.0, 6.0)
+    sx, sy = cam(0, 0, 0)
+    b.append(
+        f'<ellipse cx="{sx:.1f}" cy="{sy + 6:.1f}" rx="150" ry="30" fill="#000" fill-opacity="0.5" filter="url(#soft)"/>'
+    )
+    b += vehicle(cam, models["kiri10"], 0.0, 0.0, 0.0, EGO_PAINT, 0.03)[1]
+    b += xray_box(cam, (0.0, -1.6, 0.75), (1.1, 0.6, 0.3), "#ff8a80")
+    b += xray_box(cam, (0.0, -0.95, 0.62), (0.5, 0.35, 0.18), BLUE2)
+    for name, anchor, (cx_, cy_) in REPO_PARTS:
+        ax, ay = cam(*anchor)
+        cw = 350
+        ex = cx_ if ax < cx_ else cx_ + cw
+        b.append(
+            f'<path d="M{ax:.1f} {ay:.1f} L{ex} {cy_ + 24}" stroke="{VIOLET}" stroke-opacity="0.8" stroke-width="1.3" fill="none"/>'
+        )
+        b.append(f'<circle cx="{ax:.1f}" cy="{ay:.1f}" r="4" fill="{VIOLET}"/>')
+        b.append(
+            f'<g filter="url(#shadow)"><rect x="{cx_}" y="{cy_}" width="{cw}" height="92" rx="10" fill="#111418" fill-opacity="0.94" stroke="{VIOLET}" stroke-opacity="0.7"/></g>'
+        )
+        b.append(text(cx_ + 14, cy_ + 24, f"assurance/{name}/", 13.5, "#ffffff", 700))
+        for k, ln in enumerate(wrap(folders[name], 11.5, cw - 28)[:4]):
+            b.append(text(cx_ + 14, cy_ + 44 + 14.5 * k, ln, 11.5, "#c9ced6"))
+    rest = [n for n in folders if n not in {p[0] for p in REPO_PARTS}]
+    b.append(
+        text(40, 470, "Also in assurance/: " + ", ".join(f"{n}/" for n in rest), 12, "#9aa3ad")
+    )
+    b.append(text(28, 40, "Where each part is documented", 22, "#ffffff", 700))
+    b.append(
+        text(
+            28,
+            64,
+            "The robotaxi with its parts labelled by the assurance/ folder that covers them; descriptions from the Layout table of assurance/README.md.",
+            13.5,
+            "#c9ced6",
+        )
+    )
+    b += stamp(
+        W - tw("ILLUSTRATION · positions illustrative", 11) - 62,
+        22,
+        11,
+        "ILLUSTRATION · positions illustrative",
+    )
+    desc = (
+        "The robotaxi with leader lines to six folders of assurance/ and what each holds: "
+        + "; ".join(f"{n}: {folders[n]}" for n, _, _ in REPO_PARTS)
+        + f". Also in assurance/: {', '.join(rest)}."
+    )
+    return svg(W, H, "Where each part is documented", desc, b)
+
+
 def build() -> dict[Path, str]:
     f = fx.load()
     v = fx.need(f)
@@ -1793,6 +2129,9 @@ def build() -> dict[Path, str]:
         OUT / "remote-driving.svg": remote_figure(f, v, models),
         OUT / "safety-goals.svg": goals_figure(f, v, models),
         OUT / "gates.svg": gates_figure(f, v, models),
+        OUT / "ftti.svg": ftti_figure(f, v, models),
+        OUT / "attack-surface.svg": attack_figure(f, v, models),
+        OUT / "repository-map.svg": repo_map_figure(f, v, models),
     }
 
 
