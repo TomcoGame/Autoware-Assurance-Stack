@@ -55,6 +55,16 @@ class Limit:
 
 
 @dataclass(frozen=True)
+class OddRow:
+    oid: str
+    attribute: str
+    inside: str
+    outside: str
+    detected_by: str
+    state: str
+
+
+@dataclass(frozen=True)
 class Facts:
     elements: dict[str, Element]
     goals: dict[str, tuple[str, str, str]]  # SG id -> (statement, ASIL, safe state)
@@ -62,6 +72,9 @@ class Facts:
     limits: dict[str, Limit]
     decisions: dict[str, str]  # DQ id -> chosen option, applied decisions only
     standards: list[str]  # WP-M-01 §4, in order
+    odd: dict[str, OddRow]  # every ODD attribute of WP-C-02 §3
+    monitors: dict[str, str]  # MON id -> its name, the text before the first colon (WP-C-02 §4)
+    decision_titles: dict[str, str]  # DQ id -> title of the chosen option, applied decisions only
 
     def dq(self, qid: str) -> str:
         """'DQ-002 A' for an applied decision."""
@@ -166,6 +179,40 @@ def limits() -> dict[str, Limit]:
     return out
 
 
+def odd_rows() -> dict[str, OddRow]:
+    out = {}
+    for line in WP_C02.read_text(encoding="utf-8").splitlines():
+        if line.startswith("| ODD-"):
+            c = [fk.plain(x) for x in fk.split_row(line)]
+            if len(c) < 6:
+                raise FactError(f"{WP_C02.name}: {c[0]} has {len(c)} cells, expected 6")
+            out[c[0]] = OddRow(*c[:6])
+    if not out:
+        raise FactError(f"{WP_C02.name}: no ODD attributes")
+    return out
+
+
+def monitors() -> dict[str, str]:
+    out = {}
+    for line in WP_C02.read_text(encoding="utf-8").splitlines():
+        if line.startswith("| MON-"):
+            c = fk.split_row(line)
+            out[fk.plain(c[0])] = fk.plain(c[1]).split(":")[0]
+    return out
+
+
+def decision_titles() -> dict[str, str]:
+    entries = yaml.safe_load(REGISTER.read_text(encoding="utf-8")) or []
+    out = {}
+    for d in entries:
+        choice = (d.get("answer") or {}).get("choice")
+        if d.get("status") == "applied" and choice:
+            for o in d.get("options", []):
+                if o.get("key") == choice:
+                    out[d["id"]] = str(o.get("title", ""))
+    return out
+
+
 def decisions() -> dict[str, str]:
     entries = yaml.safe_load(REGISTER.read_text(encoding="utf-8")) or []
     return {
@@ -181,7 +228,17 @@ def standards() -> list[str]:
 
 
 def load() -> Facts:
-    return Facts(elements(), goals(), requirements(), limits(), decisions(), standards())
+    return Facts(
+        elements(),
+        goals(),
+        requirements(),
+        limits(),
+        decisions(),
+        standards(),
+        odd_rows(),
+        monitors(),
+        decision_titles(),
+    )
 
 
 def need(facts: Facts) -> dict[str, str]:
@@ -190,7 +247,7 @@ def need(facts: Facts) -> dict[str, str]:
     for k in ("EL-01", "EL-02", "EL-03", "EL-04", "EL-09"):
         if k not in el:
             raise FactError(f"{WP_C04.name}: no element {k}")
-    for k in ("SG-02", "SG-06", "SG-07"):
+    for k in ("SG-01", "SG-02", "SG-06", "SG-07", "SG-08"):
         if k not in sg:
             raise FactError(f"{WP_C03.name}: no safety goal {k}")
     for k in ("FSR-06.01", "FSR-06.02"):
@@ -213,6 +270,13 @@ def need(facts: Facts) -> dict[str, str]:
         "dq_mrc": facts.dq("DQ-016"),
         "dq_sg06": facts.dq("DQ-017"),
         "dq_sensors": facts.dq("DQ-018"),
+        "dq_remote": facts.dq("DQ-010"),
+        "dq_remote_title": facts.decision_titles.get("DQ-010", ""),
+        "sg01": sg["SG-01"][1],
+        "sg01_text": sg["SG-01"][0],
+        "sg08": sg["SG-08"][1],
+        "sg08_text": sg["SG-08"][0],
+        "sg08_safe_state": sg["SG-08"][2],
     }
 
 
