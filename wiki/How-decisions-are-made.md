@@ -56,6 +56,12 @@ recorded where the project keeps that kind of decision: strategic decisions in
 product that owns the subject. Work products cite the decision by its identifier, for example "DQ-015 B" for option
 B of DQ-015.
 
+For example, the decision to let remote operators drive (DQ-010) is carried into a safety goal of its own, SG-08 in [WP-C-03](../assurance/02-concept/WP-C-03-hara.md), and into the monitor's checks:
+
+![Remote driving goes through the safety monitor: a remote operations centre sends driving commands that pass through the safety monitor before reaching the robotaxi. Cards give the remote-driving decision, safety goal SG-08 and its safe state.](../tools/readme/figures/remote-driving.svg)
+
+*Concept illustration: the safety monitor is not built yet. Labels read from the work products by [`figures.py`](../tools/readme/figures.py); vehicle model CC BY 4.0, see [credits](../tools/readme/models/CREDITS.md).*
+
 ## How the lead answers
 
 Open questions are shown to the lead on a private inbox page built from the register by

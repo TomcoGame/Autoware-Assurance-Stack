@@ -10,6 +10,7 @@ from __future__ import annotations
 import contextlib
 import io
 from pathlib import Path
+import re
 import struct
 import sys
 import unittest
@@ -293,6 +294,26 @@ class Figures(unittest.TestCase):
         self.assertIn(escape(v["sg07_safe_state"]), mrc)
         self.assertIn(v["dq_mrc"], mrc)
         self.assertIn("ILLUSTRATION", mrc)
+
+    def test_odd_figure_quotes_inside_and_outside(self):
+        f = fx.load()
+        odd = self.out[figures.OUT / "odd.svg"]
+        flat = " ".join(re.findall(r">([^<]*)</text>", odd))
+        for k in ("ODD-03", "ODD-10", "ODD-11"):
+            for part in (f.odd[k].inside, f.odd[k].outside):
+                self.assertIn(" ".join(escape(part).split()), flat, k)
+
+    def test_two_ways_and_remote_figures_use_the_records(self):
+        v = fx.need(fx.load())
+        two = self.out[figures.OUT / "two-ways-to-be-unsafe.svg"]
+        self.assertIn(escape(v["sg01_text"].lower()), two)
+        self.assertIn("glare", two)
+        remote = " ".join(
+            re.findall(r">([^<]*)</text>", self.out[figures.OUT / "remote-driving.svg"])
+        )
+        self.assertIn(escape(v["sg08_text"]), remote)
+        self.assertIn(v["dq_remote"], remote)
+        self.assertIn("not built yet", remote)
 
     def test_sizes_stay_reasonable_for_a_readme(self):
         for path, text in self.out.items():

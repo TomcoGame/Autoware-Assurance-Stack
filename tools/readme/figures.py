@@ -16,6 +16,7 @@ from __future__ import annotations
 import math
 from pathlib import Path
 import random
+import re
 import sys
 from xml.sax.saxutils import escape
 
@@ -1113,6 +1114,380 @@ def mrc_figure(f: fx.Facts, v: dict, models) -> str:
     return svg(W, H, "Minimal risk condition", desc, b)
 
 
+# ---------------------------------------------------------------- wiki figures: ODD, two questions, remote driving
+
+
+def wrap(s: str, size: float, width: float) -> list[str]:
+    words, line_, out = s.split(), "", []
+    for w in words:
+        if line_ and tw(f"{line_} {w}", size) > width:
+            out.append(line_)
+            line_ = w
+        else:
+            line_ = f"{line_} {w}".strip()
+    return out + ([line_] if line_ else [])
+
+
+def panel_frame(b, i, ox, top, pw, ph, color):
+    """Open a clipped panel; returns the id so the caller can close it with </g>."""
+    clip = f"p{i}"
+    b.append(
+        f'<clipPath id="{clip}"><rect x="{ox:.0f}" y="{top}" width="{pw:.0f}" height="{ph}" rx="12"/></clipPath>'
+    )
+    b.append(
+        f'<g clip-path="url(#{clip})"><rect x="{ox:.0f}" y="{top}" width="{pw:.0f}" height="{ph}" fill="#15181d"/>'
+    )
+    band = f'<rect x="{ox:.0f}" y="{top}" width="{pw:.0f}" height="42" fill="#0b0d10" fill-opacity="0.72"/>'
+    return (
+        band
+        + f'<rect x="{ox:.0f}" y="{top}" width="{pw:.0f}" height="{ph}" rx="12" fill="none" stroke="{color}" stroke-opacity="0.6"/>'
+    )
+
+
+def sign(cam, x, y, value, ring, k=2.2):
+    """A US speed limit sign on a post, facing the camera; drawn `k` times life size to be legible."""
+    w, h, z = 0.32 * k, 0.42 * k, 1.6 + 0.42 * k
+    out = [line(cam, (x, y, 0), (x, y, z), "stroke:#9aa0a6;stroke-width:2")]
+    out.append(
+        poly(
+            cam,
+            [(x - w, y, z - h), (x + w, y, z - h), (x + w, y, z + h), (x - w, y, z + h)],
+            f"fill:#f4f5f7;stroke:{ring};stroke-width:3",
+        )
+    )
+    cx_, cy_ = cam(x, y, z)
+    scale = cam.focal / max(cam.depth((x, y, z)), 1.0)
+    out.append(
+        text(
+            cx_,
+            cy_ - 0.2 * k * scale,
+            "SPEED LIMIT",
+            max(4.0, 0.1 * k * scale),
+            "#111",
+            700,
+            "middle",
+        )
+    )
+    out.append(
+        text(cx_, cy_ + 0.25 * k * scale, value, max(6.0, 0.36 * k * scale), "#111", 800, "middle")
+    )
+    return out
+
+
+def rain(ox, top, pw, ph, n, rnd):
+    d = "".join(
+        f"M{ox + rnd.uniform(0, pw):.0f} {top + rnd.uniform(0, ph):.0f}l-4 14" for _ in range(n)
+    )
+    return f'<path d="{d}" stroke="#b8c7e0" stroke-opacity="0.45" stroke-width="1.2" fill="none"/>'
+
+
+def odd_figure(f: fx.Facts, v: dict, models) -> str:
+    W, H, top, ph = 1200, 560, 92, 270
+    rows = [f.odd[k] for k in ("ODD-03", "ODD-10", "ODD-11")]
+    speed_in = re.search(r"(\d+) mph", rows[0].inside)
+    speed_out = re.search(r"(\d+) mph", rows[0].outside)
+    if not (speed_in and speed_out):
+        raise fx.FactError("WP-C-02 ODD-03 no longer gives the speeds in mph")
+    rnd = random.Random(34503)
+    b = [
+        f'<rect width="{W}" height="{H}" fill="url(#sky)"/>',
+        '<defs><linearGradient id="fogv" x1="0" y1="1" x2="0" y2="0"><stop offset="0.25" stop-color="#c9ced6" stop-opacity="0"/>'
+        '<stop offset="0.75" stop-color="#c9ced6" stop-opacity="0.85"/></linearGradient></defs>',
+    ]
+    pw = (W - 48) / 3
+    for i, row in enumerate(rows):
+        ox = 12 + i * (pw + 12)
+        border = panel_frame(b, i, ox, top, pw, ph, VIOLET)
+        cam = r3.Camera(pos=(1.0, -12.0, 6.0), pitch=17, focal=430, cx=ox + pw / 2, cy=top + 165)
+        b += road(cam)
+        b += vehicle(cam, models["kiri10"], EGO[0], 0.0, 0.0, EGO_PAINT, 0.04)[1]
+        if i == 0:
+            b += sign(cam, 5.2, 9.0, speed_in.group(1), "#2fbf71")
+            b.append(
+                poly(
+                    cam,
+                    [(-40, 24, 0), (40, 24, 0), (40, 24, 3), (-40, 24, 3)],
+                    "fill:url(#curtain)",
+                )
+            )
+            b.append(
+                line(
+                    cam, (-40, 24), (40, 24), f"stroke:{VIOLET};stroke-width:2;stroke-dasharray:9 6"
+                )
+            )
+            b += sign(cam, 5.2, 30.0, speed_out.group(1), RED)
+            b += tag(cam, (-4.0, 24, 3.2), "geofence: the route stays inside", VIOLET)
+        elif i == 1:
+            b.append(rain(ox, top, pw, ph, 260, rnd))
+        else:
+            b.append(
+                f'<rect x="{ox:.0f}" y="{top}" width="{pw:.0f}" height="{ph}" fill="url(#fogv)"/>'
+            )
+        b.append(
+            f'<rect x="{ox:.0f}" y="{top}" width="{pw:.0f}" height="{ph}" fill="url(#vignette)"/>'
+        )
+        b.append("</g>")
+        b.append(border)
+        b.append(text(ox + 16, top + 26, f"{row.oid} · {row.attribute}", 14.5, "#ffffff", 700))
+        y = top + ph + 26
+        for label, body, col in (
+            ("Inside", row.inside, "#2fbf71"),
+            ("Outside", row.outside, "#ff8a80"),
+        ):
+            b.append(text(ox + 4, y, label.upper(), 10.5, col, 700, extra='letter-spacing="1"'))
+            for k, ln in enumerate(wrap(body, 12.5, pw - 10)[:3]):
+                b.append(text(ox + 4, y + 17 + 16 * k, ln, 12.5, "#e3e6ea"))
+            y += 17 + 16 * min(3, len(wrap(body, 12.5, pw - 10))) + 10
+        mon = row.detected_by.split()[0]
+        b.append(
+            text(
+                ox + 4,
+                y + 4,
+                f"Detected by {mon} ({f.monitors.get(mon, '?')}) · {row.state.split(';')[0]}",
+                11.5,
+                VIOLET,
+            )
+        )
+    b.append(text(28, 40, "Inside and outside the ODD", 22, "#ffffff", 700))
+    b.append(
+        text(
+            28,
+            64,
+            "Anything the vehicle cannot handle must be outside the ODD, or it must notice and reach a minimal risk condition by itself.",
+            13.5,
+            "#c9ced6",
+        )
+    )
+    b += stamp(
+        W - tw("ILLUSTRATION · draft for engineering review", 11) - 62,
+        22,
+        11,
+        "ILLUSTRATION · draft for engineering review",
+    )
+    desc = (
+        "Three panels of the robotaxi on a city street. Speed: a "
+        f"{speed_in.group(1)} mph sign inside the geofence and a {speed_out.group(1)} mph sign beyond it. Rain. Fog. "
+        "Under each, the inside and outside of the attribute as WP-C-02 states it, and the monitor that detects it."
+    )
+    return svg(W, H, "Inside and outside the ODD", desc, b)
+
+
+def two_ways_figure(f: fx.Facts, v: dict, models) -> str:
+    W, H, top, ph = 1200, 500, 92, 300
+    glare = f.odd["ODD-12"].outside.split(";")[-1].strip()
+    if "glare" not in glare:
+        raise fx.FactError("WP-C-02 ODD-12 no longer names glare as a triggering condition")
+    b = [
+        f'<rect width="{W}" height="{H}" fill="url(#sky)"/>',
+        '<defs><radialGradient id="sun" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff6d8" stop-opacity="1"/>'
+        '<stop offset="0.25" stop-color="#ffe7a3" stop-opacity="0.75"/><stop offset="1" stop-color="#ffcf6e" stop-opacity="0"/></radialGradient></defs>',
+    ]
+    pw = (W - 36) / 2
+    panels = [
+        (
+            "ISO 26262",
+            STANDARD_QUESTIONS["ISO 26262"][0],
+            "A part fails",
+            f"For example SG-01: {v['sg01_text'].lower()}",
+            f"ASIL {v['sg01']} · WP-C-03",
+            RED,
+        ),
+        (
+            "ISO 21448",
+            STANDARD_QUESTIONS["ISO 21448"][0],
+            "Nothing fails, but it is not good enough",
+            f"For example: {glare}",
+            "SOTIF · WP-C-02 ODD-12",
+            AMBER,
+        ),
+    ]
+    for i, (std, q, title, sub, src, col) in enumerate(panels):
+        ox = 12 + i * (pw + 12)
+        border = panel_frame(b, i, ox, top, pw, ph, col)
+        cam = r3.Camera(pos=(1.0, -12.0, 6.0), pitch=17, focal=520, cx=ox + pw / 2, cy=top + 172)
+        b += road(cam)
+        if i == 0:
+            arrow = [cam(EGO[0], y, 0.03) for y in (3.0, 16.0)]
+            b.append(
+                f'<path d="M{arrow[0][0]:.1f} {arrow[0][1]:.1f}L{arrow[1][0]:.1f} {arrow[1][1]:.1f}" stroke="{RED}" stroke-width="7" stroke-opacity="0.7" fill="none" marker-end="url(#ah)"/>'
+            )
+            b.append(
+                f'<defs><marker id="ah" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="{RED}"/></marker></defs>'
+            )
+            b += vehicle(cam, models["kiri10"], EGO[0], 0.0, 0.0, EGO_PAINT, 0.035)[1]
+            sx, sy = cam(EGO[0], -0.4, 0.9)
+            b.append(
+                f'<circle class="pulse" cx="{sx:.1f}" cy="{sy:.1f}" r="16" fill="{RED}" fill-opacity="0.55" filter="url(#soft)"/>'
+            )
+            b += tag(cam, (EGO[0] - 1.6, -1.0, 1.9), "fault", "#ffb4ae")
+        else:
+            hx, hy = cam(-6, 120, 6)
+            b.append(f'<circle cx="{hx:.0f}" cy="{hy:.0f}" r="150" fill="url(#sun)"/>')
+            b += cylinder(cam, PED[0], PED[1], 0.35, 1.75, "#ffffff")
+            px, py = cam(PED[0], PED[1], 0.9)
+            b.append(f'<circle cx="{px:.0f}" cy="{py:.0f}" r="70" fill="url(#sun)" opacity="0.8"/>')
+            b += detection_box(cam, PED[0], PED[1], 0, (0.9, 0.9, 1.9), AMBER)
+            b += tag(cam, (PED[0], PED[1], 2.4), "not detected?", AMBER)
+            b += vehicle(cam, models["kiri10"], EGO[0], 0.0, 0.0, EGO_PAINT, 0.035)[1]
+        b.append(
+            f'<rect x="{ox:.0f}" y="{top}" width="{pw:.0f}" height="{ph}" fill="url(#vignette)"/>'
+        )
+        b.append("</g>")
+        b.append(border)
+        b.append(text(ox + 16, top + 28, f"{std} · {q}", 15, "#ffffff", 700))
+        b.append(text(ox + 16, top + ph + 28, title, 15, col, 700))
+        for k, ln in enumerate(wrap(sub, 12.5, pw - 20)[:2]):
+            b.append(text(ox + 16, top + ph + 48 + 16 * k, ln, 12.5, "#e3e6ea"))
+        b.append(text(ox + 16, top + ph + 86, src, 11.5, col, 650))
+    b.append(text(28, 40, "Two ways to be unsafe", 22, "#ffffff", 700))
+    b.append(
+        text(
+            28,
+            64,
+            "Functional safety asks what happens when something fails; SOTIF asks what happens when nothing fails but the function is not good enough.",
+            13.5,
+            "#c9ced6",
+        )
+    )
+    b += stamp(
+        W - tw("ILLUSTRATION · draft for engineering review", 11) - 62,
+        22,
+        11,
+        "ILLUSTRATION · draft for engineering review",
+    )
+    desc = (
+        f"Left, ISO 26262: a fault makes the robotaxi accelerate when nothing asked it to; safety goal SG-01, {v['sg01_text']}, "
+        f"ASIL {v['sg01']}. Right, ISO 21448: nothing has failed, but low sun dazzles the sensors and a pedestrian on the "
+        f"crosswalk may not be detected; WP-C-02 says {glare}."
+    )
+    return svg(W, H, "Two ways to be unsafe", desc, b)
+
+
+def operator_station(x, y):
+    """A remote operations desk: three screens and an operator, drawn flat."""
+    return [
+        f'<rect x="{x}" y="{y + 70}" width="190" height="12" rx="3" fill="#2a2f37"/>',
+        *[
+            f'<rect x="{x + 8 + 60 * i}" y="{y + 18}" width="54" height="36" rx="4" fill="#1d2633" stroke="{BLUE2}" stroke-width="1.2"/>'
+            for i in range(3)
+        ],
+        *[
+            f'<rect x="{x + 30 + 60 * i}" y="{y + 54}" width="10" height="16" fill="#2a2f37"/>'
+            for i in range(3)
+        ],
+        f'<circle cx="{x + 95}" cy="{y + 96}" r="13" fill="#3a4250"/>',
+        f'<path d="M{x + 70} {y + 140} Q{x + 95} {y + 105} {x + 120} {y + 140} Z" fill="#3a4250"/>',
+        text(x + 95, y + 162, "Remote operations centre", 12.5, "#dfe2e6", 650, "middle"),
+    ]
+
+
+def note2(x, y, w, num, title, sub, src, color):
+    """A card with up to two lines of body text."""
+    lines_ = wrap(sub, 11.5, w - 28)[:2]
+    h = 50 + 15 * len(lines_)
+    out = [
+        f'<g filter="url(#shadow)"><rect x="{x}" y="{y}" width="{w}" height="{h}" rx="10" fill="#111418" fill-opacity="0.92" stroke="{color}" stroke-opacity="0.75" stroke-width="1.2"/></g>',
+        f'<circle cx="{x + 20}" cy="{y + 21}" r="10" fill="{color}"/>',
+        text(x + 20, y + 25.5, num, 12, "#0d0f12", 800, "middle"),
+        text(x + 38, y + 26, title, 14, "#f3f4f6", 650),
+    ]
+    out += [text(x + 14, y + 44 + 15 * k, ln, 11.5, "#b9bfc8") for k, ln in enumerate(lines_)]
+    out.append(
+        text(
+            x + 14,
+            y + 44 + 15 * len(lines_) + 2,
+            src,
+            10.5,
+            color,
+            650,
+            extra='letter-spacing="0.2"',
+        )
+    )
+    return out
+
+
+def remote_figure(f: fx.Facts, v: dict, models) -> str:
+    W, H = 1200, 490
+    cam = r3.Camera(pos=(-2.0, -11.0, 6.5), pitch=20, focal=620, cx=760, cy=300)
+    b = [f'<rect width="{W}" height="{H}" fill="url(#sky)"/>']
+    b += road(cam)
+    b += vehicle(cam, models["kiri10"], EGO[0], 6.0, 0.0, EGO_PAINT, 0.03)[1]
+    ax, ay = cam(EGO[0], 5.6, 1.7)
+    b.append(f'<circle cx="{ax:.1f}" cy="{ay:.1f}" r="4" fill="{GREEN}"/>')
+    b += operator_station(70, 190)
+    mx, my = 470, 250  # the monitor on the command path
+    b.append(
+        f'<path d="M262 245 C330 200 400 200 {mx - 46} {my - 6}" stroke="{BLUE2}" stroke-width="2.2" stroke-dasharray="6 5" fill="none" class="pulse"/>'
+    )
+    b.append(
+        f'<path d="M{mx + 46} {my - 6} C560 180 {ax - 60:.0f} {ay - 50:.0f} {ax:.1f} {ay:.1f}" stroke="{BLUE2}" stroke-width="2.2" stroke-dasharray="6 5" fill="none" class="pulse"/>'
+    )
+    b.append(
+        f'<g filter="url(#shadow)"><rect x="{mx - 46}" y="{my - 30}" width="92" height="48" rx="10" fill="#111a2b" stroke="{BLUE}" stroke-width="1.6"/></g>'
+    )
+    b.append(text(mx, my - 9, "Safety monitor", 12, "#ffffff", 700, "middle"))
+    b.append(text(mx, my + 8, f"ASIL {v['monitor']}", 11, BLUE2, 650, "middle"))
+    b.append(
+        text(
+            mx,
+            my + 34,
+            "on the vehicle; drawn apart to show the path",
+            10.5,
+            "#9aa3ad",
+            400,
+            "middle",
+        )
+    )
+    b += note2(
+        40,
+        380,
+        300,
+        "1",
+        "Remote operators may drive",
+        v["dq_remote_title"],
+        v["dq_remote"],
+        "#d5d9df",
+    )
+    b += note2(
+        356,
+        380,
+        400,
+        "2",
+        "Only fresh, intact commands",
+        v["sg08_text"],
+        f"SG-08 · ASIL {v['sg08']}",
+        BLUE2,
+    )
+    safe = v["sg08_safe_state"][0].lower() + v["sg08_safe_state"][1:]
+    b += note2(
+        772,
+        380,
+        390,
+        "3",
+        "Otherwise it stops",
+        f"{safe}; the link's loss or delay is watched by MON-04 ({f.monitors.get('MON-04', '?')})",
+        "SG-08 safe state · WP-C-02 §4",
+        AMBER,
+    )
+    b.append(text(28, 40, "Remote driving goes through the safety monitor", 22, "#ffffff", 700))
+    b.append(
+        text(
+            28,
+            64,
+            "A remote operator's command is bounded like Autoware's: the monitor checks it, and stops the vehicle if it is stale or not the operator's.",
+            13.5,
+            "#c9ced6",
+        )
+    )
+    b += stamp(W - tw(STAMP, 11) - 62, 84, 11)
+    desc = (
+        f"A remote operations centre sends driving commands over a wireless link; they pass through the safety monitor "
+        f"(ASIL {v['monitor']}) before reaching the robotaxi. Cards: {v['dq_remote']}, {v['dq_remote_title']}; SG-08, "
+        f"{v['sg08_text']}, ASIL {v['sg08']}; otherwise {v['sg08_safe_state'].lower()}, with MON-04 watching the link."
+    )
+    return svg(W, H, "Remote driving", desc, b)
+
+
 def build() -> dict[Path, str]:
     f = fx.load()
     v = fx.need(f)
@@ -1124,6 +1499,9 @@ def build() -> dict[Path, str]:
         OUT / "standards.svg": standards(f),
         OUT / "item.svg": item_figure(f, v, models),
         OUT / "minimal-risk-condition.svg": mrc_figure(f, v, models),
+        OUT / "odd.svg": odd_figure(f, v, models),
+        OUT / "two-ways-to-be-unsafe.svg": two_ways_figure(f, v, models),
+        OUT / "remote-driving.svg": remote_figure(f, v, models),
     }
 
 
