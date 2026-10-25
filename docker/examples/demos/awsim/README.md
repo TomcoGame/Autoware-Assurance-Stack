@@ -1,6 +1,6 @@
 # awsim
 
-Bridges autoware to the [AWSIM](https://tier4.github.io/AWSIM/) Unity simulator over `network_mode: host` and launches `e2e_simulator.launch.xml`. AWSIM itself runs on the host (or elsewhere on the LAN); this container is the autoware side of the bridge.
+Bridges autoware to the [AWSIM](https://github.com/tier4/AWSIM) Unity simulator over `network_mode: host` and launches `e2e_simulator.launch.xml`. AWSIM itself runs on the host (or elsewhere on the LAN); this container is the autoware side of the bridge.
 
 ## Prerequisites
 
