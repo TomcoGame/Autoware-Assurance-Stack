@@ -1,0 +1,1291 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1070" height="4411" viewBox="0 0 1070 4411" role="img" aria-labelledby="t d">
+<title id="t">WP-V-03 Figure 2-1: the known scenarios</title>
+<desc id="d">Known scenarios: SC-01 Pedestrian on or stepping onto a marked crosswalk: passes when No contact with the pedestrian; the vehicle yields as the traffic rules require, and the monitor commands the deceleration that restores the safe distance whenever Autoware does not; unjustified hard braking counts against the SOTIF acceptance criteria; SC-02 Pedestrian emerging from behind a parked vehicle: passes when The vehicle's speed near the occlusion lets it stop for a road user emerging at the assumed speed; no contact, and no swerve out of the drivable area to avoid one; SC-03 Vehicle ahead braking or stopping in congested traffic: passes when No collision with the vehicle ahead; acceleration stays inside the envelope, the monitor restores the safe longitudinal distance, and a braking shortfall on a wet road switches to the secondary path; SC-04 Spurious obstacle with a road user following: passes when Braking that the safety channel does not confirm stays at or below the firm level; emergency braking happens only when a road user is confirmed; a blocked safety sensor is detected and Autoware stops comfortably; the belt warning acts; SC-05 Signalised intersection with cross traffic: passes when The vehicle enters only on a recognised green and treats an unknown signal as red; whatever the signal, it does not enter when its swept path crosses that of a detected road user before it could stop or clear; SC-06 Unprotected left turn across oncoming traffic: passes when The vehicle starts the turn only with a gap that lets the oncoming road user pass at its assumed speed and acceleration, and stops before the conflict area otherwise; SC-07 Entry to a roundabout with traffic circulating: passes when The vehicle yields to circulating traffic and enters only with a gap that its assumed speed allows; SC-08 Cyclist alongside on the inside of a turn: passes when No steering command whose swept path comes within the safe lateral distance of the cyclist is executed; the vehicle waits or stops in lane; SC-09 Lane keeping where localisation is degraded: passes when The vehicle stays in its lane and drivable area; a steering command toward a detected road user or kerb is rejected and the vehicle stops in lane; a degraded pose is detected; SC-10 Work zone or re-marked lanes not yet in the map: passes when The divergence monitor detects the disagreement and the vehicle carries out a minimal risk manoeuvre; it never follows the map into a closed lane; SC-11 Person directing traffic: passes when The vehicle detects the person directing traffic, stops safely and asks for remote assistance; it does not move on the signal alone, and responders can stop or hold it; SC-12 Emergency vehicle approaching with siren and lights: passes when The vehicle detects the emergency vehicle, pulls to the side when safe or stops, and lets it pass; when it cannot yield it reaches a minimal risk condition; SC-13 Rare object or debris in the lane: passes when The vehicle stops before the object or passes it within the lane when clear; a vehicle that cannot find a way on reaches a minimal risk condition and asks for help; SC-14 Weather changing toward the ODD limits during a trip: passes when The weather monitor detects the exit, treats a reading it cannot tell from the limit as outside, and the vehicle reaches a minimal risk condition; detection inside the ODD still meets the safety channel's requirement; SC-15 Kerbside stop while passengers board or alight: passes when The vehicle does not move with a door open or a person in the near field in the direction of travel, never reverses, and resumes only when every release condition holds; SC-16 Stopped at a red light with pedestrians crossing in front: passes when The vehicle stays held until every release condition holds; motion while holding is detected and the park brake applied; no acceleration toward a detected road user; SC-17 Loss of Autoware while driving: passes when The monitor detects the loss within its detection budget and stops the vehicle in lane with hazard lights on, without Autoware; a fault of the monitor itself leads to the vehicle's own stop, never to the park brake while moving; SC-18 Pull-over minimal risk manoeuvre along a busy kerb: passes when The vehicle pulls over only into a mapped safe stopping place and stops in lane otherwise; repeated stop requests go to a remote operator; SC-19 Passengers leaving at a stop in lane: passes when The vehicle holds the minimal risk condition with hazard lights on and warns passengers of traffic on their side before they leave; the residual risk counts against the SOTIF acceptance criteria; SC-20 Remote driving with a delayed or lost link: passes when Commands older than the age bound, out of sequence or failing their integrity check are rejected and the vehicle stops; the envelope checks apply to remote commands as to Autoware's; a remote emergency stop brakes firmly unless the safety channel confirms a road user; SC-21 Remote release of the wrong vehicle or at the wrong moment: passes when A release moves the vehicle only when it is bound to that vehicle, authentic and fresh, and the release conditions hold; SC-22 Turn indicator during a turn or lane change: passes when The indicator always matches the commanded and achieved steering direction; on a mismatch hazard lights come on; SC-23 Give and take with other drivers: passes when The vehicle takes its turn as the rules give it and shows when it yields and when it is about to move; its hesitations and stops count against the SOTIF acceptance criteria; SC-24 Passenger misuse and emergencies in the cabin: passes when No control is reachable from the cabin; every seat reaches a remote operator who can divert the vehicle; no trip ends with a person inside without an operator's decision; SC-25 First responders at a collision: passes when The vehicle stops and holds after a collision; doors open from inside without power; responders can find the isolation points and reach remote operations; SC-26 Return to service after maintenance: passes when The vehicle refuses driverless dispatch until calibration, cleanliness and versions are checked and recorded; parameter changes outside the release process are rejected.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg { --req:#23875a; --perf:#c2412b; --road:#e9ebee; --verge:#f7f8f9; --lane:#ffffff; --zeb:#ffffff;
+ --ego:#c2412b; --oth:#9aa1ab; --amber:#e39b00; --a3:#d4644a; --a1:#f5dcd3; --t1:#3b140b; }
+@media (prefers-color-scheme: dark) { svg { --req:#45b882; --perf:#ff7a63; --road:#2b2f36; --verge:#1b1e22;
+ --lane:#7f8792; --zeb:#c9ced6; --ego:#ff7a63; --oth:#6f7782; --amber:#f2b84b; --a3:#bb4f34; --a1:#4a2820; --t1:#f6e3dd; } }
+svg .plot { fill:var(--bg); stroke:var(--grid); stroke-width:1; }
+svg .axis { stroke:var(--ink3); stroke-width:1; }
+svg .ax { font:10.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .req { fill:none; stroke:var(--req); stroke-width:2; stroke-dasharray:5 4; }
+svg .perf { fill:none; stroke:var(--perf); stroke-width:2.4; stroke-linejoin:round; }
+svg .on { stroke:var(--perf); stroke-width:1; stroke-dasharray:2 3; }
+svg .cur { stroke:var(--ink2); stroke-width:1; opacity:.55; }
+svg .verge { fill:var(--verge); stroke:var(--grid); stroke-width:1; }
+svg .road { fill:var(--road); }
+svg .lane { stroke:var(--lane); stroke-width:1.5; stroke-dasharray:8 7; }
+svg .kerb { stroke:var(--ink3); stroke-width:1.2; }
+svg .zebra { fill:var(--zeb); }
+svg .stop { stroke:var(--zeb); stroke-width:3; }
+svg .oth { fill:var(--oth); }
+svg .ego { fill:var(--ego); } svg .egow { fill:var(--bg); opacity:.75; }
+svg .ghost { fill:none; stroke:var(--req); stroke-width:1.4; stroke-dasharray:3 2; } svg .ghostw { fill:none; }
+svg .ped { fill:var(--ink); }
+svg .bike { fill:var(--ink2); }
+svg .mast { fill:none; stroke:var(--ink2); stroke-width:1.6; }
+svg .ipath { fill:none; stroke:var(--req); stroke-width:2; stroke-dasharray:5 4; }
+svg .apath { fill:none; stroke:var(--perf); stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1 1; }
+svg .fault { fill:var(--perf); }
+svg .fx { font:700 10px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--bg); }
+svg .ring { fill:none; stroke:var(--perf); stroke-width:1.6; }
+svg .callout { fill:var(--perf); }
+svg .ct { font:600 11px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--bg); }
+svg .bl-bad { fill:var(--amber); }
+svg .gid { font:700 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .pr { fill:var(--a3); } svg .pf { fill:var(--a1); }
+svg .prt { font:600 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:#ffffff; }
+svg .pft { font:600 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--t1); }
+svg .lr { stroke:var(--req); stroke-width:2; stroke-dasharray:5 4; } svg .lp { stroke:var(--perf); stroke-width:2.4; }
+svg { --mon:#2d55c8; --monsoft:#e7ecfb; --bad2:#c2412b; }
+@media (prefers-color-scheme: dark) { svg { --mon:#86a2ff; --monsoft:#232c48; --bad2:#ff7a63; } }
+svg .hd { font:600 11px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .sego { fill:var(--mon); }
+svg .key { fill:var(--amber); } svg .kt { font:700 10px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--amber); }
+svg .plan { fill:none; stroke:var(--ink3); stroke-width:1.6; stroke-dasharray:2 4; }
+svg .pring { fill:none; stroke:var(--req); stroke-width:1.6; }
+svg .pcall { fill:var(--req); }
+svg .amb { fill:var(--amber); }
+svg .bcn { fill:#2d55c8; } svg .bcr { fill:#d23a2a; }
+svg .sig { fill:var(--ink2); } svg .sr { fill:#e0412f; } svg .sg { fill:#2fb36c; } svg .soff { fill:var(--ink3); opacity:.5; }
+svg .isle { fill:var(--verge); stroke:var(--ink3); stroke-width:1.2; }
+svg .cone { fill:var(--amber); }
+svg .sat { fill:none; stroke:var(--ink3); stroke-width:1.4; } svg .xo { stroke:var(--bad2); stroke-width:1.8; }
+svg .phan { fill:none; stroke:var(--amber); stroke-width:1.4; stroke-dasharray:3 2; }
+svg .armk { stroke:var(--amber); stroke-width:2.2; stroke-linecap:round; }
+svg .fog { fill:var(--ink3); opacity:.12; } svg .drop { stroke:var(--ink3); stroke-width:1.2; }
+svg .doorp { fill:var(--amber); }
+svg .bay { fill:none; stroke:var(--req); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .hit { fill:var(--bad2); }
+svg .cab { fill:var(--card); stroke:var(--ink3); stroke-width:1.4; }
+svg .seat { fill:var(--road); } svg .sos { fill:var(--amber); }
+svg .sheet { fill:var(--card); stroke:var(--ink3); stroke-width:1.2; } svg .box { fill:none; stroke:var(--ink3); stroke-width:1.2; }
+svg .xp { fill:var(--bg); stroke:var(--bad2); stroke-width:1.2; } svg .xpt { font:600 10.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--bad2); }
+svg .oc { fill:var(--card); stroke:var(--ink3); stroke-width:1; } svg .oct { font:10px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink2); }
+svg .ox { fill:var(--card); stroke:var(--bad2); stroke-width:1.6; } svg .oxt { font:600 10px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--bad2); }
+svg .ob { fill:none; stroke:var(--ink3); stroke-width:1; stroke-dasharray:3 2; } svg .obt { font:10px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink3); }
+svg .mp { fill:var(--monsoft); stroke:var(--mon); stroke-width:1; } svg .mpt { font:10px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--mon); }
+</style>
+<rect class="bg" width="1070" height="4411"/>
+<text x="24" y="34" class="h">What each known scenario sets up, and when it passes</text>
+<text x="24" y="56" class="t">WP-V-03 §2, Figure 2-1: one concrete instance of each logical scenario, what it exercises, the ODD attributes it varies, its methods and pass criterion,</text>
+<text x="24" y="73" class="t">and the verification cases of WP-S-09 that run it. Schematic: the ranges are in §2.2, and no scenario has been run.</text>
+<rect x="24" y="96" width="330" height="515" rx="8" class="card"/>
+<text x="38" y="120" class="gid">SC-01</text>
+<text x="38" y="140" class="tb">Pedestrian on or stepping onto a marked</text>
+<text x="38" y="156" class="tb">crosswalk</text>
+<rect x="39" y="162" width="300" height="120" rx="6" class="verge"/>
+<rect x="39" y="192" width="300" height="64" class="road"/>
+<line x1="39" y1="224" x2="339" y2="224" class="lane"/>
+<line x1="39" y1="192" x2="339" y2="192" class="kerb"/>
+<line x1="39" y1="256" x2="339" y2="256" class="kerb"/>
+<rect x="245" y="195" width="24" height="4" class="zebra"/>
+<rect x="245" y="203" width="24" height="4" class="zebra"/>
+<rect x="245" y="211" width="24" height="4" class="zebra"/>
+<rect x="245" y="219" width="24" height="4" class="zebra"/>
+<rect x="245" y="227" width="24" height="4" class="zebra"/>
+<rect x="245" y="235" width="24" height="4" class="zebra"/>
+<rect x="245" y="243" width="24" height="4" class="zebra"/>
+<rect x="245" y="251" width="24" height="4" class="zebra"/>
+<line x1="238" y1="225" x2="238" y2="255" class="stop"/>
+<g><circle cx="257" cy="232" r="4.2" class="key"/><animateTransform attributeName="transform" type="translate" values="0 -50;0 -45.8;0 -41.7;0 -37.5;0 -33.3;0 -29.2;0 -25;0 -20.8;0 -16.7;0 -12.5;0 -8.3;0 -4.2;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<path d="M61 240 L225 240" class="ipath"/>
+<g><rect x="213" y="233.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="-164 0;-150.3 0;-136.7 0;-123 0;-109.3 0;-95.7 0;-82 0;-68.3 0;-54.7 0;-41 0;-27.3 0;-13.7 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="225" cy="240" r="12" class="pring"/><rect x="140.4" y="168" width="169.2" height="18" rx="9" class="pcall"/><text x="225" y="181" class="ct" text-anchor="middle">yields before the crosswalk</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="38" y="302" class="ax">Hazardous events: HE-02.1, HE-06.4</text>
+<text x="38" y="316" class="ax">Triggering conditions: TC-02, TC-03, TC-15</text>
+<text x="38" y="330" class="ax">Misuse: MU-11</text>
+<text x="38" y="344" class="ax">Loss scenarios: LS-01, LS-02</text>
+<text x="38" y="358" class="ax">Goals at stake: SG-02, SG-03, SG-06</text>
+<text x="38" y="380" class="hd">Varies</text>
+<rect x="88" y="368" width="46.5" height="16" rx="8" class="oc"/>
+<text x="111.2" y="380" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="139.5" y="368" width="46.5" height="16" rx="8" class="oc"/>
+<text x="162.8" y="380" class="oct" text-anchor="middle">ODD-03</text>
+<rect x="191" y="368" width="46.5" height="16" rx="8" class="oc"/>
+<text x="214.2" y="380" class="oct" text-anchor="middle">ODD-05</text>
+<rect x="242.5" y="368" width="46.5" height="16" rx="8" class="oc"/>
+<text x="265.8" y="380" class="oct" text-anchor="middle">ODD-16</text>
+<rect x="88" y="388" width="46.5" height="16" rx="8" class="oc"/>
+<text x="111.2" y="400" class="oct" text-anchor="middle">ODD-12</text>
+<rect x="139.5" y="388" width="46.5" height="16" rx="8" class="oc"/>
+<text x="162.8" y="400" class="oct" text-anchor="middle">ODD-10</text>
+<rect x="191" y="388" width="46.5" height="16" rx="8" class="oc"/>
+<text x="214.2" y="400" class="oct" text-anchor="middle">ODD-13</text>
+<rect x="88" y="408" width="98.2" height="16" rx="8" class="ob"/>
+<text x="137.1" y="420" class="obt" text-anchor="middle">bound FSR-06.01</text>
+<text x="38" y="442" class="hd">Methods</text>
+<rect x="88" y="430" width="69.5" height="16" rx="8" class="mp"/>
+<text x="122.8" y="442" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="162.5" y="430" width="40.8" height="16" rx="8" class="mp"/>
+<text x="182.9" y="442" class="mpt" text-anchor="middle">Track</text>
+<rect x="208.2" y="430" width="35" height="16" rx="8" class="mp"/>
+<text x="225.8" y="442" class="mpt" text-anchor="middle">Road</text>
+<text x="38" y="464" class="hd">Passes when</text>
+<text x="38" y="479" class="s">No contact with the pedestrian; the vehicle yields</text>
+<text x="38" y="493" class="s">as the traffic rules require, and the monitor</text>
+<text x="38" y="507" class="s">commands the deceleration that restores the safe</text>
+<text x="38" y="521" class="s">distance whenever Autoware does not; unjustified</text>
+<text x="38" y="535" class="s">hard braking counts against the SOTIF acceptance</text>
+<text x="38" y="549" class="s">criteria</text>
+<text x="38" y="565" class="ax">Judged against FSR-02.01, FSR-02.02, FSR-02.05,</text>
+<text x="38" y="579" class="ax">FSR-03.01, FSR-06.01, FSR-06.03, AC-02</text>
+<text x="38" y="593" class="ax">Run by VC-01, VC-02, VC-03, VC-06</text>
+<rect x="370" y="96" width="330" height="515" rx="8" class="card"/>
+<text x="384" y="120" class="gid">SC-02</text>
+<text x="384" y="140" class="tb">Pedestrian emerging from behind a parked</text>
+<text x="384" y="156" class="tb">vehicle</text>
+<rect x="385" y="162" width="300" height="120" rx="6" class="verge"/>
+<rect x="385" y="192" width="300" height="64" class="road"/>
+<line x1="385" y1="224" x2="685" y2="224" class="lane"/>
+<line x1="385" y1="192" x2="685" y2="192" class="kerb"/>
+<line x1="385" y1="256" x2="685" y2="256" class="kerb"/>
+<g><rect x="569" y="259.5" width="24" height="13" rx="3" class="oth"/></g>
+<g><circle cx="601" cy="236" r="4.2" class="key"/><animateTransform attributeName="transform" type="translate" values="0 40;0 36.7;0 33.3;0 30;0 26.7;0 23.3;0 20;0 16.7;0 13.3;0 10;0 6.7;0 3.3;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<path d="M407 240 L551 240" class="ipath"/>
+<g><rect x="539" y="233.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="-144 0;-132 0;-120 0;-108 0;-96 0;-84 0;-72 0;-60 0;-48 0;-36 0;-24 0;-12 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="551" cy="240" r="12" class="pring"/><rect x="431.9" y="168" width="238.2" height="18" rx="9" class="pcall"/><text x="551" y="181" class="ct" text-anchor="middle">slow enough to stop for anyone emerging</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="384" y="302" class="ax">Hazardous events: HE-04.3</text>
+<text x="384" y="316" class="ax">Triggering conditions: TC-10, TC-17</text>
+<text x="384" y="330" class="ax">Misuse: MU-10</text>
+<text x="384" y="344" class="ax">Loss scenarios: LS-01, LS-02</text>
+<text x="384" y="358" class="ax">Goals at stake: SG-02, SG-04, SG-06</text>
+<text x="384" y="380" class="hd">Varies</text>
+<rect x="434" y="368" width="46.5" height="16" rx="8" class="oc"/>
+<text x="457.2" y="380" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="485.5" y="368" width="46.5" height="16" rx="8" class="oc"/>
+<text x="508.8" y="380" class="oct" text-anchor="middle">ODD-05</text>
+<rect x="537" y="368" width="46.5" height="16" rx="8" class="oc"/>
+<text x="560.2" y="380" class="oct" text-anchor="middle">ODD-16</text>
+<rect x="588.5" y="368" width="46.5" height="16" rx="8" class="oc"/>
+<text x="611.8" y="380" class="oct" text-anchor="middle">ODD-12</text>
+<rect x="434" y="388" width="46.5" height="16" rx="8" class="oc"/>
+<text x="457.2" y="400" class="oct" text-anchor="middle">ODD-02</text>
+<rect x="485.5" y="388" width="98.2" height="16" rx="8" class="ob"/>
+<text x="534.6" y="400" class="obt" text-anchor="middle">bound FSR-06.02</text>
+<text x="384" y="422" class="hd">Methods</text>
+<rect x="434" y="410" width="69.5" height="16" rx="8" class="mp"/>
+<text x="468.8" y="422" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="508.5" y="410" width="40.8" height="16" rx="8" class="mp"/>
+<text x="528.9" y="422" class="mpt" text-anchor="middle">Track</text>
+<text x="384" y="444" class="hd">Passes when</text>
+<text x="384" y="459" class="s">The vehicle's speed near the occlusion lets it stop</text>
+<text x="384" y="473" class="s">for a road user emerging at the assumed speed; no</text>
+<text x="384" y="487" class="s">contact, and no swerve out of the drivable area to</text>
+<text x="384" y="501" class="s">avoid one</text>
+<text x="384" y="517" class="ax">Judged against FSR-06.02, FSR-02.02, FSR-04.01,</text>
+<text x="384" y="531" class="ax">FSR-04.05, FSR-03.01, AC-02</text>
+<text x="384" y="545" class="ax">Run by VC-01, VC-02, VC-03, VC-12</text>
+<rect x="716" y="96" width="330" height="515" rx="8" class="card"/>
+<text x="730" y="120" class="gid">SC-03</text>
+<text x="730" y="140" class="tb">Vehicle ahead braking or stopping in</text>
+<text x="730" y="156" class="tb">congested traffic</text>
+<rect x="731" y="162" width="300" height="120" rx="6" class="verge"/>
+<rect x="731" y="192" width="300" height="64" class="road"/>
+<line x1="731" y1="224" x2="1031" y2="224" class="lane"/>
+<line x1="731" y1="192" x2="1031" y2="192" class="kerb"/>
+<line x1="731" y1="256" x2="1031" y2="256" class="kerb"/>
+<g><rect x="997" y="233.5" width="24" height="13" rx="3" class="oth"/></g>
+<g><rect x="799" y="201.5" width="24" height="13" rx="3" class="oth"/></g>
+<g><rect x="879" y="201.5" width="24" height="13" rx="3" class="oth"/></g>
+<g><rect x="965" y="233.5" width="24" height="13" rx="3" class="key"/><animateTransform attributeName="transform" type="translate" values="-56 0;-51.3 0;-46.7 0;-42 0;-37.3 0;-32.7 0;-28 0;-23.3 0;-18.7 0;-14 0;-9.3 0;-4.7 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<path d="M753 240 L945 240" class="ipath"/>
+<g><rect x="933" y="233.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="-192 0;-176 0;-160 0;-144 0;-128 0;-112 0;-96 0;-80 0;-64 0;-48 0;-32 0;-16 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="945" cy="240" r="12" class="pring"/><rect x="846.2" y="168" width="180.8" height="18" rx="9" class="pcall"/><text x="936.6" y="181" class="ct" text-anchor="middle">keeps a safe gap as it brakes</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="730" y="302" class="ax">Hazardous events: HE-01.2, HE-02.2</text>
+<text x="730" y="316" class="ax">Triggering conditions: TC-11, TC-25</text>
+<text x="730" y="330" class="ax">Misuse: MU-14</text>
+<text x="730" y="344" class="ax">Loss scenarios: LS-03, LS-04</text>
+<text x="730" y="358" class="ax">Goals at stake: SG-01, SG-02, SG-04, SG-06</text>
+<text x="730" y="380" class="hd">Varies</text>
+<rect x="780" y="368" width="46.5" height="16" rx="8" class="oc"/>
+<text x="803.2" y="380" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="831.5" y="368" width="46.5" height="16" rx="8" class="oc"/>
+<text x="854.8" y="380" class="oct" text-anchor="middle">ODD-03</text>
+<rect x="883" y="368" width="46.5" height="16" rx="8" class="oc"/>
+<text x="906.2" y="380" class="oct" text-anchor="middle">ODD-17</text>
+<rect x="934.5" y="368" width="46.5" height="16" rx="8" class="oc"/>
+<text x="957.8" y="380" class="oct" text-anchor="middle">ODD-16</text>
+<rect x="780" y="388" width="46.5" height="16" rx="8" class="oc"/>
+<text x="803.2" y="400" class="oct" text-anchor="middle">ODD-13</text>
+<rect x="831.5" y="388" width="46.5" height="16" rx="8" class="oc"/>
+<text x="854.8" y="400" class="oct" text-anchor="middle">ODD-10</text>
+<rect x="883" y="388" width="98.2" height="16" rx="8" class="ob"/>
+<text x="932.1" y="400" class="obt" text-anchor="middle">bound FSR-06.01</text>
+<text x="730" y="422" class="hd">Methods</text>
+<rect x="780" y="410" width="69.5" height="16" rx="8" class="mp"/>
+<text x="814.8" y="422" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="854.5" y="410" width="75.2" height="16" rx="8" class="mp"/>
+<text x="892.1" y="422" class="mpt" text-anchor="middle">In the loop</text>
+<rect x="934.8" y="410" width="40.8" height="16" rx="8" class="mp"/>
+<text x="955.1" y="422" class="mpt" text-anchor="middle">Track</text>
+<text x="730" y="444" class="hd">Passes when</text>
+<text x="730" y="459" class="s">No collision with the vehicle ahead; acceleration</text>
+<text x="730" y="473" class="s">stays inside the envelope, the monitor restores the</text>
+<text x="730" y="487" class="s">safe longitudinal distance, and a braking shortfall</text>
+<text x="730" y="501" class="s">on a wet road switches to the secondary path</text>
+<text x="730" y="517" class="ax">Judged against FSR-01.01, FSR-01.02, FSR-02.02,</text>
+<text x="730" y="531" class="ax">FSR-02.03, FSR-02.05, FSR-03.02, FSR-04.05,</text>
+<text x="730" y="545" class="ax">FSR-06.01, AC-02</text>
+<text x="730" y="559" class="ax">Run by VC-01, VC-02, VC-03, VC-05, VC-06</text>
+<rect x="24" y="627" width="330" height="481" rx="8" class="card"/>
+<text x="38" y="651" class="gid">SC-04</text>
+<text x="38" y="671" class="tb">Spurious obstacle with a road user</text>
+<text x="38" y="687" class="tb">following</text>
+<rect x="39" y="693" width="300" height="120" rx="6" class="verge"/>
+<rect x="39" y="723" width="300" height="64" class="road"/>
+<line x1="39" y1="755" x2="339" y2="755" class="lane"/>
+<line x1="39" y1="723" x2="339" y2="723" class="kerb"/>
+<line x1="39" y1="787" x2="339" y2="787" class="kerb"/>
+<rect x="256" y="764" width="22" height="14" rx="3" class="phan"/>
+<text x="267" y="775" class="kt" text-anchor="middle">?</text>
+<g><rect x="125" y="764.5" width="24" height="13" rx="3" class="key"/><animateTransform attributeName="transform" type="translate" values="-88 0;-80.7 0;-73.3 0;-66 0;-58.7 0;-51.3 0;-44 0;-36.7 0;-29.3 0;-22 0;-14.7 0;-7.3 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<path d="M99 771 L191 771" class="ipath"/>
+<g><rect x="179" y="764.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="-92 0;-84.3 0;-76.7 0;-69 0;-61.3 0;-53.7 0;-46 0;-38.3 0;-30.7 0;-23 0;-15.3 0;-7.7 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="267" cy="771" r="12" class="pring"/><rect x="96.8" y="699" width="238.2" height="18" rx="9" class="pcall"/><text x="215.9" y="712" class="ct" text-anchor="middle">no hard brake for an unconfirmed object</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="38" y="833" class="ax">Hazardous events: HE-03.1, HE-03.2</text>
+<text x="38" y="847" class="ax">Triggering conditions: TC-03, TC-04, TC-24</text>
+<text x="38" y="861" class="ax">Misuse: MU-04, MU-07</text>
+<text x="38" y="875" class="ax">Loss scenarios: LS-08, LS-19</text>
+<text x="38" y="889" class="ax">Goals at stake: SG-02, SG-03</text>
+<text x="38" y="911" class="hd">Varies</text>
+<rect x="88" y="899" width="46.5" height="16" rx="8" class="oc"/>
+<text x="111.2" y="911" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="139.5" y="899" width="46.5" height="16" rx="8" class="oc"/>
+<text x="162.8" y="911" class="oct" text-anchor="middle">ODD-10</text>
+<rect x="191" y="899" width="46.5" height="16" rx="8" class="oc"/>
+<text x="214.2" y="911" class="oct" text-anchor="middle">ODD-11</text>
+<rect x="242.5" y="899" width="46.5" height="16" rx="8" class="oc"/>
+<text x="265.8" y="911" class="oct" text-anchor="middle">ODD-13</text>
+<rect x="88" y="919" width="46.5" height="16" rx="8" class="oc"/>
+<text x="111.2" y="931" class="oct" text-anchor="middle">ODD-16</text>
+<rect x="139.5" y="919" width="98.2" height="16" rx="8" class="ob"/>
+<text x="188.6" y="931" class="obt" text-anchor="middle">bound FSR-06.01</text>
+<text x="38" y="953" class="hd">Methods</text>
+<rect x="88" y="941" width="69.5" height="16" rx="8" class="mp"/>
+<text x="122.8" y="953" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="162.5" y="941" width="40.8" height="16" rx="8" class="mp"/>
+<text x="182.9" y="953" class="mpt" text-anchor="middle">Track</text>
+<text x="38" y="975" class="hd">Passes when</text>
+<text x="38" y="990" class="s">Braking that the safety channel does not confirm</text>
+<text x="38" y="1004" class="s">stays at or below the firm level; emergency braking</text>
+<text x="38" y="1018" class="s">happens only when a road user is confirmed; a</text>
+<text x="38" y="1032" class="s">blocked safety sensor is detected and Autoware</text>
+<text x="38" y="1046" class="s">stops comfortably; the belt warning acts</text>
+<text x="38" y="1062" class="ax">Judged against FSR-03.01, FSR-03.02, FSR-03.03,</text>
+<text x="38" y="1076" class="ax">FSR-02.01, FSR-07.08, FM-10, HR-03, AC-02</text>
+<text x="38" y="1090" class="ax">Run by VC-01, VC-02, VC-03, VC-09</text>
+<rect x="370" y="627" width="330" height="481" rx="8" class="card"/>
+<text x="384" y="651" class="gid">SC-05</text>
+<text x="384" y="671" class="tb">Signalised intersection with cross</text>
+<text x="384" y="687" class="tb">traffic</text>
+<rect x="385" y="693" width="300" height="120" rx="6" class="verge"/>
+<rect x="385" y="723" width="300" height="64" class="road"/>
+<rect x="589" y="693" width="48" height="120" class="road"/>
+<line x1="385" y1="755" x2="685" y2="755" class="lane"/>
+<line x1="385" y1="723" x2="685" y2="723" class="kerb"/>
+<line x1="385" y1="787" x2="685" y2="787" class="kerb"/>
+<line x1="581" y1="756" x2="581" y2="786" class="stop"/>
+<rect x="571" y="792" width="8" height="18" rx="2" class="sig"/>
+<circle cx="575" cy="796.5" r="2.6" class="soff"/>
+<circle cx="575" cy="805.5" r="2.6" class="sg"/>
+<g><rect x="618.5" y="799" width="13" height="24" rx="3" class="key"/><animateTransform attributeName="transform" type="translate" values="0 -116;0 -106.3;0 -96.7;0 -87;0 -77.3;0 -67.7;0 -58;0 -48.3;0 -38.7;0 -29;0 -19.3;0 -9.7;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<path d="M407 771 L569 771" class="ipath"/>
+<g><rect x="557" y="764.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="-162 0;-148.5 0;-135 0;-121.5 0;-108 0;-94.5 0;-81 0;-67.5 0;-54 0;-40.5 0;-27 0;-13.5 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="569" cy="771" r="12" class="pring"/><rect x="472.9" y="699" width="192.2" height="18" rx="9" class="pcall"/><text x="569" y="712" class="ct" text-anchor="middle">waits while its path is crossed</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="384" y="833" class="ax">Hazardous events: HE-06.1</text>
+<text x="384" y="847" class="ax">Triggering conditions: TC-01, TC-06, TC-07, TC-19</text>
+<text x="384" y="861" class="ax">Loss scenarios: LS-01, LS-02</text>
+<text x="384" y="875" class="ax">Goals at stake: SG-02, SG-06</text>
+<text x="384" y="897" class="hd">Varies</text>
+<rect x="434" y="885" width="46.5" height="16" rx="8" class="oc"/>
+<text x="457.2" y="897" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="485.5" y="885" width="46.5" height="16" rx="8" class="oc"/>
+<text x="508.8" y="897" class="oct" text-anchor="middle">ODD-04</text>
+<rect x="537" y="885" width="46.5" height="16" rx="8" class="oc"/>
+<text x="560.2" y="897" class="oct" text-anchor="middle">ODD-12</text>
+<rect x="588.5" y="885" width="46.5" height="16" rx="8" class="oc"/>
+<text x="611.8" y="897" class="oct" text-anchor="middle">ODD-16</text>
+<rect x="434" y="905" width="46.5" height="16" rx="8" class="oc"/>
+<text x="457.2" y="917" class="oct" text-anchor="middle">ODD-17</text>
+<rect x="485.5" y="905" width="98.2" height="16" rx="8" class="ob"/>
+<text x="534.6" y="917" class="obt" text-anchor="middle">bound FSR-06.01</text>
+<text x="384" y="939" class="hd">Methods</text>
+<rect x="434" y="927" width="69.5" height="16" rx="8" class="mp"/>
+<text x="468.8" y="939" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="508.5" y="927" width="40.8" height="16" rx="8" class="mp"/>
+<text x="528.9" y="939" class="mpt" text-anchor="middle">Track</text>
+<rect x="554.2" y="927" width="35" height="16" rx="8" class="mp"/>
+<text x="571.8" y="939" class="mpt" text-anchor="middle">Road</text>
+<text x="384" y="961" class="hd">Passes when</text>
+<text x="384" y="976" class="s">The vehicle enters only on a recognised green and</text>
+<text x="384" y="990" class="s">treats an unknown signal as red; whatever the</text>
+<text x="384" y="1004" class="s">signal, it does not enter when its swept path</text>
+<text x="384" y="1018" class="s">crosses that of a detected road user before it</text>
+<text x="384" y="1032" class="s">could stop or clear</text>
+<text x="384" y="1048" class="ax">Judged against FSR-06.01, FSR-06.03, FSR-02.01,</text>
+<text x="384" y="1062" class="ax">FSR-02.02, FSR-03.01, FM-05, AC-02</text>
+<text x="384" y="1076" class="ax">Run by VC-01, VC-02, VC-03, VC-12</text>
+<rect x="716" y="627" width="330" height="481" rx="8" class="card"/>
+<text x="730" y="651" class="gid">SC-06</text>
+<text x="730" y="671" class="tb">Unprotected left turn across oncoming</text>
+<text x="730" y="687" class="tb">traffic</text>
+<rect x="731" y="693" width="300" height="120" rx="6" class="verge"/>
+<rect x="731" y="723" width="300" height="64" class="road"/>
+<rect x="935" y="693" width="48" height="120" class="road"/>
+<line x1="731" y1="755" x2="1031" y2="755" class="lane"/>
+<line x1="731" y1="723" x2="1031" y2="723" class="kerb"/>
+<line x1="731" y1="787" x2="1031" y2="787" class="kerb"/>
+<g><rect x="849" y="732.5" width="24" height="13" rx="3" class="key"/><animateTransform attributeName="transform" type="translate" values="170 0;155.8 0;141.7 0;127.5 0;113.3 0;99.2 0;85 0;70.8 0;56.7 0;42.5 0;28.3 0;14.2 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<path d="M753 771 L927 771 L945 768 L961 757 L969 741 L971 723 L971 697" class="plan"/>
+<path d="M753 771 L923 771" class="ipath"/>
+<g><rect x="911" y="764.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="-170 0;-155.8 0;-141.7 0;-127.5 0;-113.3 0;-99.2 0;-85 0;-70.8 0;-56.7 0;-42.5 0;-28.3 0;-14.2 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="959" cy="739" r="12" class="pring"/><rect x="863.5" y="791" width="163.5" height="18" rx="9" class="pcall"/><text x="945.2" y="804" class="ct" text-anchor="middle">turns only with a safe gap</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="730" y="833" class="ax">Hazardous events: HE-06.2</text>
+<text x="730" y="847" class="ax">Triggering conditions: TC-12, TC-20</text>
+<text x="730" y="861" class="ax">Loss scenarios: LS-02</text>
+<text x="730" y="875" class="ax">Goals at stake: SG-02, SG-06</text>
+<text x="730" y="897" class="hd">Varies</text>
+<rect x="780" y="885" width="46.5" height="16" rx="8" class="oc"/>
+<text x="803.2" y="897" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="831.5" y="885" width="46.5" height="16" rx="8" class="oc"/>
+<text x="854.8" y="897" class="oct" text-anchor="middle">ODD-04</text>
+<rect x="883" y="885" width="46.5" height="16" rx="8" class="oc"/>
+<text x="906.2" y="897" class="oct" text-anchor="middle">ODD-16</text>
+<rect x="934.5" y="885" width="46.5" height="16" rx="8" class="oc"/>
+<text x="957.8" y="897" class="oct" text-anchor="middle">ODD-12</text>
+<rect x="780" y="905" width="98.2" height="16" rx="8" class="ob"/>
+<text x="829.1" y="917" class="obt" text-anchor="middle">bound FSR-06.01</text>
+<text x="730" y="939" class="hd">Methods</text>
+<rect x="780" y="927" width="69.5" height="16" rx="8" class="mp"/>
+<text x="814.8" y="939" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="854.5" y="927" width="40.8" height="16" rx="8" class="mp"/>
+<text x="874.9" y="939" class="mpt" text-anchor="middle">Track</text>
+<text x="730" y="961" class="hd">Passes when</text>
+<text x="730" y="976" class="s">The vehicle starts the turn only with a gap that</text>
+<text x="730" y="990" class="s">lets the oncoming road user pass at its assumed</text>
+<text x="730" y="1004" class="s">speed and acceleration, and stops before the</text>
+<text x="730" y="1018" class="s">conflict area otherwise</text>
+<text x="730" y="1034" class="ax">Judged against FSR-06.01, FSR-06.02, FSR-06.03,</text>
+<text x="730" y="1048" class="ax">FSR-02.02, FSR-03.01, FM-07, AC-02</text>
+<text x="730" y="1062" class="ax">Run by VC-01, VC-02, VC-03, VC-12</text>
+<rect x="24" y="1124" width="330" height="487" rx="8" class="card"/>
+<text x="38" y="1148" class="gid">SC-07</text>
+<text x="38" y="1168" class="tb">Entry to a roundabout with traffic</text>
+<text x="38" y="1184" class="tb">circulating</text>
+<rect x="39" y="1190" width="300" height="120" rx="6" class="verge"/>
+<rect x="39" y="1220" width="300" height="64" class="road"/>
+<rect x="243" y="1190" width="48" height="120" class="road"/>
+<line x1="39" y1="1252" x2="339" y2="1252" class="lane"/>
+<line x1="39" y1="1220" x2="339" y2="1220" class="kerb"/>
+<line x1="39" y1="1284" x2="339" y2="1284" class="kerb"/>
+<circle cx="267" cy="1252" r="15" class="isle"/>
+<g><rect x="255" y="1272.5" width="24" height="13" rx="3" class="key"/><animateTransform attributeName="transform" type="translate" values="0 -54;-7 -53.1;-13.5 -50.4;-19.1 -46.1;-23.4 -40.5;-26.1 -34;-27 -27;-26.1 -20;-23.4 -13.5;-19.1 -7.9;-13.5 -3.6;-7 -0.9;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<path d="M61 1268 L215 1268" class="ipath"/>
+<g><rect x="203" y="1261.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="-154 0;-141.2 0;-128.3 0;-115.5 0;-102.7 0;-89.8 0;-77 0;-64.2 0;-51.3 0;-38.5 0;-25.7 0;-12.8 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="215" cy="1268" r="12" class="pring"/><rect x="124.6" y="1196" width="180.8" height="18" rx="9" class="pcall"/><text x="215" y="1209" class="ct" text-anchor="middle">yields to circulating traffic</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="38" y="1330" class="ax">Hazardous events: HE-06.3</text>
+<text x="38" y="1344" class="ax">Triggering conditions: TC-13</text>
+<text x="38" y="1358" class="ax">Loss scenarios: LS-02</text>
+<text x="38" y="1372" class="ax">Goals at stake: SG-02, SG-06</text>
+<text x="38" y="1394" class="hd">Varies</text>
+<rect x="88" y="1382" width="46.5" height="16" rx="8" class="oc"/>
+<text x="111.2" y="1394" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="139.5" y="1382" width="46.5" height="16" rx="8" class="oc"/>
+<text x="162.8" y="1394" class="oct" text-anchor="middle">ODD-04</text>
+<rect x="191" y="1382" width="46.5" height="16" rx="8" class="oc"/>
+<text x="214.2" y="1394" class="oct" text-anchor="middle">ODD-16</text>
+<rect x="242.5" y="1382" width="46.5" height="16" rx="8" class="oc"/>
+<text x="265.8" y="1394" class="oct" text-anchor="middle">ODD-17</text>
+<rect x="88" y="1402" width="98.2" height="16" rx="8" class="ob"/>
+<text x="137.1" y="1414" class="obt" text-anchor="middle">bound FSR-06.01</text>
+<text x="38" y="1436" class="hd">Methods</text>
+<rect x="88" y="1424" width="69.5" height="16" rx="8" class="mp"/>
+<text x="122.8" y="1436" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="162.5" y="1424" width="40.8" height="16" rx="8" class="mp"/>
+<text x="182.9" y="1436" class="mpt" text-anchor="middle">Track</text>
+<text x="38" y="1458" class="hd">Passes when</text>
+<text x="38" y="1473" class="s">The vehicle yields to circulating traffic and</text>
+<text x="38" y="1487" class="s">enters only with a gap that its assumed speed</text>
+<text x="38" y="1501" class="s">allows</text>
+<text x="38" y="1517" class="ax">Judged against FSR-06.01, FSR-06.03, FSR-02.02,</text>
+<text x="38" y="1531" class="ax">FM-07, AC-02</text>
+<text x="38" y="1545" class="ax">Run by VC-01, VC-02, VC-03, VC-12</text>
+<rect x="370" y="1124" width="330" height="487" rx="8" class="card"/>
+<text x="384" y="1148" class="gid">SC-08</text>
+<text x="384" y="1168" class="tb">Cyclist alongside on the inside of a</text>
+<text x="384" y="1184" class="tb">turn</text>
+<rect x="385" y="1190" width="300" height="120" rx="6" class="verge"/>
+<rect x="385" y="1220" width="300" height="64" class="road"/>
+<rect x="585" y="1283" width="34" height="27" class="road"/>
+<line x1="385" y1="1252" x2="685" y2="1252" class="lane"/>
+<line x1="385" y1="1220" x2="685" y2="1220" class="kerb"/>
+<line x1="385" y1="1284" x2="685" y2="1284" class="kerb"/>
+<g><rect x="573" y="1276.5" width="16" height="5" rx="2.5" class="key"/><animateTransform attributeName="transform" type="translate" values="-92 0;-84.3 0;-76.7 0;-69 0;-61.3 0;-53.7 0;-46 0;-38.3 0;-30.7 0;-23 0;-15.3 0;-7.7 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<path d="M407 1268 L568 1268 L574.6 1268.7 L581 1270.6 L586.9 1273.7 L592 1278 L596.3 1283.1 L599.4 1289 L601.3 1295.4 L602 1302" class="plan"/>
+<path d="M407 1268 L543 1268" class="ipath"/>
+<g><rect x="531" y="1261.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="-136 0;-124.7 0;-113.3 0;-102 0;-90.7 0;-79.3 0;-68 0;-56.7 0;-45.3 0;-34 0;-22.7 0;-11.3 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="581" cy="1279" r="12" class="pring"/><rect x="513.6" y="1196" width="134.8" height="18" rx="9" class="pcall"/><text x="581" y="1209" class="ct" text-anchor="middle">waits for the cyclist</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="384" y="1330" class="ax">Hazardous events: HE-04.2</text>
+<text x="384" y="1344" class="ax">Triggering conditions: TC-18</text>
+<text x="384" y="1358" class="ax">Misuse: MU-13</text>
+<text x="384" y="1372" class="ax">Loss scenarios: LS-02</text>
+<text x="384" y="1386" class="ax">Goals at stake: SG-02, SG-04, SG-06</text>
+<text x="384" y="1408" class="hd">Varies</text>
+<rect x="434" y="1396" width="46.5" height="16" rx="8" class="oc"/>
+<text x="457.2" y="1408" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="485.5" y="1396" width="46.5" height="16" rx="8" class="oc"/>
+<text x="508.8" y="1408" class="oct" text-anchor="middle">ODD-05</text>
+<rect x="537" y="1396" width="46.5" height="16" rx="8" class="oc"/>
+<text x="560.2" y="1408" class="oct" text-anchor="middle">ODD-16</text>
+<rect x="588.5" y="1396" width="46.5" height="16" rx="8" class="oc"/>
+<text x="611.8" y="1408" class="oct" text-anchor="middle">ODD-04</text>
+<rect x="434" y="1416" width="98.2" height="16" rx="8" class="ob"/>
+<text x="483.1" y="1428" class="obt" text-anchor="middle">bound FSR-06.01</text>
+<text x="384" y="1450" class="hd">Methods</text>
+<rect x="434" y="1438" width="69.5" height="16" rx="8" class="mp"/>
+<text x="468.8" y="1450" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="508.5" y="1438" width="40.8" height="16" rx="8" class="mp"/>
+<text x="528.9" y="1450" class="mpt" text-anchor="middle">Track</text>
+<text x="384" y="1472" class="hd">Passes when</text>
+<text x="384" y="1487" class="s">No steering command whose swept path comes within</text>
+<text x="384" y="1501" class="s">the safe lateral distance of the cyclist is</text>
+<text x="384" y="1515" class="s">executed; the vehicle waits or stops in lane</text>
+<text x="384" y="1531" class="ax">Judged against FSR-04.01, FSR-04.05, FSR-06.01,</text>
+<text x="384" y="1545" class="ax">FSR-02.02, FSR-03.01, FM-06, AC-02</text>
+<text x="384" y="1559" class="ax">Run by VC-01, VC-02, VC-03, VC-10</text>
+<rect x="716" y="1124" width="330" height="487" rx="8" class="card"/>
+<text x="730" y="1148" class="gid">SC-09</text>
+<text x="730" y="1168" class="tb">Lane keeping where localisation is</text>
+<text x="730" y="1184" class="tb">degraded</text>
+<rect x="731" y="1190" width="300" height="120" rx="6" class="verge"/>
+<rect x="731" y="1220" width="300" height="64" class="road"/>
+<line x1="731" y1="1252" x2="1031" y2="1252" class="lane"/>
+<line x1="731" y1="1220" x2="1031" y2="1220" class="kerb"/>
+<line x1="731" y1="1284" x2="1031" y2="1284" class="kerb"/>
+<circle cx="751" cy="1205" r="6" class="sat"/>
+<line x1="744" y1="1198" x2="758" y2="1212" class="xo"/>
+<text x="763" y="1209" class="ax">GNSS lost</text>
+<g><rect x="839" y="1229.5" width="24" height="13" rx="3" class="oth"/></g>
+<path d="M753 1268 L967 1268" class="ipath"/>
+<g><rect x="955" y="1261.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="-214 0;-196.2 0;-178.3 0;-160.5 0;-142.7 0;-124.8 0;-107 0;-89.2 0;-71.3 0;-53.5 0;-35.7 0;-17.8 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="967" cy="1268" r="12" class="pring"/><rect x="840.5" y="1196" width="186.5" height="18" rx="9" class="pcall"/><text x="933.8" y="1209" class="ct" text-anchor="middle">keeps its lane, or stops in it</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="730" y="1330" class="ax">Hazardous events: HE-04.1, HE-04.3</text>
+<text x="730" y="1344" class="ax">Triggering conditions: TC-08, TC-11</text>
+<text x="730" y="1358" class="ax">Loss scenarios: LS-05</text>
+<text x="730" y="1372" class="ax">Goals at stake: SG-02, SG-04, SG-06</text>
+<text x="730" y="1394" class="hd">Varies</text>
+<rect x="780" y="1382" width="46.5" height="16" rx="8" class="oc"/>
+<text x="803.2" y="1394" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="831.5" y="1382" width="46.5" height="16" rx="8" class="oc"/>
+<text x="854.8" y="1394" class="oct" text-anchor="middle">ODD-01</text>
+<rect x="883" y="1382" width="46.5" height="16" rx="8" class="oc"/>
+<text x="906.2" y="1394" class="oct" text-anchor="middle">ODD-02</text>
+<rect x="934.5" y="1382" width="46.5" height="16" rx="8" class="oc"/>
+<text x="957.8" y="1394" class="oct" text-anchor="middle">ODD-03</text>
+<rect x="780" y="1402" width="46.5" height="16" rx="8" class="oc"/>
+<text x="803.2" y="1414" class="oct" text-anchor="middle">ODD-07</text>
+<rect x="831.5" y="1402" width="46.5" height="16" rx="8" class="oc"/>
+<text x="854.8" y="1414" class="oct" text-anchor="middle">ODD-08</text>
+<rect x="883" y="1402" width="46.5" height="16" rx="8" class="oc"/>
+<text x="906.2" y="1414" class="oct" text-anchor="middle">ODD-15</text>
+<rect x="934.5" y="1402" width="46.5" height="16" rx="8" class="oc"/>
+<text x="957.8" y="1414" class="oct" text-anchor="middle">ODD-17</text>
+<rect x="780" y="1422" width="46.5" height="16" rx="8" class="oc"/>
+<text x="803.2" y="1434" class="oct" text-anchor="middle">ODD-06</text>
+<text x="730" y="1456" class="hd">Methods</text>
+<rect x="780" y="1444" width="69.5" height="16" rx="8" class="mp"/>
+<text x="814.8" y="1456" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="854.5" y="1444" width="35" height="16" rx="8" class="mp"/>
+<text x="872" y="1456" class="mpt" text-anchor="middle">Road</text>
+<text x="730" y="1478" class="hd">Passes when</text>
+<text x="730" y="1493" class="s">The vehicle stays in its lane and drivable area; a</text>
+<text x="730" y="1507" class="s">steering command toward a detected road user or</text>
+<text x="730" y="1521" class="s">kerb is rejected and the vehicle stops in lane; a</text>
+<text x="730" y="1535" class="s">degraded pose is detected</text>
+<text x="730" y="1551" class="ax">Judged against FSR-04.01, FSR-04.02, FSR-04.03,</text>
+<text x="730" y="1565" class="ax">FSR-04.05, FSR-02.02, FSR-03.01, FSR-06.01, FM-09,</text>
+<text x="730" y="1579" class="ax">AC-02</text>
+<text x="730" y="1593" class="ax">Run by VC-01, VC-02</text>
+<rect x="24" y="1627" width="330" height="419" rx="8" class="card"/>
+<text x="38" y="1651" class="gid">SC-10</text>
+<rect x="188" y="1638" width="152" height="18" rx="4" class="xp"/>
+<text x="264" y="1651" class="xpt" text-anchor="middle">crosses the ODD boundary</text>
+<text x="38" y="1671" class="tb">Work zone or re-marked lanes not yet in</text>
+<text x="38" y="1687" class="tb">the map</text>
+<rect x="39" y="1693" width="300" height="120" rx="6" class="verge"/>
+<rect x="39" y="1723" width="300" height="64" class="road"/>
+<line x1="39" y1="1755" x2="339" y2="1755" class="lane"/>
+<line x1="39" y1="1723" x2="339" y2="1723" class="kerb"/>
+<line x1="39" y1="1787" x2="339" y2="1787" class="kerb"/>
+<path d="M215 1775 L219 1783 L211 1783 Z" class="cone"/>
+<path d="M231 1771 L235 1779 L227 1779 Z" class="cone"/>
+<path d="M247 1767 L251 1775 L243 1775 Z" class="cone"/>
+<path d="M263 1763 L267 1771 L259 1771 Z" class="cone"/>
+<path d="M279 1759 L283 1767 L275 1767 Z" class="cone"/>
+<path d="M295 1757 L299 1765 L291 1765 Z" class="cone"/>
+<path d="M311 1757 L315 1765 L307 1765 Z" class="cone"/>
+<path d="M327 1757 L331 1765 L323 1765 Z" class="cone"/>
+<text x="225" y="1805" class="ax">the map: lane open</text>
+<path d="M199 1771 L331 1771" class="plan"/>
+<path d="M61 1771 L197 1771" class="ipath"/>
+<g><rect x="185" y="1764.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="-136 0;-124.7 0;-113.3 0;-102 0;-90.7 0;-79.3 0;-68 0;-56.7 0;-45.3 0;-34 0;-22.7 0;-11.3 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="197" cy="1771" r="12" class="pring"/><rect x="80.8" y="1699" width="232.5" height="18" rx="9" class="pcall"/><text x="197" y="1712" class="ct" text-anchor="middle">does not follow the map into the cones</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="38" y="1833" class="ax">Triggering conditions: TC-09</text>
+<text x="38" y="1847" class="ax">Loss scenarios: LS-14</text>
+<text x="38" y="1861" class="ax">Goals at stake: SG-04, SG-06</text>
+<text x="38" y="1883" class="hd">Varies</text>
+<rect x="88" y="1871" width="46.5" height="16" rx="8" class="oc"/>
+<text x="111.2" y="1883" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="139.5" y="1871" width="46.5" height="16" rx="8" class="ox"/>
+<text x="162.8" y="1883" class="oxt" text-anchor="middle">ODD-07</text>
+<rect x="191" y="1871" width="46.5" height="16" rx="8" class="ox"/>
+<text x="214.2" y="1883" class="oxt" text-anchor="middle">ODD-08</text>
+<rect x="242.5" y="1871" width="46.5" height="16" rx="8" class="oc"/>
+<text x="265.8" y="1883" class="oct" text-anchor="middle">ODD-12</text>
+<text x="38" y="1905" class="hd">Methods</text>
+<rect x="88" y="1893" width="69.5" height="16" rx="8" class="mp"/>
+<text x="122.8" y="1905" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="162.5" y="1893" width="40.8" height="16" rx="8" class="mp"/>
+<text x="182.9" y="1905" class="mpt" text-anchor="middle">Track</text>
+<text x="38" y="1927" class="hd">Passes when</text>
+<text x="38" y="1942" class="s">The divergence monitor detects the disagreement and</text>
+<text x="38" y="1956" class="s">the vehicle carries out a minimal risk manoeuvre;</text>
+<text x="38" y="1970" class="s">it never follows the map into a closed lane</text>
+<text x="38" y="1986" class="ax">Judged against MON-02, FSR-07.05, FSR-04.01,</text>
+<text x="38" y="2000" class="ax">FSR-02.02, FSR-06.01, FSR-06.03, TR-09, FM-13,</text>
+<text x="38" y="2014" class="ax">AC-02</text>
+<text x="38" y="2028" class="ax">Run by VC-01, VC-02, VC-03, VC-18</text>
+<rect x="370" y="1627" width="330" height="419" rx="8" class="card"/>
+<text x="384" y="1651" class="gid">SC-11</text>
+<rect x="534" y="1638" width="152" height="18" rx="4" class="xp"/>
+<text x="610" y="1651" class="xpt" text-anchor="middle">crosses the ODD boundary</text>
+<text x="384" y="1671" class="tb">Person directing traffic</text>
+<rect x="385" y="1677" width="300" height="120" rx="6" class="verge"/>
+<rect x="385" y="1707" width="300" height="64" class="road"/>
+<rect x="589" y="1677" width="48" height="120" class="road"/>
+<line x1="385" y1="1739" x2="685" y2="1739" class="lane"/>
+<line x1="385" y1="1707" x2="685" y2="1707" class="kerb"/>
+<line x1="385" y1="1771" x2="685" y2="1771" class="kerb"/>
+<line x1="581" y1="1740" x2="581" y2="1770" class="stop"/>
+<line x1="613" y1="1739" x2="601" y2="1745" class="armk"/>
+<path d="M403 1699 L409 1683 L415 1699" class="mast"/>
+<text x="421" y="1696" class="ax">asks for remote assistance</text>
+<g><circle cx="613" cy="1739" r="4.2" class="key"/></g>
+<path d="M407 1755 L569 1755" class="ipath"/>
+<g><rect x="557" y="1748.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="-162 0;-148.5 0;-135 0;-121.5 0;-108 0;-94.5 0;-81 0;-67.5 0;-54 0;-40.5 0;-27 0;-13.5 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="613" cy="1739" r="12" class="pring"/><rect x="471.5" y="1775" width="209.5" height="18" rx="9" class="pcall"/><text x="576.2" y="1788" class="ct" text-anchor="middle">stops, does not move on the signal</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="384" y="1817" class="ax">Triggering conditions: TC-22</text>
+<text x="384" y="1831" class="ax">Misuse: MU-20</text>
+<text x="384" y="1845" class="ax">Goals at stake: SG-06</text>
+<text x="384" y="1867" class="hd">Varies</text>
+<rect x="434" y="1855" width="46.5" height="16" rx="8" class="oc"/>
+<text x="457.2" y="1867" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="485.5" y="1855" width="46.5" height="16" rx="8" class="ox"/>
+<text x="508.8" y="1867" class="oxt" text-anchor="middle">ODD-19</text>
+<rect x="537" y="1855" width="46.5" height="16" rx="8" class="oc"/>
+<text x="560.2" y="1867" class="oct" text-anchor="middle">ODD-04</text>
+<rect x="588.5" y="1855" width="46.5" height="16" rx="8" class="oc"/>
+<text x="611.8" y="1867" class="oct" text-anchor="middle">ODD-12</text>
+<text x="384" y="1889" class="hd">Methods</text>
+<rect x="434" y="1877" width="69.5" height="16" rx="8" class="mp"/>
+<text x="468.8" y="1889" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="508.5" y="1877" width="40.8" height="16" rx="8" class="mp"/>
+<text x="528.9" y="1889" class="mpt" text-anchor="middle">Track</text>
+<rect x="554.2" y="1877" width="40.8" height="16" rx="8" class="mp"/>
+<text x="574.6" y="1889" class="mpt" text-anchor="middle">Drill</text>
+<text x="384" y="1911" class="hd">Passes when</text>
+<text x="384" y="1926" class="s">The vehicle detects the person directing traffic,</text>
+<text x="384" y="1940" class="s">stops safely and asks for remote assistance; it</text>
+<text x="384" y="1954" class="s">does not move on the signal alone, and responders</text>
+<text x="384" y="1968" class="s">can stop or hold it</text>
+<text x="384" y="1984" class="ax">Judged against MON-02, FSR-07.05, FSR-06.01,</text>
+<text x="384" y="1998" class="ax">FSR-02.02, FM-16, HR-08, AC-02</text>
+<text x="384" y="2012" class="ax">Run by VC-01, VC-02, VC-03, VC-18</text>
+<rect x="716" y="1627" width="330" height="419" rx="8" class="card"/>
+<text x="730" y="1651" class="gid">SC-12</text>
+<text x="730" y="1671" class="tb">Emergency vehicle approaching with siren</text>
+<text x="730" y="1687" class="tb">and lights</text>
+<rect x="731" y="1693" width="300" height="120" rx="6" class="verge"/>
+<rect x="731" y="1723" width="300" height="64" class="road"/>
+<line x1="731" y1="1755" x2="1031" y2="1755" class="lane"/>
+<line x1="731" y1="1723" x2="1031" y2="1723" class="kerb"/>
+<line x1="731" y1="1787" x2="1031" y2="1787" class="kerb"/>
+<g><g><rect x="991" y="1732.5" width="24" height="13" rx="3" class="key"/></g><g><circle cx="999" cy="1739" r="2.6" class="bcn"/><circle cx="1007" cy="1739" r="2.6" class="bcr"/><animate attributeName="opacity" values="1;0.15;1" dur="0.8s" repeatCount="indefinite"/></g><animateTransform attributeName="transform" type="translate" values="-262 0;-240.2 0;-218.3 0;-196.5 0;-174.7 0;-152.8 0;-131 0;-109.2 0;-87.3 0;-65.5 0;-43.7 0;-21.8 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<path d="M753 1771 L849 1771 L879 1780 L903 1780" class="ipath"/>
+<g><rect x="891" y="1773.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="-150 -9;-137.4 -9;-124.8 -9;-112.2 -9;-99.6 -9;-86.9 -9;-74.3 -9;-61.7 -9;-49.3 -7.6;-37.2 -4;-25.2 -0.4;-12.6 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="903" cy="1780" r="12" class="pring"/><rect x="815.5" y="1699" width="175" height="18" rx="9" class="pcall"/><text x="903" y="1712" class="ct" text-anchor="middle">pulls aside and lets it pass</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="730" y="1833" class="ax">Triggering conditions: TC-21</text>
+<text x="730" y="1847" class="ax">Goals at stake: SG-06</text>
+<text x="730" y="1869" class="hd">Varies</text>
+<rect x="780" y="1857" width="46.5" height="16" rx="8" class="oc"/>
+<text x="803.2" y="1869" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="831.5" y="1857" width="46.5" height="16" rx="8" class="oc"/>
+<text x="854.8" y="1869" class="oct" text-anchor="middle">ODD-18</text>
+<rect x="883" y="1857" width="46.5" height="16" rx="8" class="oc"/>
+<text x="906.2" y="1869" class="oct" text-anchor="middle">ODD-17</text>
+<rect x="934.5" y="1857" width="46.5" height="16" rx="8" class="oc"/>
+<text x="957.8" y="1869" class="oct" text-anchor="middle">ODD-04</text>
+<rect x="780" y="1877" width="98.2" height="16" rx="8" class="ob"/>
+<text x="829.1" y="1889" class="obt" text-anchor="middle">bound FSR-06.01</text>
+<text x="730" y="1911" class="hd">Methods</text>
+<rect x="780" y="1899" width="69.5" height="16" rx="8" class="mp"/>
+<text x="814.8" y="1911" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="854.5" y="1899" width="40.8" height="16" rx="8" class="mp"/>
+<text x="874.9" y="1911" class="mpt" text-anchor="middle">Track</text>
+<text x="730" y="1933" class="hd">Passes when</text>
+<text x="730" y="1948" class="s">The vehicle detects the emergency vehicle, pulls to</text>
+<text x="730" y="1962" class="s">the side when safe or stops, and lets it pass; when</text>
+<text x="730" y="1976" class="s">it cannot yield it reaches a minimal risk condition</text>
+<text x="730" y="1992" class="ax">Judged against FSR-06.01, FSR-06.03, FSR-07.05,</text>
+<text x="730" y="2006" class="ax">FSR-02.02, FM-15, TR-14, AC-02</text>
+<text x="730" y="2020" class="ax">Run by VC-01, VC-02, VC-03</text>
+<rect x="24" y="2062" width="330" height="467" rx="8" class="card"/>
+<text x="38" y="2086" class="gid">SC-13</text>
+<text x="38" y="2106" class="tb">Rare object or debris in the lane</text>
+<rect x="39" y="2112" width="300" height="120" rx="6" class="verge"/>
+<rect x="39" y="2142" width="300" height="64" class="road"/>
+<line x1="39" y1="2174" x2="339" y2="2174" class="lane"/>
+<line x1="39" y1="2142" x2="339" y2="2142" class="kerb"/>
+<line x1="39" y1="2206" x2="339" y2="2206" class="kerb"/>
+<path d="M246 2187 L251 2183 L259 2185 L261 2192 L255 2197 L247 2195 Z" class="key"/>
+<path d="M61 2190 L227 2190" class="ipath"/>
+<g><rect x="215" y="2183.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="-166 0;-152.2 0;-138.3 0;-124.5 0;-110.7 0;-96.8 0;-83 0;-69.2 0;-55.3 0;-41.5 0;-27.7 0;-13.8 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="253" cy="2190" r="12" class="pring"/><rect x="125.5" y="2118" width="209.5" height="18" rx="9" class="pcall"/><text x="230.2" y="2131" class="ct" text-anchor="middle">stops before it, or passes in lane</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="38" y="2252" class="ax">Triggering conditions: TC-15, TC-16</text>
+<text x="38" y="2266" class="ax">Misuse: MU-12</text>
+<text x="38" y="2280" class="ax">Loss scenarios: LS-01</text>
+<text x="38" y="2294" class="ax">Goals at stake: SG-02, SG-03</text>
+<text x="38" y="2316" class="hd">Varies</text>
+<rect x="88" y="2304" width="46.5" height="16" rx="8" class="oc"/>
+<text x="111.2" y="2316" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="139.5" y="2304" width="46.5" height="16" rx="8" class="oc"/>
+<text x="162.8" y="2316" class="oct" text-anchor="middle">ODD-16</text>
+<rect x="191" y="2304" width="46.5" height="16" rx="8" class="oc"/>
+<text x="214.2" y="2316" class="oct" text-anchor="middle">ODD-12</text>
+<rect x="242.5" y="2304" width="46.5" height="16" rx="8" class="oc"/>
+<text x="265.8" y="2316" class="oct" text-anchor="middle">ODD-13</text>
+<text x="38" y="2338" class="hd">Methods</text>
+<rect x="88" y="2326" width="69.5" height="16" rx="8" class="mp"/>
+<text x="122.8" y="2338" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="162.5" y="2326" width="40.8" height="16" rx="8" class="mp"/>
+<text x="182.9" y="2338" class="mpt" text-anchor="middle">Track</text>
+<text x="38" y="2360" class="hd">Passes when</text>
+<text x="38" y="2375" class="s">The vehicle stops before the object or passes it</text>
+<text x="38" y="2389" class="s">within the lane when clear; a vehicle that cannot</text>
+<text x="38" y="2403" class="s">find a way on reaches a minimal risk condition and</text>
+<text x="38" y="2417" class="s">asks for help</text>
+<text x="38" y="2433" class="ax">Judged against FSR-02.01, FSR-02.02, FSR-03.01,</text>
+<text x="38" y="2447" class="ax">FM-03, TR-14, SR-01, AC-02</text>
+<text x="38" y="2461" class="ax">Run by VC-01, VC-02, VC-03, VC-06</text>
+<rect x="370" y="2062" width="330" height="467" rx="8" class="card"/>
+<text x="384" y="2086" class="gid">SC-14</text>
+<rect x="534" y="2073" width="152" height="18" rx="4" class="xp"/>
+<text x="610" y="2086" class="xpt" text-anchor="middle">crosses the ODD boundary</text>
+<text x="384" y="2106" class="tb">Weather changing toward the ODD limits</text>
+<text x="384" y="2122" class="tb">during a trip</text>
+<rect x="385" y="2128" width="300" height="120" rx="6" class="verge"/>
+<rect x="385" y="2158" width="300" height="64" class="road"/>
+<line x1="385" y1="2190" x2="685" y2="2190" class="lane"/>
+<line x1="385" y1="2158" x2="685" y2="2158" class="kerb"/>
+<line x1="385" y1="2222" x2="685" y2="2222" class="kerb"/>
+<rect x="525" y="2128" width="160" height="120" class="fog"/>
+<line x1="531" y1="2136" x2="528" y2="2143" class="drop"/>
+<line x1="537" y1="2160" x2="534" y2="2167" class="drop"/>
+<line x1="531" y1="2184" x2="528" y2="2191" class="drop"/>
+<line x1="537" y1="2208" x2="534" y2="2215" class="drop"/>
+<line x1="531" y1="2232" x2="528" y2="2239" class="drop"/>
+<line x1="543" y1="2136" x2="540" y2="2143" class="drop"/>
+<line x1="549" y1="2160" x2="546" y2="2167" class="drop"/>
+<line x1="543" y1="2184" x2="540" y2="2191" class="drop"/>
+<line x1="549" y1="2208" x2="546" y2="2215" class="drop"/>
+<line x1="543" y1="2232" x2="540" y2="2239" class="drop"/>
+<line x1="555" y1="2136" x2="552" y2="2143" class="drop"/>
+<line x1="561" y1="2160" x2="558" y2="2167" class="drop"/>
+<line x1="555" y1="2184" x2="552" y2="2191" class="drop"/>
+<line x1="561" y1="2208" x2="558" y2="2215" class="drop"/>
+<line x1="555" y1="2232" x2="552" y2="2239" class="drop"/>
+<line x1="567" y1="2136" x2="564" y2="2143" class="drop"/>
+<line x1="573" y1="2160" x2="570" y2="2167" class="drop"/>
+<line x1="567" y1="2184" x2="564" y2="2191" class="drop"/>
+<line x1="573" y1="2208" x2="570" y2="2215" class="drop"/>
+<line x1="567" y1="2232" x2="564" y2="2239" class="drop"/>
+<line x1="579" y1="2136" x2="576" y2="2143" class="drop"/>
+<line x1="585" y1="2160" x2="582" y2="2167" class="drop"/>
+<line x1="579" y1="2184" x2="576" y2="2191" class="drop"/>
+<line x1="585" y1="2208" x2="582" y2="2215" class="drop"/>
+<line x1="579" y1="2232" x2="576" y2="2239" class="drop"/>
+<line x1="591" y1="2136" x2="588" y2="2143" class="drop"/>
+<line x1="597" y1="2160" x2="594" y2="2167" class="drop"/>
+<line x1="591" y1="2184" x2="588" y2="2191" class="drop"/>
+<line x1="597" y1="2208" x2="594" y2="2215" class="drop"/>
+<line x1="591" y1="2232" x2="588" y2="2239" class="drop"/>
+<line x1="603" y1="2136" x2="600" y2="2143" class="drop"/>
+<line x1="609" y1="2160" x2="606" y2="2167" class="drop"/>
+<line x1="603" y1="2184" x2="600" y2="2191" class="drop"/>
+<line x1="609" y1="2208" x2="606" y2="2215" class="drop"/>
+<line x1="603" y1="2232" x2="600" y2="2239" class="drop"/>
+<line x1="615" y1="2136" x2="612" y2="2143" class="drop"/>
+<line x1="621" y1="2160" x2="618" y2="2167" class="drop"/>
+<line x1="615" y1="2184" x2="612" y2="2191" class="drop"/>
+<line x1="621" y1="2208" x2="618" y2="2215" class="drop"/>
+<line x1="615" y1="2232" x2="612" y2="2239" class="drop"/>
+<line x1="627" y1="2136" x2="624" y2="2143" class="drop"/>
+<line x1="633" y1="2160" x2="630" y2="2167" class="drop"/>
+<line x1="627" y1="2184" x2="624" y2="2191" class="drop"/>
+<line x1="633" y1="2208" x2="630" y2="2215" class="drop"/>
+<line x1="627" y1="2232" x2="624" y2="2239" class="drop"/>
+<line x1="639" y1="2136" x2="636" y2="2143" class="drop"/>
+<line x1="645" y1="2160" x2="642" y2="2167" class="drop"/>
+<line x1="639" y1="2184" x2="636" y2="2191" class="drop"/>
+<line x1="645" y1="2208" x2="642" y2="2215" class="drop"/>
+<line x1="639" y1="2232" x2="636" y2="2239" class="drop"/>
+<line x1="651" y1="2136" x2="648" y2="2143" class="drop"/>
+<line x1="657" y1="2160" x2="654" y2="2167" class="drop"/>
+<line x1="651" y1="2184" x2="648" y2="2191" class="drop"/>
+<line x1="657" y1="2208" x2="654" y2="2215" class="drop"/>
+<line x1="651" y1="2232" x2="648" y2="2239" class="drop"/>
+<line x1="663" y1="2136" x2="660" y2="2143" class="drop"/>
+<line x1="669" y1="2160" x2="666" y2="2167" class="drop"/>
+<line x1="663" y1="2184" x2="660" y2="2191" class="drop"/>
+<line x1="669" y1="2208" x2="666" y2="2215" class="drop"/>
+<line x1="663" y1="2232" x2="660" y2="2239" class="drop"/>
+<g><rect x="463" y="2167.5" width="24" height="13" rx="3" class="oth"/></g>
+<path d="M407 2206 L607 2206" class="ipath"/>
+<g><rect x="595" y="2199.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="-200 0;-183.3 0;-166.7 0;-150 0;-133.3 0;-116.7 0;-100 0;-83.3 0;-66.7 0;-50 0;-33.3 0;-16.7 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="607" cy="2206" r="12" class="pring"/><rect x="471.5" y="2134" width="209.5" height="18" rx="9" class="pcall"/><text x="576.2" y="2147" class="ct" text-anchor="middle">sees the ODD exit and stops safely</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="384" y="2268" class="ax">Triggering conditions: TC-05, TC-28</text>
+<text x="384" y="2282" class="ax">Loss scenarios: LS-07, LS-27</text>
+<text x="384" y="2296" class="ax">Goals at stake: SG-02, SG-03, SG-06, SG-07</text>
+<text x="384" y="2318" class="hd">Varies</text>
+<rect x="434" y="2306" width="46.5" height="16" rx="8" class="oc"/>
+<text x="457.2" y="2318" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="485.5" y="2306" width="46.5" height="16" rx="8" class="ox"/>
+<text x="508.8" y="2318" class="oxt" text-anchor="middle">ODD-10</text>
+<rect x="537" y="2306" width="46.5" height="16" rx="8" class="ox"/>
+<text x="560.2" y="2318" class="oxt" text-anchor="middle">ODD-11</text>
+<rect x="588.5" y="2306" width="46.5" height="16" rx="8" class="oc"/>
+<text x="611.8" y="2318" class="oct" text-anchor="middle">ODD-12</text>
+<rect x="434" y="2326" width="46.5" height="16" rx="8" class="oc"/>
+<text x="457.2" y="2338" class="oct" text-anchor="middle">ODD-13</text>
+<rect x="485.5" y="2326" width="46.5" height="16" rx="8" class="oc"/>
+<text x="508.8" y="2338" class="oct" text-anchor="middle">ODD-16</text>
+<text x="384" y="2360" class="hd">Methods</text>
+<rect x="434" y="2348" width="69.5" height="16" rx="8" class="mp"/>
+<text x="468.8" y="2360" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="508.5" y="2348" width="35" height="16" rx="8" class="mp"/>
+<text x="526" y="2360" class="mpt" text-anchor="middle">Road</text>
+<text x="384" y="2382" class="hd">Passes when</text>
+<text x="384" y="2397" class="s">The weather monitor detects the exit, treats a</text>
+<text x="384" y="2411" class="s">reading it cannot tell from the limit as outside,</text>
+<text x="384" y="2425" class="s">and the vehicle reaches a minimal risk condition;</text>
+<text x="384" y="2439" class="s">detection inside the ODD still meets the safety</text>
+<text x="384" y="2453" class="s">channel's requirement</text>
+<text x="384" y="2469" class="ax">Judged against MON-03, FSR-07.05, FSR-02.01,</text>
+<text x="384" y="2483" class="ax">FSR-02.02, FSR-03.01, FSR-06.01, TR-10, SR-07,</text>
+<text x="384" y="2497" class="ax">AC-02</text>
+<text x="384" y="2511" class="ax">Run by VC-01, VC-02, VC-18</text>
+<rect x="716" y="2062" width="330" height="467" rx="8" class="card"/>
+<text x="730" y="2086" class="gid">SC-15</text>
+<text x="730" y="2106" class="tb">Kerbside stop while passengers board or</text>
+<text x="730" y="2122" class="tb">alight</text>
+<rect x="731" y="2128" width="300" height="120" rx="6" class="verge"/>
+<rect x="731" y="2158" width="300" height="64" class="road"/>
+<line x1="731" y1="2190" x2="1031" y2="2190" class="lane"/>
+<line x1="731" y1="2158" x2="1031" y2="2158" class="kerb"/>
+<line x1="731" y1="2222" x2="1031" y2="2222" class="kerb"/>
+<rect x="895" y="2221.5" width="10" height="7" rx="1" class="doorp"/>
+<g><circle cx="931" cy="2234" r="4.2" class="ped"/></g>
+<g><circle cx="895" cy="2230" r="4.2" class="key"/><animateTransform attributeName="transform" type="translate" values="-24 12;-22 11;-20 10;-18 9;-16 8;-14 7;-12 6;-10 5;-8 4;-6 3;-4 2;-2 1;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><rect x="889" y="2208.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="0 0;0 0" keyTimes="0;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="901" cy="2215" r="12" class="pring"/><rect x="819.2" y="2134" width="163.5" height="18" rx="9" class="pcall"/><text x="901" y="2147" class="ct" text-anchor="middle">holds while a door is open</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="730" y="2268" class="ax">Hazardous events: HE-05.1, HE-10.1</text>
+<text x="730" y="2282" class="ax">Misuse: MU-01, MU-08, MU-19</text>
+<text x="730" y="2296" class="ax">Loss scenarios: LS-12, LS-16, LS-20</text>
+<text x="730" y="2310" class="ax">Goals at stake: SG-05</text>
+<text x="730" y="2332" class="hd">Varies</text>
+<rect x="780" y="2320" width="46.5" height="16" rx="8" class="oc"/>
+<text x="803.2" y="2332" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="831.5" y="2320" width="46.5" height="16" rx="8" class="oc"/>
+<text x="854.8" y="2332" class="oct" text-anchor="middle">ODD-09</text>
+<rect x="883" y="2320" width="46.5" height="16" rx="8" class="oc"/>
+<text x="906.2" y="2332" class="oct" text-anchor="middle">ODD-16</text>
+<rect x="934.5" y="2320" width="46.5" height="16" rx="8" class="oc"/>
+<text x="957.8" y="2332" class="oct" text-anchor="middle">ODD-06</text>
+<text x="730" y="2354" class="hd">Methods</text>
+<rect x="780" y="2342" width="69.5" height="16" rx="8" class="mp"/>
+<text x="814.8" y="2354" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="854.5" y="2342" width="40.8" height="16" rx="8" class="mp"/>
+<text x="874.9" y="2354" class="mpt" text-anchor="middle">Bench</text>
+<rect x="900.2" y="2342" width="40.8" height="16" rx="8" class="mp"/>
+<text x="920.6" y="2354" class="mpt" text-anchor="middle">Track</text>
+<text x="730" y="2376" class="hd">Passes when</text>
+<text x="730" y="2391" class="s">The vehicle does not move with a door open or a</text>
+<text x="730" y="2405" class="s">person in the near field in the direction of</text>
+<text x="730" y="2419" class="s">travel, never reverses, and resumes only when every</text>
+<text x="730" y="2433" class="s">release condition holds</text>
+<text x="730" y="2449" class="ax">Judged against FSR-05.01, FSR-05.03, FSR-05.05,</text>
+<text x="730" y="2463" class="ax">FSR-07.04, HR-04</text>
+<text x="730" y="2477" class="ax">Run by VC-02, VC-03, VC-11</text>
+<rect x="24" y="2545" width="330" height="445" rx="8" class="card"/>
+<text x="38" y="2569" class="gid">SC-16</text>
+<text x="38" y="2589" class="tb">Stopped at a red light with pedestrians</text>
+<text x="38" y="2605" class="tb">crossing in front</text>
+<rect x="39" y="2611" width="300" height="120" rx="6" class="verge"/>
+<rect x="39" y="2641" width="300" height="64" class="road"/>
+<line x1="39" y1="2673" x2="339" y2="2673" class="lane"/>
+<line x1="39" y1="2641" x2="339" y2="2641" class="kerb"/>
+<line x1="39" y1="2705" x2="339" y2="2705" class="kerb"/>
+<rect x="235" y="2644" width="24" height="4" class="zebra"/>
+<rect x="235" y="2652" width="24" height="4" class="zebra"/>
+<rect x="235" y="2660" width="24" height="4" class="zebra"/>
+<rect x="235" y="2668" width="24" height="4" class="zebra"/>
+<rect x="235" y="2676" width="24" height="4" class="zebra"/>
+<rect x="235" y="2684" width="24" height="4" class="zebra"/>
+<rect x="235" y="2692" width="24" height="4" class="zebra"/>
+<rect x="235" y="2700" width="24" height="4" class="zebra"/>
+<line x1="228" y1="2674" x2="228" y2="2704" class="stop"/>
+<rect x="217" y="2710" width="8" height="18" rx="2" class="sig"/>
+<circle cx="221" cy="2714.5" r="2.6" class="sr"/>
+<circle cx="221" cy="2723.5" r="2.6" class="soff"/>
+<g><circle cx="253" cy="2663" r="4.2" class="ped"/></g>
+<g><circle cx="245" cy="2651" r="4.2" class="key"/><animateTransform attributeName="transform" type="translate" values="0 74;0 67.8;0 61.7;0 55.5;0 49.3;0 43.2;0 37;0 30.8;0 24.7;0 18.5;0 12.3;0 6.2;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><rect x="199" y="2682.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="0 0;0 0" keyTimes="0;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="211" cy="2689" r="12" class="pring"/><rect x="129.2" y="2617" width="163.5" height="18" rx="9" class="pcall"/><text x="211" y="2630" class="ct" text-anchor="middle">stays held until it may go</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="38" y="2751" class="ax">Hazardous events: HE-01.1, HE-05.2</text>
+<text x="38" y="2765" class="ax">Loss scenarios: LS-20, LS-21</text>
+<text x="38" y="2779" class="ax">Goals at stake: SG-01, SG-05</text>
+<text x="38" y="2801" class="hd">Varies</text>
+<rect x="88" y="2789" width="46.5" height="16" rx="8" class="oc"/>
+<text x="111.2" y="2801" class="oct" text-anchor="middle">ODD-04</text>
+<rect x="139.5" y="2789" width="46.5" height="16" rx="8" class="oc"/>
+<text x="162.8" y="2801" class="oct" text-anchor="middle">ODD-05</text>
+<rect x="191" y="2789" width="46.5" height="16" rx="8" class="oc"/>
+<text x="214.2" y="2801" class="oct" text-anchor="middle">ODD-06</text>
+<rect x="242.5" y="2789" width="46.5" height="16" rx="8" class="oc"/>
+<text x="265.8" y="2801" class="oct" text-anchor="middle">ODD-16</text>
+<rect x="88" y="2809" width="46.5" height="16" rx="8" class="oc"/>
+<text x="111.2" y="2821" class="oct" text-anchor="middle">ODD-13</text>
+<text x="38" y="2843" class="hd">Methods</text>
+<rect x="88" y="2831" width="75.2" height="16" rx="8" class="mp"/>
+<text x="125.6" y="2843" class="mpt" text-anchor="middle">In the loop</text>
+<rect x="168.2" y="2831" width="40.8" height="16" rx="8" class="mp"/>
+<text x="188.6" y="2843" class="mpt" text-anchor="middle">Bench</text>
+<rect x="214" y="2831" width="40.8" height="16" rx="8" class="mp"/>
+<text x="234.4" y="2843" class="mpt" text-anchor="middle">Track</text>
+<text x="38" y="2865" class="hd">Passes when</text>
+<text x="38" y="2880" class="s">The vehicle stays held until every release</text>
+<text x="38" y="2894" class="s">condition holds; motion while holding is detected</text>
+<text x="38" y="2908" class="s">and the park brake applied; no acceleration toward</text>
+<text x="38" y="2922" class="s">a detected road user</text>
+<text x="38" y="2938" class="ax">Judged against FSR-05.01, FSR-05.02, FSR-05.04,</text>
+<text x="38" y="2952" class="ax">FSR-01.01, FSR-01.02</text>
+<text x="38" y="2966" class="ax">Run by VC-03, VC-05, VC-11</text>
+<rect x="370" y="2545" width="330" height="445" rx="8" class="card"/>
+<text x="384" y="2569" class="gid">SC-17</text>
+<text x="384" y="2589" class="tb">Loss of Autoware while driving</text>
+<rect x="385" y="2595" width="300" height="120" rx="6" class="verge"/>
+<rect x="385" y="2625" width="300" height="64" class="road"/>
+<line x1="385" y1="2657" x2="685" y2="2657" class="lane"/>
+<line x1="385" y1="2625" x2="685" y2="2625" class="kerb"/>
+<line x1="385" y1="2689" x2="685" y2="2689" class="kerb"/>
+<text x="393" y="2707" class="ax">Autoware lost while driving</text>
+<g><rect x="493" y="2634.5" width="24" height="13" rx="3" class="oth"/></g>
+<path d="M407 2673 L591 2673" class="ipath"/>
+<g><rect x="579" y="2666.5" width="24" height="13" rx="3" class="sego"/><g><circle cx="581" cy="2680" r="3" class="amb"/><circle cx="601" cy="2680" r="3" class="amb"/><circle cx="581" cy="2666" r="3" class="amb"/><circle cx="601" cy="2666" r="3" class="amb"/><animate attributeName="opacity" values="1;0.15;1" dur="0.8s" repeatCount="indefinite"/></g><animateTransform attributeName="transform" type="translate" values="-184 0;-168.7 0;-153.3 0;-138 0;-122.7 0;-107.3 0;-92 0;-76.7 0;-61.3 0;-46 0;-30.7 0;-15.3 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="591" cy="2673" r="12" class="pring"/><rect x="503.5" y="2601" width="175" height="18" rx="9" class="pcall"/><text x="591" y="2614" class="ct" text-anchor="middle">the monitor stops it in lane</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="384" y="2735" class="ax">Hazardous events: HE-07.1</text>
+<text x="384" y="2749" class="ax">Misuse: MU-15</text>
+<text x="384" y="2763" class="ax">Loss scenarios: LS-03, LS-06, LS-18, LS-22</text>
+<text x="384" y="2777" class="ax">Goals at stake: SG-07</text>
+<text x="384" y="2799" class="hd">Varies</text>
+<rect x="434" y="2787" width="46.5" height="16" rx="8" class="oc"/>
+<text x="457.2" y="2799" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="485.5" y="2787" width="46.5" height="16" rx="8" class="oc"/>
+<text x="508.8" y="2799" class="oct" text-anchor="middle">ODD-17</text>
+<rect x="537" y="2787" width="46.5" height="16" rx="8" class="oc"/>
+<text x="560.2" y="2799" class="oct" text-anchor="middle">ODD-02</text>
+<rect x="588.5" y="2787" width="46.5" height="16" rx="8" class="oc"/>
+<text x="611.8" y="2799" class="oct" text-anchor="middle">ODD-12</text>
+<text x="384" y="2821" class="hd">Methods</text>
+<rect x="434" y="2809" width="75.2" height="16" rx="8" class="mp"/>
+<text x="471.6" y="2821" class="mpt" text-anchor="middle">In the loop</text>
+<rect x="514.2" y="2809" width="40.8" height="16" rx="8" class="mp"/>
+<text x="534.6" y="2821" class="mpt" text-anchor="middle">Track</text>
+<text x="384" y="2843" class="hd">Passes when</text>
+<text x="384" y="2858" class="s">The monitor detects the loss within its detection</text>
+<text x="384" y="2872" class="s">budget and stops the vehicle in lane with hazard</text>
+<text x="384" y="2886" class="s">lights on, without Autoware; a fault of the monitor</text>
+<text x="384" y="2900" class="s">itself leads to the vehicle's own stop, never to</text>
+<text x="384" y="2914" class="s">the park brake while moving</text>
+<text x="384" y="2930" class="ax">Judged against FSR-07.01, FSR-07.02, FSR-07.06,</text>
+<text x="384" y="2944" class="ax">FSR-07.07, FSR-01.01, FSR-02.02, FSR-04.01, TR-01,</text>
+<text x="384" y="2958" class="ax">SR-01, SR-04</text>
+<text x="384" y="2972" class="ax">Run by VC-03, VC-14</text>
+<rect x="716" y="2545" width="330" height="445" rx="8" class="card"/>
+<text x="730" y="2569" class="gid">SC-18</text>
+<text x="730" y="2589" class="tb">Pull-over minimal risk manoeuvre along a</text>
+<text x="730" y="2605" class="tb">busy kerb</text>
+<rect x="731" y="2611" width="300" height="120" rx="6" class="verge"/>
+<rect x="731" y="2641" width="300" height="64" class="road"/>
+<line x1="731" y1="2673" x2="1031" y2="2673" class="lane"/>
+<line x1="731" y1="2641" x2="1031" y2="2641" class="kerb"/>
+<line x1="731" y1="2705" x2="1031" y2="2705" class="kerb"/>
+<rect x="877" y="2707" width="48" height="20" rx="3" class="bay"/>
+<g><rect x="967" y="2710" width="44" height="14" rx="3" class="oth"/></g>
+<g><rect x="833" y="2697.5" width="16" height="5" rx="2.5" class="key"/><animateTransform attributeName="transform" type="translate" values="-80 0;-73.3 0;-66.7 0;-60 0;-53.3 0;-46.7 0;-40 0;-33.3 0;-26.7 0;-20 0;-13.3 0;-6.7 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<path d="M753 2689 L857 2689 L887 2716 L901 2716" class="ipath"/>
+<g><rect x="889" y="2709.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="-148 -27;-134.8 -27;-121.6 -27;-108.4 -27;-95.2 -27;-82 -27;-68.8 -27;-55.6 -27;-42.8 -25.9;-33 -17.1;-23.2 -8.3;-13.2 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="901" cy="2716" r="12" class="pring"/><rect x="796.2" y="2617" width="209.5" height="18" rx="9" class="pcall"/><text x="901" y="2630" class="ct" text-anchor="middle">pulls over only into a mapped stop</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="730" y="2751" class="ax">Triggering conditions: TC-14</text>
+<text x="730" y="2765" class="ax">Misuse: MU-03</text>
+<text x="730" y="2779" class="ax">Loss scenarios: LS-25</text>
+<text x="730" y="2801" class="hd">Varies</text>
+<rect x="780" y="2789" width="46.5" height="16" rx="8" class="oc"/>
+<text x="803.2" y="2801" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="831.5" y="2789" width="46.5" height="16" rx="8" class="oc"/>
+<text x="854.8" y="2801" class="oct" text-anchor="middle">ODD-05</text>
+<rect x="883" y="2789" width="46.5" height="16" rx="8" class="oc"/>
+<text x="906.2" y="2801" class="oct" text-anchor="middle">ODD-09</text>
+<rect x="934.5" y="2789" width="46.5" height="16" rx="8" class="oc"/>
+<text x="957.8" y="2801" class="oct" text-anchor="middle">ODD-18</text>
+<rect x="780" y="2809" width="46.5" height="16" rx="8" class="oc"/>
+<text x="803.2" y="2821" class="oct" text-anchor="middle">ODD-16</text>
+<text x="730" y="2843" class="hd">Methods</text>
+<rect x="780" y="2831" width="69.5" height="16" rx="8" class="mp"/>
+<text x="814.8" y="2843" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="854.5" y="2831" width="40.8" height="16" rx="8" class="mp"/>
+<text x="874.9" y="2843" class="mpt" text-anchor="middle">Track</text>
+<text x="730" y="2865" class="hd">Passes when</text>
+<text x="730" y="2880" class="s">The vehicle pulls over only into a mapped safe</text>
+<text x="730" y="2894" class="s">stopping place and stops in lane otherwise;</text>
+<text x="730" y="2908" class="s">repeated stop requests go to a remote operator</text>
+<text x="730" y="2924" class="ax">Judged against FSR-07.05, FSR-04.01, FSR-02.02,</text>
+<text x="730" y="2938" class="ax">MRM-1, FM-19, HR-01, AC-02</text>
+<text x="730" y="2952" class="ax">Run by VC-01, VC-02, VC-03, VC-14</text>
+<rect x="24" y="3006" width="330" height="523" rx="8" class="card"/>
+<text x="38" y="3030" class="gid">SC-19</text>
+<text x="38" y="3050" class="tb">Passengers leaving at a stop in lane</text>
+<rect x="39" y="3056" width="300" height="120" rx="6" class="verge"/>
+<rect x="39" y="3086" width="300" height="64" class="road"/>
+<line x1="39" y1="3118" x2="339" y2="3118" class="lane"/>
+<line x1="39" y1="3086" x2="339" y2="3086" class="kerb"/>
+<line x1="39" y1="3150" x2="339" y2="3150" class="kerb"/>
+<g><circle cx="215" cy="3160" r="4.2" class="ped"/></g>
+<g><rect x="317" y="3142.5" width="16" height="5" rx="2.5" class="key"/><animateTransform attributeName="transform" type="translate" values="-246 0;-225.5 0;-205 0;-184.5 0;-164 0;-143.5 0;-123 0;-102.5 0;-82 0;-61.5 0;-41 0;-20.5 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><rect x="197" y="3127.5" width="24" height="13" rx="3" class="sego"/><g><circle cx="199" cy="3141" r="3" class="amb"/><circle cx="219" cy="3141" r="3" class="amb"/><circle cx="199" cy="3127" r="3" class="amb"/><circle cx="219" cy="3127" r="3" class="amb"/><animate attributeName="opacity" values="1;0.15;1" dur="0.8s" repeatCount="indefinite"/></g><animateTransform attributeName="transform" type="translate" values="0 0;0 0" keyTimes="0;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="209" cy="3134" r="12" class="pring"/><rect x="127.2" y="3062" width="163.5" height="18" rx="9" class="pcall"/><text x="209" y="3075" class="ct" text-anchor="middle">warns before they step out</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="38" y="3196" class="ax">Triggering conditions: TC-29</text>
+<text x="38" y="3210" class="ax">Misuse: MU-02</text>
+<text x="38" y="3224" class="ax">Loss scenarios: LS-23</text>
+<text x="38" y="3238" class="ax">Goals at stake: SG-07</text>
+<text x="38" y="3260" class="hd">Varies</text>
+<rect x="88" y="3248" width="46.5" height="16" rx="8" class="oc"/>
+<text x="111.2" y="3260" class="oct" text-anchor="middle">ODD-17</text>
+<rect x="139.5" y="3248" width="46.5" height="16" rx="8" class="oc"/>
+<text x="162.8" y="3260" class="oct" text-anchor="middle">ODD-16</text>
+<rect x="191" y="3248" width="46.5" height="16" rx="8" class="oc"/>
+<text x="214.2" y="3260" class="oct" text-anchor="middle">ODD-12</text>
+<text x="38" y="3282" class="hd">Methods</text>
+<rect x="88" y="3270" width="69.5" height="16" rx="8" class="mp"/>
+<text x="122.8" y="3282" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="162.5" y="3270" width="40.8" height="16" rx="8" class="mp"/>
+<text x="182.9" y="3282" class="mpt" text-anchor="middle">Drill</text>
+<text x="38" y="3304" class="hd">Passes when</text>
+<text x="38" y="3319" class="s">The vehicle holds the minimal risk condition with</text>
+<text x="38" y="3333" class="s">hazard lights on and warns passengers of traffic on</text>
+<text x="38" y="3347" class="s">their side before they leave; the residual risk</text>
+<text x="38" y="3361" class="s">counts against the SOTIF acceptance criteria</text>
+<text x="38" y="3377" class="ax">Judged against FSR-07.02, FSR-07.04, FM-20, AC-02</text>
+<text x="38" y="3391" class="ax">Run by VC-02</text>
+<rect x="370" y="3006" width="330" height="523" rx="8" class="card"/>
+<text x="384" y="3030" class="gid">SC-20</text>
+<rect x="534" y="3017" width="152" height="18" rx="4" class="xp"/>
+<text x="610" y="3030" class="xpt" text-anchor="middle">crosses the ODD boundary</text>
+<text x="384" y="3050" class="tb">Remote driving with a delayed or lost</text>
+<text x="384" y="3066" class="tb">link</text>
+<rect x="385" y="3072" width="300" height="120" rx="6" class="verge"/>
+<rect x="385" y="3102" width="300" height="64" class="road"/>
+<line x1="385" y1="3134" x2="685" y2="3134" class="lane"/>
+<line x1="385" y1="3102" x2="685" y2="3102" class="kerb"/>
+<line x1="385" y1="3166" x2="685" y2="3166" class="kerb"/>
+<path d="M403 3094 L409 3078 L415 3094" class="mast"/>
+<text x="421" y="3091" class="ax">remote driver: link delayed</text>
+<g><circle cx="599" cy="3146" r="4.2" class="key"/><animateTransform attributeName="transform" type="translate" values="0 -66;0 -60.5;0 -55;0 -49.5;0 -44;0 -38.5;0 -33;0 -27.5;0 -22;0 -16.5;0 -11;0 -5.5;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<path d="M407 3150 L519 3150" class="ipath"/>
+<g><rect x="507" y="3143.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="-112 0;-102.7 0;-93.3 0;-84 0;-74.7 0;-65.3 0;-56 0;-46.7 0;-37.3 0;-28 0;-18.7 0;-9.3 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="519" cy="3150" r="12" class="pring"/><rect x="428.6" y="3170" width="180.8" height="18" rx="9" class="pcall"/><text x="519" y="3183" class="ct" text-anchor="middle">rejects stale commands, stops</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="384" y="3212" class="ax">Hazardous events: HE-08.1</text>
+<text x="384" y="3226" class="ax">Triggering conditions: TC-26, TC-27</text>
+<text x="384" y="3240" class="ax">Misuse: MU-17, MU-18</text>
+<text x="384" y="3254" class="ax">Loss scenarios: LS-09, LS-10, LS-11, LS-26</text>
+<text x="384" y="3268" class="ax">Goals at stake: SG-08</text>
+<text x="384" y="3290" class="hd">Varies</text>
+<rect x="434" y="3278" width="46.5" height="16" rx="8" class="oc"/>
+<text x="457.2" y="3290" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="485.5" y="3278" width="46.5" height="16" rx="8" class="ox"/>
+<text x="508.8" y="3290" class="oxt" text-anchor="middle">ODD-15</text>
+<rect x="537" y="3278" width="46.5" height="16" rx="8" class="oc"/>
+<text x="560.2" y="3290" class="oct" text-anchor="middle">ODD-16</text>
+<rect x="588.5" y="3278" width="46.5" height="16" rx="8" class="oc"/>
+<text x="611.8" y="3290" class="oct" text-anchor="middle">ODD-12</text>
+<rect x="434" y="3298" width="98.2" height="16" rx="8" class="ob"/>
+<text x="483.1" y="3310" class="obt" text-anchor="middle">bound FSR-08.01</text>
+<text x="384" y="3332" class="hd">Methods</text>
+<rect x="434" y="3320" width="69.5" height="16" rx="8" class="mp"/>
+<text x="468.8" y="3332" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="508.5" y="3320" width="75.2" height="16" rx="8" class="mp"/>
+<text x="546.1" y="3332" class="mpt" text-anchor="middle">In the loop</text>
+<rect x="588.8" y="3320" width="40.8" height="16" rx="8" class="mp"/>
+<text x="609.1" y="3332" class="mpt" text-anchor="middle">Drill</text>
+<text x="384" y="3354" class="hd">Passes when</text>
+<text x="384" y="3369" class="s">Commands older than the age bound, out of sequence</text>
+<text x="384" y="3383" class="s">or failing their integrity check are rejected and</text>
+<text x="384" y="3397" class="s">the vehicle stops; the envelope checks apply to</text>
+<text x="384" y="3411" class="s">remote commands as to Autoware's; a remote</text>
+<text x="384" y="3425" class="s">emergency stop brakes firmly unless the safety</text>
+<text x="384" y="3439" class="s">channel confirms a road user</text>
+<text x="384" y="3455" class="ax">Judged against MON-04, FSR-07.05, FSR-08.01,</text>
+<text x="384" y="3469" class="ax">FSR-08.02, FSR-08.03, FSR-01.01, FSR-02.02,</text>
+<text x="384" y="3483" class="ax">FSR-04.01, FSR-06.01, FSR-07.01, FSR-03.01, SR-06,</text>
+<text x="384" y="3497" class="ax">FM-11, AC-02</text>
+<text x="384" y="3511" class="ax">Run by VC-02, VC-15</text>
+<rect x="716" y="3006" width="330" height="523" rx="8" class="card"/>
+<text x="730" y="3030" class="gid">SC-21</text>
+<text x="730" y="3050" class="tb">Remote release of the wrong vehicle or</text>
+<text x="730" y="3066" class="tb">at the wrong moment</text>
+<rect x="731" y="3072" width="300" height="120" rx="6" class="verge"/>
+<rect x="731" y="3102" width="300" height="64" class="road"/>
+<line x1="731" y1="3134" x2="1031" y2="3134" class="lane"/>
+<line x1="731" y1="3102" x2="1031" y2="3102" class="kerb"/>
+<line x1="731" y1="3166" x2="1031" y2="3166" class="kerb"/>
+<path d="M749 3094 L755 3078 L761 3094" class="mast"/>
+<text x="767" y="3091" class="ax">release for vehicle 2</text>
+<g><rect x="929" y="3152.5" width="24" height="13" rx="3" class="key"/></g>
+<g><rect x="859" y="3152.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="0 0;0 0" keyTimes="0;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="871" cy="3159" r="12" class="pring"/><rect x="763.4" y="3170" width="215.2" height="18" rx="9" class="pcall"/><text x="871" y="3183" class="ct" text-anchor="middle">moves only on a release bound to it</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="730" y="3212" class="ax">Misuse: MU-16</text>
+<text x="730" y="3226" class="ax">Loss scenarios: LS-12, LS-13</text>
+<text x="730" y="3248" class="hd">Varies</text>
+<rect x="780" y="3236" width="46.5" height="16" rx="8" class="oc"/>
+<text x="803.2" y="3248" class="oct" text-anchor="middle">ODD-15</text>
+<rect x="831.5" y="3236" width="46.5" height="16" rx="8" class="oc"/>
+<text x="854.8" y="3248" class="oct" text-anchor="middle">ODD-09</text>
+<text x="730" y="3270" class="hd">Methods</text>
+<rect x="780" y="3258" width="40.8" height="16" rx="8" class="mp"/>
+<text x="800.4" y="3270" class="mpt" text-anchor="middle">Bench</text>
+<rect x="825.8" y="3258" width="40.8" height="16" rx="8" class="mp"/>
+<text x="846.1" y="3270" class="mpt" text-anchor="middle">Drill</text>
+<text x="730" y="3292" class="hd">Passes when</text>
+<text x="730" y="3307" class="s">A release moves the vehicle only when it is bound</text>
+<text x="730" y="3321" class="s">to that vehicle, authentic and fresh, and the</text>
+<text x="730" y="3335" class="s">release conditions hold</text>
+<text x="730" y="3351" class="ax">Judged against FSR-07.04, FSR-05.01, SR-02, CSR-01,</text>
+<text x="730" y="3365" class="ax">HR-07</text>
+<text x="730" y="3379" class="ax">Run by VC-15</text>
+<rect x="24" y="3545" width="330" height="391" rx="8" class="card"/>
+<text x="38" y="3569" class="gid">SC-22</text>
+<text x="38" y="3589" class="tb">Turn indicator during a turn or lane</text>
+<text x="38" y="3605" class="tb">change</text>
+<rect x="39" y="3611" width="300" height="120" rx="6" class="verge"/>
+<rect x="39" y="3641" width="300" height="64" class="road"/>
+<rect x="239" y="3704" width="34" height="27" class="road"/>
+<line x1="39" y1="3673" x2="339" y2="3673" class="lane"/>
+<line x1="39" y1="3641" x2="339" y2="3641" class="kerb"/>
+<line x1="39" y1="3705" x2="339" y2="3705" class="kerb"/>
+<g><rect x="141" y="3697.5" width="16" height="5" rx="2.5" class="oth"/></g>
+<path d="M61 3689 L222 3689 L228.6 3689.7 L235 3691.6 L240.9 3694.7 L246 3699 L250.3 3704.1 L253.4 3710 L255.3 3716.4 L256 3723" class="ipath"/>
+<g><rect x="203" y="3682.5" width="24" height="13" rx="3" class="sego"/><g><circle cx="205" cy="3696" r="3" class="amb"/><circle cx="225" cy="3696" r="3" class="amb"/><animate attributeName="opacity" values="1;0.15;1" dur="0.8s" repeatCount="indefinite"/></g><animateTransform attributeName="transform" type="translate" values="-154 0;-141.2 0;-128.3 0;-115.5 0;-102.7 0;-89.8 0;-77 0;-64.2 0;-51.3 0;-38.5 0;-25.7 0;-12.8 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="215" cy="3689" r="12" class="pring"/><rect x="121.8" y="3617" width="186.5" height="18" rx="9" class="pcall"/><text x="215" y="3630" class="ct" text-anchor="middle">its indicator matches the turn</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="38" y="3751" class="ax">Hazardous events: HE-09.1</text>
+<text x="38" y="3765" class="ax">Loss scenarios: LS-17</text>
+<text x="38" y="3779" class="ax">Goals at stake: SG-09</text>
+<text x="38" y="3801" class="hd">Varies</text>
+<rect x="88" y="3789" width="46.5" height="16" rx="8" class="oc"/>
+<text x="111.2" y="3801" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="139.5" y="3789" width="46.5" height="16" rx="8" class="oc"/>
+<text x="162.8" y="3801" class="oct" text-anchor="middle">ODD-02</text>
+<rect x="191" y="3789" width="46.5" height="16" rx="8" class="oc"/>
+<text x="214.2" y="3801" class="oct" text-anchor="middle">ODD-16</text>
+<text x="38" y="3823" class="hd">Methods</text>
+<rect x="88" y="3811" width="69.5" height="16" rx="8" class="mp"/>
+<text x="122.8" y="3823" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="162.5" y="3811" width="75.2" height="16" rx="8" class="mp"/>
+<text x="200.1" y="3823" class="mpt" text-anchor="middle">In the loop</text>
+<text x="38" y="3845" class="hd">Passes when</text>
+<text x="38" y="3860" class="s">The indicator always matches the commanded and</text>
+<text x="38" y="3874" class="s">achieved steering direction; on a mismatch hazard</text>
+<text x="38" y="3888" class="s">lights come on</text>
+<text x="38" y="3904" class="ax">Judged against FSR-09.01, FSR-04.01</text>
+<text x="38" y="3918" class="ax">Run by VC-01, VC-02, VC-16</text>
+<rect x="370" y="3545" width="330" height="391" rx="8" class="card"/>
+<text x="384" y="3569" class="gid">SC-23</text>
+<text x="384" y="3589" class="tb">Give and take with other drivers</text>
+<rect x="385" y="3595" width="300" height="120" rx="6" class="verge"/>
+<rect x="385" y="3625" width="300" height="64" class="road"/>
+<rect x="589" y="3595" width="48" height="120" class="road"/>
+<line x1="385" y1="3657" x2="685" y2="3657" class="lane"/>
+<line x1="385" y1="3625" x2="685" y2="3625" class="kerb"/>
+<line x1="385" y1="3689" x2="685" y2="3689" class="kerb"/>
+<line x1="581" y1="3658" x2="581" y2="3688" class="stop"/>
+<g><rect x="594.5" y="3603" width="13" height="24" rx="3" class="key"/><animateTransform attributeName="transform" type="translate" values="0 -18;0 -16.5;0 -15;0 -13.5;0 -12;0 -10.5;0 -9;0 -7.5;0 -6;0 -4.5;0 -3;0 -1.5;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<path d="M407 3673 L569 3673" class="ipath"/>
+<g><rect x="557" y="3666.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="-162 0;-148.5 0;-135 0;-121.5 0;-108 0;-94.5 0;-81 0;-67.5 0;-54 0;-40.5 0;-27 0;-13.5 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="569" cy="3673" r="12" class="pring"/><rect x="484.4" y="3693" width="169.2" height="18" rx="9" class="pcall"/><text x="569" y="3706" class="ct" text-anchor="middle">takes its turn and shows it</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="384" y="3735" class="ax">Triggering conditions: TC-23</text>
+<text x="384" y="3749" class="ax">Goals at stake: SG-03</text>
+<text x="384" y="3771" class="hd">Varies</text>
+<rect x="434" y="3759" width="46.5" height="16" rx="8" class="oc"/>
+<text x="457.2" y="3771" class="oct" text-anchor="middle">ODD-20</text>
+<rect x="485.5" y="3759" width="46.5" height="16" rx="8" class="oc"/>
+<text x="508.8" y="3771" class="oct" text-anchor="middle">ODD-04</text>
+<rect x="537" y="3759" width="46.5" height="16" rx="8" class="oc"/>
+<text x="560.2" y="3771" class="oct" text-anchor="middle">ODD-17</text>
+<rect x="588.5" y="3759" width="46.5" height="16" rx="8" class="oc"/>
+<text x="611.8" y="3771" class="oct" text-anchor="middle">ODD-16</text>
+<text x="384" y="3793" class="hd">Methods</text>
+<rect x="434" y="3781" width="69.5" height="16" rx="8" class="mp"/>
+<text x="468.8" y="3793" class="mpt" text-anchor="middle">Simulation</text>
+<rect x="508.5" y="3781" width="35" height="16" rx="8" class="mp"/>
+<text x="526" y="3793" class="mpt" text-anchor="middle">Road</text>
+<text x="384" y="3815" class="hd">Passes when</text>
+<text x="384" y="3830" class="s">The vehicle takes its turn as the rules give it and</text>
+<text x="384" y="3844" class="s">shows when it yields and when it is about to move;</text>
+<text x="384" y="3858" class="s">its hesitations and stops count against the SOTIF</text>
+<text x="384" y="3872" class="s">acceptance criteria</text>
+<text x="384" y="3888" class="ax">Judged against FSR-06.01, FSR-06.03, FSR-03.02,</text>
+<text x="384" y="3902" class="ax">FM-17, HR-06, AC-02</text>
+<text x="384" y="3916" class="ax">Run by VC-01, VC-02</text>
+<rect x="716" y="3545" width="330" height="391" rx="8" class="card"/>
+<text x="730" y="3569" class="gid">SC-24</text>
+<text x="730" y="3589" class="tb">Passenger misuse and emergencies in the</text>
+<text x="730" y="3605" class="tb">cabin</text>
+<rect x="731" y="3611" width="300" height="120" rx="6" class="verge"/>
+<rect x="827" y="3641" width="108" height="64" rx="14" class="cab"/>
+<rect x="845" y="3651" width="24" height="16" rx="4" class="seat"/>
+<circle cx="854" cy="3659" r="4.2" class="ped"/>
+<circle cx="864" cy="3659" r="2.4" class="sos"/>
+<rect x="845" y="3679" width="24" height="16" rx="4" class="seat"/>
+<circle cx="854" cy="3687" r="4.2" class="ped"/>
+<circle cx="864" cy="3687" r="2.4" class="sos"/>
+<rect x="893" y="3651" width="24" height="16" rx="4" class="seat"/>
+<circle cx="902" cy="3659" r="4.2" class="ped"/>
+<circle cx="912" cy="3659" r="2.4" class="sos"/>
+<rect x="893" y="3679" width="24" height="16" rx="4" class="seat"/>
+<circle cx="902" cy="3687" r="4.2" class="ped"/>
+<circle cx="912" cy="3687" r="2.4" class="sos"/>
+<path d="M749 3633 L755 3617 L761 3633" class="mast"/>
+<text x="767" y="3630" class="ax">remote operator</text>
+<g><circle cx="912" cy="3659" r="12" class="pring"/><rect x="818.8" y="3709" width="186.5" height="18" rx="9" class="pcall"/><text x="912" y="3722" class="ct" text-anchor="middle">every seat reaches an operator</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="730" y="3751" class="ax">Misuse: MU-05, MU-06, MU-09</text>
+<text x="730" y="3773" class="hd">Varies</text>
+<rect x="780" y="3761" width="46.5" height="16" rx="8" class="oc"/>
+<text x="803.2" y="3773" class="oct" text-anchor="middle">ODD-15</text>
+<text x="730" y="3795" class="hd">Methods</text>
+<rect x="780" y="3783" width="40.8" height="16" rx="8" class="mp"/>
+<text x="800.4" y="3795" class="mpt" text-anchor="middle">Bench</text>
+<rect x="825.8" y="3783" width="40.8" height="16" rx="8" class="mp"/>
+<text x="846.1" y="3795" class="mpt" text-anchor="middle">Drill</text>
+<text x="730" y="3817" class="hd">Passes when</text>
+<text x="730" y="3832" class="s">No control is reachable from the cabin; every seat</text>
+<text x="730" y="3846" class="s">reaches a remote operator who can divert the</text>
+<text x="730" y="3860" class="s">vehicle; no trip ends with a person inside without</text>
+<text x="730" y="3874" class="s">an operator's decision</text>
+<text x="730" y="3890" class="ax">Judged against AOU-07, HR-02, HR-05</text>
+<text x="730" y="3904" class="ax">Run by no verification case (validation, WP-V-07)</text>
+<rect x="24" y="3952" width="330" height="375" rx="8" class="card"/>
+<text x="38" y="3976" class="gid">SC-25</text>
+<text x="38" y="3996" class="tb">First responders at a collision</text>
+<rect x="39" y="4002" width="300" height="120" rx="6" class="verge"/>
+<rect x="39" y="4032" width="300" height="64" class="road"/>
+<line x1="39" y1="4064" x2="339" y2="4064" class="lane"/>
+<line x1="39" y1="4032" x2="339" y2="4032" class="kerb"/>
+<line x1="39" y1="4096" x2="339" y2="4096" class="kerb"/>
+<path d="M213 4080 L207.2 4082.4 L206.8 4088.6 L202.8 4083.8 L196.7 4085.3 L200 4080 L196.7 4074.7 L202.8 4076.2 L206.8 4071.4 L207.2 4077.6 Z" class="hit"/>
+<path d="M57 4024 L63 4008 L69 4024" class="mast"/>
+<text x="75" y="4021" class="ax">remote operations</text>
+<g><rect x="205" y="4073.5" width="24" height="13" rx="3" class="oth"/></g>
+<g><circle cx="275" cy="4016" r="4.2" class="key"/></g>
+<g><circle cx="291" cy="4019" r="4.2" class="key"/></g>
+<g><rect x="177" y="4073.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="0 0;0 0" keyTimes="0;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="189" cy="4080" r="12" class="pring"/><rect x="98.6" y="4100" width="180.8" height="18" rx="9" class="pcall"/><text x="189" y="4113" class="ct" text-anchor="middle">holds; doors open from inside</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="38" y="4142" class="ax">Misuse: MU-21</text>
+<text x="38" y="4156" class="ax">Loss scenarios: LS-24</text>
+<text x="38" y="4178" class="hd">Varies</text>
+<rect x="88" y="4166" width="46.5" height="16" rx="8" class="oc"/>
+<text x="111.2" y="4178" class="oct" text-anchor="middle">ODD-12</text>
+<rect x="139.5" y="4166" width="46.5" height="16" rx="8" class="oc"/>
+<text x="162.8" y="4178" class="oct" text-anchor="middle">ODD-15</text>
+<text x="38" y="4200" class="hd">Methods</text>
+<rect x="88" y="4188" width="40.8" height="16" rx="8" class="mp"/>
+<text x="108.4" y="4200" class="mpt" text-anchor="middle">Bench</text>
+<rect x="133.8" y="4188" width="40.8" height="16" rx="8" class="mp"/>
+<text x="154.1" y="4200" class="mpt" text-anchor="middle">Drill</text>
+<text x="38" y="4222" class="hd">Passes when</text>
+<text x="38" y="4237" class="s">The vehicle stops and holds after a collision;</text>
+<text x="38" y="4251" class="s">doors open from inside without power; responders</text>
+<text x="38" y="4265" class="s">can find the isolation points and reach remote</text>
+<text x="38" y="4279" class="s">operations</text>
+<text x="38" y="4295" class="ax">Judged against TR-15, MRM-3, SR-05, HR-08, HR-09</text>
+<text x="38" y="4309" class="ax">Run by no verification case (validation, WP-V-07)</text>
+<rect x="370" y="3952" width="330" height="375" rx="8" class="card"/>
+<text x="384" y="3976" class="gid">SC-26</text>
+<text x="384" y="3996" class="tb">Return to service after maintenance</text>
+<rect x="385" y="4002" width="300" height="120" rx="6" class="verge"/>
+<rect x="455" y="4032" width="80" height="64" rx="4" class="bay"/>
+<text x="495" y="4110" class="ax" text-anchor="middle">depot bay</text>
+<rect x="585" y="4036" width="82" height="56" rx="4" class="sheet"/>
+<rect x="591" y="4044" width="8" height="8" rx="1" class="box"/>
+<text x="603" y="4051.5" class="ax">calibration</text>
+<rect x="591" y="4060" width="8" height="8" rx="1" class="box"/>
+<text x="603" y="4067.5" class="ax">cleanliness</text>
+<rect x="591" y="4076" width="8" height="8" rx="1" class="box"/>
+<text x="603" y="4083.5" class="ax">versions</text>
+<g><rect x="483" y="4057.5" width="24" height="13" rx="3" class="sego"/><animateTransform attributeName="transform" type="translate" values="0 0;0 0" keyTimes="0;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="495" cy="4064" r="12" class="pring"/><rect x="389" y="4008" width="226.8" height="18" rx="9" class="pcall"/><text x="502.4" y="4021" class="ct" text-anchor="middle">no dispatch until checks are recorded</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="384" y="4142" class="ax">Misuse: MU-22, MU-23</text>
+<text x="384" y="4156" class="ax">Loss scenarios: LS-15</text>
+<text x="384" y="4178" class="hd">Varies</text>
+<rect x="434" y="4166" width="46.5" height="16" rx="8" class="oc"/>
+<text x="457.2" y="4178" class="oct" text-anchor="middle">ODD-14</text>
+<text x="384" y="4200" class="hd">Methods</text>
+<rect x="434" y="4188" width="40.8" height="16" rx="8" class="mp"/>
+<text x="454.4" y="4200" class="mpt" text-anchor="middle">Bench</text>
+<rect x="479.8" y="4188" width="40.8" height="16" rx="8" class="mp"/>
+<text x="500.1" y="4200" class="mpt" text-anchor="middle">Drill</text>
+<text x="384" y="4222" class="hd">Passes when</text>
+<text x="384" y="4237" class="s">The vehicle refuses driverless dispatch until</text>
+<text x="384" y="4251" class="s">calibration, cleanliness and versions are checked</text>
+<text x="384" y="4265" class="s">and recorded; parameter changes outside the release</text>
+<text x="384" y="4279" class="s">process are rejected</text>
+<text x="384" y="4295" class="ax">Judged against HR-10, AOU-08, SR-03, CR-03, CSR-05</text>
+<text x="384" y="4309" class="ax">Run by no verification case (validation, WP-V-07)</text>
+<g><rect x="25" y="4354.5" width="24" height="13" rx="3" class="sego"/></g>
+<text x="58" y="4365" class="t">the vehicle</text>
+<g><rect x="152.5" y="4354.5" width="24" height="13" rx="3" class="key"/></g>
+<text x="185.5" y="4365" class="t">what the scenario is about</text>
+<g><rect x="377.5" y="4354.5" width="24" height="13" rx="3" class="oth"/></g>
+<text x="410.5" y="4365" class="t">other road users</text>
+<line x1="536.5" y1="4361" x2="562.5" y2="4361" class="ipath"/>
+<text x="570.5" y="4365" class="t">what the pass criterion asks</text>
+<line x1="774.5" y1="4361" x2="800.5" y2="4361" class="plan"/>
+<text x="808.5" y="4365" class="t">a path it must not just follow</text>
+<rect x="24" y="4377" width="26" height="16" rx="8" class="ox"/>
+<text x="58" y="4389" class="t">swept across the ODD boundary</text>
+<rect x="268.5" y="4377" width="26" height="16" rx="8" class="ob"/>
+<text x="302.5" y="4389" class="t">behaviour bound not yet fixed</text>
+</svg>
