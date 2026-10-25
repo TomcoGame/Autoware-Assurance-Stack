@@ -122,7 +122,7 @@ fsrs:
     goal: SG-03
     asil: C
     element: EL-02
-    text: Limit decelerations from Autoware above the comfortable level that EL-03 does not confirm with a road user or obstacle to a firm, non-emergency level set in WP-S-04 (DQ-019 A)
+    text: Limit decelerations from Autoware above the comfortable level that EL-03 does not confirm with a road user or obstacle to a firm, non-emergency level of 3 m/s² (DQ-019 A, DQ-033 A)
     verify: Fault injection of spurious braking commands; scenario tests
   - id: FSR-03.03
     goal: SG-03

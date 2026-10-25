@@ -26,3 +26,23 @@ Standard clauses: UL 4600 §9, §11; 26262-6; SWE.1–6; MLE.1–4.
 | [WP-W-10](WP-W-10-ml-engineering.md) | ML engineering: data, training, testing and deployment of models | G3 | Skeleton |
 | [WP-W-11](WP-W-11-cybersecurity-implementation-verification.md) | Cybersecurity implementation and verification | G3 | Skeleton |
 | [WP-W-12](WP-W-12-hd-map-data.md) | HD map data (Lanelet2 and point cloud): requirements, production, verification | G3 | Skeleton |
+
+## Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| 21434, 21448, 26262, PAS 8800 | ISO/SAE 21434 (cybersecurity), ISO 21448 (SOTIF), ISO 26262 (functional safety), ISO/PAS 8800 (AI safety). "26262-3" is part 3 of ISO 26262 |
+| ACQ, HWE, MAN, MLE, SUP, SWE, SYS, VAL | Automotive SPICE process groups: acquisition, hardware engineering, management, machine learning engineering, support, software engineering, system engineering, validation. "SWE.1–6" means processes 1 to 6 of the group |
+| DFA | Dependent failure analysis: one cause that could defeat several safety measures at once |
+| G0 to G6 | Gates: project milestones with exit criteria, defined in WP-M-00 §2 |
+| HD map | High-definition map: the detailed lane-level map Autoware drives from |
+| ID | Identifier |
+| ML | Machine learning |
+| ROS 2 | Robot Operating System 2: the middleware Autoware is built on |
+| Skeleton, Draft, In review, Approved, Baselined | Status of a work product: structure only; written, not verified; in verification review; approved; approved and frozen |
+| UL 4600 | The standard for the safety of autonomous products; the main framework here |
+| WP | Work product: a document or record the assurance path needs. WP-M-00 is the register that lists them all |
+| § | Section or clause, as in "UL 4600 §5" |
+| – (en dash) in a range | "through", as in "§5–8" (clauses 5 to 8) |
+
+Other terms are defined in the [Glossary](../../wiki/Glossary.md).

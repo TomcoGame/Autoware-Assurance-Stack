@@ -1,0 +1,427 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1070" height="1676" viewBox="0 0 1070 1676" role="img" aria-labelledby="t d">
+<title id="t">F-08 guide-word scenes</title>
+<desc id="d">Guide-word scenes for F-08 Select and limit the command sent on. M01 No function: No command passed on and the loss not detected; the vehicle continues on its last command instead of stopping (H-07). M02 Stops functioning: Stops passing commands; same as no function (H-07, rated as M01). M03 Unrequested function: Emergency source selected without a request; the vehicle brakes hard (H-03). M04 Function stuck: A stale command passed on; the vehicle does not slow when the new command does (H-02). M05 Excessive function: Command limits not applied; excessive acceleration reaches the vehicle (H-01). M06 Partial function: Limits applied only in part; bounded by M05 (H-01, rated as M05). M07 Functions early: Remote source selected before the operator's link is valid; the vehicle acts on commands that are not the operator's (H-08). M08 Functions late: Leaves the remote source late; as M11 (H-08, rated as M11). M10 Applies too long: Keeps the remote source after the operator has released it; stale commands as in M11 (H-08, rated as M11). M11 Delayed: Remote commands passed on with latency beyond the bound; they are stale when they act (H-08). M12 Inverse function: Reverse gear passed on where forward is commanded (H-10). M13 Erratic or intermittent: Switches between sources; each switch to emergency acts as M03 (H-03, rated as M03).</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg { --req:#23875a; --perf:#c2412b; --road:#e9ebee; --verge:#f7f8f9; --lane:#ffffff; --zeb:#ffffff;
+ --ego:#c2412b; --oth:#9aa1ab; --amber:#e39b00; --a3:#d4644a; --a1:#f5dcd3; --t1:#3b140b; }
+@media (prefers-color-scheme: dark) { svg { --req:#45b882; --perf:#ff7a63; --road:#2b2f36; --verge:#1b1e22;
+ --lane:#7f8792; --zeb:#c9ced6; --ego:#ff7a63; --oth:#6f7782; --amber:#f2b84b; --a3:#bb4f34; --a1:#4a2820; --t1:#f6e3dd; } }
+svg .plot { fill:var(--bg); stroke:var(--grid); stroke-width:1; }
+svg .axis { stroke:var(--ink3); stroke-width:1; }
+svg .ax { font:10.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .req { fill:none; stroke:var(--req); stroke-width:2; stroke-dasharray:5 4; }
+svg .perf { fill:none; stroke:var(--perf); stroke-width:2.4; stroke-linejoin:round; }
+svg .on { stroke:var(--perf); stroke-width:1; stroke-dasharray:2 3; }
+svg .cur { stroke:var(--ink2); stroke-width:1; opacity:.55; }
+svg .verge { fill:var(--verge); stroke:var(--grid); stroke-width:1; }
+svg .road { fill:var(--road); }
+svg .lane { stroke:var(--lane); stroke-width:1.5; stroke-dasharray:8 7; }
+svg .kerb { stroke:var(--ink3); stroke-width:1.2; }
+svg .zebra { fill:var(--zeb); }
+svg .stop { stroke:var(--zeb); stroke-width:3; }
+svg .oth { fill:var(--oth); }
+svg .ego { fill:var(--ego); } svg .egow { fill:var(--bg); opacity:.75; }
+svg .ghost { fill:none; stroke:var(--req); stroke-width:1.4; stroke-dasharray:3 2; } svg .ghostw { fill:none; }
+svg .ped { fill:var(--ink); }
+svg .bike { fill:var(--ink2); }
+svg .mast { fill:none; stroke:var(--ink2); stroke-width:1.6; }
+svg .ipath { fill:none; stroke:var(--req); stroke-width:2; stroke-dasharray:5 4; }
+svg .apath { fill:none; stroke:var(--perf); stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1 1; }
+svg .fault { fill:var(--perf); }
+svg .fx { font:700 10px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--bg); }
+svg .ring { fill:none; stroke:var(--perf); stroke-width:1.6; }
+svg .callout { fill:var(--perf); }
+svg .ct { font:600 11px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--bg); }
+svg .bl-bad { fill:var(--amber); }
+svg .gid { font:700 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .pr { fill:var(--a3); } svg .pf { fill:var(--a1); }
+svg .prt { font:600 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:#ffffff; }
+svg .pft { font:600 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--t1); }
+svg .lr { stroke:var(--req); stroke-width:2; stroke-dasharray:5 4; } svg .lp { stroke:var(--perf); stroke-width:2.4; }
+</style>
+<rect class="bg" width="1070" height="1676"/>
+<text x="24" y="34" class="h">F-08 Select and limit the command sent on: what each malfunction does</text>
+<text x="24" y="56" class="t">WP-C-03 §6.1, Figure 6-4 (F-08): the 12 safety-related guide words, 7 rated and 5 folded into another. Schematic, not simulation results.</text>
+<rect x="24" y="84" width="330" height="372" rx="8" class="card"/>
+<text x="38" y="108" class="gid">M01</text>
+<text x="72" y="108" class="tb">No function</text>
+<text x="38" y="125" class="s">Never acts when it should</text>
+<rect x="239" y="95" width="101" height="19" rx="4" class="pr"/>
+<text x="289.5" y="108.5" class="prt" text-anchor="middle">H-07 · ASIL D</text>
+<rect x="60" y="140" width="258" height="80" class="plot"/>
+<line x1="60" y1="216" x2="318" y2="216" class="axis"/>
+<text x="60" y="232" class="ax">↑ Command sent on</text>
+<text x="318" y="232" class="ax" text-anchor="end">time →</text>
+<path d="M60 216 L111.6 216 L111.6 216 L111.6 164.2 L318 164.2" class="req"/>
+<path d="M60 216 L318 216" class="perf" pathLength="1"/>
+<line x1="111.6" y1="140" x2="111.6" y2="220" class="on"/>
+<g><line x1="318" y1="140" x2="318" y2="220" class="cur"/><animateTransform attributeName="transform" type="translate" values="-258 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<rect x="39" y="256" width="300" height="120" rx="6" class="verge"/>
+<rect x="39" y="286" width="300" height="64" class="road"/>
+<line x1="39" y1="318" x2="339" y2="318" class="lane"/>
+<line x1="39" y1="286" x2="339" y2="286" class="kerb"/>
+<line x1="39" y1="350" x2="339" y2="350" class="kerb"/>
+<path d="M61 334 L103 334 L112 334.2 L121 334.9 L130 335.9 L139 337.1 L148 338.5 L157 339.9 L166 341.1 L175 342.1 L184 342.8 L193 343" class="ipath"/>
+<path d="M61 334 L321 334" class="apath" pathLength="1"><animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></path>
+<g><rect x="181" y="336.5" width="24" height="13" rx="3" class="ghost"/><rect x="197" y="338.5" width="4" height="9" rx="1" class="ghostw"/><animateTransform attributeName="transform" type="translate" values="-132 -9;-121 -9;-109.9 -9;-98.9 -9;-87.8 -8.9;-76.8 -8.5;-65.8 -7.5;-54.8 -6;-43.9 -4.3;-33 -2.7;-22 -1.3;-11 -0.4;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><rect x="309" y="327.5" width="24" height="13" rx="3" class="ego"/><rect x="325" y="329.5" width="4" height="9" rx="1" class="egow"/><animateTransform attributeName="transform" type="translate" values="-260 0;-238.3 0;-216.7 0;-195 0;-173.3 0;-151.7 0;-130 0;-108.3 0;-86.7 0;-65 0;-43.3 0;-21.7 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g opacity="1"><circle cx="113" cy="320" r="6.5" class="fault"/><text x="113" y="323.5" class="fx" text-anchor="middle">!</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.2;0.2;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="233" cy="334" r="12" class="ring"/><rect x="148.4" y="294" width="169.2" height="18" rx="9" class="callout"/><text x="233" y="307" class="ct" text-anchor="middle">drives on with no safe stop</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="38" y="395" class="s">No command passed on and the loss not detected; the</text>
+<text x="38" y="410" class="s">vehicle continues on its last command instead of</text>
+<text x="38" y="425" class="s">stopping</text>
+<text x="38" y="444" class="ax">SG-07 · H-07 No minimal risk manoeuvre when one is…</text>
+<rect x="370" y="84" width="330" height="372" rx="8" class="card"/>
+<text x="384" y="108" class="gid">M02</text>
+<text x="418" y="108" class="tb">Stops functioning</text>
+<text x="384" y="125" class="s">Acts at first, then stops while still needed</text>
+<rect x="591.6" y="95" width="94.4" height="19" rx="4" class="pf"/>
+<text x="638.8" y="108.5" class="pft" text-anchor="middle">rated as M01</text>
+<rect x="406" y="140" width="258" height="80" class="plot"/>
+<line x1="406" y1="216" x2="664" y2="216" class="axis"/>
+<text x="406" y="232" class="ax">↑ Command sent on</text>
+<text x="664" y="232" class="ax" text-anchor="end">time →</text>
+<path d="M406 216 L457.6 216 L457.6 216 L457.6 164.2 L664 164.2" class="req"/>
+<path d="M406 216 L457.6 216 L457.6 216 L457.6 164.2 L547.9 164.2 L547.9 164.2 L547.9 216 L664 216" class="perf" pathLength="1"/>
+<line x1="547.9" y1="140" x2="547.9" y2="220" class="on"/>
+<g><line x1="664" y1="140" x2="664" y2="220" class="cur"/><animateTransform attributeName="transform" type="translate" values="-258 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<rect x="385" y="256" width="300" height="120" rx="6" class="verge"/>
+<rect x="385" y="286" width="300" height="64" class="road"/>
+<line x1="385" y1="318" x2="685" y2="318" class="lane"/>
+<line x1="385" y1="286" x2="685" y2="286" class="kerb"/>
+<line x1="385" y1="350" x2="685" y2="350" class="kerb"/>
+<path d="M407 334 L491 334 L500 334.2 L509 334.9 L518 335.9 L527 337.1 L536 338.5 L545 339.9 L554 341.1 L563 342.1 L572 342.8 L581 343" class="ipath"/>
+<path d="M407 334 L667 334" class="apath" pathLength="1"><animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></path>
+<g><rect x="569" y="336.5" width="24" height="13" rx="3" class="ghost"/><rect x="585" y="338.5" width="4" height="9" rx="1" class="ghostw"/><animateTransform attributeName="transform" type="translate" values="-174 -9;-159.5 -9;-144.9 -9;-130.4 -9;-115.8 -9;-101.3 -9;-86.7 -8.9;-72.2 -8.2;-57.8 -6.4;-43.4 -4.3;-29 -2.1;-14.5 -0.6;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><rect x="655" y="327.5" width="24" height="13" rx="3" class="ego"/><rect x="671" y="329.5" width="4" height="9" rx="1" class="egow"/><animateTransform attributeName="transform" type="translate" values="-260 0;-238.3 0;-216.7 0;-195 0;-173.3 0;-151.7 0;-130 0;-108.3 0;-86.7 0;-65 0;-43.3 0;-21.7 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g opacity="1"><circle cx="550" cy="320" r="6.5" class="fault"/><text x="550" y="323.5" class="fx" text-anchor="middle">!</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.4;0.4;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="621" cy="334" r="12" class="ring"/><rect x="511.8" y="294" width="169.2" height="18" rx="9" class="callout"/><text x="596.4" y="307" class="ct" text-anchor="middle">drives on with no safe stop</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="384" y="395" class="s">Stops passing commands; same as no function</text>
+<text x="384" y="444" class="ax">SG-07 · H-07 No minimal risk manoeuvre when one is…</text>
+<rect x="716" y="84" width="330" height="372" rx="8" class="card"/>
+<text x="730" y="108" class="gid">M03</text>
+<text x="764" y="108" class="tb">Unrequested functi…</text>
+<text x="730" y="125" class="s">Acts when it should not</text>
+<rect x="931" y="95" width="101" height="19" rx="4" class="pr"/>
+<text x="981.5" y="108.5" class="prt" text-anchor="middle">H-03 · ASIL C</text>
+<rect x="752" y="140" width="258" height="80" class="plot"/>
+<line x1="752" y1="216" x2="1010" y2="216" class="axis"/>
+<text x="752" y="232" class="ax">↑ Command sent on</text>
+<text x="1010" y="232" class="ax" text-anchor="end">time →</text>
+<path d="M752 216 L1010 216" class="req"/>
+<path d="M752 216 L829.4 216 L829.4 216 L829.4 164.2 L919.7 164.2 L919.7 164.2 L919.7 216 L1010 216" class="perf" pathLength="1"/>
+<line x1="829.4" y1="140" x2="829.4" y2="220" class="on"/>
+<g><line x1="1010" y1="140" x2="1010" y2="220" class="cur"/><animateTransform attributeName="transform" type="translate" values="-258 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<rect x="731" y="256" width="300" height="120" rx="6" class="verge"/>
+<rect x="731" y="286" width="300" height="64" class="road"/>
+<line x1="731" y1="318" x2="1031" y2="318" class="lane"/>
+<line x1="731" y1="286" x2="1031" y2="286" class="kerb"/>
+<line x1="731" y1="350" x2="1031" y2="350" class="kerb"/>
+<g><rect x="836" y="327.5" width="24" height="13" rx="3" class="oth"/><animateTransform attributeName="transform" type="translate" values="-87 0;-79.8 0;-72.5 0;-65.2 0;-58 0;-50.8 0;-43.5 0;-36.2 0;-29 0;-21.8 0;-14.5 0;-7.2 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<path d="M811 334 L1013 334" class="ipath"/>
+<path d="M811 334 L875 334" class="apath" pathLength="1"><animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></path>
+<g><rect x="1001" y="327.5" width="24" height="13" rx="3" class="ghost"/><rect x="1017" y="329.5" width="4" height="9" rx="1" class="ghostw"/><animateTransform attributeName="transform" type="translate" values="-202 0;-185.2 0;-168.3 0;-151.5 0;-134.7 0;-117.8 0;-101 0;-84.2 0;-67.3 0;-50.5 0;-33.7 0;-16.8 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><rect x="863" y="327.5" width="24" height="13" rx="3" class="ego"/><rect x="879" y="329.5" width="4" height="9" rx="1" class="egow"/><animateTransform attributeName="transform" type="translate" values="-64 0;-58.7 0;-53.3 0;-48 0;-42.7 0;-37.3 0;-32 0;-26.7 0;-21.3 0;-16 0;-10.7 0;-5.3 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g opacity="1"><circle cx="830.2" cy="320" r="6.5" class="fault"/><text x="830.2" y="323.5" class="fx" text-anchor="middle">!</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.2;0.2;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="861" cy="334" r="12" class="ring"/><rect x="790.8" y="294" width="140.5" height="18" rx="9" class="callout"/><text x="861" y="307" class="ct" text-anchor="middle">the car behind runs in</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="730" y="395" class="s">Emergency source selected without a request; the</text>
+<text x="730" y="410" class="s">vehicle brakes hard</text>
+<text x="730" y="444" class="ax">SG-03 · H-03 Unintended hard deceleration</text>
+<rect x="24" y="472" width="330" height="372" rx="8" class="card"/>
+<text x="38" y="496" class="gid">M04</text>
+<text x="72" y="496" class="tb">Function stuck</text>
+<text x="38" y="513" class="s">Holds its last output and ignores new input</text>
+<rect x="239" y="483" width="101" height="19" rx="4" class="pr"/>
+<text x="289.5" y="496.5" class="prt" text-anchor="middle">H-02 · ASIL D</text>
+<rect x="60" y="528" width="258" height="80" class="plot"/>
+<line x1="60" y1="604" x2="318" y2="604" class="axis"/>
+<text x="60" y="620" class="ax">↑ Command sent on</text>
+<text x="318" y="620" class="ax" text-anchor="end">time →</text>
+<path d="M60 604 L98.7 604 L98.7 604 L98.7 552.2 L176.1 552.2 L176.1 552.2 L176.1 589.2 L318 589.2" class="req"/>
+<path d="M60 604 L98.7 604 L98.7 604 L98.7 552.2 L318 552.2" class="perf" pathLength="1"/>
+<line x1="176.1" y1="528" x2="176.1" y2="608" class="on"/>
+<g><line x1="318" y1="528" x2="318" y2="608" class="cur"/><animateTransform attributeName="transform" type="translate" values="-258 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<rect x="39" y="644" width="300" height="120" rx="6" class="verge"/>
+<rect x="39" y="674" width="300" height="64" class="road"/>
+<line x1="39" y1="706" x2="339" y2="706" class="lane"/>
+<line x1="39" y1="674" x2="339" y2="674" class="kerb"/>
+<line x1="39" y1="738" x2="339" y2="738" class="kerb"/>
+<rect x="245" y="677" width="24" height="4" class="zebra"/>
+<rect x="245" y="685" width="24" height="4" class="zebra"/>
+<rect x="245" y="693" width="24" height="4" class="zebra"/>
+<rect x="245" y="701" width="24" height="4" class="zebra"/>
+<rect x="245" y="709" width="24" height="4" class="zebra"/>
+<rect x="245" y="717" width="24" height="4" class="zebra"/>
+<rect x="245" y="725" width="24" height="4" class="zebra"/>
+<rect x="245" y="733" width="24" height="4" class="zebra"/>
+<line x1="238" y1="707" x2="238" y2="737" class="stop"/>
+<circle cx="257" cy="716" r="4.2" class="ped"/>
+<path d="M61 722 L223 722" class="ipath"/>
+<path d="M61 722 L243 722" class="apath" pathLength="1"><animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></path>
+<g><rect x="211" y="715.5" width="24" height="13" rx="3" class="ghost"/><rect x="227" y="717.5" width="4" height="9" rx="1" class="ghostw"/><animateTransform attributeName="transform" type="translate" values="-162 0;-148.5 0;-135 0;-121.5 0;-108 0;-94.5 0;-81 0;-67.5 0;-54 0;-40.5 0;-27 0;-13.5 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><rect x="231" y="715.5" width="24" height="13" rx="3" class="ego"/><rect x="247" y="717.5" width="4" height="9" rx="1" class="egow"/><animateTransform attributeName="transform" type="translate" values="-182 0;-166.8 0;-151.7 0;-136.5 0;-121.3 0;-106.2 0;-91 0;-75.8 0;-60.7 0;-45.5 0;-30.3 0;-15.2 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g opacity="1"><circle cx="142.9" cy="708" r="6.5" class="fault"/><text x="142.9" y="711.5" class="fx" text-anchor="middle">!</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.3;0.4;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="257" cy="716" r="12" class="ring"/><rect x="198.2" y="676" width="117.5" height="18" rx="9" class="callout"/><text x="257" y="689" class="ct" text-anchor="middle">into the crosswalk</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="38" y="783" class="s">A stale command passed on; the vehicle does not slow</text>
+<text x="38" y="798" class="s">when the new command does</text>
+<text x="38" y="832" class="ax">SG-02 · H-02 Insufficient deceleration</text>
+<rect x="370" y="472" width="330" height="372" rx="8" class="card"/>
+<text x="384" y="496" class="gid">M05</text>
+<text x="418" y="496" class="tb">Excessive function</text>
+<text x="384" y="513" class="s">Output larger than intended</text>
+<rect x="585" y="483" width="101" height="19" rx="4" class="pr"/>
+<text x="635.5" y="496.5" class="prt" text-anchor="middle">H-01 · ASIL D</text>
+<rect x="406" y="528" width="258" height="80" class="plot"/>
+<line x1="406" y1="604" x2="664" y2="604" class="axis"/>
+<text x="406" y="620" class="ax">↑ Command sent on</text>
+<text x="664" y="620" class="ax" text-anchor="end">time →</text>
+<path d="M406 604 L457.6 604 L457.6 604 L457.6 552.2 L664 552.2" class="req"/>
+<path d="M406 604 L457.6 604 L457.6 604 L457.6 533 L664 533" class="perf" pathLength="1"/>
+<line x1="457.6" y1="528" x2="457.6" y2="608" class="on"/>
+<g><line x1="664" y1="528" x2="664" y2="608" class="cur"/><animateTransform attributeName="transform" type="translate" values="-258 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<rect x="385" y="644" width="300" height="120" rx="6" class="verge"/>
+<rect x="385" y="674" width="300" height="64" class="road"/>
+<line x1="385" y1="706" x2="685" y2="706" class="lane"/>
+<line x1="385" y1="674" x2="685" y2="674" class="kerb"/>
+<line x1="385" y1="738" x2="685" y2="738" class="kerb"/>
+<g><rect x="613" y="715.5" width="24" height="13" rx="3" class="oth"/></g>
+<path d="M407 722 L581 722" class="ipath"/>
+<path d="M407 722 L601 722" class="apath" pathLength="1"><animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></path>
+<g><rect x="569" y="715.5" width="24" height="13" rx="3" class="ghost"/><rect x="585" y="717.5" width="4" height="9" rx="1" class="ghostw"/><animateTransform attributeName="transform" type="translate" values="-174 0;-159.5 0;-145 0;-130.5 0;-116 0;-101.5 0;-87 0;-72.5 0;-58 0;-43.5 0;-29 0;-14.5 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><rect x="589" y="715.5" width="24" height="13" rx="3" class="ego"/><rect x="605" y="717.5" width="4" height="9" rx="1" class="egow"/><animateTransform attributeName="transform" type="translate" values="-194 0;-177.8 0;-161.7 0;-145.5 0;-129.3 0;-113.2 0;-97 0;-80.8 0;-64.7 0;-48.5 0;-32.3 0;-16.2 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g opacity="1"><circle cx="445.8" cy="708" r="6.5" class="fault"/><text x="445.8" y="711.5" class="fx" text-anchor="middle">!</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.2;0.2;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="613" cy="722" r="12" class="ring"/><rect x="534.8" y="682" width="146.2" height="18" rx="9" class="callout"/><text x="607.9" y="695" class="ct" text-anchor="middle">closes on the car ahead</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="384" y="783" class="s">Command limits not applied; excessive acceleration</text>
+<text x="384" y="798" class="s">reaches the vehicle</text>
+<text x="384" y="832" class="ax">SG-01 · H-01 Unintended acceleration</text>
+<rect x="716" y="472" width="330" height="372" rx="8" class="card"/>
+<text x="730" y="496" class="gid">M06</text>
+<text x="764" y="496" class="tb">Partial function</text>
+<text x="730" y="513" class="s">Output smaller than intended but not zero</text>
+<rect x="937.6" y="483" width="94.4" height="19" rx="4" class="pf"/>
+<text x="984.8" y="496.5" class="pft" text-anchor="middle">rated as M05</text>
+<rect x="752" y="528" width="258" height="80" class="plot"/>
+<line x1="752" y1="604" x2="1010" y2="604" class="axis"/>
+<text x="752" y="620" class="ax">↑ Command sent on</text>
+<text x="1010" y="620" class="ax" text-anchor="end">time →</text>
+<path d="M752 604 L803.6 604 L803.6 604 L803.6 552.2 L1010 552.2" class="req"/>
+<path d="M752 604 L803.6 604 L803.6 604 L803.6 578.1 L1010 578.1" class="perf" pathLength="1"/>
+<line x1="803.6" y1="528" x2="803.6" y2="608" class="on"/>
+<g><line x1="1010" y1="528" x2="1010" y2="608" class="cur"/><animateTransform attributeName="transform" type="translate" values="-258 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<rect x="731" y="644" width="300" height="120" rx="6" class="verge"/>
+<rect x="731" y="674" width="300" height="64" class="road"/>
+<line x1="731" y1="706" x2="1031" y2="706" class="lane"/>
+<line x1="731" y1="674" x2="1031" y2="674" class="kerb"/>
+<line x1="731" y1="738" x2="1031" y2="738" class="kerb"/>
+<g><rect x="959" y="715.5" width="24" height="13" rx="3" class="oth"/></g>
+<path d="M753 722 L927 722" class="ipath"/>
+<path d="M753 722 L947 722" class="apath" pathLength="1"><animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></path>
+<g><rect x="915" y="715.5" width="24" height="13" rx="3" class="ghost"/><rect x="931" y="717.5" width="4" height="9" rx="1" class="ghostw"/><animateTransform attributeName="transform" type="translate" values="-174 0;-159.5 0;-145 0;-130.5 0;-116 0;-101.5 0;-87 0;-72.5 0;-58 0;-43.5 0;-29 0;-14.5 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><rect x="935" y="715.5" width="24" height="13" rx="3" class="ego"/><rect x="951" y="717.5" width="4" height="9" rx="1" class="egow"/><animateTransform attributeName="transform" type="translate" values="-194 0;-177.8 0;-161.7 0;-145.5 0;-129.3 0;-113.2 0;-97 0;-80.8 0;-64.7 0;-48.5 0;-32.3 0;-16.2 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g opacity="1"><circle cx="791.8" cy="708" r="6.5" class="fault"/><text x="791.8" y="711.5" class="fx" text-anchor="middle">!</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.2;0.2;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="959" cy="722" r="12" class="ring"/><rect x="880.8" y="682" width="146.2" height="18" rx="9" class="callout"/><text x="953.9" y="695" class="ct" text-anchor="middle">closes on the car ahead</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="730" y="783" class="s">Limits applied only in part; bounded by M05</text>
+<text x="730" y="832" class="ax">SG-01 · H-01 Unintended acceleration</text>
+<rect x="24" y="860" width="330" height="372" rx="8" class="card"/>
+<text x="38" y="884" class="gid">M07</text>
+<text x="72" y="884" class="tb">Functions early</text>
+<text x="38" y="901" class="s">Acts before its trigger</text>
+<rect x="239" y="871" width="101" height="19" rx="4" class="pr"/>
+<text x="289.5" y="884.5" class="prt" text-anchor="middle">H-08 · ASIL C</text>
+<rect x="60" y="916" width="258" height="80" class="plot"/>
+<line x1="60" y1="992" x2="318" y2="992" class="axis"/>
+<text x="60" y="1008" class="ax">↑ Command sent on</text>
+<text x="318" y="1008" class="ax" text-anchor="end">time →</text>
+<path d="M60 992 L176.1 992 L176.1 992 L176.1 940.2 L318 940.2" class="req"/>
+<path d="M60 992 L111.6 992 L111.6 992 L111.6 940.2 L318 940.2" class="perf" pathLength="1"/>
+<line x1="111.6" y1="916" x2="111.6" y2="996" class="on"/>
+<g><line x1="318" y1="916" x2="318" y2="996" class="cur"/><animateTransform attributeName="transform" type="translate" values="-258 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<rect x="39" y="1032" width="300" height="120" rx="6" class="verge"/>
+<rect x="39" y="1062" width="300" height="64" class="road"/>
+<line x1="39" y1="1094" x2="339" y2="1094" class="lane"/>
+<line x1="39" y1="1062" x2="339" y2="1062" class="kerb"/>
+<line x1="39" y1="1126" x2="339" y2="1126" class="kerb"/>
+<g><rect x="277" y="1103.5" width="24" height="13" rx="3" class="oth"/></g>
+<path d="M57 1054 L63 1038 L69 1054" class="mast"/>
+<text x="75" y="1051" class="ax">remote operator: stop</text>
+<path d="M61 1110 L247 1110" class="ipath"/>
+<path d="M61 1110 L272 1110" class="apath" pathLength="1"><animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></path>
+<g><rect x="235" y="1103.5" width="24" height="13" rx="3" class="ghost"/><rect x="251" y="1105.5" width="4" height="9" rx="1" class="ghostw"/><animateTransform attributeName="transform" type="translate" values="-186 0;-170.5 0;-155 0;-139.5 0;-124 0;-108.5 0;-93 0;-77.5 0;-62 0;-46.5 0;-31 0;-15.5 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><rect x="260" y="1103.5" width="24" height="13" rx="3" class="ego"/><rect x="276" y="1105.5" width="4" height="9" rx="1" class="egow"/><animateTransform attributeName="transform" type="translate" values="-211 0;-193.4 0;-175.8 0;-158.2 0;-140.7 0;-123.1 0;-105.5 0;-87.9 0;-70.3 0;-52.8 0;-35.2 0;-17.6 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g opacity="1"><circle cx="103.2" cy="1096" r="6.5" class="fault"/><text x="103.2" y="1099.5" class="fx" text-anchor="middle">!</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.2;0.2;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="277" cy="1110" r="12" class="ring"/><rect x="171.5" y="1070" width="163.5" height="18" rx="9" class="callout"/><text x="253.2" y="1083" class="ct" text-anchor="middle">keeps to the stale command</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="38" y="1171" class="s">Remote source selected before the operator's link is</text>
+<text x="38" y="1186" class="s">valid; the vehicle acts on commands that are not the</text>
+<text x="38" y="1201" class="s">operator's</text>
+<text x="38" y="1220" class="ax">SG-08 · H-08 Acting on stale or corrupted remote dr…</text>
+<rect x="370" y="860" width="330" height="372" rx="8" class="card"/>
+<text x="384" y="884" class="gid">M08</text>
+<text x="418" y="884" class="tb">Functions late</text>
+<text x="384" y="901" class="s">Acts after its trigger has passed</text>
+<rect x="591.6" y="871" width="94.4" height="19" rx="4" class="pf"/>
+<text x="638.8" y="884.5" class="pft" text-anchor="middle">rated as M11</text>
+<rect x="406" y="916" width="258" height="80" class="plot"/>
+<line x1="406" y1="992" x2="664" y2="992" class="axis"/>
+<text x="406" y="1008" class="ax">↑ Command sent on</text>
+<text x="664" y="1008" class="ax" text-anchor="end">time →</text>
+<path d="M406 992 L457.6 992 L457.6 992 L457.6 940.2 L664 940.2" class="req"/>
+<path d="M406 992 L535 992 L535 992 L535 940.2 L664 940.2" class="perf" pathLength="1"/>
+<line x1="457.6" y1="916" x2="457.6" y2="996" class="on"/>
+<g><line x1="664" y1="916" x2="664" y2="996" class="cur"/><animateTransform attributeName="transform" type="translate" values="-258 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<rect x="385" y="1032" width="300" height="120" rx="6" class="verge"/>
+<rect x="385" y="1062" width="300" height="64" class="road"/>
+<line x1="385" y1="1094" x2="685" y2="1094" class="lane"/>
+<line x1="385" y1="1062" x2="685" y2="1062" class="kerb"/>
+<line x1="385" y1="1126" x2="685" y2="1126" class="kerb"/>
+<g><rect x="623" y="1103.5" width="24" height="13" rx="3" class="oth"/></g>
+<path d="M403 1054 L409 1038 L415 1054" class="mast"/>
+<text x="421" y="1051" class="ax">remote operator: stop</text>
+<path d="M407 1110 L593 1110" class="ipath"/>
+<path d="M407 1110 L618 1110" class="apath" pathLength="1"><animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></path>
+<g><rect x="581" y="1103.5" width="24" height="13" rx="3" class="ghost"/><rect x="597" y="1105.5" width="4" height="9" rx="1" class="ghostw"/><animateTransform attributeName="transform" type="translate" values="-186 0;-170.5 0;-155 0;-139.5 0;-124 0;-108.5 0;-93 0;-77.5 0;-62 0;-46.5 0;-31 0;-15.5 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><rect x="606" y="1103.5" width="24" height="13" rx="3" class="ego"/><rect x="622" y="1105.5" width="4" height="9" rx="1" class="egow"/><animateTransform attributeName="transform" type="translate" values="-211 0;-193.4 0;-175.8 0;-158.2 0;-140.7 0;-123.1 0;-105.5 0;-87.9 0;-70.3 0;-52.8 0;-35.2 0;-17.6 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g opacity="1"><circle cx="449.2" cy="1096" r="6.5" class="fault"/><text x="449.2" y="1099.5" class="fx" text-anchor="middle">!</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.2;0.2;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="623" cy="1110" r="12" class="ring"/><rect x="517.5" y="1070" width="163.5" height="18" rx="9" class="callout"/><text x="599.2" y="1083" class="ct" text-anchor="middle">keeps to the stale command</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="384" y="1171" class="s">Leaves the remote source late; as M11</text>
+<text x="384" y="1220" class="ax">SG-08 · H-08 Acting on stale or corrupted remote dr…</text>
+<rect x="716" y="860" width="330" height="372" rx="8" class="card"/>
+<text x="730" y="884" class="gid">M10</text>
+<text x="764" y="884" class="tb">Applies too long</text>
+<text x="730" y="901" class="s">Output lasts longer than intended</text>
+<rect x="937.6" y="871" width="94.4" height="19" rx="4" class="pf"/>
+<text x="984.8" y="884.5" class="pft" text-anchor="middle">rated as M11</text>
+<rect x="752" y="916" width="258" height="80" class="plot"/>
+<line x1="752" y1="992" x2="1010" y2="992" class="axis"/>
+<text x="752" y="1008" class="ax">↑ Command sent on</text>
+<text x="1010" y="1008" class="ax" text-anchor="end">time →</text>
+<path d="M752 992 L803.6 992 L803.6 992 L803.6 940.2 L893.9 940.2 L893.9 940.2 L893.9 992 L1010 992" class="req"/>
+<path d="M752 992 L803.6 992 L803.6 992 L803.6 940.2 L984.2 940.2 L984.2 940.2 L984.2 992 L1010 992" class="perf" pathLength="1"/>
+<line x1="893.9" y1="916" x2="893.9" y2="996" class="on"/>
+<g><line x1="1010" y1="916" x2="1010" y2="996" class="cur"/><animateTransform attributeName="transform" type="translate" values="-258 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<rect x="731" y="1032" width="300" height="120" rx="6" class="verge"/>
+<rect x="731" y="1062" width="300" height="64" class="road"/>
+<line x1="731" y1="1094" x2="1031" y2="1094" class="lane"/>
+<line x1="731" y1="1062" x2="1031" y2="1062" class="kerb"/>
+<line x1="731" y1="1126" x2="1031" y2="1126" class="kerb"/>
+<g><rect x="969" y="1103.5" width="24" height="13" rx="3" class="oth"/></g>
+<path d="M749 1054 L755 1038 L761 1054" class="mast"/>
+<text x="767" y="1051" class="ax">remote operator: stop</text>
+<path d="M753 1110 L939 1110" class="ipath"/>
+<path d="M753 1110 L964 1110" class="apath" pathLength="1"><animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></path>
+<g><rect x="927" y="1103.5" width="24" height="13" rx="3" class="ghost"/><rect x="943" y="1105.5" width="4" height="9" rx="1" class="ghostw"/><animateTransform attributeName="transform" type="translate" values="-186 0;-170.5 0;-155 0;-139.5 0;-124 0;-108.5 0;-93 0;-77.5 0;-62 0;-46.5 0;-31 0;-15.5 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><rect x="952" y="1103.5" width="24" height="13" rx="3" class="ego"/><rect x="968" y="1105.5" width="4" height="9" rx="1" class="egow"/><animateTransform attributeName="transform" type="translate" values="-211 0;-193.4 0;-175.8 0;-158.2 0;-140.7 0;-123.1 0;-105.5 0;-87.9 0;-70.3 0;-52.8 0;-35.2 0;-17.6 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g opacity="1"><circle cx="869" cy="1096" r="6.5" class="fault"/><text x="869" y="1099.5" class="fx" text-anchor="middle">!</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.4;0.4;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="969" cy="1110" r="12" class="ring"/><rect x="863.5" y="1070" width="163.5" height="18" rx="9" class="callout"/><text x="945.2" y="1083" class="ct" text-anchor="middle">keeps to the stale command</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="730" y="1171" class="s">Keeps the remote source after the operator has</text>
+<text x="730" y="1186" class="s">released it; stale commands as in M11</text>
+<text x="730" y="1220" class="ax">SG-08 · H-08 Acting on stale or corrupted remote dr…</text>
+<rect x="24" y="1248" width="330" height="372" rx="8" class="card"/>
+<text x="38" y="1272" class="gid">M11</text>
+<text x="72" y="1272" class="tb">Delayed</text>
+<text x="38" y="1289" class="s">Acts correctly but with latency beyond its specific…</text>
+<rect x="239" y="1259" width="101" height="19" rx="4" class="pr"/>
+<text x="289.5" y="1272.5" class="prt" text-anchor="middle">H-08 · ASIL C</text>
+<rect x="60" y="1304" width="258" height="80" class="plot"/>
+<line x1="60" y1="1380" x2="318" y2="1380" class="axis"/>
+<text x="60" y="1396" class="ax">↑ Command sent on</text>
+<text x="318" y="1396" class="ax" text-anchor="end">time →</text>
+<path d="M60 1380 L111.6 1380 L111.6 1380 L111.6 1328.2 L318 1328.2" class="req"/>
+<path d="M60 1380 L163.2 1380 L183.8 1360.8 L204.5 1347.4 L225.1 1338.6 L245.8 1333.4 L271.6 1329.7 L318 1328.2" class="perf" pathLength="1"/>
+<line x1="111.6" y1="1304" x2="111.6" y2="1384" class="on"/>
+<g><line x1="318" y1="1304" x2="318" y2="1384" class="cur"/><animateTransform attributeName="transform" type="translate" values="-258 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<rect x="39" y="1420" width="300" height="120" rx="6" class="verge"/>
+<rect x="39" y="1450" width="300" height="64" class="road"/>
+<line x1="39" y1="1482" x2="339" y2="1482" class="lane"/>
+<line x1="39" y1="1450" x2="339" y2="1450" class="kerb"/>
+<line x1="39" y1="1514" x2="339" y2="1514" class="kerb"/>
+<g><rect x="277" y="1491.5" width="24" height="13" rx="3" class="oth"/></g>
+<path d="M57 1442 L63 1426 L69 1442" class="mast"/>
+<text x="75" y="1439" class="ax">remote operator: stop</text>
+<path d="M61 1498 L247 1498" class="ipath"/>
+<path d="M61 1498 L272 1498" class="apath" pathLength="1"><animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></path>
+<g><rect x="235" y="1491.5" width="24" height="13" rx="3" class="ghost"/><rect x="251" y="1493.5" width="4" height="9" rx="1" class="ghostw"/><animateTransform attributeName="transform" type="translate" values="-186 0;-170.5 0;-155 0;-139.5 0;-124 0;-108.5 0;-93 0;-77.5 0;-62 0;-46.5 0;-31 0;-15.5 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><rect x="260" y="1491.5" width="24" height="13" rx="3" class="ego"/><rect x="276" y="1493.5" width="4" height="9" rx="1" class="egow"/><animateTransform attributeName="transform" type="translate" values="-211 0;-193.4 0;-175.8 0;-158.2 0;-140.7 0;-123.1 0;-105.5 0;-87.9 0;-70.3 0;-52.8 0;-35.2 0;-17.6 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g opacity="1"><circle cx="103.2" cy="1484" r="6.5" class="fault"/><text x="103.2" y="1487.5" class="fx" text-anchor="middle">!</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.2;0.2;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="277" cy="1498" r="12" class="ring"/><rect x="171.5" y="1458" width="163.5" height="18" rx="9" class="callout"/><text x="253.2" y="1471" class="ct" text-anchor="middle">keeps to the stale command</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="38" y="1559" class="s">Remote commands passed on with latency beyond the</text>
+<text x="38" y="1574" class="s">bound; they are stale when they act</text>
+<text x="38" y="1608" class="ax">SG-08 · H-08 Acting on stale or corrupted remote dr…</text>
+<rect x="370" y="1248" width="330" height="372" rx="8" class="card"/>
+<text x="384" y="1272" class="gid">M12</text>
+<text x="418" y="1272" class="tb">Inverse function</text>
+<text x="384" y="1289" class="s">Acts in the opposite direction or sense</text>
+<rect x="585" y="1259" width="101" height="19" rx="4" class="pr"/>
+<text x="635.5" y="1272.5" class="prt" text-anchor="middle">H-10 · ASIL C</text>
+<rect x="406" y="1304" width="258" height="80" class="plot"/>
+<line x1="406" y1="1345.0" x2="664" y2="1345.0" class="axis"/>
+<text x="406" y="1396" class="ax">↑ Command sent on</text>
+<text x="664" y="1396" class="ax" text-anchor="end">time →</text>
+<path d="M406 1345 L457.6 1345 L457.6 1345 L457.6 1322.8 L664 1322.8" class="req"/>
+<path d="M406 1345 L457.6 1345 L457.6 1345 L457.6 1367.2 L664 1367.2" class="perf" pathLength="1"/>
+<line x1="457.6" y1="1304" x2="457.6" y2="1384" class="on"/>
+<g><line x1="664" y1="1304" x2="664" y2="1384" class="cur"/><animateTransform attributeName="transform" type="translate" values="-258 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<rect x="385" y="1420" width="300" height="120" rx="6" class="verge"/>
+<rect x="385" y="1450" width="300" height="64" class="road"/>
+<line x1="385" y1="1482" x2="685" y2="1482" class="lane"/>
+<line x1="385" y1="1450" x2="685" y2="1450" class="kerb"/>
+<line x1="385" y1="1514" x2="685" y2="1514" class="kerb"/>
+<circle cx="503" cy="1498" r="4.2" class="ped"/>
+<path d="M557 1498 L523 1498" class="apath" pathLength="1"><animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></path>
+<g><rect x="545" y="1491.5" width="24" height="13" rx="3" class="ghost"/><rect x="561" y="1493.5" width="4" height="9" rx="1" class="ghostw"/><animateTransform attributeName="transform" type="translate" values="0 0;0 0" keyTimes="0;1" dur="6s" repeatCount="indefinite"/></g>
+<g><rect x="511" y="1491.5" width="24" height="13" rx="3" class="ego"/><rect x="527" y="1493.5" width="4" height="9" rx="1" class="egow"/><animateTransform attributeName="transform" type="translate" values="34 0;31.2 0;28.3 0;25.5 0;22.7 0;19.8 0;17 0;14.2 0;11.3 0;8.5 0;5.7 0;2.8 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g opacity="1"><circle cx="557" cy="1484" r="6.5" class="fault"/><text x="557" y="1487.5" class="fx" text-anchor="middle">!</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.1;0.1;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="507" cy="1498" r="12" class="ring"/><rect x="399.4" y="1458" width="215.2" height="18" rx="9" class="callout"/><text x="507" y="1471" class="ct" text-anchor="middle">rolls back toward the person behind</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="384" y="1559" class="s">Reverse gear passed on where forward is commanded</text>
+<text x="384" y="1608" class="ax">SG-05 · H-10 Unintended reverse motion</text>
+<rect x="716" y="1248" width="330" height="372" rx="8" class="card"/>
+<text x="730" y="1272" class="gid">M13</text>
+<text x="764" y="1272" class="tb">Erratic or intermi…</text>
+<text x="730" y="1289" class="s">Output oscillates, chatters or comes and goes</text>
+<rect x="937.6" y="1259" width="94.4" height="19" rx="4" class="pf"/>
+<text x="984.8" y="1272.5" class="pft" text-anchor="middle">rated as M03</text>
+<rect x="752" y="1304" width="258" height="80" class="plot"/>
+<line x1="752" y1="1380" x2="1010" y2="1380" class="axis"/>
+<text x="752" y="1396" class="ax">↑ Command sent on</text>
+<text x="1010" y="1396" class="ax" text-anchor="end">time →</text>
+<path d="M752 1380 L803.6 1380 L803.6 1380 L803.6 1328.2 L1010 1328.2" class="req"/>
+<path d="M752 1380 L803.6 1380 L803.6 1380 L803.6 1328.2 L824.2 1328.2 L824.2 1311.9 L842.3 1311.9 L842.3 1357.8 L862.9 1357.8 L862.9 1316.4 L883.6 1316.4 L883.6 1366.7 L904.2 1366.7 L904.2 1320.8 L924.9 1320.8 L924.9 1350.4 L945.5 1350.4 L945.5 1309.7 L966.1 1309.7 L966.1 1361.5 L986.8 1361.5 L986.8 1322.3 L1010 1322.3" class="perf" pathLength="1"/>
+<line x1="824.2" y1="1304" x2="824.2" y2="1384" class="on"/>
+<g><line x1="1010" y1="1304" x2="1010" y2="1384" class="cur"/><animateTransform attributeName="transform" type="translate" values="-258 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<rect x="731" y="1420" width="300" height="120" rx="6" class="verge"/>
+<rect x="731" y="1450" width="300" height="64" class="road"/>
+<line x1="731" y1="1482" x2="1031" y2="1482" class="lane"/>
+<line x1="731" y1="1450" x2="1031" y2="1450" class="kerb"/>
+<line x1="731" y1="1514" x2="1031" y2="1514" class="kerb"/>
+<g><rect x="834.4" y="1491.5" width="24" height="13" rx="3" class="oth"/><animateTransform attributeName="transform" type="translate" values="-85.4 0;-78.3 0;-71.2 0;-64.1 0;-56.9 0;-49.8 0;-42.7 0;-35.6 0;-28.5 0;-21.3 0;-14.2 0;-7.1 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<path d="M811 1498 L1013 1498" class="ipath"/>
+<path d="M811 1498 L873.4 1498" class="apath" pathLength="1"><animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></path>
+<g><rect x="1001" y="1491.5" width="24" height="13" rx="3" class="ghost"/><rect x="1017" y="1493.5" width="4" height="9" rx="1" class="ghostw"/><animateTransform attributeName="transform" type="translate" values="-202 0;-185.2 0;-168.3 0;-151.5 0;-134.7 0;-117.8 0;-101 0;-84.2 0;-67.3 0;-50.5 0;-33.7 0;-16.8 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g><rect x="861.4" y="1491.5" width="24" height="13" rx="3" class="ego"/><rect x="877.4" y="1493.5" width="4" height="9" rx="1" class="egow"/><animateTransform attributeName="transform" type="translate" values="-62.4 0;-57.2 0;-52 0;-46.8 0;-41.6 0;-36.4 0;-31.2 0;-26 0;-20.8 0;-15.6 0;-10.4 0;-5.2 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g opacity="1"><circle cx="828.5" cy="1484" r="6.5" class="fault"/><text x="828.5" y="1487.5" class="fx" text-anchor="middle">!</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.2;0.2;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="859.4" cy="1498" r="12" class="ring"/><rect x="789.1" y="1458" width="140.5" height="18" rx="9" class="callout"/><text x="859.4" y="1471" class="ct" text-anchor="middle">the car behind runs in</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="730" y="1559" class="s">Switches between sources; each switch to emergency</text>
+<text x="730" y="1574" class="s">acts as M03</text>
+<text x="730" y="1608" class="ax">SG-03 · H-03 Unintended hard deceleration</text>
+<line x1="24" y1="1646" x2="50" y2="1646" class="lr"/>
+<text x="58" y="1650" class="t">required output, intended path</text>
+<line x1="294" y1="1646" x2="320" y2="1646" class="lp"/>
+<text x="328" y="1650" class="t">performed output, path taken</text>
+<circle cx="554" cy="1646" r="6.5" class="fault"/>
+<text x="554" y="1649.5" class="fx" text-anchor="middle">!</text>
+<text x="568" y="1650" class="t">where the deviation starts</text>
+<circle cx="784" cy="1646" r="8" class="ring"/>
+<text x="800" y="1650" class="t">the moment it matters</text>
+</svg>

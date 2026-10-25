@@ -1,0 +1,462 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="498" viewBox="0 0 1240 498" role="img" aria-labelledby="t d">
+<title id="t">WP-C-03 Figure 6-3: functions against malfunction guide words</title>
+<desc id="d">Function by guide word: F-01 Localise the vehicle on the HD map: M01 H-04, M02 as M01, M03 NA, M04 H-04, M05 H-04, M06 as M05, M07 NSC, M08 H-06, M09 NA, M10 NA, M11 as M08, M12 as M05, M13 as M05, M14 NA; F-02 Detect and track objects: M01 H-02, M02 as M01, M03 H-03, M04 as M01, M05 as M03, M06 as M01, M07 NA, M08 as M11, M09 NA, M10 NA, M11 H-02, M12 as M01, M13 as M03, M14 NA; F-03 Recognise traffic lights: M01 NSC, M02 NSC, M03 NA, M04 as M12, M05 NA, M06 NA, M07 as M12, M08 as M12, M09 NA, M10 NA, M11 as M12, M12 H-06, M13 as M12, M14 NA; F-04 Predict the motion of other road users: M01 H-02, M02 as M01, M03 NA, M04 as M01, M05 H-03, M06 H-06, M07 NA, M08 as M01, M09 NA, M10 NA, M11 as M01, M12 as M06, M13 as M05, M14 NA; F-05 Plan the route to the destination: M01 NSC, M02 NSC, M03 NSC, M04 NSC, M05 NA, M06 NA, M07 NA, M08 NSC, M09 NA, M10 NA, M11 NSC, M12 NSC, M13 NSC, M14 NA; F-06 Plan behaviour and motion: M01 H-07, M02 as M01, M03 H-05, M04 as M06, M05 H-01, M06 H-02, M07 H-06, M08 as M11, M09 as M03, M10 as M13, M11 H-02, M12 H-04, M13 H-03, M14 as M12; F-07 Follow the planned trajectory: M01 H-02, M02 as M01, M03 H-05, M04 as M05, M05 H-01, M06 as M01, M07 NSC, M08 as M11, M09 NA, M10 NA, M11 H-04, M12 H-01, M13 H-04, M14 as M13; F-08 Select and limit the command sent on: M01 H-07, M02 as M01, M03 H-03, M04 H-02, M05 H-01, M06 as M05, M07 H-08, M08 as M11, M09 NA, M10 as M11, M11 H-08, M12 H-10, M13 as M03, M14 NA; F-09 Monitor the system and carry out a minimal risk manoeuvre: M01 H-07, M02 as M01, M03 H-03, M04 as M01, M05 as M03, M06 as M01, M07 as M03, M08 as M11, M09 H-05, M10 NSC, M11 H-07, M12 NA, M13 as M03, M14 NA; F-10 Bound every command to a safety envelope and stop the vehicle independently: M01 NSC, M02 H-07, M03 H-03, M04 H-02, M05 as M03, M06 NSC, M07 as M03, M08 NSC, M09 H-05, M10 NSC, M11 NSC, M12 H-01, M13 as M03, M14 NA; F-11 Accept trips, mode changes and requests: M01 NSC, M02 NSC, M03 H-05, M04 NSC, M05 NA, M06 NA, M07 as M03, M08 NSC, M09 NA, M10 NA, M11 NSC, M12 as M03, M13 NSC, M14 NA; F-12 Signal intent to other road users: M01 H-09, M02 as M01, M03 H-09, M04 as M03, M05 NA, M06 NA, M07 NSC, M08 as M01, M09 as M01, M10 as M03, M11 as M01, M12 H-09, M13 as M03, M14 NA.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg { --a1:#f5dcd3; --a2:#eaa48f; --a3:#d4644a; --a4:#9e2f1c; --t1:#3b140b; --t4:#ffffff; }
+@media (prefers-color-scheme: dark) { svg { --a1:#4a2820; --a2:#7d3a28; --a3:#bb4f34; --a4:#f07656; --t1:#f6e3dd; --t4:#1b0a05; } }
+svg .qm { fill:var(--card); stroke:var(--ink3); stroke-width:1; }
+svg .aa { fill:var(--a1); } svg .ab { fill:var(--a2); } svg .ac { fill:var(--a3); } svg .ad { fill:var(--a4); }
+svg .tq { font:600 12px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .t1 { font:700 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--t1); }
+svg .t4 { font:700 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--t4); }
+svg .col { font:500 11px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink2); }
+svg .sr { fill:var(--a3); } svg .sf { fill:var(--a1); } svg .ns { fill:var(--card); stroke:var(--grid); stroke-width:1; }
+svg .na { fill:var(--bg); stroke:var(--grid); stroke-width:1; }
+svg .cw { font:600 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--t4); }
+svg .cf { font:500 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--t1); }
+svg .cn { font:500 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink3); }
+svg .gh { font:600 11px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .gs { font:10px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+</style>
+<rect class="bg" width="1240" height="498"/>
+<text x="24" y="32" class="h">What each malfunction of each function leads to</text>
+<text x="24" y="54" class="t">WP-C-03 §6.1: every function against the fourteen guide words; the hazard where</text>
+<text x="24" y="71" class="t">a pair is safety-related, or the pair it is rated as where it is folded</text>
+<text x="369.7" y="102" class="gh" text-anchor="middle">M01</text>
+<text x="369.7" y="115" class="gs" text-anchor="middle">No function</text>
+<text x="429.1" y="102" class="gh" text-anchor="middle">M02</text>
+<text x="429.1" y="115" class="gs" text-anchor="middle">Stops</text>
+<text x="429.1" y="126" class="gs" text-anchor="middle">functioning</text>
+<text x="488.6" y="102" class="gh" text-anchor="middle">M03</text>
+<text x="488.6" y="115" class="gs" text-anchor="middle">Unrequested</text>
+<text x="488.6" y="126" class="gs" text-anchor="middle">function</text>
+<text x="548" y="102" class="gh" text-anchor="middle">M04</text>
+<text x="548" y="115" class="gs" text-anchor="middle">Function</text>
+<text x="548" y="126" class="gs" text-anchor="middle">stuck</text>
+<text x="607.4" y="102" class="gh" text-anchor="middle">M05</text>
+<text x="607.4" y="115" class="gs" text-anchor="middle">Excessive</text>
+<text x="607.4" y="126" class="gs" text-anchor="middle">function</text>
+<text x="666.9" y="102" class="gh" text-anchor="middle">M06</text>
+<text x="666.9" y="115" class="gs" text-anchor="middle">Partial</text>
+<text x="666.9" y="126" class="gs" text-anchor="middle">function</text>
+<text x="726.3" y="102" class="gh" text-anchor="middle">M07</text>
+<text x="726.3" y="115" class="gs" text-anchor="middle">Functions</text>
+<text x="726.3" y="126" class="gs" text-anchor="middle">early</text>
+<text x="785.7" y="102" class="gh" text-anchor="middle">M08</text>
+<text x="785.7" y="115" class="gs" text-anchor="middle">Functions</text>
+<text x="785.7" y="126" class="gs" text-anchor="middle">late</text>
+<text x="845.1" y="102" class="gh" text-anchor="middle">M09</text>
+<text x="845.1" y="115" class="gs" text-anchor="middle">Applies too</text>
+<text x="845.1" y="126" class="gs" text-anchor="middle">short</text>
+<text x="904.6" y="102" class="gh" text-anchor="middle">M10</text>
+<text x="904.6" y="115" class="gs" text-anchor="middle">Applies too</text>
+<text x="904.6" y="126" class="gs" text-anchor="middle">long</text>
+<text x="964" y="102" class="gh" text-anchor="middle">M11</text>
+<text x="964" y="115" class="gs" text-anchor="middle">Delayed</text>
+<text x="1023.4" y="102" class="gh" text-anchor="middle">M12</text>
+<text x="1023.4" y="115" class="gs" text-anchor="middle">Inverse</text>
+<text x="1023.4" y="126" class="gs" text-anchor="middle">function</text>
+<text x="1082.9" y="102" class="gh" text-anchor="middle">M13</text>
+<text x="1082.9" y="115" class="gs" text-anchor="middle">Erratic or</text>
+<text x="1082.9" y="126" class="gs" text-anchor="middle">intermittent</text>
+<text x="1142.3" y="102" class="gh" text-anchor="middle">M14</text>
+<text x="1142.3" y="115" class="gs" text-anchor="middle">Uneven</text>
+<text x="1210" y="115" class="gs" text-anchor="middle">Rated</text>
+<text x="24" y="155" class="tb">F-01</text>
+<text x="64" y="155" class="s">Localise the vehicle on the HD map</text>
+<rect x="341" y="140" width="57.4" height="22" rx="3" class="sr"/>
+<text x="369.7" y="155" class="cw" text-anchor="middle">H-04</text>
+<rect x="400.4" y="140" width="57.4" height="22" rx="3" class="sf"/>
+<text x="429.1" y="155" class="cf" text-anchor="middle">→M01</text>
+<rect x="459.9" y="140" width="57.4" height="22" rx="3" class="na"/>
+<text x="488.6" y="155" class="cn" text-anchor="middle">·</text>
+<rect x="519.3" y="140" width="57.4" height="22" rx="3" class="sr"/>
+<text x="548" y="155" class="cw" text-anchor="middle">H-04</text>
+<rect x="578.7" y="140" width="57.4" height="22" rx="3" class="sr"/>
+<text x="607.4" y="155" class="cw" text-anchor="middle">H-04</text>
+<rect x="638.1" y="140" width="57.4" height="22" rx="3" class="sf"/>
+<text x="666.9" y="155" class="cf" text-anchor="middle">→M05</text>
+<rect x="697.6" y="140" width="57.4" height="22" rx="3" class="ns"/>
+<text x="726.3" y="155" class="cn" text-anchor="middle">NSC</text>
+<rect x="757" y="140" width="57.4" height="22" rx="3" class="sr"/>
+<text x="785.7" y="155" class="cw" text-anchor="middle">H-06</text>
+<rect x="816.4" y="140" width="57.4" height="22" rx="3" class="na"/>
+<text x="845.1" y="155" class="cn" text-anchor="middle">·</text>
+<rect x="875.9" y="140" width="57.4" height="22" rx="3" class="na"/>
+<text x="904.6" y="155" class="cn" text-anchor="middle">·</text>
+<rect x="935.3" y="140" width="57.4" height="22" rx="3" class="sf"/>
+<text x="964" y="155" class="cf" text-anchor="middle">→M08</text>
+<rect x="994.7" y="140" width="57.4" height="22" rx="3" class="sf"/>
+<text x="1023.4" y="155" class="cf" text-anchor="middle">→M05</text>
+<rect x="1054.1" y="140" width="57.4" height="22" rx="3" class="sf"/>
+<text x="1082.9" y="155" class="cf" text-anchor="middle">→M05</text>
+<rect x="1113.6" y="140" width="57.4" height="22" rx="3" class="na"/>
+<text x="1142.3" y="155" class="cn" text-anchor="middle">·</text>
+<text x="1210" y="155" class="tb" text-anchor="middle">4</text>
+<text x="24" y="181" class="tb">F-02</text>
+<text x="64" y="181" class="s">Detect and track objects</text>
+<rect x="341" y="166" width="57.4" height="22" rx="3" class="sr"/>
+<text x="369.7" y="181" class="cw" text-anchor="middle">H-02</text>
+<rect x="400.4" y="166" width="57.4" height="22" rx="3" class="sf"/>
+<text x="429.1" y="181" class="cf" text-anchor="middle">→M01</text>
+<rect x="459.9" y="166" width="57.4" height="22" rx="3" class="sr"/>
+<text x="488.6" y="181" class="cw" text-anchor="middle">H-03</text>
+<rect x="519.3" y="166" width="57.4" height="22" rx="3" class="sf"/>
+<text x="548" y="181" class="cf" text-anchor="middle">→M01</text>
+<rect x="578.7" y="166" width="57.4" height="22" rx="3" class="sf"/>
+<text x="607.4" y="181" class="cf" text-anchor="middle">→M03</text>
+<rect x="638.1" y="166" width="57.4" height="22" rx="3" class="sf"/>
+<text x="666.9" y="181" class="cf" text-anchor="middle">→M01</text>
+<rect x="697.6" y="166" width="57.4" height="22" rx="3" class="na"/>
+<text x="726.3" y="181" class="cn" text-anchor="middle">·</text>
+<rect x="757" y="166" width="57.4" height="22" rx="3" class="sf"/>
+<text x="785.7" y="181" class="cf" text-anchor="middle">→M11</text>
+<rect x="816.4" y="166" width="57.4" height="22" rx="3" class="na"/>
+<text x="845.1" y="181" class="cn" text-anchor="middle">·</text>
+<rect x="875.9" y="166" width="57.4" height="22" rx="3" class="na"/>
+<text x="904.6" y="181" class="cn" text-anchor="middle">·</text>
+<rect x="935.3" y="166" width="57.4" height="22" rx="3" class="sr"/>
+<text x="964" y="181" class="cw" text-anchor="middle">H-02</text>
+<rect x="994.7" y="166" width="57.4" height="22" rx="3" class="sf"/>
+<text x="1023.4" y="181" class="cf" text-anchor="middle">→M01</text>
+<rect x="1054.1" y="166" width="57.4" height="22" rx="3" class="sf"/>
+<text x="1082.9" y="181" class="cf" text-anchor="middle">→M03</text>
+<rect x="1113.6" y="166" width="57.4" height="22" rx="3" class="na"/>
+<text x="1142.3" y="181" class="cn" text-anchor="middle">·</text>
+<text x="1210" y="181" class="tb" text-anchor="middle">3</text>
+<text x="24" y="207" class="tb">F-03</text>
+<text x="64" y="207" class="s">Recognise traffic lights</text>
+<rect x="341" y="192" width="57.4" height="22" rx="3" class="ns"/>
+<text x="369.7" y="207" class="cn" text-anchor="middle">NSC</text>
+<rect x="400.4" y="192" width="57.4" height="22" rx="3" class="ns"/>
+<text x="429.1" y="207" class="cn" text-anchor="middle">NSC</text>
+<rect x="459.9" y="192" width="57.4" height="22" rx="3" class="na"/>
+<text x="488.6" y="207" class="cn" text-anchor="middle">·</text>
+<rect x="519.3" y="192" width="57.4" height="22" rx="3" class="sf"/>
+<text x="548" y="207" class="cf" text-anchor="middle">→M12</text>
+<rect x="578.7" y="192" width="57.4" height="22" rx="3" class="na"/>
+<text x="607.4" y="207" class="cn" text-anchor="middle">·</text>
+<rect x="638.1" y="192" width="57.4" height="22" rx="3" class="na"/>
+<text x="666.9" y="207" class="cn" text-anchor="middle">·</text>
+<rect x="697.6" y="192" width="57.4" height="22" rx="3" class="sf"/>
+<text x="726.3" y="207" class="cf" text-anchor="middle">→M12</text>
+<rect x="757" y="192" width="57.4" height="22" rx="3" class="sf"/>
+<text x="785.7" y="207" class="cf" text-anchor="middle">→M12</text>
+<rect x="816.4" y="192" width="57.4" height="22" rx="3" class="na"/>
+<text x="845.1" y="207" class="cn" text-anchor="middle">·</text>
+<rect x="875.9" y="192" width="57.4" height="22" rx="3" class="na"/>
+<text x="904.6" y="207" class="cn" text-anchor="middle">·</text>
+<rect x="935.3" y="192" width="57.4" height="22" rx="3" class="sf"/>
+<text x="964" y="207" class="cf" text-anchor="middle">→M12</text>
+<rect x="994.7" y="192" width="57.4" height="22" rx="3" class="sr"/>
+<text x="1023.4" y="207" class="cw" text-anchor="middle">H-06</text>
+<rect x="1054.1" y="192" width="57.4" height="22" rx="3" class="sf"/>
+<text x="1082.9" y="207" class="cf" text-anchor="middle">→M12</text>
+<rect x="1113.6" y="192" width="57.4" height="22" rx="3" class="na"/>
+<text x="1142.3" y="207" class="cn" text-anchor="middle">·</text>
+<text x="1210" y="207" class="tb" text-anchor="middle">1</text>
+<text x="24" y="233" class="tb">F-04</text>
+<text x="64" y="233" class="s">Predict the motion of other road users</text>
+<rect x="341" y="218" width="57.4" height="22" rx="3" class="sr"/>
+<text x="369.7" y="233" class="cw" text-anchor="middle">H-02</text>
+<rect x="400.4" y="218" width="57.4" height="22" rx="3" class="sf"/>
+<text x="429.1" y="233" class="cf" text-anchor="middle">→M01</text>
+<rect x="459.9" y="218" width="57.4" height="22" rx="3" class="na"/>
+<text x="488.6" y="233" class="cn" text-anchor="middle">·</text>
+<rect x="519.3" y="218" width="57.4" height="22" rx="3" class="sf"/>
+<text x="548" y="233" class="cf" text-anchor="middle">→M01</text>
+<rect x="578.7" y="218" width="57.4" height="22" rx="3" class="sr"/>
+<text x="607.4" y="233" class="cw" text-anchor="middle">H-03</text>
+<rect x="638.1" y="218" width="57.4" height="22" rx="3" class="sr"/>
+<text x="666.9" y="233" class="cw" text-anchor="middle">H-06</text>
+<rect x="697.6" y="218" width="57.4" height="22" rx="3" class="na"/>
+<text x="726.3" y="233" class="cn" text-anchor="middle">·</text>
+<rect x="757" y="218" width="57.4" height="22" rx="3" class="sf"/>
+<text x="785.7" y="233" class="cf" text-anchor="middle">→M01</text>
+<rect x="816.4" y="218" width="57.4" height="22" rx="3" class="na"/>
+<text x="845.1" y="233" class="cn" text-anchor="middle">·</text>
+<rect x="875.9" y="218" width="57.4" height="22" rx="3" class="na"/>
+<text x="904.6" y="233" class="cn" text-anchor="middle">·</text>
+<rect x="935.3" y="218" width="57.4" height="22" rx="3" class="sf"/>
+<text x="964" y="233" class="cf" text-anchor="middle">→M01</text>
+<rect x="994.7" y="218" width="57.4" height="22" rx="3" class="sf"/>
+<text x="1023.4" y="233" class="cf" text-anchor="middle">→M06</text>
+<rect x="1054.1" y="218" width="57.4" height="22" rx="3" class="sf"/>
+<text x="1082.9" y="233" class="cf" text-anchor="middle">→M05</text>
+<rect x="1113.6" y="218" width="57.4" height="22" rx="3" class="na"/>
+<text x="1142.3" y="233" class="cn" text-anchor="middle">·</text>
+<text x="1210" y="233" class="tb" text-anchor="middle">3</text>
+<text x="24" y="259" class="tb">F-05</text>
+<text x="64" y="259" class="s">Plan the route to the destination</text>
+<rect x="341" y="244" width="57.4" height="22" rx="3" class="ns"/>
+<text x="369.7" y="259" class="cn" text-anchor="middle">NSC</text>
+<rect x="400.4" y="244" width="57.4" height="22" rx="3" class="ns"/>
+<text x="429.1" y="259" class="cn" text-anchor="middle">NSC</text>
+<rect x="459.9" y="244" width="57.4" height="22" rx="3" class="ns"/>
+<text x="488.6" y="259" class="cn" text-anchor="middle">NSC</text>
+<rect x="519.3" y="244" width="57.4" height="22" rx="3" class="ns"/>
+<text x="548" y="259" class="cn" text-anchor="middle">NSC</text>
+<rect x="578.7" y="244" width="57.4" height="22" rx="3" class="na"/>
+<text x="607.4" y="259" class="cn" text-anchor="middle">·</text>
+<rect x="638.1" y="244" width="57.4" height="22" rx="3" class="na"/>
+<text x="666.9" y="259" class="cn" text-anchor="middle">·</text>
+<rect x="697.6" y="244" width="57.4" height="22" rx="3" class="na"/>
+<text x="726.3" y="259" class="cn" text-anchor="middle">·</text>
+<rect x="757" y="244" width="57.4" height="22" rx="3" class="ns"/>
+<text x="785.7" y="259" class="cn" text-anchor="middle">NSC</text>
+<rect x="816.4" y="244" width="57.4" height="22" rx="3" class="na"/>
+<text x="845.1" y="259" class="cn" text-anchor="middle">·</text>
+<rect x="875.9" y="244" width="57.4" height="22" rx="3" class="na"/>
+<text x="904.6" y="259" class="cn" text-anchor="middle">·</text>
+<rect x="935.3" y="244" width="57.4" height="22" rx="3" class="ns"/>
+<text x="964" y="259" class="cn" text-anchor="middle">NSC</text>
+<rect x="994.7" y="244" width="57.4" height="22" rx="3" class="ns"/>
+<text x="1023.4" y="259" class="cn" text-anchor="middle">NSC</text>
+<rect x="1054.1" y="244" width="57.4" height="22" rx="3" class="ns"/>
+<text x="1082.9" y="259" class="cn" text-anchor="middle">NSC</text>
+<rect x="1113.6" y="244" width="57.4" height="22" rx="3" class="na"/>
+<text x="1142.3" y="259" class="cn" text-anchor="middle">·</text>
+<text x="1210" y="259" class="tb" text-anchor="middle">0</text>
+<text x="24" y="285" class="tb">F-06</text>
+<text x="64" y="285" class="s">Plan behaviour and motion</text>
+<rect x="341" y="270" width="57.4" height="22" rx="3" class="sr"/>
+<text x="369.7" y="285" class="cw" text-anchor="middle">H-07</text>
+<rect x="400.4" y="270" width="57.4" height="22" rx="3" class="sf"/>
+<text x="429.1" y="285" class="cf" text-anchor="middle">→M01</text>
+<rect x="459.9" y="270" width="57.4" height="22" rx="3" class="sr"/>
+<text x="488.6" y="285" class="cw" text-anchor="middle">H-05</text>
+<rect x="519.3" y="270" width="57.4" height="22" rx="3" class="sf"/>
+<text x="548" y="285" class="cf" text-anchor="middle">→M06</text>
+<rect x="578.7" y="270" width="57.4" height="22" rx="3" class="sr"/>
+<text x="607.4" y="285" class="cw" text-anchor="middle">H-01</text>
+<rect x="638.1" y="270" width="57.4" height="22" rx="3" class="sr"/>
+<text x="666.9" y="285" class="cw" text-anchor="middle">H-02</text>
+<rect x="697.6" y="270" width="57.4" height="22" rx="3" class="sr"/>
+<text x="726.3" y="285" class="cw" text-anchor="middle">H-06</text>
+<rect x="757" y="270" width="57.4" height="22" rx="3" class="sf"/>
+<text x="785.7" y="285" class="cf" text-anchor="middle">→M11</text>
+<rect x="816.4" y="270" width="57.4" height="22" rx="3" class="sf"/>
+<text x="845.1" y="285" class="cf" text-anchor="middle">→M03</text>
+<rect x="875.9" y="270" width="57.4" height="22" rx="3" class="sf"/>
+<text x="904.6" y="285" class="cf" text-anchor="middle">→M13</text>
+<rect x="935.3" y="270" width="57.4" height="22" rx="3" class="sr"/>
+<text x="964" y="285" class="cw" text-anchor="middle">H-02</text>
+<rect x="994.7" y="270" width="57.4" height="22" rx="3" class="sr"/>
+<text x="1023.4" y="285" class="cw" text-anchor="middle">H-04</text>
+<rect x="1054.1" y="270" width="57.4" height="22" rx="3" class="sr"/>
+<text x="1082.9" y="285" class="cw" text-anchor="middle">H-03</text>
+<rect x="1113.6" y="270" width="57.4" height="22" rx="3" class="sf"/>
+<text x="1142.3" y="285" class="cf" text-anchor="middle">→M12</text>
+<text x="1210" y="285" class="tb" text-anchor="middle">8</text>
+<text x="24" y="311" class="tb">F-07</text>
+<text x="64" y="311" class="s">Follow the planned trajectory</text>
+<rect x="341" y="296" width="57.4" height="22" rx="3" class="sr"/>
+<text x="369.7" y="311" class="cw" text-anchor="middle">H-02</text>
+<rect x="400.4" y="296" width="57.4" height="22" rx="3" class="sf"/>
+<text x="429.1" y="311" class="cf" text-anchor="middle">→M01</text>
+<rect x="459.9" y="296" width="57.4" height="22" rx="3" class="sr"/>
+<text x="488.6" y="311" class="cw" text-anchor="middle">H-05</text>
+<rect x="519.3" y="296" width="57.4" height="22" rx="3" class="sf"/>
+<text x="548" y="311" class="cf" text-anchor="middle">→M05</text>
+<rect x="578.7" y="296" width="57.4" height="22" rx="3" class="sr"/>
+<text x="607.4" y="311" class="cw" text-anchor="middle">H-01</text>
+<rect x="638.1" y="296" width="57.4" height="22" rx="3" class="sf"/>
+<text x="666.9" y="311" class="cf" text-anchor="middle">→M01</text>
+<rect x="697.6" y="296" width="57.4" height="22" rx="3" class="ns"/>
+<text x="726.3" y="311" class="cn" text-anchor="middle">NSC</text>
+<rect x="757" y="296" width="57.4" height="22" rx="3" class="sf"/>
+<text x="785.7" y="311" class="cf" text-anchor="middle">→M11</text>
+<rect x="816.4" y="296" width="57.4" height="22" rx="3" class="na"/>
+<text x="845.1" y="311" class="cn" text-anchor="middle">·</text>
+<rect x="875.9" y="296" width="57.4" height="22" rx="3" class="na"/>
+<text x="904.6" y="311" class="cn" text-anchor="middle">·</text>
+<rect x="935.3" y="296" width="57.4" height="22" rx="3" class="sr"/>
+<text x="964" y="311" class="cw" text-anchor="middle">H-04</text>
+<rect x="994.7" y="296" width="57.4" height="22" rx="3" class="sr"/>
+<text x="1023.4" y="311" class="cw" text-anchor="middle">H-01</text>
+<rect x="1054.1" y="296" width="57.4" height="22" rx="3" class="sr"/>
+<text x="1082.9" y="311" class="cw" text-anchor="middle">H-04</text>
+<rect x="1113.6" y="296" width="57.4" height="22" rx="3" class="sf"/>
+<text x="1142.3" y="311" class="cf" text-anchor="middle">→M13</text>
+<text x="1210" y="311" class="tb" text-anchor="middle">6</text>
+<text x="24" y="337" class="tb">F-08</text>
+<text x="64" y="337" class="s">Select and limit the command sent on</text>
+<rect x="341" y="322" width="57.4" height="22" rx="3" class="sr"/>
+<text x="369.7" y="337" class="cw" text-anchor="middle">H-07</text>
+<rect x="400.4" y="322" width="57.4" height="22" rx="3" class="sf"/>
+<text x="429.1" y="337" class="cf" text-anchor="middle">→M01</text>
+<rect x="459.9" y="322" width="57.4" height="22" rx="3" class="sr"/>
+<text x="488.6" y="337" class="cw" text-anchor="middle">H-03</text>
+<rect x="519.3" y="322" width="57.4" height="22" rx="3" class="sr"/>
+<text x="548" y="337" class="cw" text-anchor="middle">H-02</text>
+<rect x="578.7" y="322" width="57.4" height="22" rx="3" class="sr"/>
+<text x="607.4" y="337" class="cw" text-anchor="middle">H-01</text>
+<rect x="638.1" y="322" width="57.4" height="22" rx="3" class="sf"/>
+<text x="666.9" y="337" class="cf" text-anchor="middle">→M05</text>
+<rect x="697.6" y="322" width="57.4" height="22" rx="3" class="sr"/>
+<text x="726.3" y="337" class="cw" text-anchor="middle">H-08</text>
+<rect x="757" y="322" width="57.4" height="22" rx="3" class="sf"/>
+<text x="785.7" y="337" class="cf" text-anchor="middle">→M11</text>
+<rect x="816.4" y="322" width="57.4" height="22" rx="3" class="na"/>
+<text x="845.1" y="337" class="cn" text-anchor="middle">·</text>
+<rect x="875.9" y="322" width="57.4" height="22" rx="3" class="sf"/>
+<text x="904.6" y="337" class="cf" text-anchor="middle">→M11</text>
+<rect x="935.3" y="322" width="57.4" height="22" rx="3" class="sr"/>
+<text x="964" y="337" class="cw" text-anchor="middle">H-08</text>
+<rect x="994.7" y="322" width="57.4" height="22" rx="3" class="sr"/>
+<text x="1023.4" y="337" class="cw" text-anchor="middle">H-10</text>
+<rect x="1054.1" y="322" width="57.4" height="22" rx="3" class="sf"/>
+<text x="1082.9" y="337" class="cf" text-anchor="middle">→M03</text>
+<rect x="1113.6" y="322" width="57.4" height="22" rx="3" class="na"/>
+<text x="1142.3" y="337" class="cn" text-anchor="middle">·</text>
+<text x="1210" y="337" class="tb" text-anchor="middle">7</text>
+<text x="24" y="363" class="tb">F-09</text>
+<text x="64" y="363" class="s">Monitor the system and carry out a minimal ri…</text>
+<rect x="341" y="348" width="57.4" height="22" rx="3" class="sr"/>
+<text x="369.7" y="363" class="cw" text-anchor="middle">H-07</text>
+<rect x="400.4" y="348" width="57.4" height="22" rx="3" class="sf"/>
+<text x="429.1" y="363" class="cf" text-anchor="middle">→M01</text>
+<rect x="459.9" y="348" width="57.4" height="22" rx="3" class="sr"/>
+<text x="488.6" y="363" class="cw" text-anchor="middle">H-03</text>
+<rect x="519.3" y="348" width="57.4" height="22" rx="3" class="sf"/>
+<text x="548" y="363" class="cf" text-anchor="middle">→M01</text>
+<rect x="578.7" y="348" width="57.4" height="22" rx="3" class="sf"/>
+<text x="607.4" y="363" class="cf" text-anchor="middle">→M03</text>
+<rect x="638.1" y="348" width="57.4" height="22" rx="3" class="sf"/>
+<text x="666.9" y="363" class="cf" text-anchor="middle">→M01</text>
+<rect x="697.6" y="348" width="57.4" height="22" rx="3" class="sf"/>
+<text x="726.3" y="363" class="cf" text-anchor="middle">→M03</text>
+<rect x="757" y="348" width="57.4" height="22" rx="3" class="sf"/>
+<text x="785.7" y="363" class="cf" text-anchor="middle">→M11</text>
+<rect x="816.4" y="348" width="57.4" height="22" rx="3" class="sr"/>
+<text x="845.1" y="363" class="cw" text-anchor="middle">H-05</text>
+<rect x="875.9" y="348" width="57.4" height="22" rx="3" class="ns"/>
+<text x="904.6" y="363" class="cn" text-anchor="middle">NSC</text>
+<rect x="935.3" y="348" width="57.4" height="22" rx="3" class="sr"/>
+<text x="964" y="363" class="cw" text-anchor="middle">H-07</text>
+<rect x="994.7" y="348" width="57.4" height="22" rx="3" class="na"/>
+<text x="1023.4" y="363" class="cn" text-anchor="middle">·</text>
+<rect x="1054.1" y="348" width="57.4" height="22" rx="3" class="sf"/>
+<text x="1082.9" y="363" class="cf" text-anchor="middle">→M03</text>
+<rect x="1113.6" y="348" width="57.4" height="22" rx="3" class="na"/>
+<text x="1142.3" y="363" class="cn" text-anchor="middle">·</text>
+<text x="1210" y="363" class="tb" text-anchor="middle">4</text>
+<text x="24" y="389" class="tb">F-10</text>
+<text x="64" y="389" class="s">Bound every command to a safety envelope and…</text>
+<rect x="341" y="374" width="57.4" height="22" rx="3" class="ns"/>
+<text x="369.7" y="389" class="cn" text-anchor="middle">NSC</text>
+<rect x="400.4" y="374" width="57.4" height="22" rx="3" class="sr"/>
+<text x="429.1" y="389" class="cw" text-anchor="middle">H-07</text>
+<rect x="459.9" y="374" width="57.4" height="22" rx="3" class="sr"/>
+<text x="488.6" y="389" class="cw" text-anchor="middle">H-03</text>
+<rect x="519.3" y="374" width="57.4" height="22" rx="3" class="sr"/>
+<text x="548" y="389" class="cw" text-anchor="middle">H-02</text>
+<rect x="578.7" y="374" width="57.4" height="22" rx="3" class="sf"/>
+<text x="607.4" y="389" class="cf" text-anchor="middle">→M03</text>
+<rect x="638.1" y="374" width="57.4" height="22" rx="3" class="ns"/>
+<text x="666.9" y="389" class="cn" text-anchor="middle">NSC</text>
+<rect x="697.6" y="374" width="57.4" height="22" rx="3" class="sf"/>
+<text x="726.3" y="389" class="cf" text-anchor="middle">→M03</text>
+<rect x="757" y="374" width="57.4" height="22" rx="3" class="ns"/>
+<text x="785.7" y="389" class="cn" text-anchor="middle">NSC</text>
+<rect x="816.4" y="374" width="57.4" height="22" rx="3" class="sr"/>
+<text x="845.1" y="389" class="cw" text-anchor="middle">H-05</text>
+<rect x="875.9" y="374" width="57.4" height="22" rx="3" class="ns"/>
+<text x="904.6" y="389" class="cn" text-anchor="middle">NSC</text>
+<rect x="935.3" y="374" width="57.4" height="22" rx="3" class="ns"/>
+<text x="964" y="389" class="cn" text-anchor="middle">NSC</text>
+<rect x="994.7" y="374" width="57.4" height="22" rx="3" class="sr"/>
+<text x="1023.4" y="389" class="cw" text-anchor="middle">H-01</text>
+<rect x="1054.1" y="374" width="57.4" height="22" rx="3" class="sf"/>
+<text x="1082.9" y="389" class="cf" text-anchor="middle">→M03</text>
+<rect x="1113.6" y="374" width="57.4" height="22" rx="3" class="na"/>
+<text x="1142.3" y="389" class="cn" text-anchor="middle">·</text>
+<text x="1210" y="389" class="tb" text-anchor="middle">5</text>
+<text x="24" y="415" class="tb">F-11</text>
+<text x="64" y="415" class="s">Accept trips, mode changes and requests</text>
+<rect x="341" y="400" width="57.4" height="22" rx="3" class="ns"/>
+<text x="369.7" y="415" class="cn" text-anchor="middle">NSC</text>
+<rect x="400.4" y="400" width="57.4" height="22" rx="3" class="ns"/>
+<text x="429.1" y="415" class="cn" text-anchor="middle">NSC</text>
+<rect x="459.9" y="400" width="57.4" height="22" rx="3" class="sr"/>
+<text x="488.6" y="415" class="cw" text-anchor="middle">H-05</text>
+<rect x="519.3" y="400" width="57.4" height="22" rx="3" class="ns"/>
+<text x="548" y="415" class="cn" text-anchor="middle">NSC</text>
+<rect x="578.7" y="400" width="57.4" height="22" rx="3" class="na"/>
+<text x="607.4" y="415" class="cn" text-anchor="middle">·</text>
+<rect x="638.1" y="400" width="57.4" height="22" rx="3" class="na"/>
+<text x="666.9" y="415" class="cn" text-anchor="middle">·</text>
+<rect x="697.6" y="400" width="57.4" height="22" rx="3" class="sf"/>
+<text x="726.3" y="415" class="cf" text-anchor="middle">→M03</text>
+<rect x="757" y="400" width="57.4" height="22" rx="3" class="ns"/>
+<text x="785.7" y="415" class="cn" text-anchor="middle">NSC</text>
+<rect x="816.4" y="400" width="57.4" height="22" rx="3" class="na"/>
+<text x="845.1" y="415" class="cn" text-anchor="middle">·</text>
+<rect x="875.9" y="400" width="57.4" height="22" rx="3" class="na"/>
+<text x="904.6" y="415" class="cn" text-anchor="middle">·</text>
+<rect x="935.3" y="400" width="57.4" height="22" rx="3" class="ns"/>
+<text x="964" y="415" class="cn" text-anchor="middle">NSC</text>
+<rect x="994.7" y="400" width="57.4" height="22" rx="3" class="sf"/>
+<text x="1023.4" y="415" class="cf" text-anchor="middle">→M03</text>
+<rect x="1054.1" y="400" width="57.4" height="22" rx="3" class="ns"/>
+<text x="1082.9" y="415" class="cn" text-anchor="middle">NSC</text>
+<rect x="1113.6" y="400" width="57.4" height="22" rx="3" class="na"/>
+<text x="1142.3" y="415" class="cn" text-anchor="middle">·</text>
+<text x="1210" y="415" class="tb" text-anchor="middle">1</text>
+<text x="24" y="441" class="tb">F-12</text>
+<text x="64" y="441" class="s">Signal intent to other road users</text>
+<rect x="341" y="426" width="57.4" height="22" rx="3" class="sr"/>
+<text x="369.7" y="441" class="cw" text-anchor="middle">H-09</text>
+<rect x="400.4" y="426" width="57.4" height="22" rx="3" class="sf"/>
+<text x="429.1" y="441" class="cf" text-anchor="middle">→M01</text>
+<rect x="459.9" y="426" width="57.4" height="22" rx="3" class="sr"/>
+<text x="488.6" y="441" class="cw" text-anchor="middle">H-09</text>
+<rect x="519.3" y="426" width="57.4" height="22" rx="3" class="sf"/>
+<text x="548" y="441" class="cf" text-anchor="middle">→M03</text>
+<rect x="578.7" y="426" width="57.4" height="22" rx="3" class="na"/>
+<text x="607.4" y="441" class="cn" text-anchor="middle">·</text>
+<rect x="638.1" y="426" width="57.4" height="22" rx="3" class="na"/>
+<text x="666.9" y="441" class="cn" text-anchor="middle">·</text>
+<rect x="697.6" y="426" width="57.4" height="22" rx="3" class="ns"/>
+<text x="726.3" y="441" class="cn" text-anchor="middle">NSC</text>
+<rect x="757" y="426" width="57.4" height="22" rx="3" class="sf"/>
+<text x="785.7" y="441" class="cf" text-anchor="middle">→M01</text>
+<rect x="816.4" y="426" width="57.4" height="22" rx="3" class="sf"/>
+<text x="845.1" y="441" class="cf" text-anchor="middle">→M01</text>
+<rect x="875.9" y="426" width="57.4" height="22" rx="3" class="sf"/>
+<text x="904.6" y="441" class="cf" text-anchor="middle">→M03</text>
+<rect x="935.3" y="426" width="57.4" height="22" rx="3" class="sf"/>
+<text x="964" y="441" class="cf" text-anchor="middle">→M01</text>
+<rect x="994.7" y="426" width="57.4" height="22" rx="3" class="sr"/>
+<text x="1023.4" y="441" class="cw" text-anchor="middle">H-09</text>
+<rect x="1054.1" y="426" width="57.4" height="22" rx="3" class="sf"/>
+<text x="1082.9" y="441" class="cf" text-anchor="middle">→M03</text>
+<rect x="1113.6" y="426" width="57.4" height="22" rx="3" class="na"/>
+<text x="1142.3" y="441" class="cn" text-anchor="middle">·</text>
+<text x="1210" y="441" class="tb" text-anchor="middle">3</text>
+<rect x="24" y="465" width="46" height="18" rx="3" class="sr"/>
+<text x="47" y="479" class="cw" text-anchor="middle">H-06</text>
+<text x="78" y="478" class="t">safety-related, rated</text>
+<rect x="236.5" y="465" width="46" height="18" rx="3" class="sf"/>
+<text x="259.5" y="479" class="cf" text-anchor="middle">→M12</text>
+<text x="290.5" y="478" class="t">folded into the pair named</text>
+<rect x="481.5" y="465" width="46" height="18" rx="3" class="ns"/>
+<text x="504.5" y="479" class="cn" text-anchor="middle">NSC</text>
+<text x="535.5" y="478" class="t">not safety-related</text>
+<rect x="674.5" y="465" width="46" height="18" rx="3" class="na"/>
+<text x="697.5" y="479" class="cn" text-anchor="middle">·</text>
+<text x="728.5" y="478" class="t">not applicable</text>
+</svg>

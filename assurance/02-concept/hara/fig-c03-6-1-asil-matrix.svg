@@ -26,7 +26,7 @@ svg .col { font:500 11px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:v
 </style>
 <rect class="bg" width="640" height="458"/>
 <text x="24" y="32" class="h">ASIL of each hazardous event</text>
-<text x="24" y="54" class="t">WP-C-03 §6: hazard by operational situation; A·2 is two events,</text>
+<text x="24" y="54" class="t">WP-C-03 §6.3: hazard by operational situation; A·2 is two events,</text>
 <text x="24" y="71" class="t">the higher ASIL shown; empty where not rated</text>
 <text x="270.2" y="102" class="col" text-anchor="middle">01</text>
 <text x="306.6" y="102" class="col" text-anchor="middle">02</text>

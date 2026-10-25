@@ -28,6 +28,8 @@ WP_C03 = ASSURANCE / "02-concept" / "WP-C-03-hara.md"
 WP_C04 = ASSURANCE / "02-concept" / "WP-C-04-functional-safety-concept.md"
 WP_M01 = ASSURANCE / "01-management" / "WP-M-01-assurance-strategy.md"
 REGISTER = ASSURANCE / "01-management" / "decisions" / "register.yaml"
+WP_M00 = ASSURANCE / "01-management" / "WP-M-00-work-product-register.md"
+ASSURANCE_README = ASSURANCE / "README.md"
 
 
 class FactError(Exception):
@@ -55,6 +57,16 @@ class Limit:
 
 
 @dataclass(frozen=True)
+class OddRow:
+    oid: str
+    attribute: str
+    inside: str
+    outside: str
+    detected_by: str
+    state: str
+
+
+@dataclass(frozen=True)
 class Facts:
     elements: dict[str, Element]
     goals: dict[str, tuple[str, str, str]]  # SG id -> (statement, ASIL, safe state)
@@ -62,6 +74,9 @@ class Facts:
     limits: dict[str, Limit]
     decisions: dict[str, str]  # DQ id -> chosen option, applied decisions only
     standards: list[str]  # WP-M-01 §4, in order
+    odd: dict[str, OddRow]  # every ODD attribute of WP-C-02 §3
+    monitors: dict[str, str]  # MON id -> its name, the text before the first colon (WP-C-02 §4)
+    decision_titles: dict[str, str]  # DQ id -> title of the chosen option, applied decisions only
 
     def dq(self, qid: str) -> str:
         """'DQ-002 A' for an applied decision."""
@@ -166,6 +181,157 @@ def limits() -> dict[str, Limit]:
     return out
 
 
+def odd_rows() -> dict[str, OddRow]:
+    out = {}
+    for line in WP_C02.read_text(encoding="utf-8").splitlines():
+        if line.startswith("| ODD-"):
+            c = [fk.plain(x) for x in fk.split_row(line)]
+            if len(c) < 6:
+                raise FactError(f"{WP_C02.name}: {c[0]} has {len(c)} cells, expected 6")
+            out[c[0]] = OddRow(*c[:6])
+    if not out:
+        raise FactError(f"{WP_C02.name}: no ODD attributes")
+    return out
+
+
+def monitors() -> dict[str, str]:
+    out = {}
+    for line in WP_C02.read_text(encoding="utf-8").splitlines():
+        if line.startswith("| MON-"):
+            c = fk.split_row(line)
+            out[fk.plain(c[0])] = fk.plain(c[1]).split(":")[0]
+    return out
+
+
+def decision_titles() -> dict[str, str]:
+    entries = yaml.safe_load(REGISTER.read_text(encoding="utf-8")) or []
+    out = {}
+    for d in entries:
+        choice = (d.get("answer") or {}).get("choice")
+        if d.get("status") == "applied" and choice:
+            for o in d.get("options", []):
+                if o.get("key") == choice:
+                    out[d["id"]] = str(o.get("title", ""))
+    return out
+
+
+@dataclass(frozen=True)
+class Gate:
+    gid: str
+    name: str
+    criterion: str
+    needed: int  # work products the gate needs (not tailored out)
+    done: int  # of those, approved or baselined
+    drafted: int  # of those, drafted or in review
+
+
+def gates() -> list[Gate]:
+    """The gates of WP-M-00 §2 with the work products each needs, from the §3 register."""
+    import wpregister  # noqa: PLC0415  (beside figkit, on the path set above)
+
+    head, rows = _rows(WP_M00, "Gate", "## 2.")
+    crit = {fk.plain(r[0]): fk.plain(r[fk.col(head, "Exit criterion (summary)")]) for r in rows}
+    reg = wpregister.load()
+    out = []
+    for gi, (gid, name) in enumerate(reg.gates):
+        need = [p for p in reg.products if gi in p.gates and p.status != "N/A"]
+        out.append(
+            Gate(
+                gid,
+                name,
+                crit.get(gid, ""),
+                len(need),
+                sum(p.status in ("A", "B") for p in need),
+                sum(p.status in ("D", "R") for p in need),
+            )
+        )
+    if not out:
+        raise FactError(f"{WP_M00.name}: no gates")
+    return out
+
+
+def assurance_state() -> str:
+    """The 'Assurance state' row of the generated summary in assurance/README.md."""
+    m = re.search(
+        r"^\| Assurance state \| (.+?) \|$", ASSURANCE_README.read_text(encoding="utf-8"), re.M
+    )
+    if not m:
+        raise FactError(
+            f"{ASSURANCE_README.name}: no 'Assurance state' row in the generated summary"
+        )
+    return m.group(1).strip()
+
+
+@dataclass(frozen=True)
+class Timing:
+    goal: str
+    kind: str  # deviation, drift, derived or limit
+    margin: float | None  # metres, proposed
+    ftti_short: float | None  # seconds, worst case (largest fault)
+    ftti_long: float | None  # seconds, smallest fault
+    detect: float  # share of the FTTI for detection
+    react: float  # share for the reaction
+    basis: str
+
+
+def timing() -> dict[str, Timing]:
+    """The FTTI of each safety goal, computed by WP-S-04's own timing.py from its timing.yaml."""
+    sys.path.insert(0, str(ASSURANCE / "03-system" / "timing"))
+    import timing as tm  # noqa: PLC0415
+
+    m = tm.load()
+    alloc = m["allocation"]
+    out = {}
+    for g in m["goals"]:
+        out[g["id"]] = Timing(
+            g["id"],
+            g["kind"],
+            g.get("margin"),
+            tm.ftti(m, g["id"], "high"),
+            tm.ftti(m, g["id"], "low"),
+            alloc["detect"],
+            alloc["react"],
+            str(g.get("basis", "")),
+        )
+    return out
+
+
+@dataclass(frozen=True)
+class Asset:
+    aid: str
+    name: str
+    threats: list[str]  # threat scenario ids
+    max_risk: int  # highest risk value of those threats (0 when none)
+
+
+def tara() -> tuple[list[Asset], int, int]:
+    """The assets of WP-C-09 with their threat scenarios and highest risk, computed by its own
+    tara.py; also the highest value of the risk scale and the value from which risk is reduced."""
+    sys.path.insert(0, str(ASSURANCE / "02-concept" / "tara"))
+    import tara as ta  # noqa: PLC0415
+
+    m = ta.load()
+    out = []
+    for a in m["assets"]:
+        ts = [t for t in m["threats"] if a["id"] in t.get("assets", [])]
+        out.append(
+            Asset(
+                a["id"],
+                str(a["name"]),
+                [t["id"] for t in ts],
+                max((ta.risk(m, t) for t in ts), default=0),
+            )
+        )
+    scale = max(v for row in m["method"]["matrix"] for v in row)
+    return out, scale, int(m["method"]["reduce_at"])
+
+
+def folders() -> dict[str, str]:
+    """Folder -> its content, from the Layout table of assurance/README.md."""
+    head, rows = _rows(ASSURANCE_README, "Folder", "## Layout")
+    return {fk.plain(r[0]).strip("/"): fk.plain(r[fk.col(head, "Content")]) for r in rows}
+
+
 def decisions() -> dict[str, str]:
     entries = yaml.safe_load(REGISTER.read_text(encoding="utf-8")) or []
     return {
@@ -181,7 +347,17 @@ def standards() -> list[str]:
 
 
 def load() -> Facts:
-    return Facts(elements(), goals(), requirements(), limits(), decisions(), standards())
+    return Facts(
+        elements(),
+        goals(),
+        requirements(),
+        limits(),
+        decisions(),
+        standards(),
+        odd_rows(),
+        monitors(),
+        decision_titles(),
+    )
 
 
 def need(facts: Facts) -> dict[str, str]:
@@ -190,7 +366,7 @@ def need(facts: Facts) -> dict[str, str]:
     for k in ("EL-01", "EL-02", "EL-03", "EL-04", "EL-09"):
         if k not in el:
             raise FactError(f"{WP_C04.name}: no element {k}")
-    for k in ("SG-02", "SG-06", "SG-07"):
+    for k in ("SG-01", "SG-02", "SG-06", "SG-07", "SG-08"):
         if k not in sg:
             raise FactError(f"{WP_C03.name}: no safety goal {k}")
     for k in ("FSR-06.01", "FSR-06.02"):
@@ -213,6 +389,13 @@ def need(facts: Facts) -> dict[str, str]:
         "dq_mrc": facts.dq("DQ-016"),
         "dq_sg06": facts.dq("DQ-017"),
         "dq_sensors": facts.dq("DQ-018"),
+        "dq_remote": facts.dq("DQ-010"),
+        "dq_remote_title": facts.decision_titles.get("DQ-010", ""),
+        "sg01": sg["SG-01"][1],
+        "sg01_text": sg["SG-01"][0],
+        "sg08": sg["SG-08"][1],
+        "sg08_text": sg["SG-08"][0],
+        "sg08_safe_state": sg["SG-08"][2],
     }
 
 

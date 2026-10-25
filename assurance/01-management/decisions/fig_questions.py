@@ -3,6 +3,7 @@
 
     figures/dq-001.svg   ODD reach of each option: top speed against who shares the road
     figures/dq-002.svg   where the command is bounded in each option, along the command path
+    figures/dq-034.svg   following distance the monitor keeps against speed, for each option
 
 The option keys and titles drawn are checked against register.yaml, so a figure cannot fall out of
 step with its question.
@@ -31,6 +32,9 @@ svg .head { fill:var(--ink3); }
 svg .reach-a { fill:var(--accsoft); stroke:var(--acc); stroke-width:1.8; }
 svg .reach-b { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.6; }
 svg .reach-c { fill:var(--card); stroke:var(--ink3); stroke-width:1.4; }
+svg .fa { stroke:var(--acc); stroke-width:2.4; fill:none; }
+svg .fb { stroke:var(--amb); stroke-width:2.4; fill:none; stroke-dasharray:7 4; }
+svg .fc { stroke:var(--ink3); stroke-width:2.4; fill:none; stroke-dasharray:2 3; }
 svg .ka { font:700 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--acc); }
 """
 
@@ -212,9 +216,91 @@ def dq002(titles: dict[str, str]) -> str:
     return fk.svg(W, int(h), "DQ-002: where the command is bounded", desc, body, EXTRA)
 
 
+# ---------------------------------------------------------------- DQ-034
+
+# Safe following distance behind a vehicle at the same speed v: d = v t + v² / (2 b) - v² / (2 B) + m,
+# with our response time t, our guaranteed braking b, the vehicle ahead's braking B and the margin m
+# of SG-01 (WP-S-04). The values are the question's assumptions, not measurements.
+RESPONSE, OWN, MARGIN = 0.5, 4.0, 0.5
+AHEAD = {"A": 8.0, "B": 6.0, "C": 4.0}
+FMAX = 50
+
+
+def follow(v_kmh: float, ahead: float) -> float:
+    v = v_kmh / 3.6
+    return v * RESPONSE + v * v / (2 * OWN) - v * v / (2 * ahead) + MARGIN
+
+
+def dq034(titles: dict[str, str]) -> str:
+    x0, x1, y0, y1 = 70, 500, 84, 324
+    dmax = 25
+    X = lambda v: x0 + (x1 - x0) * v / FMAX  # noqa: E731
+    Y = lambda d: y1 - (y1 - y0) * d / dmax  # noqa: E731
+    body = [
+        fk.text(24, 32, "How far back the monitor keeps the vehicle", "h"),
+        fk.text(
+            24, 54, "Following distance behind a vehicle at the same speed, for each option", "t"
+        ),
+    ]
+    for d in range(0, dmax + 1, 5):
+        body.append(
+            fk.el("path", None, d=f"M{x0} {fk.num(Y(d))} L{x1} {fk.num(Y(d))}", class_="hair")
+        )
+        body.append(fk.text(x0 - 8, Y(d) + 4, f"{d} m", "s", "end"))
+    for v in range(0, FMAX + 1, 10):
+        body.append(fk.text(X(v), y1 + 18, str(v), "s", "middle"))
+    body.append(fk.text((x0 + x1) / 2, y1 + 38, "Speed, km/h", "t", "middle"))
+    for key, cls in zip(AHEAD, ("fa", "fb", "fc")):
+        pts = [(X(v), Y(follow(v, AHEAD[key]))) for v in range(0, FMAX + 1, 2)]
+        body.append(
+            fk.el(
+                "path",
+                None,
+                d="M" + " L".join(f"{fk.num(x)} {fk.num(y)}" for x, y in pts),
+                class_=cls,
+            )
+        )
+        x, y = pts[-1]
+        body.append(
+            fk.text(
+                x + 8,
+                y + 4,
+                f"{key}  {follow(FMAX, AHEAD[key]):.1f} m",
+                "ka" if key == "A" else "tb",
+            )
+        )
+    y = y1 + 66
+    for key in AHEAD:
+        line = f"{key}  {titles[key]} ({AHEAD[key]:g} m/s²)"
+        for j, ln in enumerate(fk.wrap(line, W - 48, "t")):
+            body.append(fk.text(24, y, ln, "tb" if j == 0 else "t"))
+            y += 17
+        y += 4
+    body.append(
+        fk.text(
+            24,
+            y + 4,
+            f"Assumes a {RESPONSE:g} s response, {OWN:g} m/s² of our own braking and a {MARGIN:g} m margin.",
+            "s",
+        )
+    )
+    y += 20
+    desc = (
+        "Following distance the safety monitor keeps behind a vehicle at the same speed, from 0 to "
+        f"{FMAX} km/h, for each option of DQ-034. "
+        + " ".join(
+            f"{k} ({titles[k]}): vehicle ahead braking at {AHEAD[k]:g} m/s², {follow(FMAX, AHEAD[k]):.1f} m at {FMAX} km/h."
+            for k in AHEAD
+        )
+        + f" Assumes a {RESPONSE:g} s response, {OWN:g} m/s² of own braking and a {MARGIN:g} m margin."
+    )
+    return fk.svg(W, int(y + 6), "DQ-034: following distance for each option", desc, body, EXTRA)
+
+
 FIGURES = {
     "DQ-001": ("figures/dq-001.svg", dq001, [k for k, _, _ in ODD]),
     "DQ-002": ("figures/dq-002.svg", dq002, list(CHAIN)),
+    "DQ-034": ("figures/dq-034.svg", dq034, list(AHEAD)),
 }
 
 

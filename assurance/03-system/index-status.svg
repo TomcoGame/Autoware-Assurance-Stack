@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="502" viewBox="0 0 640 502" role="img" aria-labelledby="t d">
 <title id="t">03-system: work products by gate and status</title>
-<desc id="d">Work products of 03-system from WP-M-00 §3, with the gates they are needed for and their status: WP-S-01 System requirements specification: G2, Skeleton; WP-S-02 Technical safety requirements specification: G2, Skeleton; WP-S-03 Technical safety concept and system architectural design: G2, Draft; WP-S-04 Timing: FTTI, detection and reaction budget, fallback timing: G2, Draft; WP-S-05 Hardware-software interface, including the drive-by-wire interface: G2, Skeleton; WP-S-06 Requirements for production, operation, service and decommissioning: G2, Skeleton; WP-S-07 Cybersecurity requirements and architectural design: G2, Skeleton; WP-S-08 System integration and test strategy, specification and report: G4, Skeleton; WP-S-09 System verification specification and report: G4, Skeleton.</desc>
+<desc id="d">Work products of 03-system from WP-M-00 §3, with the gates they are needed for and their status: WP-S-01 System requirements specification: G2, Skeleton; WP-S-02 Technical safety requirements specification: G2, Draft; WP-S-03 Technical safety concept and system architectural design: G2, Draft; WP-S-04 Timing: FTTI, detection and reaction budget, fallback timing: G2, Draft; WP-S-05 Hardware-software interface, including the drive-by-wire interface: G2, Draft; WP-S-06 Requirements for production, operation, service and decommissioning: G2, Skeleton; WP-S-07 Cybersecurity requirements and architectural design: G2, Draft; WP-S-08 System integration and test strategy, specification and report: G4, Draft; WP-S-09 System verification specification and report: G4, Draft.</desc>
 <style>
 svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
 @media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
@@ -33,7 +33,7 @@ svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dashar
 <rect x="438.1" y="113" width="26.6" height="14" rx="7" class="st-s"/>
 <text x="24" y="157" class="tb">WP-S-02</text>
 <text x="24" y="172" class="s">Technical safety requirements specification</text>
-<rect x="438.1" y="153" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="438.1" y="153" width="26.6" height="14" rx="7" class="st-d"/>
 <rect x="16" y="180" width="608" height="40" rx="4" class="card"/>
 <text x="24" y="197" class="tb">WP-S-03</text>
 <text x="24" y="212" class="s">Technical safety concept and system architectural design</text>
@@ -44,23 +44,23 @@ svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dashar
 <rect x="16" y="260" width="608" height="40" rx="4" class="card"/>
 <text x="24" y="277" class="tb">WP-S-05</text>
 <text x="24" y="292" class="s">Hardware-software interface, including the drive-by-wir…</text>
-<rect x="438.1" y="273" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="438.1" y="273" width="26.6" height="14" rx="7" class="st-d"/>
 <text x="24" y="317" class="tb">WP-S-06</text>
 <text x="24" y="332" class="s">Requirements for production, operation, service and dec…</text>
 <rect x="438.1" y="313" width="26.6" height="14" rx="7" class="st-s"/>
 <rect x="16" y="340" width="608" height="40" rx="4" class="card"/>
 <text x="24" y="357" class="tb">WP-S-07</text>
 <text x="24" y="372" class="s">Cybersecurity requirements and architectural design</text>
-<rect x="438.1" y="353" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="438.1" y="353" width="26.6" height="14" rx="7" class="st-d"/>
 <text x="24" y="397" class="tb">WP-S-08</text>
 <text x="24" y="412" class="s">System integration and test strategy, specification and…</text>
-<rect x="511.3" y="393" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="511.3" y="393" width="26.6" height="14" rx="7" class="st-d"/>
 <rect x="16" y="420" width="608" height="40" rx="4" class="card"/>
 <text x="24" y="437" class="tb">WP-S-09</text>
 <text x="24" y="452" class="s">System verification specification and report</text>
-<rect x="511.3" y="433" width="26.6" height="14" rx="7" class="st-s"/>
+<rect x="511.3" y="433" width="26.6" height="14" rx="7" class="st-d"/>
 <rect x="24" y="473" width="26" height="14" rx="7" class="st-s"/>
-<text x="56" y="484" class="t">Skeleton (7)</text>
+<text x="56" y="484" class="t">Skeleton (2)</text>
 <rect x="154.0" y="473" width="26" height="14" rx="7" class="st-d"/>
-<text x="186" y="484" class="t">Draft (2)</text>
+<text x="186" y="484" class="t">Draft (7)</text>
 </svg>

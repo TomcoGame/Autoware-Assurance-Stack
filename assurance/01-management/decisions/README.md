@@ -77,3 +77,25 @@ python3 assurance/01-management/decisions/build_inbox.py --out <scratch>/inbox.h
   chat. In chat a question is named by its words, not its id.
 - **Easy to undo:** an entry with `proceed_after`; Claude goes ahead with the recommendation after that date and
   says so.
+
+## Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| ASIL | Automotive Safety Integrity Level, A (lowest) to D (highest), from ISO 26262 |
+| Batch | A numbered group of about ten questions asked together, field `batch: N` |
+| CI | Continuous integration: the automated checks GitHub runs on every pull request and push |
+| Claude | The AI assistant that drafts the work and keeps the register |
+| DQ | Decision question: the identifier of a register entry, as in DQ-004. "DQ-015 B" means option B of DQ-015 |
+| Gate, go/no-go | A project milestone (G0 to G6) and the decision whether the project may pass it |
+| Hard, easy, revisit | How a question may be settled: a hard one needs the lead's answer; an easy one may be assumed after its date; a revisit one can be reopened at a later gate |
+| ID, id | Identifier |
+| Inbox page | The private web page where the lead reads and answers the open questions |
+| ODD | Operational design domain: the roads, conditions and traffic the system is designed for |
+| Safety authority | Who accepts risk and decides the questions here; the project lead until DQ-004 names one |
+| WP-M-01 §8 | Section 8 of the assurance strategy, where strategic decisions are recorded |
+| `code` text | A field name or value of `register.yaml`, such as `proceed_after` or `via: chat` |
+| `<scratch>` | Placeholder for a temporary folder of your choice |
+| § | Section, as in "WP-M-01 §8" |
+
+Other terms are defined in the [Glossary](../../../wiki/Glossary.md).

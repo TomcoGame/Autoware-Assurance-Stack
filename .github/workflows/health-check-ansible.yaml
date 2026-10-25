@@ -31,6 +31,7 @@ jobs:
             .github/workflows/health-check-ansible.yaml
           files_ignore: |
             ansible/roles/artifacts/**
+            **/*.md
 
   require-label:
     needs: changed-files

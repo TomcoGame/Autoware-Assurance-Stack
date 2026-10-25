@@ -27,6 +27,10 @@ Every work product lists the clauses it answers in its header, and the
 [register (WP-M-00)](../assurance/01-management/WP-M-00-work-product-register.md#3-register) has one column per
 framework.
 
+![Two ways to be unsafe: left, ISO 26262, a fault makes the robotaxi accelerate when nothing asked it to (SG-01); right, ISO 21448, nothing has failed but low sun dazzles the sensors and a pedestrian on the crosswalk may not be detected.](../tools/readme/figures/two-ways-to-be-unsafe.svg)
+
+*Illustration. Labels read from the work products by [`figures.py`](../tools/readme/figures.py); vehicle model CC BY 4.0, see [credits](../tools/readme/models/CREDITS.md).*
+
 ## Why UL 4600 leads
 
 ISO 26262 and ISO 21448 were written for vehicles with a driver, or a driver who can be asked to take over. Here
@@ -47,6 +51,10 @@ producing evidence ([WP-M-01 §4](../assurance/01-management/WP-M-01-assurance-s
 - **The ODD carries more weight.** Anything the vehicle cannot handle must be outside the ODD, or the vehicle must
   detect it and reach a minimal risk condition by itself
   ([WP-C-02 §1](../assurance/02-concept/WP-C-02-odd-and-intended-functionality.md#1-purpose)).
+
+![Inside and outside the ODD: three panels of the robotaxi on a city street, for the posted speed limit (a speed sign inside the geofence and a higher one beyond it), precipitation (rain) and visibility (fog). Under each, what is inside and outside the ODD as WP-C-02 states it, and the monitor that detects it.](../tools/readme/figures/odd.svg)
+
+*Illustration. Labels read from the work products by [`figures.py`](../tools/readme/figures.py); vehicle model CC BY 4.0, see [credits](../tools/readme/models/CREDITS.md).*
 
 ## Other references
 

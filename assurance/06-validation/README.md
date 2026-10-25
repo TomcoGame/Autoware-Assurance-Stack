@@ -6,7 +6,7 @@ Safety validation, SOTIF scenario evaluation, fault injection, penetration testi
 
 Standard clauses: UL 4600 §12; 26262-4 §8; 21448 §9–11; 21434 §11; VAL.1.
 
-![The 8 work products of this folder, one row each, with a chip at each gate it is needed for, coloured by its status in the WP-M-00 register: 1 at G1, 2 at G2, 2 at G4, 3 at G5; 8 skeleton](index-status.svg)
+![The 8 work products of this folder, one row each, with a chip at each gate it is needed for, coloured by its status in the WP-M-00 register: 1 at G1, 2 at G2, 2 at G4, 3 at G5; 6 skeleton, 2 draft](index-status.svg)
 
 *Drawn from [WP-M-00](../01-management/WP-M-00-work-product-register.md#3-register) §3.6, which also has the clauses of each work product.*
 
@@ -16,9 +16,34 @@ Standard clauses: UL 4600 §12; 26262-4 §8; 21448 §9–11; 21434 §11; VAL.1.
 |---|---|---|---|
 | [WP-V-01](WP-V-01-safety-validation.md) | Safety validation plan, specification and report | G5 | Skeleton |
 | [WP-V-02](WP-V-02-sotif-vv-strategy.md) | SOTIF verification and validation strategy, validation targets | G2 | Skeleton |
-| [WP-V-03](WP-V-03-sotif-known-scenarios.md) | Evaluation of known hazardous scenarios | G4 | Skeleton |
+| [WP-V-03](WP-V-03-sotif-known-scenarios.md) | Evaluation of known hazardous scenarios | G4 | Draft |
 | [WP-V-04](WP-V-04-sotif-unknown-scenarios.md) | Evaluation of unknown hazardous scenarios | G5 | Skeleton |
 | [WP-V-05](WP-V-05-fault-injection.md) | Fault injection test specification and report | G4 | Skeleton |
 | [WP-V-06](WP-V-06-cybersecurity-validation.md) | Cybersecurity validation and penetration testing | G5 | Skeleton |
 | [WP-V-07](WP-V-07-test-operations.md) | Test operations: safety drivers, remote supervisors, test sites | G1 | Skeleton |
-| [WP-V-08](WP-V-08-simulation-credibility.md) | Simulation credibility and scenario coverage | G2 | Skeleton |
+| [WP-V-08](WP-V-08-simulation-credibility.md) | Simulation credibility and scenario coverage | G2 | Draft |
+
+## Subfolders
+
+| Folder | What it holds |
+|---|---|
+| [`scenarios/`](scenarios/README.md) | Known scenarios |
+| [`simenv/`](simenv/) | — |
+
+## Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| 21434, 21448, 26262, PAS 8800 | ISO/SAE 21434 (cybersecurity), ISO 21448 (SOTIF), ISO 26262 (functional safety), ISO/PAS 8800 (AI safety). "26262-3" is part 3 of ISO 26262 |
+| ACQ, HWE, MAN, MLE, SUP, SWE, SYS, VAL | Automotive SPICE process groups: acquisition, hardware engineering, management, machine learning engineering, support, software engineering, system engineering, validation. "SWE.1–6" means processes 1 to 6 of the group |
+| G0 to G6 | Gates: project milestones with exit criteria, defined in WP-M-00 §2 |
+| ID | Identifier |
+| Skeleton, Draft, In review, Approved, Baselined | Status of a work product: structure only; written, not verified; in verification review; approved; approved and frozen |
+| SOTIF | Safety of the intended functionality (ISO 21448): harm from a function working as designed but not well enough |
+| UL 4600 | The standard for the safety of autonomous products; the main framework here |
+| WP | Work product: a document or record the assurance path needs. WP-M-00 is the register that lists them all |
+| § | Section or clause, as in "UL 4600 §5" |
+| – (en dash) in a range | "through", as in "§5–8" (clauses 5 to 8) |
+| — | Nothing: no value, or the subfolder has no README of its own |
+
+Other terms are defined in the [Glossary](../../wiki/Glossary.md).

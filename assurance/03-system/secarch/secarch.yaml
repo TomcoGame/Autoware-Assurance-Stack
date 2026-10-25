@@ -1,0 +1,32 @@
+# Technical cybersecurity requirements for WP-S-07 (ISO/SAE 21434 §10). secarch.py checks them against the
+# cybersecurity concept (every item-level requirement of WP-C-10 is refined here, on a component of WP-S-03),
+# derives each one's CAL from the goals of the requirement it refines, and writes the WP-S-07 tables.
+# Every entry is a draft by Claude (I0).
+#
+# PUBLIC TIER. This repository is public. The text and verification of each technical requirement, the trust zones,
+# the conduits, the interfaces exposed outside the vehicle and their attack vectors are restricted (WP-M-09 §4) and
+# kept outside this repository; secarch.py refuses them. Only each requirement's trace, component, allocation and
+# CAL are published.
+
+tcsrs:
+  - {id: CSTR-01.01, csr: CSR-01, component: CMP-11, alloc: both}
+  - {id: CSTR-01.02, csr: CSR-01, component: CMP-02, alloc: software}
+  - {id: CSTR-01.03, csr: CSR-01, component: CMP-02, alloc: hardware}
+  - {id: CSTR-01.04, csr: CSR-01, component: CMP-02, alloc: both}
+  - {id: CSTR-03.01, csr: CSR-03, component: CMP-01, alloc: hardware}
+  - {id: CSTR-03.02, csr: CSR-03, component: CMP-01, alloc: software}
+  - {id: CSTR-03.03, csr: CSR-03, component: CMP-02, alloc: software}
+  - {id: CSTR-05.01, csr: CSR-05, component: CMP-02, alloc: both}
+  - {id: CSTR-05.02, csr: CSR-05, component: CMP-03, alloc: both}
+  - {id: CSTR-05.03, csr: CSR-05, component: CMP-01, alloc: both}
+  - {id: CSTR-05.04, csr: CSR-05, component: CMP-01, alloc: software}
+  - {id: CSTR-05.05, csr: CSR-05, component: CMP-02, alloc: hardware}
+  - {id: CSTR-05.06, csr: CSR-05, component: CMP-02, alloc: both}
+  - {id: CSTR-05.07, csr: CSR-05, component: CMP-02, alloc: hardware}
+  - {id: CSTR-07.01, csr: CSR-07, component: CMP-03, alloc: software}
+  - {id: CSTR-07.02, csr: CSR-07, component: CMP-01, alloc: software}
+  - {id: CSTR-08.01, csr: CSR-08, component: CMP-01, alloc: software}
+  - {id: CSTR-09.01, csr: CSR-09, component: CMP-01, alloc: software}
+  - {id: CSTR-11.01, csr: CSR-11, component: CMP-01, alloc: software}
+  - {id: CSTR-12.01, csr: CSR-12, component: CMP-01, alloc: software}
+  - {id: CSTR-12.02, csr: CSR-12, component: CMP-09, alloc: hardware}

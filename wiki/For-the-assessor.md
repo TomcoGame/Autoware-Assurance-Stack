@@ -20,6 +20,12 @@ deferred (DQ-004) and is asked again as DQ-007 before the HARA confirmation revi
 | The concept phase | [WP-C-01](../assurance/02-concept/WP-C-01-item-definition.md) item definition, [WP-C-02](../assurance/02-concept/WP-C-02-odd-and-intended-functionality.md) ODD, [WP-C-03](../assurance/02-concept/WP-C-03-hara.md) HARA, [WP-C-04](../assurance/02-concept/WP-C-04-functional-safety-concept.md) FSC |
 | The safety case records and their rules | [`assurance/case/`](../assurance/case/README.md) |
 
+## The safety goals in pictures
+
+![The nine safety goals: one small scene of the robotaxi per safety goal of WP-C-03, drawn as the situation going wrong (unintended acceleration, braking too little, unintended hard braking, drifting out of the planned path, moving off from standstill, entering against right of way, failing to reach a minimal risk condition, acting on stale remote commands, signalling the wrong manoeuvre), each with its ASIL and safe state.](../tools/readme/figures/safety-goals.svg)
+
+*Illustration. Labels read from the work products by [`figures.py`](../tools/readme/figures.py); vehicle models CC BY 4.0, see [credits](../tools/readme/models/CREDITS.md).*
+
 ## How to trace a value to its source
 
 - **Ratings and ASILs** are not typed. They are kept in [`hara.yaml`](../assurance/02-concept/hara/hara.yaml);

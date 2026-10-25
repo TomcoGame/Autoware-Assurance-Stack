@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-C-04 Functional safety concept (FSRs, allocation, assumptions) |
 | Standard reference | UL 4600 §10; ISO 26262-3 §7; ASPICE 4.0 SYS.2; IEEE 2846-2022 (informative, assumptions in safety-related models) |
-| Version | 0.5 (FSR-07.08: the monitor checks Autoware's stop after its own sensors fail (DQ-021 A); 2026-10-23). 0.4 (FSR-07.06 and FSR-07.07: the vehicle stops when the monitor falls silent, from the fallback concept (WP-C-12); 2026-10-23). 0.3 (collision avoidance carries SG-06 (DQ-017 A); the safety channel has its own sensors (DQ-018 A); the monitor softens unconfirmed hard braking (DQ-019 A); 2026-10-23). 0.2 (first content: the envelope concept, nine elements, functional safety requirements for the nine safety goals, generated from `fsc/fsc.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.8 (Figure 2-1, the safety view of the item architecture; 2026-10-25). 0.7 (folder page `fsc/README.md` with the whole concept on one page, Figure 4-2 on how each goal is held, and `fsc/fsrs.csv` tracing every FSR to its mechanisms, technical requirements and verification cases; 2026-10-24). 0.6 (FSR-03.02: the firm level is 3 m/s² (DQ-033 A); 2026-10-24). 0.5 (FSR-07.08: the monitor checks Autoware's stop after its own sensors fail (DQ-021 A); 2026-10-23). 0.4 (FSR-07.06 and FSR-07.07: the vehicle stops when the monitor falls silent, from the fallback concept (WP-C-12); 2026-10-23). 0.3 (collision avoidance carries SG-06 (DQ-017 A); the safety channel has its own sensors (DQ-018 A); the monitor softens unconfirmed hard braking (DQ-019 A); 2026-10-23). 0.2 (first content: the envelope concept, nine elements, functional safety requirements for the nine safety goals, generated from `fsc/fsc.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | Up to ASIL D |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -25,6 +25,14 @@ In summary:
 <!-- END GENERATED: fsc-summary -->
 
 ## 2. The concept
+
+<!-- BEGIN GENERATED: fsc-safety-view (assurance/02-concept/fsc/fsc.py) -->
+
+![Figure 2-1: the item boundary of WP-C-01 redrawn with the elements of the functional safety concept. Inside the item: Autoware computer (EL-01, QM), Safety monitor (EL-02, ASIL D), Safety perception channel (EL-03, ASIL D). Outside it: Vehicle drive-by-wire (EL-04, ASIL D), Park brake (EL-05, ASIL D), Vehicle state sensing (EL-06, ASIL D), Monitor power supply (EL-07, ASIL D), Door system (EL-08, ASIL D), Remote operations station (EL-09, ASIL C). Autoware's commands (dashed) reach the drive-by-wire only through the safety monitor; every flow a rated requirement rests on (solid) starts or ends at the monitor. Each element shows its derived ASIL and the number of FSRs allocated to it; the same data are in the elements table.](fsc/fig-c04-2-1-safety-view.svg)
+
+*Figure 2-1. The safety view of the item architecture: the item of [WP-C-01](WP-C-01-item-definition.md) §5 with the elements this concept places its requirements on. Drawn by [`fsc/fsc.py`](fsc/fsc.py) from `fsc/fsc.yaml`; CI fails if it is stale or if an element has no place in it.*
+
+<!-- END GENERATED: fsc-safety-view -->
 
 ### 2.1 Doer and checker
 
@@ -74,6 +82,10 @@ SG-02 (brake enough, ASIL D) and SG-03 (do not brake hard without reason, ASIL C
 
 *Figure 4-1. Which element carries which safety goal. Drawn from `fsc/fsc.yaml` and the HARA model by [`fsc/fsc.py`](fsc/fsc.py); CI fails if it is stale.*
 
+![Figure 4-2: nine cards, one per safety goal SG-01 to SG-09. Each shows a chart of a faulty command, the envelope bound and what the safety monitor passes to the vehicle over time, a top-down scene with the path the faulty command would take, where the monitor steps in and the safe state reached, and the rated requirements by the element that carries them.](fsc/fig-c04-4-2-goals.svg)
+
+*Figure 4-2. How the concept holds each safety goal. Schematic, not simulation results. Drawn by [`fsc/fsc.py`](fsc/fsc.py); CI fails if it is stale. The whole concept is on one page in [`fsc/README.md`](fsc/README.md).*
+
 Each element's ASIL is derived: the highest ASIL among the FSRs allocated to it. Elements outside the item are bound by the assumption named, which becomes a requirement on the vehicle supplier through the development interface agreement ([WP-M-11](../01-management/WP-M-11-upstream-and-supplier-management.md)).
 
 <!-- BEGIN GENERATED: fsc-elements (assurance/02-concept/fsc/fsc.py) -->
@@ -94,7 +106,7 @@ Each element's ASIL is derived: the highest ASIL among the FSRs allocated to it.
 
 ## 5. Functional safety requirements
 
-Requirements that depended on a decision of the safety authority name it.
+Requirements that depended on a decision of the safety authority name it. [`fsc/fsrs.csv`](fsc/fsrs.csv) traces each one to the safety mechanisms of WP-S-03, the technical safety requirements of WP-S-02 and the verification cases of WP-S-09.
 
 <!-- BEGIN GENERATED: fsc-fsrs (assurance/02-concept/fsc/fsc.py) -->
 
@@ -111,7 +123,7 @@ Requirements that depended on a decision of the safety authority name it.
 | FSR-02.04 | Provide a secondary braking path that can still stop the vehicle after any single fault in the primary one | D | EL-04 Vehicle drive-by-wire | Supplier evidence under the DIA |
 | FSR-02.05 | Plan and control to keep a safe distance and stop for road users and obstacles (nominal function) | QM | EL-01 Autoware computer | Simulation and vehicle test |
 | FSR-03.01 | Keep false detections in the swept path below the rate the SOTIF acceptance criteria allow, so that monitor interventions are rarely unjustified | C | EL-03 Safety perception channel | Field and replay data over the ODD; false-positive rate estimation |
-| FSR-03.02 | Limit decelerations from Autoware above the comfortable level that EL-03 does not confirm with a road user or obstacle to a firm, non-emergency level set in WP-S-04 (DQ-019 A) | C | EL-02 Safety monitor | Fault injection of spurious braking commands; scenario tests |
+| FSR-03.02 | Limit decelerations from Autoware above the comfortable level that EL-03 does not confirm with a road user or obstacle to a firm, non-emergency level of 3 m/s² (DQ-019 A, DQ-033 A) | C | EL-02 Safety monitor | Fault injection of spurious braking commands; scenario tests |
 | FSR-03.03 | Apply emergency-level deceleration on the monitor's own initiative only when FSR-02.02 requires it | C | EL-02 Safety monitor | Review of the intervention logic; replay tests |
 | FSR-04.01 | Reject steering commands whose predicted swept path, over the stopping time, comes within the safe lateral distance of a road user, obstacle or kerb detected by EL-03, and stop in lane instead | D | EL-02 Safety monitor | Fault injection of steering commands; scenario tests with oncoming traffic and cyclists |
 | FSR-04.02 | Limit commanded steering angle and rate to the envelope for the current speed | D | EL-02 Safety monitor | Fault injection; HIL |

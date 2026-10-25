@@ -240,3 +240,123 @@ Notes:
 - On the host, `sudo tegrastats` while inference runs shows iGPU utilization (`GR3D_FREQ`) climbing above idle.
 
 DLA, VPI, NVDEC/NVENC, and Argus camera support are intentionally out of scope for this image; they require a separate L4T-derived variant.
+
+## Abbreviations, terms and symbols
+
+| Term                          | Meaning                                                                                                                                              |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| acados                        | Open-source library for fast optimal control (model predictive control), built into the universe images for Autoware packages that use it            |
+| amd64                         | 64-bit x86 processor architecture used by most desktop and server PCs (Intel, AMD)                                                                   |
+| ansible                       | Automation tool that installs and configures software from scripts called roles and playbooks; this repository uses it to set up machines and images |
+| `apt`                         | Ubuntu's package manager, which installs software packages from online archives                                                                      |
+| Argus                         | NVIDIA's camera software interface on Jetson and DRIVE computers                                                                                     |
+| Arm                           | A family of processor designs, used in phones and in NVIDIA Jetson and DRIVE computers                                                               |
+| arm64                         | 64-bit Arm processor architecture, used by NVIDIA Jetson and DRIVE computers and some servers                                                        |
+| Autoware                      | The open-source self-driving software stack that these images package                                                                                |
+| `aw`                          | The ordinary (non-administrator) user account that runs Autoware inside the container                                                                |
+| Blackwell                     | NVIDIA's GPU architecture generation used in the Thor chip                                                                                           |
+| BSP                           | Board support package: the vendor's operating system, drivers and tools for a specific computer board                                                |
+| `buildx bake`                 | Docker command that builds several images at once from a definition file (`docker/docker-bake.hcl`)                                                  |
+| CAN bus                       | Controller area network: the wired network a vehicle's control units and some sensors use to talk to each other                                      |
+| CI                            | Continuous integration: automatic builds and tests that run on every change                                                                          |
+| closure                       | The full set of packages installed, including the dependencies of dependencies                                                                       |
+| container                     | A running, isolated instance of an image; it shares the host's operating system kernel but has its own files and processes                           |
+| core                          | Autoware Core: the small, stable set of essential Autoware packages, and the images that contain them                                                |
+| CUDA                          | Compute Unified Device Architecture: NVIDIA's platform for running general computations, such as neural networks, on the GPU                         |
+| `cudaErrorInsufficientDriver` | CUDA error (code 35) meaning the GPU driver is missing or too old for the CUDA version                                                               |
+| cuDNN                         | CUDA Deep Neural Network library: NVIDIA's GPU library of neural-network building blocks                                                             |
+| CycloneDDS                    | Eclipse Cyclone DDS: the DDS implementation Autoware uses to carry ROS 2 messages                                                                    |
+| DDS                           | Data Distribution Service: the publish-subscribe networking standard ROS 2 uses to pass messages between nodes                                       |
+| deps                          | Dependencies: other software a package needs in order to build or run                                                                                |
+| devel                         | Development image: includes compilers, headers and build tools so you can build code, which makes it larger than a runtime image                     |
+| `-dev` packages               | Packages with the header files and libraries needed to compile against a library, not just run it                                                    |
+| digest                        | A hash (`sha256:...`) that identifies one exact image content, unlike a tag, which can be moved                                                      |
+| `DISPLAY`                     | Environment variable that tells GUI programs which X11 screen to draw on                                                                             |
+| distro                        | ROS distribution: a named ROS 2 release, such as humble or jazzy                                                                                     |
+| DLA                           | Deep Learning Accelerator: a dedicated neural-network chip block on some NVIDIA Jetson and DRIVE computers                                           |
+| Docker                        | Software that builds images and runs them as isolated containers                                                                                     |
+| drift                         | A package that ended up at a different version than the one pinned in the lockfile                                                                   |
+| DRIVE OS                      | NVIDIA's operating system and software stack for its DRIVE automotive computers                                                                      |
+| DRIVE Thor                    | NVIDIA's automotive computer built on the Thor chip                                                                                                  |
+| entrypoint                    | The script that runs first every time the container starts; here it sets up the `aw` user and the ROS environment                                    |
+| env var                       | Environment variable: a named setting passed to programs, set with `-e NAME=value` in `docker run`                                                   |
+| exec deps                     | Execution dependencies: what a package needs at run time, as opposed to build time                                                                   |
+| floating tag                  | A tag that is moved to newer image content over time, so pulling it on different days can give different images                                      |
+| GHCR                          | GitHub Container Registry (`ghcr.io`): GitHub's service for storing and downloading images                                                           |
+| GID                           | Group ID: the number Linux uses to identify a user group, which decides file permissions                                                             |
+| GPU                           | Graphics processing unit: the graphics card, which Autoware also uses for neural-network perception                                                  |
+| `GR3D_FREQ`                   | The `tegrastats` field that shows how busy the GPU is                                                                                                |
+| GUI                           | Graphical user interface: a program with windows rather than only text                                                                               |
+| hermetic build                | A build whose every input is fixed in advance, so nothing changes with the network or the date                                                       |
+| host                          | The physical computer that runs Docker and the containers                                                                                            |
+| humble                        | ROS 2 Humble Hawksbill: the 2022 long-term-support ROS 2 release, for Ubuntu 22.04                                                                   |
+| iGPU                          | Integrated GPU: a GPU built into the same chip as the processor, as on Jetson and DRIVE                                                              |
+| image                         | A packaged, read-only snapshot of an operating system plus installed software, from which containers are started                                     |
+| inference                     | Running a trained neural network on new data, for example to detect objects                                                                          |
+| jazzy                         | ROS 2 Jazzy Jalisco: the 2024 long-term-support ROS 2 release, for Ubuntu 24.04                                                                      |
+| JetPack                       | NVIDIA's software bundle for Jetson computers: Linux, drivers, CUDA and libraries                                                                    |
+| Jetson Thor                   | NVIDIA's robotics computer built on the Thor chip                                                                                                    |
+| JIT                           | Just-in-time: compiled at the moment it is first run rather than in advance                                                                          |
+| L4T                           | Linux for Tegra: NVIDIA's Linux operating system for Jetson computers, part of JetPack                                                               |
+| lanelet2                      | The map format Autoware uses for lanes, traffic rules and road layout                                                                                |
+| `libcuda.so`                  | The CUDA driver library, provided by the host's NVIDIA driver; CUDA programs cannot use the GPU without it                                           |
+| `lo`                          | The loopback network interface: traffic stays on the same computer                                                                                   |
+| lockfile                      | A file that records the exact version of every package to install, so builds can be repeated                                                         |
+| MIT-SHM                       | An X11 extension that shares memory between a program and the display server, which does not work across the container boundary                      |
+| ML                            | Machine learning: here the trained neural-network models Autoware uses for perception                                                                |
+| multi-arch                    | One image name that provides builds for several processor architectures, with Docker picking the right one                                           |
+| node                          | A single ROS 2 program that sends and receives messages                                                                                              |
+| NVDEC                         | NVIDIA's hardware video decoder                                                                                                                      |
+| NVENC                         | NVIDIA's hardware video encoder                                                                                                                      |
+| NVIDIA                        | Company that makes GPUs and the CUDA software, and the Jetson and DRIVE computers                                                                    |
+| NVIDIA Container Toolkit      | NVIDIA software (`nvidia-container-toolkit`) that lets Docker containers use the host's NVIDIA GPU                                                   |
+| `nvidia-ctk`                  | The command-line tool of the NVIDIA Container Toolkit, used to configure Docker for the GPU                                                          |
+| pin                           | To fix a dependency to one exact version, so it cannot change between builds                                                                         |
+| `pipx`                        | Tool that installs Python command-line programs, each in its own isolated environment                                                                |
+| pointcloud                    | A map made of 3D points, usually recorded with lidar; see point cloud                                                                                |
+| prereq                        | Prerequisite: something that must be in place first                                                                                                  |
+| PTX                           | Parallel Thread Execution: NVIDIA's intermediate GPU code, compiled just in time when no ready-made code exists for the GPU                          |
+| Qt                            | The GUI toolkit that `rviz2` and `rqt` are built with                                                                                                |
+| RMW                           | ROS middleware: the layer in ROS 2 that selects which DDS implementation carries the messages                                                        |
+| rolling                       | Here, the continuously updated `packages.ros.org` package source, as opposed to a dated snapshot                                                     |
+| ROS 2                         | Robot Operating System 2: the open-source framework Autoware is built on, which passes messages between programs called nodes                        |
+| `rosdep`                      | ROS tool that installs the system packages each ROS package declares it needs                                                                        |
+| `rqt`                         | A set of ROS graphical tools for inspecting nodes, topics and messages                                                                               |
+| runtime                       | Runtime image: contains only what is needed to run the software, so it is smaller than a devel image                                                 |
+| `rviz2`                       | RViz: the ROS 2 3D visualisation tool that shows the map, vehicle, sensor data and plans                                                             |
+| SBSA                          | Server Base System Architecture: an Arm standard; NVIDIA's CUDA packages for standard arm64 servers, which Thor now also uses                        |
+| `sm_110`                      | The GPU generation code (compute capability 11.0) of the Thor GPU; CUDA code must be built for it to run natively                                    |
+| snapshot                      | A dated, frozen copy of the ROS package archive (`snapshots.ros.org`), so packages do not change over time                                           |
+| SoC                           | System on chip: processor, GPU and other parts on a single chip                                                                                      |
+| stage                         | One image in the image graph; each is built on the one before it                                                                                     |
+| stdin                         | Standard input: the keyboard input a program reads                                                                                                   |
+| `sudo`                        | Linux command that runs another command as the administrator (root)                                                                                  |
+| tag                           | The name after the colon in an image name (for example `universe-jazzy`) that selects one variant or version                                         |
+| Tegra                         | NVIDIA's family of chips that combine an Arm processor and a GPU, used in Jetson and DRIVE computers                                                 |
+| `tegrastats`                  | NVIDIA tool on Jetson and DRIVE computers that prints processor, GPU and memory use                                                                  |
+| TensorRT                      | NVIDIA's library that optimises and runs neural networks fast on the GPU                                                                             |
+| Thor                          | NVIDIA's computer chip for robots and vehicles, sold as Jetson Thor and DRIVE Thor                                                                   |
+| TTY                           | A text terminal, so the program can be used interactively                                                                                            |
+| Ubuntu                        | The Linux distribution the images are based on                                                                                                       |
+| UID                           | User ID: the number Linux uses to identify a user, which decides who owns files                                                                      |
+| universe                      | Autoware Universe: the larger set of Autoware packages beyond Core, and the images that contain them                                                 |
+| `vcs`                         | vcstool: a command that clones all the source repositories listed in a `.repos` file                                                                 |
+| volume                        | Storage attached to a container, either a mounted host folder or a Docker-managed named volume                                                       |
+| VPI                           | Vision Programming Interface: NVIDIA's library for computer-vision processing on its accelerators                                                    |
+| X11                           | The X Window System: the Linux display system that draws GUI windows; containers send their windows to the host's X server                           |
+| `xhost`                       | Command that controls which programs may open windows on the host's X11 display                                                                      |
+| Grey box (image graph)        | A base image                                                                                                                                         |
+| Blue box (image graph)        | A development (devel) image                                                                                                                          |
+| Green box (image graph)       | A runtime image                                                                                                                                      |
+| Purple box (image graph)      | An image with CUDA GPU support                                                                                                                       |
+| `+`                           | Plus: the image contains everything in the first item and adds the second                                                                            |
+| `#`                           | In shell commands: starts a comment, which is not run                                                                                                |
+| `<...>`                       | A placeholder: replace it with your own value, for example `<ros_distro>` with `jazzy`                                                               |
+| `[-<date>\|-<version>]`       | An optional part of the tag: either a date or a version, or nothing                                                                                  |
+| `\`                           | At the end of a command line: the command continues on the next line                                                                                 |
+| `$`                           | In shell commands: reads an environment variable, for example `$DISPLAY`                                                                             |
+| `$(...)`                      | In shell commands: run the command inside and use its output, for example `$(id -u)` gives your user ID                                              |
+| `&&`                          | In shell commands: run the next command only if the previous one succeeded                                                                           |
+| `>` quote block               | A note set apart from the main text                                                                                                                  |
+
+Other project terms are defined in the [Glossary](../wiki/Glossary.md).

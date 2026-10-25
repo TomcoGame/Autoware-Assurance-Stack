@@ -1,0 +1,408 @@
+# Analysis data for WP-C-03 §6: every function of WP-C-01 §3 against the fourteen malfunction guide words, the
+# road and light conditions, and the severity of each hazard in each operational situation of hara.yaml.
+# hara.py expands every safety-related function and guide-word pair, not folded into another, over every situation
+# and condition, rates each row and writes the hazardous rows one file per hazard next to this one.
+# `output` names what the function delivers, the chart axis of its guide-word scenes. `class` is SC (can cause the
+# hazard named), NSC (cannot cause a hazard, with the reason) or NA (the guide word does not apply to the function).
+# The third item folds an SC pair into another of the same function with the same effect on
+# the vehicle, so it is rated once. Every entry is a draft by Claude (I0).
+
+guidewords:
+  M01: {name: No function, means: Never acts when it should}
+  M02: {name: Stops functioning, means: "Acts at first, then stops while still needed"}
+  M03: {name: Unrequested function, means: Acts when it should not}
+  M04: {name: Function stuck, means: Holds its last output and ignores new input}
+  M05: {name: Excessive function, means: Output larger than intended}
+  M06: {name: Partial function, means: Output smaller than intended but not zero}
+  M07: {name: Functions early, means: Acts before its trigger}
+  M08: {name: Functions late, means: Acts after its trigger has passed}
+  M09: {name: Applies too short, means: Output lasts shorter than intended}
+  M10: {name: Applies too long, means: Output lasts longer than intended}
+  M11: {name: Delayed, means: Acts correctly but with latency beyond its specification}
+  M12: {name: Inverse function, means: Acts in the opposite direction or sense}
+  M13: {name: Erratic or intermittent, means: "Output oscillates, chatters or comes and goes"}
+  M14: {name: Uneven, means: Output asymmetric or non-monotonic}
+
+# Road and light conditions across the ODD (WP-C-02 ODD-10 to ODD-13), with one foreseeable condition beyond it.
+conditions:
+  - {id: W01, name: Dry road in daylight, exposure: E4, basis: Most operating time}
+  - {id: W02, name: Wet road or light rain, exposure: E3, basis: Inside the ODD up to 2.5 mm/h (DQ-012 A); 1–10 % of time}
+  - {id: W03, name: Dry road at night under street lighting, exposure: E3, basis: Night service is inside the ODD; 1–10 % of time}
+  - {id: W04, name: Wet road at night, exposure: E2, basis: Both together; under 1 % of time}
+  - {id: W05, name: Visibility near the ODD bound of 200 m (mist, low sun), exposure: E2, basis: Under 1 % of time}
+  - {id: W06, name: Heavy rain beyond the ODD before the weather monitor ends the trip, exposure: E1, basis: MON-03 ends the trip; the time spent there is short and rare}
+
+functions:
+  - id: F-01
+    name: Localise the vehicle on the HD map
+    output: Pose
+    class:
+      M01: [SC, H-04, "", Pose lost without detection; control continues on dead reckoning and the vehicle drifts out of its lane]
+      M02: [SC, H-04, M01, Localisation stops mid-trip; same as no function]
+      M03: [NA, "", "", Localisation runs continuously; it is never requested]
+      M04: [SC, H-04, "", Pose frozen while the vehicle moves; the controller steers for a road it has already left]
+      M05: [SC, H-04, "", Lateral pose error beyond the lane margin; the vehicle drives off its lane]
+      M06: [SC, H-04, M05, A smaller pose error; bounded by M05]
+      M07: [NSC, "", "", "Pose ahead of the true position along the road makes the vehicle stop short of stop lines, not past them"]
+      M08: [SC, H-06, "", Pose behind the true position along the road; the vehicle stops past the stop line or crosswalk edge]
+      M09: [NA, "", "", Continuous output; no duration]
+      M10: [NA, "", "", Continuous output; no duration]
+      M11: [SC, H-06, M08, Latency makes the pose lag; same as functions late]
+      M12: [SC, H-04, M05, "Heading mirrored or reversed; a gross pose error, rated as M05"]
+      M13: [SC, H-04, M05, Pose jumps between estimates; at its largest jump the same as M05]
+      M14: [NA, "", "", No asymmetric output]
+  - id: F-02
+    name: Detect and track objects
+    output: Objects reported
+    class:
+      M01: [SC, H-02, "", A road user or obstacle in the path is not detected; no deceleration is planned for it]
+      M02: [SC, H-02, M01, Detection stops mid-trip; same as no function]
+      M03: [SC, H-03, "", A phantom object in the path; the vehicle brakes hard for nothing]
+      M04: [SC, H-02, M01, Object list frozen; new road users are missed as in M01]
+      M05: [SC, H-03, M03, Objects larger or closer than they are; unneeded braking as in M03]
+      M06: [SC, H-02, M01, Some objects missed or too small; bounded by M01]
+      M07: [NA, "", "", Detection has no trigger]
+      M08: [SC, H-02, M11, Detection late; same as delayed]
+      M09: [NA, "", "", Continuous output; no duration]
+      M10: [NA, "", "", Continuous output; no duration]
+      M11: [SC, H-02, "", Detection latency beyond specification; braking starts too late for a road user entering the path]
+      M12: [SC, H-02, M01, "Velocity direction reversed; a road user moving into the path is taken as leaving it, as in M01"]
+      M13: [SC, H-03, M03, Objects flicker in and out; each false appearance acts as M03]
+      M14: [NA, "", "", No asymmetric output]
+  - id: F-03
+    name: Recognise traffic lights
+    output: Light state
+    class:
+      M01: [NSC, "", "", No recognition result is treated as red (WP-C-07 FM-05); the vehicle stops at the light]
+      M02: [NSC, "", "", Recognition stops; treated as M01]
+      M03: [NA, "", "", Recognition runs where the map has a signal; it is never requested]
+      M04: [SC, H-06, M12, State frozen at green while the light turns red; same response as M12]
+      M05: [NA, "", "", A signal state has no magnitude]
+      M06: [NA, "", "", A signal state has no magnitude]
+      M07: [SC, H-06, M12, Green reported before it shows; same as M12]
+      M08: [SC, H-06, M12, Red reported after it shows; the vehicle proceeds on a stale green as in M12]
+      M09: [NA, "", "", No duration]
+      M10: [NA, "", "", No duration]
+      M11: [SC, H-06, M12, Latency; a stale green as in M12]
+      M12: [SC, H-06, "", Red or amber read as green; the vehicle enters the intersection against the signal]
+      M13: [SC, H-06, M12, State flickers between colours; at its worst a green on red as in M12]
+      M14: [NA, "", "", No asymmetric output]
+  - id: F-04
+    name: Predict the motion of other road users
+    output: Predicted paths
+    class:
+      M01: [SC, H-02, "", No prediction; road users are taken as standing still and the vehicle does not slow for one moving into its path]
+      M02: [SC, H-02, M01, Prediction stops; same as no function]
+      M03: [NA, "", "", Prediction runs continuously]
+      M04: [SC, H-02, M01, Predictions frozen; road users that change course are missed as in M01]
+      M05: [SC, H-03, "", Predicted conflict larger than real; the vehicle brakes hard for a road user that would not have crossed]
+      M06: [SC, H-06, "", Predicted conflict smaller than real; the vehicle enters a conflict area a crossing road user has the right of way to]
+      M07: [NA, "", "", Prediction has no trigger]
+      M08: [SC, H-02, M01, Prediction late; as no prediction for the moment that matters]
+      M09: [NA, "", "", No duration]
+      M10: [NA, "", "", No duration]
+      M11: [SC, H-02, M01, Latency; as M08]
+      M12: [SC, H-06, M06, Direction of a road user reversed; its conflict is missed as in M06]
+      M13: [SC, H-03, M05, Predictions jump; each spurious conflict acts as M05]
+      M14: [NA, "", "", No asymmetric output]
+  - id: F-05
+    name: Plan the route to the destination
+    output: Route
+    class:
+      M01: [NSC, "", "", No route; the vehicle does not set off]
+      M02: [NSC, "", "", Route lost mid-trip; Autoware stops and asks for assistance]
+      M03: [NSC, "", "", A route the passenger did not ask for; a mission and security matter (WP-C-10 CG-06); a route outside the geofence is caught by MON-01]
+      M04: [NSC, "", "", Route frozen; the vehicle reaches the old destination]
+      M05: [NA, "", "", A route has no magnitude]
+      M06: [NA, "", "", A route has no magnitude]
+      M07: [NA, "", "", Routing has no trigger]
+      M08: [NSC, "", "", A late route delays the trip]
+      M09: [NA, "", "", No duration]
+      M10: [NA, "", "", No duration]
+      M11: [NSC, "", "", A delayed route delays the trip]
+      M12: [NSC, "", "", A route in the wrong direction is a longer trip on lanes the planner still drives correctly]
+      M13: [NSC, "", "", Re-routing back and forth delays the trip]
+      M14: [NA, "", "", No asymmetric output]
+  - id: F-06
+    name: Plan behaviour and motion
+    output: Planned trajectory
+    class:
+      M01: [SC, H-07, "", No trajectory; the vehicle continues without a plan instead of stopping]
+      M02: [SC, H-07, M01, Planning stops mid-trip; same as no function]
+      M03: [SC, H-05, "", A departure planned while the vehicle should be held; the vehicle moves off]
+      M04: [SC, H-02, M06, "Trajectory frozen; the vehicle keeps going where it should slow, as in M06"]
+      M05: [SC, H-01, "", Speed or acceleration planned above the intended value]
+      M06: [SC, H-02, "", Deceleration planned below what the situation needs]
+      M07: [SC, H-06, "", "Proceeds before its turn at a junction, roundabout or crosswalk; enters a conflict area against right of way"]
+      M08: [SC, H-02, M11, Plans the stop late; as M11]
+      M09: [SC, H-05, M03, Holds a stop for too short a time and moves off as in M03]
+      M10: [SC, H-03, M13, "Brakes for longer than needed; slows unexpectedly for following traffic, as in M13"]
+      M11: [SC, H-02, "", Planning latency beyond specification; braking starts too late]
+      M12: [SC, H-04, "", Path to the wrong side; the vehicle leaves its lane]
+      M13: [SC, H-03, "", Speed plan surges and brakes; unexpected hard decelerations for following traffic]
+      M14: [SC, H-04, M12, An uneven path swerves out of the lane as in M12]
+  - id: F-07
+    name: Follow the planned trajectory
+    output: Actuation command
+    class:
+      M01: [SC, H-02, "", No control output while braking is needed; the vehicle does not slow]
+      M02: [SC, H-02, M01, Control stops; same as no function]
+      M03: [SC, H-05, "", Drive command while the vehicle should be held]
+      M04: [SC, H-01, M05, Command frozen at a positive acceleration; as M05]
+      M05: [SC, H-01, "", Acceleration command above the planned value]
+      M06: [SC, H-02, M01, Braking command below the planned value; bounded by M01]
+      M07: [NSC, "", "", The controller tracks the trajectory continuously; it has no trigger to act early on]
+      M08: [SC, H-04, M11, Steering correction late; as M11]
+      M09: [NA, "", "", Continuous output; no duration]
+      M10: [NA, "", "", Continuous output; no duration]
+      M11: [SC, H-04, "", Control latency beyond specification; the vehicle overshoots its path in curves and turns]
+      M12: [SC, H-01, "", Acceleration where braking is commanded (sign error)]
+      M13: [SC, H-04, "", Steering oscillates; the vehicle weaves out of its lane]
+      M14: [SC, H-04, M13, Steering asymmetric left and right; the excess side leaves the lane as in M13]
+  - id: F-08
+    name: Select and limit the command sent on
+    output: Command sent on
+    class:
+      M01: [SC, H-07, "", No command passed on and the loss not detected; the vehicle continues on its last command instead of stopping]
+      M02: [SC, H-07, M01, Stops passing commands; same as no function]
+      M03: [SC, H-03, "", Emergency source selected without a request; the vehicle brakes hard]
+      M04: [SC, H-02, "", A stale command passed on; the vehicle does not slow when the new command does]
+      M05: [SC, H-01, "", Command limits not applied; excessive acceleration reaches the vehicle]
+      M06: [SC, H-01, M05, Limits applied only in part; bounded by M05]
+      M07: [SC, H-08, "", Remote source selected before the operator's link is valid; the vehicle acts on commands that are not the operator's]
+      M08: [SC, H-08, M11, Leaves the remote source late; as M11]
+      M09: [NA, "", "", No duration]
+      M10: [SC, H-08, M11, Keeps the remote source after the operator has released it; stale commands as in M11]
+      M11: [SC, H-08, "", Remote commands passed on with latency beyond the bound; they are stale when they act]
+      M12: [SC, H-10, "", Reverse gear passed on where forward is commanded]
+      M13: [SC, H-03, M03, Switches between sources; each switch to emergency acts as M03]
+      M14: [NA, "", "", No asymmetric output]
+  - id: F-09
+    name: Monitor the system and carry out a minimal risk manoeuvre
+    output: Stop when needed
+    class:
+      M01: [SC, H-07, "", "A fault is not detected, or no manoeuvre follows; the vehicle keeps driving without control"]
+      M02: [SC, H-07, M01, The manoeuvre is abandoned midway; same as no function]
+      M03: [SC, H-03, "", An emergency stop without a fault; hard braking for nothing]
+      M04: [SC, H-07, M01, Monitor stuck at no fault; as M01]
+      M05: [SC, H-03, M03, An emergency stop where a comfortable one was enough; as M03]
+      M06: [SC, H-07, M01, A manoeuvre too weak to stop the vehicle in time; bounded by M01]
+      M07: [SC, H-03, M03, An emergency stop before the fault is confirmed; as M03]
+      M08: [SC, H-07, M11, The manoeuvre starts late; as M11]
+      M09: [SC, H-05, "", The hold after the stop is released too early; the vehicle moves off]
+      M10: [NSC, "", "", Holding longer than needed keeps the vehicle stopped until remote release]
+      M11: [SC, H-07, "", Detection or manoeuvre latency beyond specification; the vehicle drives on a fault for too long]
+      M12: [NA, "", "", A manoeuvre has no opposite direction]
+      M13: [SC, H-03, M03, Manoeuvre starts and stops repeatedly; each start acts as M03]
+      M14: [NA, "", "", No asymmetric output]
+  - id: F-10
+    name: Bound every command to a safety envelope and stop the vehicle independently
+    output: Bounded command
+    class:
+      M01: [NSC, "", "", "A monitor that does not bound causes no hazard while Autoware works; a latent fault, counted in the hardware metrics (WP-H-04)"]
+      M02: [SC, H-07, "", The monitor stops passing commands; the vehicle's own stop must take over (AOU-11) or it keeps going]
+      M03: [SC, H-03, "", An intervention without reason; hard braking for nothing]
+      M04: [SC, H-02, "", A stale bounded command passed on; the vehicle does not slow]
+      M05: [SC, H-03, M03, Limits tighter than intended; unneeded hard braking as in M03]
+      M06: [NSC, "", "", "Limits looser than intended; latent, as M01"]
+      M07: [SC, H-03, M03, An early intervention; as M03]
+      M08: [NSC, "", "", "A late intervention; latent while Autoware works, as M01"]
+      M09: [SC, H-05, "", The hold is released too early; the vehicle moves off]
+      M10: [NSC, "", "", Holding longer than needed keeps the vehicle stopped]
+      M11: [NSC, "", "", "Latency in the monitor's own checks; latent while Autoware works, as M08"]
+      M12: [SC, H-01, "", "The monitor commands acceleration where it should brake, or releases where it should hold"]
+      M13: [SC, H-03, M03, Interventions come and go; each acts as M03]
+      M14: [NA, "", "", No asymmetric output]
+  - id: F-11
+    name: Accept trips, mode changes and requests
+    output: Request accepted
+    class:
+      M01: [NSC, "", "", Requests ignored; trips do not start and the stop request is answered by remote operations]
+      M02: [NSC, "", "", As M01]
+      M03: [SC, H-05, "", A release or departure nobody asked for; the vehicle moves off from a stop]
+      M04: [NSC, "", "", Mode stuck; the vehicle stays in its mode]
+      M05: [NA, "", "", Requests have no magnitude]
+      M06: [NA, "", "", Requests have no magnitude]
+      M07: [SC, H-05, M03, Departure before boarding is complete; as M03]
+      M08: [NSC, "", "", A late request delays the trip]
+      M09: [NA, "", "", No duration]
+      M10: [NA, "", "", No duration]
+      M11: [NSC, "", "", A delayed request delays the trip]
+      M12: [SC, H-05, M03, A stop request taken as a start; as M03]
+      M13: [NSC, "", "", Requests come and go; the planner acts on the last]
+      M14: [NA, "", "", No asymmetric output]
+  - id: F-12
+    name: Signal intent to other road users
+    output: Indicator
+    class:
+      M01: [SC, H-09, "", "No indicator before a turn or lane change, or no hazard lights at a stop in lane; others are not warned"]
+      M02: [SC, H-09, M01, Indicator stops before the manoeuvre ends; as M01]
+      M03: [SC, H-09, "", An indicator with no manoeuvre; others yield or move for a turn that does not come]
+      M04: [SC, H-09, M03, Indicator stays on after the manoeuvre; as M03]
+      M05: [NA, "", "", A lamp has no magnitude]
+      M06: [NA, "", "", A lamp has no magnitude]
+      M07: [NSC, "", "", Indicating early warns others sooner]
+      M08: [SC, H-09, M01, Indicator late; as no indicator for the moment that matters]
+      M09: [SC, H-09, M01, Indicator too short; as M01]
+      M10: [SC, H-09, M03, Indicator too long; as M03]
+      M11: [SC, H-09, M01, Indicator delayed; as M08]
+      M12: [SC, H-09, "", The other side indicated; others move into the path the vehicle takes]
+      M13: [SC, H-09, M03, Indicator flickers between sides; at its worst as M03]
+      M14: [NA, "", "", No asymmetric output]
+
+# Severity of each hazard in each situation. A situation not listed for a hazard is S0, with the reason in `none`.
+# Severities are rated for the most exposed person at risk at the ODD's speeds; weather changes exposure, not severity.
+severity:
+  H-01:
+    OS-01: [S3, A cyclist or pedestrian ahead struck at 40 km/h or more]
+    OS-02: [S3, Acceleration from 24 km/h carries the vehicle past 40 km/h among pedestrians close to the kerb]
+    OS-03: [S3, Accelerates into crossing traffic or pedestrians in the intersection]
+    OS-04: [S3, Accelerates into the path of the oncoming vehicle]
+    OS-05: [S2, Roundabout geometry keeps speeds near 32 km/h; angled impact]
+    OS-06: [S3, Pulls away into pedestrians crossing in front]
+    OS-07: [S3, Moves off with a person boarding or beside the vehicle]
+    OS-08: [S2, Rear impact into the vehicle ahead at a small speed difference]
+    OS-09: [S3, Pedestrian on the crosswalk struck at 40 km/h or more]
+    OS-10: [S2, Accelerates beyond the remote driving limit of 10 km/h (DQ-032 A) into a road user nearby]
+    OS-11: [S3, A pedestrian stepping out between parked vehicles struck at speed]
+    OS-12: [S3, A child struck above the 32 km/h of a school zone]
+    OS-13: [S3, Head-on with oncoming traffic on a street without a centre line]
+    OS-14: [S2, Rear impact into a vehicle in the target lane]
+    OS-15: [S3, Accelerates across the cycle lane into a cyclist]
+    OS-16: [S3, Accelerates from the stop line into cross traffic or pedestrians]
+    OS-17: [S3, A worker beside the lane struck]
+    OS-18: [S3, Accelerates into the path of the emergency vehicle]
+    OS-19: [S3, Moves off from the stop in lane into passing traffic or people leaving the vehicle]
+    OS-20: [S2, Moves off on the gradient into the vehicle ahead in the queue]
+  H-02:
+    OS-01: [S3, A cyclist or pedestrian in the lane struck at 40–48 km/h]
+    OS-02: [S2, Pedestrians struck at up to 24 km/h]
+    OS-03: [S3, Runs into crossing traffic or pedestrians at up to 48 km/h]
+    OS-04: [S3, Does not stop for oncoming traffic in the turn]
+    OS-05: [S2, Impact at roundabout speeds near 32 km/h]
+    OS-08: [S2, Rear impact into a slowing vehicle at up to 48 km/h]
+    OS-09: [S3, Pedestrian on the crosswalk struck at 40–48 km/h]
+    OS-10: [S2, Does not stop under remote driving at walking pace (DQ-032 A)]
+    OS-11: [S3, A pedestrian emerging between parked vehicles struck at speed]
+    OS-12: [S3, A child struck at up to 32 km/h]
+    OS-13: [S3, An obstacle or pedestrian on a narrow street struck at 40 km/h]
+    OS-14: [S2, Rear impact into a vehicle in the target lane]
+    OS-15: [S2, A cyclist in the cycle lane struck at up to 24 km/h]
+    OS-16: [S3, Runs the stop line into cross traffic or pedestrians]
+    OS-17: [S3, A worker struck at up to 32 km/h]
+    OS-18: [S3, Collision with the emergency vehicle]
+  H-03:
+    OS-01: [S2, Rear-end impact by a following vehicle or motorcycle at an urban speed difference]
+    OS-02: [S1, Following traffic at 24 km/h or less; light rear impact]
+    OS-03: [S2, Rear-end impact in the intersection]
+    OS-04: [S3, Stops across the oncoming lane mid-turn and is struck in the side by oncoming traffic]
+    OS-05: [S2, Rear or side impact in the roundabout]
+    OS-08: [S2, Short gaps; rear-end impact by the follower]
+    OS-09: [S2, Rear-end impact by the follower before the crosswalk]
+    OS-10: [S1, Walking pace under remote driving]
+    OS-11: [S2, Rear-end impact by the follower]
+    OS-12: [S1, School zone speeds; light rear impact]
+    OS-13: [S2, Rear-end impact by the follower]
+    OS-14: [S2, Brakes mid lane change; rear-end impact by the follower in the target lane]
+    OS-15: [S1, Low speed at the kerb]
+    OS-16: [S1, Low speed leaving the stop line]
+    OS-17: [S1, Low speed through the work zone]
+    OS-18: [S3, An emergency vehicle closing fast from behind]
+  H-04:
+    OS-01: [S3, Into the oncoming lane or into a cyclist at 40–48 km/h]
+    OS-02: [S2, Onto the sidewalk at up to 24 km/h]
+    OS-03: [S3, Into crossing or adjacent traffic in the intersection]
+    OS-04: [S3, Into oncoming traffic during the turn]
+    OS-05: [S2, Out of the roundabout lane at near 32 km/h]
+    OS-08: [S3, Into a cyclist beside the queue]
+    OS-09: [S3, Swerves into pedestrians at the crosswalk]
+    OS-10: [S2, Leaves the path at walking pace under remote driving]
+    OS-11: [S3, Into an opening door or a person stepping out]
+    OS-12: [S3, Onto the footway with children on it]
+    OS-13: [S3, Head-on on a street without a centre line]
+    OS-14: [S3, Into a vehicle or cyclist in the target lane]
+    OS-15: [S2, Into a cyclist at up to 24 km/h]
+    OS-16: [S2, Into pedestrians at the junction at low speed]
+    OS-17: [S3, Into workers beside the lane]
+    OS-18: [S2, Swerves at low speed while making way for the emergency vehicle]
+  H-05:
+    OS-06: [S2, Creeps or rolls into pedestrians crossing in front; run-over possible]
+    OS-07: [S3, A person half in the vehicle dragged or run over]
+    OS-10: [S2, Moves off at walking pace while held under remote driving]
+    OS-16: [S2, Creeps into pedestrians crossing at the stop line]
+    OS-19: [S3, Moves off while passengers leave the vehicle on the kerb side (DQ-023 C)]
+    OS-20: [S2, Rolls back on the gradient into the vehicle or person behind]
+  H-06:
+    OS-02: [S2, Into pedestrians on a downtown crosswalk at up to 24 km/h]
+    OS-03: [S3, Enters on red into crossing traffic]
+    OS-04: [S3, Turns in front of an oncoming vehicle]
+    OS-05: [S2, Enters without yielding to circulating traffic]
+    OS-06: [S3, Leaves the red light into crossing traffic or pedestrians]
+    OS-09: [S3, Does not yield to a pedestrian on the crosswalk]
+    OS-12: [S3, Does not yield at a school crossing]
+    OS-13: [S2, Does not yield to oncoming traffic at a pinch point; low closing speed]
+    OS-14: [S3, Changes lanes into a cyclist or vehicle with right of way]
+    OS-15: [S2, Pulls out of the stop in front of a cyclist or vehicle]
+    OS-16: [S3, Pulls out from the stop line into cross traffic at up to 48 km/h]
+    OS-17: [S2, Does not yield to a worker crossing the lane]
+    OS-18: [S3, Does not yield to the emergency vehicle]
+  H-07:
+    OS-01: [S3, "Any collision at urban speed, including with pedestrians and cyclists"]
+    OS-02: [S3, Uncontrolled among dense pedestrians]
+    OS-03: [S3, Uncontrolled through the intersection]
+    OS-04: [S3, Uncontrolled across oncoming traffic]
+    OS-05: [S2, Uncontrolled at roundabout speeds]
+    OS-08: [S3, Uncontrolled in traffic with cyclists alongside]
+    OS-09: [S3, Uncontrolled into the crosswalk]
+    OS-10: [S2, Uncontrolled at walking pace under remote driving]
+    OS-11: [S3, Uncontrolled past parked vehicles and pedestrians]
+    OS-12: [S3, Uncontrolled near children]
+    OS-13: [S3, Uncontrolled on a narrow street with oncoming traffic]
+    OS-14: [S3, Uncontrolled during the lane change]
+    OS-15: [S2, Uncontrolled at low speed by the kerb]
+    OS-16: [S3, Uncontrolled through the junction]
+    OS-17: [S3, Uncontrolled through the work zone]
+    OS-18: [S3, Uncontrolled in the emergency vehicle's path]
+  H-08:
+    OS-10: [S3, Collision while acting on stale commands; rated at urban speed as HE-08.1 (see HA-6)]
+  H-09:
+    OS-01: [S2, A cyclist or driver moves into the path the vehicle then takes]
+    OS-02: [S1, Pedestrians misled at low speed]
+    OS-03: [S2, A cyclist or pedestrian misled in the intersection]
+    OS-04: [S2, Oncoming traffic misled about the turn]
+    OS-05: [S2, Traffic entering the roundabout misled about the exit]
+    OS-08: [S2, A cyclist beside the queue misled]
+    OS-10: [S1, Walking pace under remote driving]
+    OS-11: [S2, A cyclist passing the parked vehicles misled]
+    OS-12: [S1, Low speed near the school]
+    OS-13: [S2, Oncoming traffic misled on a narrow street]
+    OS-14: [S2, A vehicle or cyclist in the target lane misled]
+    OS-15: [S2, A cyclist in the cycle lane misled as the vehicle crosses it]
+    OS-16: [S2, Cross traffic or pedestrians misled at the junction]
+    OS-17: [S1, Low speed through the work zone]
+    OS-18: [S2, The emergency vehicle's driver misled about where the vehicle pulls over]
+    OS-19: [S2, No hazard lights at a stop in lane; following traffic does not see the stopped vehicle in time]
+  H-10:
+    OS-06: [S2, Reverses into the vehicle or person behind in the queue]
+    OS-07: [S2, Reverses into a person behind at the kerbside stop]
+    OS-15: [S2, Reverses into a cyclist while pulling in]
+    OS-16: [S2, Reverses into the vehicle behind at the stop line]
+    OS-19: [S2, Reverses into passing traffic from the stop in lane]
+    OS-20: [S2, Reverses down the gradient into the vehicle behind]
+
+# Why a hazard cannot occur in a situation (S0). `moving` and `stopped` apply to every situation of that kind.
+none:
+  H-01: {}
+  H-02: {stopped: The vehicle is already stopped; failing to hold it is H-05}
+  H-03: {stopped: The vehicle is stopped; there is no deceleration to make}
+  H-04: {stopped: Steering at standstill does not move the vehicle}
+  H-05: {moving: The vehicle is moving; motion from standstill does not arise}
+  H-06: {default: No conflict area with right of way is entered in this situation}
+  H-07: {stopped: The vehicle is stopped; failing to hold it is H-05}
+  H-08: {default: Not in REMOTE mode}
+  H-09: {default: No manoeuvre is signalled in this situation}
+  H-10: {moving: At speed a reverse selection acts as hard braking, rated under H-03}
+
+# Controllability of every row with S1 or more (DQ-015 B).
+controllability:
+  default: [C3, No driver; no credit for other road users avoiding harm by their own action (DQ-015 B)]

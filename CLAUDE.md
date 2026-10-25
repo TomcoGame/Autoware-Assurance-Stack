@@ -53,9 +53,12 @@ for g in assurance/01-management/figures/fig_m00_register.py assurance/01-manage
          assurance/02-concept/tara/tara.py assurance/02-concept/cybersecurity/cybersecurity.py \
          assurance/02-concept/ai/ai.py assurance/02-concept/misuse/misuse.py \
          assurance/03-system/tsc/tsc.py assurance/03-system/timing/timing.py \
+         assurance/03-system/tsr/tsr.py assurance/03-system/hsi/hsi.py assurance/03-system/secarch/secarch.py \
+         assurance/03-system/integ/integ.py assurance/03-system/verif/verif.py \
+         assurance/06-validation/scenarios/scenarios.py assurance/06-validation/simenv/simenv.py \
          assurance/case/tools/dashboard.py; do python3 "$g" --check; done
 python3 -m unittest discover -s assurance/tests -p 'test_*.py'
-python3 tools/readme/figures.py --check   # the README figures read WP-C-02, WP-C-03, WP-C-04, WP-M-00, WP-M-01, the register
+python3 tools/readme/figures.py --check   # README and wiki figures: read WP-C-02/03/04/09, WP-S-04 timing, WP-M-00/01, the register, assurance/README.md
 ```
 
 - Python in `assurance/` uses the standard library and PyYAML only, formatted with black and isort at line length

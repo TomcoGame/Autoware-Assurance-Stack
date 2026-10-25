@@ -34,11 +34,20 @@ sys.path.insert(0, str(ASSURANCE / "02-concept" / "hara"))
 import check_decisions  # noqa: E402
 import figkit as fk  # noqa: E402
 import hara  # noqa: E402
+import terms  # noqa: E402
+
+sys.path.insert(0, str(HERE))
+import envelope  # noqa: E402
+import safetyview  # noqa: E402
 
 MODEL = HERE / "fsc.yaml"
 DOC = ASSURANCE / "02-concept" / "WP-C-04-functional-safety-concept.md"
 ITEM = ASSURANCE / "02-concept" / "WP-C-01-item-definition.md"
 FIG = HERE / "fig-c04-4-1-allocation.svg"
+FIG2 = HERE / "fig-c04-4-2-goals.svg"
+FIG0 = HERE / "fig-c04-2-1-safety-view.svg"
+CSV = HERE / "fsrs.csv"
+README = HERE / "README.md"
 W = 640
 
 
@@ -152,6 +161,13 @@ def tables(m: dict, sg: dict[str, dict]) -> dict[str, str]:
             f"| {e['id']} | {cell(e['name'])} | {'Yes' if e['in_item'] else 'No'} | **{ea[e['id']]}** | {cell(e['role'])} | {e.get('aou', '—')} | {n} |"
         )
     t["fsc-elements"] = "\n".join(rows)
+    t["fsc-safety-view"] = (
+        f"![{safetyview.alt(m, ea)}](fsc/{FIG0.name})\n\n"
+        "*Figure 2-1. The safety view of the item architecture: the item of "
+        "[WP-C-01](WP-C-01-item-definition.md) §5 with the elements this concept places its requirements on. "
+        "Drawn by [`fsc/fsc.py`](fsc/fsc.py) from `fsc/fsc.yaml`; CI fails if it is stale or if an element "
+        "has no place in it.*"
+    )
     n_rated = sum(1 for f in m["fsrs"] if f["asil"] != "QM")
     pend = sorted({f["pending"] for f in m["fsrs"] if f.get("pending")})
     t["fsc-summary"] = (
@@ -296,12 +312,234 @@ def figure(m: dict, sg: dict[str, dict]) -> str:
     )
 
 
+def trace() -> dict[str, dict[str, list[str]]]:
+    """For each FSR: the safety mechanisms (WP-S-03) that implement it, the technical safety
+    requirements (WP-S-02) that refine it and the verification cases (WP-S-09) that verify it."""
+    import yaml
+
+    sys.path.insert(0, str(ASSURANCE / "03-system" / "verif"))
+    import verif
+
+    out: dict[str, dict[str, list[str]]] = {}
+
+    def add(fsr: str, key: str, x: str) -> None:
+        out.setdefault(fsr, {"sm": [], "tsr": [], "vc": []})[key].append(x)
+
+    sys_dir = ASSURANCE / "03-system"
+    for sm in yaml.safe_load((sys_dir / "tsc" / "tsc.yaml").read_text(encoding="utf-8"))[
+        "mechanisms"
+    ]:
+        for f in sm.get("implements") or []:
+            add(f, "sm", sm["id"])
+    for r in yaml.safe_load((sys_dir / "tsr" / "tsr.yaml").read_text(encoding="utf-8"))["tsrs"]:
+        for f in r.get("fsrs") or []:
+            add(f, "tsr", r["id"])
+    vm, vk = verif.load(), verif.known()
+    for c in vm["cases"]:
+        for x in sorted(verif.covered(c, vk)):
+            if x.startswith("FSR-"):
+                add(x, "vc", c["id"])
+    return out
+
+
+def to_csv(header: list[str], data: list[list[str]]) -> str:
+    import csv
+    import io
+
+    buf = io.StringIO()
+    w = csv.writer(buf, lineterminator="\n")
+    w.writerow(header)
+    w.writerows(data)
+    return buf.getvalue()
+
+
+def fsrs_csv(m: dict, sg: dict[str, dict]) -> str:
+    els = {e["id"]: e for e in m["elements"]}
+    tr = trace()
+    rows = []
+    for f in m["fsrs"]:
+        t = tr.get(f["id"], {"sm": [], "tsr": [], "vc": []})
+        rows.append(
+            [
+                f["id"],
+                f"{f['goal']} {sg[f['goal']]['statement']}",
+                f["asil"],
+                f"{f['element']} {els[f['element']]['name']}",
+                f["text"],
+                f["verify"],
+                ", ".join(t["sm"]) or "—",
+                ", ".join(t["tsr"]) or "—",
+                ", ".join(t["vc"]) or "—",
+            ]
+        )
+    return to_csv(
+        [
+            "ID",
+            "Safety goal",
+            "ASIL",
+            "Allocated to",
+            "Requirement",
+            "To be verified by (WP-C-04)",
+            "Safety mechanisms (WP-S-03)",
+            "Technical safety requirements (WP-S-02)",
+            "Verification cases (WP-S-09)",
+        ],
+        rows,
+    )
+
+
+def here(md: str) -> str:
+    """Text of WP-C-04 with its relative links rewritten to work from this folder."""
+    md = re.sub(r"\]\(fsc/", "](", md)
+    return re.sub(r"\]\((?!https?:|#|\.\./\.\./|fig-|fsrs|README)", "](../", md)
+
+
+def item_figure() -> str:
+    """WP-C-01 Figure 5-1 as WP-C-01 shows it, with its path rewritten to work from this folder."""
+    md = ITEM.read_text(encoding="utf-8")
+    hit = re.search(r"^!\[[^\n]*\]\(figures/fig-c01-5-1-boundary\.svg\)$", md, flags=re.M)
+    if not hit:
+        raise fk.FigureError("WP-C-01 §5 no longer shows figures/fig-c01-5-1-boundary.svg")
+    return hit.group(0).replace("](figures/", "](../figures/")
+
+
+def readme(m: dict, sg: dict[str, dict], t: dict[str, str], doc: str) -> str:
+    """The folder page: the whole functional safety concept on one page."""
+
+    def part(heading: str) -> str:
+        body = fk.section(doc, heading).strip()
+        body = re.sub(
+            r"<!-- BEGIN GENERATED: fsc-safety-view .*?END GENERATED: fsc-safety-view -->\n\n",
+            "",
+            body,
+            flags=re.S,
+        )
+        return here(body)
+
+    files = [
+        "| File | What it holds |",
+        "|---|---|",
+        "| [`fsrs.csv`](fsrs.csv) | Every functional safety requirement with its goal, ASIL, element, how WP-C-04 says to verify it, and the safety mechanisms, technical safety requirements and verification cases that trace to it |",
+        f"| [`{FIG0.name}`]({FIG0.name}) | Figure 2-1, the safety view of the item architecture |",
+        f"| [`{FIG.name}`]({FIG.name}) | Figure 4-1, which element carries which safety goal |",
+        f"| [`{FIG2.name}`]({FIG2.name}) | Figure 4-2, how the concept holds each safety goal |",
+        "| [`fsc.yaml`](fsc.yaml) | The elements and the functional safety requirements |",
+        "| [`fsc.py`](fsc.py), [`envelope.py`](envelope.py), [`safetyview.py`](safetyview.py) | The generator: checks the model against the HARA, the item definition and the decision register, and writes WP-C-04's tables and everything here |",
+    ]
+    lines = [
+        "<!-- Generated by assurance/02-concept/fsc/fsc.py; do not edit by hand. -->",
+        "",
+        "# Functional safety concept",
+        "",
+        "The whole functional safety concept of [WP-C-04](../WP-C-04-functional-safety-concept.md) on one "
+        "page: the item and its elements, how the concept works, the safety goals it meets, which element "
+        "carries what, every functional safety requirement and how each goal is held. Everything here is "
+        "generated by `fsc.py` from `fsc.yaml` and the HARA; CI fails if it is stale. Everything is a draft "
+        "by Claude (I0) until it is reviewed.",
+        "",
+        t["fsc-summary"],
+        "",
+        "1. [The item](#1-the-item)",
+        "2. [The concept](#2-the-concept)",
+        "3. [Safety goals](#3-safety-goals)",
+        "4. [Allocation to elements](#4-allocation-to-elements)",
+        "5. [How each goal is held](#5-how-each-goal-is-held)",
+        "6. [Functional safety requirements](#6-functional-safety-requirements)",
+        "7. [Safe states, warning and degradation](#7-safe-states-warning-and-degradation)",
+        "8. [Assumptions on other elements](#8-assumptions-on-other-elements)",
+        "9. [Files in this folder](#9-files-in-this-folder)",
+        "",
+        "## 1. The item",
+        "",
+        "The item as [WP-C-01](../WP-C-01-item-definition.md) defines it, before any safety analysis: what is "
+        "inside it, what is outside, and the interfaces that cross its boundary.",
+        "",
+        item_figure(),
+        "",
+        "*WP-C-01 Figure 5-1. The item boundary and its interfaces I-01 to I-13 (WP-C-01 §5).*",
+        "",
+        "The same item as this concept sees it: the elements it places its requirements on, each with its "
+        "derived ASIL, and the flows the rated requirements rest on.",
+        "",
+        f"![{safetyview.alt(m, element_asil(m))}]({FIG0.name})",
+        "",
+        "*Figure 2-1. The safety view of the item architecture.*",
+        "",
+        here(t["fsc-elements"]),
+        "",
+        "## 2. The concept",
+        "",
+        part("## 2. The concept"),
+        "",
+        "## 3. Safety goals",
+        "",
+        "The safety goals come from the [HARA](../hara/README.md), with the ASIL of their worst hazardous "
+        "event. Each has requirements at its own ASIL; QM requirements support the nominal function.",
+        "",
+        t["fsc-goals"],
+        "",
+        "## 4. Allocation to elements",
+        "",
+        "![Figure 4-1: a grid with the nine safety goals SG-01 to SG-09 as rows and the nine elements EL-01 to "
+        "EL-09 as columns; each cell shows how many functional safety requirements of that goal are allocated "
+        "to that element, shaded by their ASIL. The safety monitor (EL-02) carries requirements for every "
+        f"goal. Elements outside the item are framed together with a dashed line.]({FIG.name})",
+        "",
+        "*Figure 4-1. Which element carries which safety goal. Each element's ASIL is the highest of the "
+        "requirements allocated to it.*",
+        "",
+        "## 5. How each goal is held",
+        "",
+        "One card per safety goal: what Autoware or a remote operator commands when it goes wrong (red, "
+        "dashed), the bound the safety envelope sets (amber), and what reaches the vehicle through the "
+        "safety monitor (blue). Under it, the hazard on the road: where the faulty command would take the "
+        "vehicle, where the monitor steps in, and the safe state the item reaches instead. The cards are "
+        "schematic; they explain the concept and are not simulation results.",
+        "",
+        "![Figure 4-2: nine cards, one per safety goal SG-01 to SG-09. Each shows a chart of the faulty "
+        "command, the envelope bound and what the monitor passes to the vehicle over time, a top-down scene "
+        "with the path the faulty command would take, where the monitor steps in and the safe state reached, "
+        f"and the rated requirements by the element that carries them.]({FIG2.name})",
+        "",
+        "## 6. Functional safety requirements",
+        "",
+        "Every requirement, with the safety mechanisms, technical safety requirements and verification cases "
+        "that trace to it, is in [`fsrs.csv`](fsrs.csv), which GitHub shows as a table that can be searched.",
+        "",
+        here(t["fsc-fsrs"]),
+        "",
+        "## 7. Safe states, warning and degradation",
+        "",
+        part("## 6. Safe states, warning and degradation"),
+        "",
+        "## 8. Assumptions on other elements",
+        "",
+        part("## 7. Assumptions on other elements"),
+        "",
+        "## 9. Files in this folder",
+        "",
+        *files,
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def build() -> dict[Path, str]:
     m, sg = load(), goals()
-    errs = check(m, sg, aous(), check_decisions.load())
+    errs = check(m, sg, aous(), check_decisions.load()) + envelope.check(sg) + safetyview.check(m)
     if errs:
         raise fk.FigureError("fsc.yaml: " + "; ".join(errs))
-    return {DOC: fill(DOC.read_text(encoding="utf-8"), tables(m, sg)), FIG: figure(m, sg)}
+    t = tables(m, sg)
+    els = {e["id"]: e for e in m["elements"]}
+    doc = fill(DOC.read_text(encoding="utf-8"), t)
+    return {
+        DOC: doc,
+        FIG0: safetyview.figure(m, element_asil(m)),
+        FIG: figure(m, sg),
+        FIG2: envelope.sheet(m, sg, els),
+        CSV: fsrs_csv(m, sg),
+        README: terms.close(readme(m, sg, t, doc), README),
+    }
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-S-04 Timing: FTTI, detection and reaction budget, fallback timing |
 | Standard reference | UL 4600 §10; ISO 26262-4 §6; ASPICE 4.0 SYS.3 |
-| Version | 0.3 (remote driving up to 10 km/h (DQ-032 A); 2026-10-23). 0.2 (first content: FTTIs computed per safety goal from proposed margins and fault ranges, the share of each FTTI given to detection and reaction, budgets of the time-critical mechanisms, the sensing-to-actuation chain, fallback timing and the measurement method, generated from `timing/timing.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.5 (folder page `timing/README.md` with the whole budget on one page, Figure 2-2 on how long each goal lets a fault last, and `timing/measurements.csv` listing every time a test must measure; 2026-10-25). 0.4 (firm braking level of 3 m/s² for SG-03 and MRM-4 (DQ-033 A); 2026-10-24). 0.3 (remote driving up to 10 km/h (DQ-032 A); 2026-10-23). 0.2 (first content: FTTIs computed per safety goal from proposed margins and fault ranges, the share of each FTTI given to detection and reaction, budgets of the time-critical mechanisms, the sensing-to-actuation chain, fallback timing and the measurement method, generated from `timing/timing.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | ASIL D |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -42,7 +42,7 @@ A goal of kind *deviation* is violated when a fault's acceleration has moved the
 |---|---|---|---|---|---|
 | SG-01 Avoid unintended acceleration | deviation | 0.5 m (proposed) | 2 to 4 m/s² | 500 ms to 707 ms | The longitudinal margin the envelope keeps beyond the safe distance (proposed) is consumed by unintended acceleration |
 | SG-02 Decelerate at least as much as needed to avoid a collision the planned trajectory avoids | deviation | 0.5 m (proposed) | 2 to 4 m/s² | 500 ms to 707 ms | The same margin is consumed when commanded braking is lost |
-| SG-03 Avoid unintended hard deceleration | limit | — | — | — | Unintended hard braking is prevented by a limit on deceleration (FSR-03.02), not by detecting it in time; its firm level is set in WP-S-02 |
+| SG-03 Avoid unintended hard deceleration | limit | — | — | — | Unintended hard braking is prevented by a limit on deceleration (FSR-03.02), not by detecting it in time; its firm level is 3 m/s² (DQ-033 A, WP-S-02 P-05) |
 | SG-04 Avoid unintended lateral motion out of the planned path | deviation | 0.3 m (proposed) | 1 to 3 m/s² | 447 ms to 775 ms | The lateral margin to the lane edge or a road user (proposed) is consumed by an unintended steering command |
 | SG-05 Avoid unintended motion from standstill, forward or backward | deviation | 0.2 m (proposed) | 0.5 to 1.5 m/s² | 516 ms to 894 ms | Motion from standstill must be stopped within a short creep distance (proposed), for example before reaching a pedestrian at the bumper |
 | SG-06 Do not enter an intersection, roundabout or crosswalk against right of way | derived from SG-02 | — | — | 500 ms to 707 ms | Entering a conflict area against right of way is prevented by the same braking as SG-02 |
@@ -51,6 +51,14 @@ A goal of kind *deviation* is violated when a fault's acceleration has moved the
 | SG-09 Avoid signalling a manoeuvre other than the one performed | limit | — | — | — | A wrong indicator misleads others only while it is shown; FSR-09.01 switches to hazard lights, and the time it may take is set in WP-S-02 with the indicator's own timing |
 
 <!-- END GENERATED: timing-ftti -->
+
+<!-- BEGIN GENERATED: timing-goal-cards (assurance/03-system/timing/timing.py) -->
+
+![Figure 2-2: one card per safety goal SG-01 to SG-09. For a goal with an FTTI, a plot of how far a fault moves the vehicle over the first second, for the largest and the smallest fault the candidate vehicles can produce, the proposed margin, and the FTTI where the margin is reached; under it, the worst-case FTTI split into time to detect, time to react and reserve on the same time axis. A derived goal shows the goal that binds it; a goal met by a limit says so. The same values are in the table above.](timing/fig-s04-2-2-goals.svg)
+
+*Figure 2-2. How long each safety goal lets a fault last. Computed from `timing/timing.yaml`; nothing is measured. Drawn by [`timing/timing.py`](timing/timing.py); CI fails if it is stale.*
+
+<!-- END GENERATED: timing-goal-cards -->
 
 **Remote driving is the tightest.** SG-08 allows a remote command only as old as the time the vehicle needs to move by its drift margin at remote driving speed. At 20 km/h that would have been under 200 ms for the whole path, which a cellular link is unlikely to hold. The lead limited remote driving to walking pace, up to 10 km/h (DQ-032 A, 2026-10-23), which doubles the time; the video delay to the operator still counts against it, and the measurement of §6 must show the link holds it in its worst hours.
 
@@ -103,12 +111,12 @@ The rated manoeuvres start when their mechanism detects the fault; Autoware's ow
 | MRM-1 Pull over to a mapped safe stopping place | Autoware (QM, not budgeted) | — | — | — |
 | MRM-2 Comfortable stop in lane | Autoware (QM, not budgeted) | — | 15.6 s | — |
 | MRM-3 Emergency stop in lane | Autoware (QM, not budgeted) | — | 6.4 s | — |
-| MRM-4 Safety monitor stop in lane | SM-05 | 143 ms | Set in WP-S-02 | — |
-| MRM-5 Vehicle's own stop on loss of the monitor | SM-14 | 179 ms to 283 ms | Set in WP-S-02 | — |
+| MRM-4 Safety monitor stop in lane | SM-05 | 143 ms | With the vehicle (DQ-008) | — |
+| MRM-5 Vehicle's own stop on loss of the monitor | SM-14 | 179 ms to 283 ms | With the vehicle (DQ-008) | — |
 
 <!-- END GENERATED: timing-fallback -->
 
-The stop of MRM-4 runs at the firm level of FSR-03.02, raised to emergency braking only when FSR-02.02 requires it; that level, and the vehicle's own stop of MRM-5, are set in WP-S-02 with the vehicle supplier. Detection takes tenths of a second and a stop from the top of the speed range takes seconds, so the stop, not the detection, dominates every fallback; the detection budgets matter because they decide where the stop begins.
+The stop of MRM-4 runs at the firm level of FSR-03.02, 3 m/s² (DQ-033 A, 2026-10-24; WP-S-02 P-05), raised to emergency braking only when FSR-02.02 requires it. Its stop time follows once the vehicle's braking jerk is known, and the vehicle's own stop of MRM-5 is set with the vehicle supplier (DQ-008). Detection takes tenths of a second and a stop from the top of the speed range takes seconds, so the stop, not the detection, dominates every fallback; the detection budgets matter because they decide where the stop begins.
 
 ## 6. Measurement method
 

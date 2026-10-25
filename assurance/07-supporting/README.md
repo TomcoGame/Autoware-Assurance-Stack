@@ -24,3 +24,24 @@ Standard clauses: UL 4600 §13–14; 26262-8; SUP.1/8/9/10.
 | [WP-P-08](WP-P-08-software-component-qualification.md) | Software components not developed to ISO 26262 (Autoware packages, ROS 2, middleware, OS) | G3 | Skeleton |
 | [WP-P-09](WP-P-09-proven-in-use.md) | Proven-in-use argument evaluation | G3 | Skeleton |
 | [WP-P-10](WP-P-10-release-management.md) | Release management and baseline procedure | G5 | Skeleton |
+
+## Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| 21434, 21448, 26262, PAS 8800 | ISO/SAE 21434 (cybersecurity), ISO 21448 (SOTIF), ISO 26262 (functional safety), ISO/PAS 8800 (AI safety). "26262-3" is part 3 of ISO 26262 |
+| ACQ, HWE, MAN, MLE, SUP, SWE, SYS, VAL | Automotive SPICE process groups: acquisition, hardware engineering, management, machine learning engineering, support, software engineering, system engineering, validation. "SWE.1–6" means processes 1 to 6 of the group |
+| G0 to G6 | Gates: project milestones with exit criteria, defined in WP-M-00 §2 |
+| ID | Identifier |
+| ISO | International Organization for Standardization |
+| OS | Operating system |
+| P | Safety envelope parameter identifier, as in P-01 (WP-S-02) |
+| ROS 2 | Robot Operating System 2: the middleware Autoware is built on |
+| Skeleton, Draft, In review, Approved, Baselined | Status of a work product: structure only; written, not verified; in verification review; approved; approved and frozen |
+| UL 4600 | The standard for the safety of autonomous products; the main framework here |
+| WP | Work product: a document or record the assurance path needs. WP-M-00 is the register that lists them all |
+| § | Section or clause, as in "UL 4600 §5" |
+| – (en dash) in a range | "through", as in "§5–8" (clauses 5 to 8) |
+| / between numbers | "and", as in "MAN.3/5" (MAN.3 and MAN.5) |
+
+Other terms are defined in the [Glossary](../../wiki/Glossary.md).

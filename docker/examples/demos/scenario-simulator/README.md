@@ -85,3 +85,65 @@ ros2 launch scenario_test_runner scenario_test_runner.launch.py \
 ```
 
 The `cyclonedds-config` named volume is populated by the `autoware` service on startup (a copy of `/home/aw/cyclonedds.xml`) and mounted into the scenario-simulator at `/shared-config`, which `CYCLONEDDS_URI` points at.
+
+## Abbreviations, terms and symbols
+
+| Term                            | Meaning                                                                                                                         |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| ansible role                    | A reusable ansible script for one setup task, such as downloading maps and models                                               |
+| `/api/operation_mode/state`     | The Autoware interface that reports the current operation mode, used here to tell when Autoware is ready                        |
+| `architecture_type`             | Launch argument telling the scenario runner which Autoware version's interfaces to expect; `awf` is the Autoware Foundation     |
+| Autoware                        | The open-source self-driving software stack that these images package                                                           |
+| `bash`                          | The standard Linux command-line shell                                                                                           |
+| centerline                      | The line along the middle of a lane that the vehicle's planned path follows                                                     |
+| `command:`                      | The part of the Compose file that sets what the container runs when it starts                                                   |
+| container                       | A running, isolated instance of an image; it shares the host's operating system kernel but has its own files and processes      |
+| Ctrl+D                          | Keyboard shortcut that ends the current shell, which here also exits the container                                              |
+| CycloneDDS                      | Eclipse Cyclone DDS: the DDS implementation Autoware uses to carry ROS 2 messages                                               |
+| `CYCLONEDDS_URI`                | Environment variable that tells CycloneDDS where its configuration file is                                                      |
+| `cyclonedds.xml`                | The CycloneDDS configuration file, which sets network interfaces and discovery                                                  |
+| `demo_artifacts`                | Ansible role in this repository that downloads the demo maps and models                                                         |
+| `depends_on`                    | Compose setting that starts one service only after another                                                                      |
+| Docker Compose v2               | The current version of Docker Compose, run as `docker compose` (with a space) rather than the older `docker-compose`            |
+| GHCR                            | GitHub Container Registry (`ghcr.io`): GitHub's service for storing and downloading images                                      |
+| GID                             | Group ID: the number Linux uses to identify a user group, which decides file permissions                                        |
+| git clone                       | Command that downloads a copy of a Git repository                                                                               |
+| healthcheck                     | A command Compose runs repeatedly to decide whether a container is ready; here it checks that Autoware is up                    |
+| host                            | The physical computer that runs Docker and the containers                                                                       |
+| humble                          | ROS 2 Humble Hawksbill: the 2022 long-term-support ROS 2 release, for Ubuntu 22.04                                              |
+| image                           | A packaged, read-only snapshot of an operating system plus installed software, from which containers are started                |
+| interleaved                     | Mixed together line by line in one output                                                                                       |
+| launch argument                 | A `name:=value` setting passed to `ros2 launch` to choose the map, vehicle, sensors and so on                                   |
+| named volume                    | Storage that Docker manages and that several containers can share                                                               |
+| `network_mode: host`            | Compose setting that makes the container use the host's network directly, so ROS 2 traffic flows as if Autoware ran on the host |
+| `--no-deps`                     | Start only the named service, not the services it depends on                                                                    |
+| `planning_simulator.launch.xml` | Autoware's launch file for the planning simulator                                                                               |
+| planning stack                  | The Autoware parts that plan the vehicle's path and speed                                                                       |
+| `--rm`                          | Remove the container when it exits                                                                                              |
+| ROS 2                           | Robot Operating System 2: the open-source framework Autoware is built on, which passes messages between programs called nodes   |
+| ROS 2 discovery                 | How ROS 2 nodes find each other automatically over the network                                                                  |
+| `ros2 launch`                   | ROS 2 command that starts many nodes at once from a launch file                                                                 |
+| `-runtime` (tag)                | A runtime image: contains only what is needed to run the software                                                               |
+| rviz                            | RViz (`rviz2`): the ROS 3D visualisation tool that shows the map, vehicle, sensor data and plans                                |
+| sample map                      | Small example map provided by Autoware for the planning simulator demo                                                          |
+| scenario                        | A scripted traffic situation, written in a YAML file, with a pass or fail result                                                |
+| `scenario_simulator_v2`         | Open-source tool from TIER IV that runs scenarios against Autoware and checks the result                                        |
+| `scenario_test_runner`          | The `scenario_simulator_v2` program that loads a scenario and runs it                                                           |
+| service                         | One container definition in a Compose file                                                                                      |
+| simulator engine                | The part of the scenario simulator that moves the other traffic and the simulated world                                         |
+| stdin                           | Standard input: the keyboard input a program reads                                                                              |
+| stdout                          | Standard output: where a program prints its text                                                                                |
+| tag                             | The name after the colon in an image name (for example `universe-jazzy`) that selects one variant or version                    |
+| topic                           | A named channel in ROS 2 that nodes publish messages to and subscribe to                                                        |
+| UID                             | User ID: the number Linux uses to identify a user, which decides who owns files                                                 |
+| URI                             | Uniform resource identifier: a string that names a file or resource                                                             |
+| X11                             | The X Window System: the Linux display system that draws GUI windows; containers send their windows to the host's X server      |
+| `xhost +local:docker`           | Command that allows local containers to open windows on the host's display                                                      |
+| YAML                            | A plain-text format for configuration files (`.yaml`)                                                                           |
+| `:=`                            | Sets a ROS 2 launch argument, as in `name:=value`                                                                               |
+| `~`                             | Your home folder on the host, for example `/home/<you>`                                                                         |
+| `$(...)`                        | In shell commands: run the command inside and use its output, for example `$(id -u)` gives your user ID                         |
+| `#`                             | In shell commands: starts a comment, which is not run                                                                           |
+| `\`                             | At the end of a command line: the command continues on the next line                                                            |
+
+Other project terms are defined in the [Glossary](../../../../wiki/Glossary.md).
