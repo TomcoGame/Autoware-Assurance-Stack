@@ -35,9 +35,15 @@ import figkit as fk  # noqa: E402
 import hara  # noqa: E402
 import tsc  # noqa: E402
 
+sys.path.insert(0, str(HERE))
+import gcards  # noqa: E402
+
 MODEL = HERE / "timing.yaml"
 DOC = ASSURANCE / "03-system" / "WP-S-04-timing-ftti-budget.md"
 FIG = HERE / "fig-s04-2-1-ftti.svg"
+FIG2 = HERE / "fig-s04-2-2-goals.svg"
+CSV = HERE / "measurements.csv"
+README = HERE / "README.md"
 KINDS = ("deviation", "drift", "derived", "limit")
 W = 640
 
@@ -161,6 +167,16 @@ def tables(m: dict, k: dict, vmax: float) -> dict[str, str]:
             f"| {span(ftti(m, g['id'], 'high'), ftti(m, g['id'], 'low'))} | {cell(g['basis'])} |"
         )
     t["timing-ftti"] = "\n".join(rows)
+    t["timing-goal-cards"] = (
+        "![Figure 2-2: one card per safety goal SG-01 to SG-09. For a goal with an FTTI, a plot of how far a "
+        "fault moves the vehicle over the first second, for the largest and the smallest fault the candidate "
+        "vehicles can produce, the proposed margin, and the FTTI where the margin is reached; under it, the "
+        "worst-case FTTI split into time to detect, time to react and reserve on the same time axis. A derived "
+        "goal shows the goal that binds it; a goal met by a limit says so. The same values are in the table "
+        f"above.](timing/{FIG2.name})\n\n"
+        "*Figure 2-2. How long each safety goal lets a fault last. Computed from `timing/timing.yaml`; nothing "
+        "is measured. Drawn by [`timing/timing.py`](timing/timing.py); CI fails if it is stale.*"
+    )
     al = m["allocation"]
     rows = [
         "| Mechanism | Bound by | Binding FTTI | Detection budget | Reaction budget |",
@@ -298,13 +314,171 @@ def figure(m: dict) -> str:
     return fk.svg(W, int(y), "WP-S-04 Figure 2-1: FTTI against fault size", desc + ".", body, EXTRA)
 
 
+def measurements_csv(m: dict, k: dict) -> str:
+    """Every time a test must measure: each budget of each time-critical mechanism, and each stage of the
+    sensing-to-actuation chain, with the requirements that carry it and the integration cases that time it.
+    """
+    import csv
+    import io
+
+    import yaml
+
+    tsrs = yaml.safe_load((HERE.parent / "tsr" / "tsr.yaml").read_text(encoding="utf-8"))["tsrs"]
+    its = yaml.safe_load((HERE.parent / "integ" / "integ.yaml").read_text(encoding="utf-8"))[
+        "cases"
+    ]
+    timed_its = [c for c in its if "timing" in c["methods"]]
+    al = m["allocation"]
+    buf = io.StringIO()
+    w = csv.writer(buf, lineterminator="\n")
+    w.writerow(
+        [
+            "What is measured",
+            "Mechanism or stage",
+            "Component",
+            "Budget",
+            "Bound by",
+            "Binding FTTI",
+            "Technical safety requirements (WP-S-02)",
+            "Integration test cases that time it (WP-S-08)",
+            "Measured",
+        ]
+    )
+    for s in m["mechanisms"]:
+        lo, hi, g = bound(m, s)
+        host = k["mechanisms"][s["id"]]["host"]
+        for part, word in (("detect", "Time to detect"), ("react", "Time to react")):
+            rs = [r["id"] for r in tsrs if r["mechanism"] == s["id"] and r.get("timing") == part]
+            cs = [c["id"] for c in timed_its if set(c["covers"]) & set(rs)]
+            w.writerow(
+                [
+                    word,
+                    f"{s['id']} {k['mechanisms'][s['id']]['name']}",
+                    f"{host} {k['components'][host]['name']}",
+                    span(lo * al[part], hi * al[part]),
+                    g,
+                    span(lo, hi),
+                    ", ".join(rs) or "—",
+                    ", ".join(cs) or "—",
+                    "Not yet",
+                ]
+            )
+    chain = [c["id"] for c in timed_its if "chain" in c["name"].lower()]
+    for c in m["chain"]:
+        w.writerow(
+            [
+                "Chain latency",
+                c["stage"],
+                f"{c['component']} {k['components'][c['component']]['name']}",
+                "To be set",
+                "—",
+                "—",
+                "—",
+                ", ".join(chain) or "—",
+                "Not yet",
+            ]
+        )
+    return buf.getvalue()
+
+
+def here(md: str) -> str:
+    """Text of WP-S-04 with its relative links rewritten to work from this folder."""
+    md = md.replace("](timing/", "](")
+    return re.sub(r"\]\((?!https?:|#|fig-|measurements\.csv|timing\.|README)", "](../", md)
+
+
+def readme(t: dict[str, str], doc: str) -> str:
+    """The folder page: the whole timing budget on one page."""
+
+    def part(heading: str) -> str:
+        return here(fk.section(doc, heading).strip())
+
+    files = [
+        "| File | What it holds |",
+        "|---|---|",
+        f"| [`{CSV.name}`]({CSV.name}) | Every time a test must measure: each detection and reaction budget and each stage of the sensing-to-actuation chain, with the requirements that carry it and the integration test cases that time it |",
+        f"| [`{FIG.name}`]({FIG.name}) | Figure 2-1, FTTI against the size of the fault |",
+        f"| [`{FIG2.name}`]({FIG2.name}) | Figure 2-2, how long each safety goal lets a fault last |",
+        "| [`timing.yaml`](timing.yaml) | Margins, fault ranges, the allocation of each FTTI, the time-critical mechanisms, the chain and the fallback |",
+        "| [`timing.py`](timing.py), [`gcards.py`](gcards.py) | The generator: computes every FTTI and budget, checks the model against the HARA, the technical safety concept and the fallback concept, and writes WP-S-04's tables and everything here |",
+    ]
+    lines = [
+        "<!-- Generated by assurance/03-system/timing/timing.py; do not edit by hand. -->",
+        "",
+        "# Timing: FTTI, detection and reaction budget",
+        "",
+        "The whole timing budget of [WP-S-04](../WP-S-04-timing-ftti-budget.md) on one page: how long each "
+        "safety goal lets a fault last, how that time is shared between detecting the fault and reacting to "
+        "it, the sensing-to-actuation chain, the fallback timing, and how every budget is to be measured. The "
+        "budgets bind the mechanisms of the [technical safety concept](../tsc/README.md) and the timed "
+        "[technical safety requirements](../tsr/README.md). Everything here is generated by `timing.py` from "
+        "`timing.yaml`; CI fails if it is stale. Everything is a draft by Claude (I0) until it is reviewed.",
+        "",
+        t["timing-summary"],
+        "",
+        "1. [What the budget is](#1-what-the-budget-is)",
+        "2. [FTTI per safety goal](#2-ftti-per-safety-goal)",
+        "3. [Sensing to actuation](#3-sensing-to-actuation)",
+        "4. [Detection and reaction times of each mechanism](#4-detection-and-reaction-times-of-each-mechanism)",
+        "5. [Fallback timing](#5-fallback-timing)",
+        "6. [How every budget is measured](#6-how-every-budget-is-measured)",
+        "7. [Files in this folder](#7-files-in-this-folder)",
+        "",
+        "## 1. What the budget is",
+        "",
+        re.sub(
+            r"<!-- BEGIN GENERATED: timing-summary .*?END GENERATED: timing-summary -->\n\n",
+            "",
+            part("## 1. Purpose"),
+            flags=re.S,
+        ),
+        "",
+        "## 2. FTTI per safety goal",
+        "",
+        part("## 2. FTTI per safety goal"),
+        "",
+        "## 3. Sensing to actuation",
+        "",
+        part("## 3. Latency budget"),
+        "",
+        "## 4. Detection and reaction times of each mechanism",
+        "",
+        part("## 4. Detection and reaction times"),
+        "",
+        "## 5. Fallback timing",
+        "",
+        part("## 5. Fallback and minimal risk manoeuvre timing"),
+        "",
+        "## 6. How every budget is measured",
+        "",
+        f"Every time a test must measure is listed in [`{CSV.name}`]({CSV.name}), with the requirements that "
+        "carry it and the integration test cases that time it.",
+        "",
+        part("## 6. Measurement method"),
+        "",
+        "## 7. Files in this folder",
+        "",
+        *files,
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def build() -> dict[Path, str]:
     m, k = load(), known()
     errs = check(m, k)
     if errs:
         raise fk.FigureError("timing.yaml: " + "; ".join(errs))
     vmax = fallback.odd()[1]
-    return {DOC: fill(DOC.read_text(encoding="utf-8"), tables(m, k, vmax)), FIG: figure(m)}
+    t = tables(m, k, vmax)
+    doc = fill(DOC.read_text(encoding="utf-8"), t)
+    return {
+        DOC: doc,
+        FIG: figure(m),
+        FIG2: gcards.sheet(m, k, ftti, ms, bound),
+        CSV: measurements_csv(m, k),
+        README: readme(t, doc),
+    }
 
 
 if __name__ == "__main__":

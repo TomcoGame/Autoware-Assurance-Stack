@@ -1,0 +1,27 @@
+What is measured,Mechanism or stage,Component,Budget,Bound by,Binding FTTI,Technical safety requirements (WP-S-02),Integration test cases that time it (WP-S-08),Measured
+Time to detect,SM-01 Longitudinal envelope,CMP-02 Safety monitor controller,200 ms to 283 ms,SG-01,500 ms to 707 ms,—,—,Not yet
+Time to react,SM-01 Longitudinal envelope,CMP-02 Safety monitor controller,200 ms to 283 ms,SG-01,500 ms to 707 ms,"TSR-01.02, TSR-01.03",IT-03,Not yet
+Time to detect,SM-02 Lateral envelope,CMP-02 Safety monitor controller,179 ms to 310 ms,SG-04,447 ms to 775 ms,TSR-02.02,IT-04,Not yet
+Time to react,SM-02 Lateral envelope,CMP-02 Safety monitor controller,179 ms to 310 ms,SG-04,447 ms to 775 ms,TSR-02.01,IT-04,Not yet
+Time to detect,SM-03 Achieved-against-commanded monitor,CMP-02 Safety monitor controller,179 ms to 283 ms,SG-04,447 ms to 707 ms,"TSR-03.01, TSR-03.02, TSR-03.03",IT-14,Not yet
+Time to react,SM-03 Achieved-against-commanded monitor,CMP-02 Safety monitor controller,179 ms to 283 ms,SG-04,447 ms to 707 ms,"TSR-03.04, TSR-03.05","IT-11, IT-13",Not yet
+Time to detect,SM-05 Command stream watchdog,CMP-02 Safety monitor controller,143 ms,SG-08,357 ms,"TSR-05.01, TSR-05.02","IT-06, IT-18",Not yet
+Time to react,SM-05 Command stream watchdog,CMP-02 Safety monitor controller,143 ms,SG-08,357 ms,—,—,Not yet
+Time to detect,"SM-06 Stop, hold and release",CMP-02 Safety monitor controller,207 ms to 358 ms,SG-05,516 ms to 894 ms,TSR-06.03,IT-05,Not yet
+Time to react,"SM-06 Stop, hold and release",CMP-02 Safety monitor controller,207 ms to 358 ms,SG-05,516 ms to 894 ms,TSR-06.01,"IT-05, IT-17",Not yet
+Time to detect,SM-08 Monitor self-diagnostics and fail-silent output,CMP-02 Safety monitor controller,179 ms to 283 ms,SG-07,447 ms to 707 ms,TSR-08.01,IT-01,Not yet
+Time to react,SM-08 Monitor self-diagnostics and fail-silent output,CMP-02 Safety monitor controller,179 ms to 283 ms,SG-07,447 ms to 707 ms,TSR-08.02,IT-01,Not yet
+Time to detect,SM-09 Geometric obstacle detection,CMP-03 Safety channel processor,200 ms to 283 ms,SG-02,500 ms to 707 ms,"TSR-09.01, TSR-09.07","IT-07, IT-09",Not yet
+Time to react,SM-09 Geometric obstacle detection,CMP-03 Safety channel processor,200 ms to 283 ms,SG-02,500 ms to 707 ms,—,—,Not yet
+Time to detect,SM-10 Safety channel sensor diagnostics,CMP-03 Safety channel processor,200 ms to 283 ms,SG-02,500 ms to 707 ms,TSR-10.01,IT-09,Not yet
+Time to react,SM-10 Safety channel sensor diagnostics,CMP-03 Safety channel processor,200 ms to 283 ms,SG-02,500 ms to 707 ms,—,—,Not yet
+Time to detect,SM-14 Stop on loss of the monitor,CMP-06 Drive-by-wire,179 ms to 283 ms,SG-07,447 ms to 707 ms,TSR-14.01,IT-13,Not yet
+Time to react,SM-14 Stop on loss of the monitor,CMP-06 Drive-by-wire,179 ms to 283 ms,SG-07,447 ms to 707 ms,—,—,Not yet
+Time to detect,SM-15 Independent vehicle state,CMP-07 Vehicle state sensing,179 ms to 283 ms,SG-04,447 ms to 707 ms,"TSR-15.01, TSR-15.02",IT-14,Not yet
+Time to react,SM-15 Independent vehicle state,CMP-07 Vehicle state sensing,179 ms to 283 ms,SG-04,447 ms to 707 ms,—,—,Not yet
+Chain latency,Safety channel sensor frame and transfer,CMP-04 Safety LiDAR,To be set,—,—,—,IT-17,Not yet
+Chain latency,Geometric detection on the safety channel processor,CMP-03 Safety channel processor,To be set,—,—,—,IT-17,Not yet
+Chain latency,Transfer to the safety monitor,CMP-03 Safety channel processor,To be set,—,—,—,IT-17,Not yet
+Chain latency,Envelope check and command arbitration,CMP-02 Safety monitor controller,To be set,—,—,—,IT-17,Not yet
+Chain latency,Transfer to the drive-by-wire,CMP-02 Safety monitor controller,To be set,—,—,—,IT-17,Not yet
+Chain latency,Brake pressure or torque build-up,CMP-06 Drive-by-wire,To be set,—,—,—,IT-17,Not yet
