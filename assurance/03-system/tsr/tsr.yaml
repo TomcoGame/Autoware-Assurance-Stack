@@ -1,0 +1,456 @@
+# Technical safety requirements for WP-S-02: what each safety mechanism of WP-S-03 must do, on which component, in
+# hardware or software, within which time, and how it is verified. tsr.py checks them against the technical safety
+# concept (every FSR a mechanism implements is refined by a requirement of that mechanism, on its host or a component
+# it uses), the timing budget and the decision register, derives each requirement's ASIL, and writes the WP-S-02
+# tables and Figure 4-1.
+# `timing` names the share of the mechanism's binding FTTI (WP-S-04 §4) the requirement must meet: detect or react.
+# `params` names the parameters below that the requirement uses. A parameter takes its value from the timing model
+# (`margin` of a safety goal, or the `budget` of a mechanism), from a decision of the lead (`value` with its `decision`),
+# waits on one (`pending`), or follows what `source` says.
+# `pending` names a decision a requirement waits on beyond those of its parameters.
+# Every entry is a draft by Claude (I0). No value here is measured.
+
+parameters:
+  - id: P-01
+    name: Longitudinal margin beyond the safe distance
+    margin: SG-01
+  - id: P-02
+    name: Lateral margin to a road user, obstacle or kerb
+    margin: SG-04
+  - id: P-03
+    name: Creep distance from standstill
+    margin: SG-05
+  - id: P-04
+    name: Drift allowed under remote driving
+    margin: SG-08
+  - id: P-05
+    name: Firm deceleration level for unconfirmed braking, and for the monitor's own stop
+    value: 3 m/s²
+    decision: DQ-033
+  - id: P-06
+    name: Assumptions of the safe longitudinal distance (response time, own guaranteed braking, braking of the vehicle ahead)
+    value: The item responds within 0.5 s and can always brake at 4 m/s²; the vehicle ahead may brake at up to 8 m/s², which keeps 19.5 m at 50 km/h
+    decision: DQ-034
+  - id: P-07
+    name: Bounds on other road users' speed and acceleration, for crossing paths and occlusions (DQ-017 A)
+    value: Pedestrians may run at up to 3 m/s and cyclists ride at up to 8 m/s, including out of an occlusion
+    decision: DQ-034
+  - id: P-08
+    name: Silence after which the vehicle stops on its own
+    budget: SM-14
+  - id: P-09
+    name: Age bound of a remote command
+    budget: SM-05
+  - id: P-10
+    name: Steering angle and rate envelope over speed
+    source: The chosen vehicle's steering geometry and actuator (DQ-008)
+  - id: P-11
+    name: Tolerances of achieved against commanded acceleration, deceleration and steering
+    source: The chosen vehicle's actuator response (DQ-008), set above its measured fault-free spread
+  - id: P-12
+    name: Smallest object the safety channel must detect, and its detection range
+    source: Range is the stopping distance at the top ODD speed; the smallest height is set with FM-03
+  - id: P-13
+    name: Allowed rate of false detections in the swept path, per sensor
+    source: The share of AC-02 allotted to unjustified monitor braking (WP-V-02), split across LiDAR and radar (DQ-031 A)
+
+tsrs:
+  # SM-01 Longitudinal envelope
+  - id: TSR-01.01
+    mechanism: SM-01
+    component: CMP-02
+    alloc: software
+    text: Compute the safe longitudinal distance to every road user and obstacle ahead that CMP-03 reports, from the current speed and the assumptions of P-06, plus the margin P-01
+    fsrs: [FSR-01.01, FSR-02.02]
+    params: [P-01, P-06]
+    verify: Formal check of the distance rule; unit tests over the speed range; scenario tests with braking vehicles ahead
+  - id: TSR-01.02
+    mechanism: SM-01
+    component: CMP-02
+    alloc: software
+    text: Limit commanded acceleration to the envelope for the current speed, and to zero or braking while any distance of TSR-01.01 is below the safe distance
+    fsrs: [FSR-01.01]
+    timing: react
+    params: [P-01]
+    verify: Fault injection of excessive acceleration commands in HIL; timing measurement
+  - id: TSR-01.03
+    mechanism: SM-01
+    component: CMP-02
+    alloc: software
+    text: When a distance of TSR-01.01 is below the safe distance and the commanded deceleration does not restore it, command the deceleration that does, up to emergency level; never command emergency level otherwise
+    fsrs: [FSR-02.02, FSR-03.03]
+    timing: react
+    params: [P-05, P-06]
+    verify: Fault injection of insufficient braking commands; scenario tests; review that no other path commands emergency level
+  - id: TSR-01.04
+    mechanism: SM-01
+    component: CMP-02
+    alloc: software
+    text: Predict the swept path over the stopping time and reject motion that crosses the predicted path of a reported road user before the vehicle could stop or clear it, using the bounds of P-07
+    fsrs: [FSR-06.01]
+    params: [P-07]
+    verify: Scenario tests at intersections, roundabouts and crosswalks with road users at the bounds of P-07
+  - id: TSR-01.05
+    mechanism: SM-01
+    component: CMP-02
+    alloc: software
+    text: Where CMP-03 reports an occluded zone beside the path, limit speed so the vehicle can stop for a road user emerging from it at the bounds of P-07
+    fsrs: [FSR-06.02]
+    params: [P-07]
+    verify: Scenario tests past parked vehicles and blind corners; review of the occlusion model
+  - id: TSR-01.06
+    mechanism: SM-01
+    component: CMP-02
+    alloc: software
+    text: Apply TSR-01.02 to TSR-01.05 to remote driving commands in the same way as to Autoware's
+    fsrs: [FSR-08.02]
+    verify: Fault injection of unsafe remote commands in HIL
+  - id: TSR-01.07
+    mechanism: SM-01
+    component: CMP-07
+    alloc: hardware
+    text: Deliver measured speed with the accuracy the safe distance of TSR-01.01 assumes
+    fsrs: [FSR-01.01]
+    verify: Supplier evidence under the DIA; comparison with a reference on the vehicle
+
+  # SM-02 Lateral envelope
+  - id: TSR-02.01
+    mechanism: SM-02
+    component: CMP-02
+    alloc: software
+    text: Limit commanded steering angle and steering rate to the envelope P-10 for the current speed
+    fsrs: [FSR-04.02]
+    timing: react
+    params: [P-10]
+    verify: Fault injection of steering commands beyond the envelope; timing measurement
+  - id: TSR-02.02
+    mechanism: SM-02
+    component: CMP-02
+    alloc: software
+    text: Reject a steering command whose swept path, over the stopping time, comes within the margin P-02 of a road user, obstacle or kerb that CMP-03 reports, and stop in lane instead
+    fsrs: [FSR-04.01]
+    timing: detect
+    params: [P-02]
+    verify: Scenario tests with oncoming traffic, cyclists alongside and kerbs; fault injection of steering commands
+
+  # SM-03 Achieved-against-commanded monitor
+  - id: TSR-03.01
+    mechanism: SM-03
+    component: CMP-02
+    alloc: software
+    text: Detect achieved acceleration above the bounded command, beyond the tolerance P-11, and then cut propulsion and stop in lane
+    fsrs: [FSR-01.02]
+    timing: detect
+    params: [P-11]
+    verify: Fault injection of unintended propulsion on the vehicle side; timing measurement
+  - id: TSR-03.02
+    mechanism: SM-03
+    component: CMP-02
+    alloc: software
+    text: Detect achieved deceleration below the commanded, beyond the tolerance P-11, and switch to the secondary brake path
+    fsrs: [FSR-02.03]
+    timing: detect
+    params: [P-11]
+    verify: Fault injection of a primary brake path shortfall; timing measurement
+  - id: TSR-03.03
+    mechanism: SM-03
+    component: CMP-02
+    alloc: software
+    text: Detect achieved steering differing from the commanded beyond the tolerance P-11, and stop in lane
+    fsrs: [FSR-04.03]
+    timing: detect
+    params: [P-11]
+    verify: Fault injection of steering deviations; timing measurement
+  - id: TSR-03.04
+    mechanism: SM-03
+    component: CMP-02
+    alloc: software
+    text: When CMP-03 reports itself failed, let Autoware stop in lane comfortably, compare its speed, deceleration and steering with the vehicle state, and stop the vehicle itself if it does not slow as expected
+    fsrs: [FSR-07.08]
+    timing: react
+    verify: Fault injection of a safety channel failure with and without a following Autoware fault
+  - id: TSR-03.05
+    mechanism: SM-03
+    component: CMP-06
+    alloc: hardware
+    text: Accept the monitor's switch to the secondary brake path and the propulsion cut within the reaction budget
+    fsrs: [FSR-02.03, FSR-01.02]
+    timing: react
+    verify: Supplier evidence under the DIA; vehicle test with timing measurement
+
+  # SM-04 Unconfirmed-braking limiter
+  - id: TSR-04.01
+    mechanism: SM-04
+    component: CMP-02
+    alloc: software
+    text: Limit a deceleration command from Autoware above the firm level P-05 to that level unless CMP-03 reports a road user or obstacle that requires more
+    fsrs: [FSR-03.02]
+    params: [P-05]
+    verify: Fault injection of spurious hard braking; replay of scenes with and without a confirming object
+  - id: TSR-04.02
+    mechanism: SM-04
+    component: CMP-03
+    alloc: software
+    text: Report with every frame whether a road user or obstacle in the path ahead requires braking above the firm level P-05
+    fsrs: [FSR-03.02]
+    params: [P-05]
+    verify: Replay of recorded scenes; detection tests
+
+  # SM-05 Command stream watchdog
+  - id: TSR-05.01
+    mechanism: SM-05
+    component: CMP-02
+    alloc: software
+    text: Detect a lost, late, repeated, out-of-sequence or implausible command from Autoware, and start MRM-4
+    fsrs: [FSR-07.01]
+    timing: detect
+    verify: Fault injection of lost, late, repeated and corrupted commands; timing measurement
+  - id: TSR-05.02
+    mechanism: SM-05
+    component: CMP-02
+    alloc: software
+    text: In REMOTE mode, reject a command older than the age bound P-09, out of sequence or failing its signature check (CSR-01), and start MRM-4
+    fsrs: [FSR-08.01]
+    timing: detect
+    params: [P-04, P-09]
+    verify: Fault injection of aged, replayed and unsigned remote commands; measurement of command age over the cellular links
+  - id: TSR-05.03
+    mechanism: SM-05
+    component: CMP-02
+    alloc: hardware
+    text: Keep a clock for command age that is synchronised with the remote operations station and whose own error counts against the age bound P-09
+    fsrs: [FSR-08.01]
+    params: [P-09]
+    verify: Clock drift and loss-of-synchronisation tests
+
+  # SM-06 Stop, hold and release
+  - id: TSR-06.01
+    mechanism: SM-06
+    component: CMP-02
+    alloc: software
+    text: On MRM-4, decelerate in lane at the firm level P-05 to standstill with hazard lights on, raised only as TSR-01.03 requires, and hold
+    fsrs: [FSR-07.02]
+    timing: react
+    params: [P-05]
+    verify: Vehicle tests of MRM-4 from the speed range on dry and wet roads
+  - id: TSR-06.02
+    mechanism: SM-06
+    component: CMP-02
+    alloc: software
+    text: At standstill, hold service and park brake until doors are closed, CMP-03 reports the near field clear in the direction of travel, and a motion request in the selected gear is present
+    fsrs: [FSR-05.01]
+    verify: Vehicle tests on the geofence's gradients; fault injection of door states and near-field reports
+  - id: TSR-06.03
+    mechanism: SM-06
+    component: CMP-02
+    alloc: software
+    text: Detect motion while holding before the vehicle has moved the creep distance P-03, and apply the park brake
+    fsrs: [FSR-05.02]
+    timing: detect
+    params: [P-03]
+    verify: Fault injection of a service brake release while holding on a gradient; timing measurement
+  - id: TSR-06.04
+    mechanism: SM-06
+    component: CMP-02
+    alloc: software
+    text: Allow reverse only at standstill, on request, and with CMP-03 reporting the rear near field clear
+    fsrs: [FSR-05.03]
+    verify: Fault injection of reverse requests in motion and with the rear near field occupied
+  - id: TSR-06.05
+    mechanism: SM-06
+    component: CMP-02
+    alloc: software
+    text: After a minimal risk condition, release the hold only on a signed release from the remote operations station and with the conditions of TSR-06.02 met
+    fsrs: [FSR-07.04]
+    verify: Fault injection of unsigned, replayed and premature release messages
+
+  # SM-07 Indicator cross-check
+  - id: TSR-07.01
+    mechanism: SM-07
+    component: CMP-02
+    alloc: software
+    text: Compare the commanded turn indicator with the commanded and achieved steering direction, and switch to hazard lights within the indicator's flash period on a mismatch
+    fsrs: [FSR-09.01]
+    verify: Fault injection of indicator commands against steering
+
+  # SM-08 Monitor self-diagnostics and fail-silent output
+  - id: TSR-08.01
+    mechanism: SM-08
+    component: CMP-02
+    alloc: hardware
+    text: Detect faults of the monitor's processor, memory and clock by lockstep cores, memory protection and an independent watchdog, with the diagnostic coverage ASIL D requires
+    fsrs: [FSR-07.07]
+    timing: detect
+    verify: Hardware fault injection; diagnostic coverage analysis (WP-H-04)
+  - id: TSR-08.02
+    mechanism: SM-08
+    component: CMP-02
+    alloc: both
+    text: On a detected own fault, stop sending commands to the vehicle, so that MRM-5 starts after the silence P-08
+    fsrs: [FSR-07.07]
+    timing: react
+    params: [P-08]
+    verify: Fault injection with the output observed on the bus; timing measurement
+
+  # SM-09 Geometric obstacle detection
+  - id: TSR-09.01
+    mechanism: SM-09
+    component: CMP-03
+    alloc: software
+    text: Detect road users and obstacles in and beside the swept path out to the range P-12 from LiDAR and radar returns by geometry and motion, without learned classification, counting a road user seen by either sensor, and report position, velocity and occluded zones with each frame
+    fsrs: [FSR-02.01]
+    timing: detect
+    params: [P-12]
+    verify: Detection tests across the ODD by day, night and in light rain; timing measurement
+  - id: TSR-09.02
+    mechanism: SM-09
+    component: CMP-04
+    alloc: hardware
+    text: Return points from road users and obstacles of the smallest size P-12 out to its range, in the ODD's light and weather, and in the near field down to the bumper in front and behind (FSR-05.01, FSR-05.03)
+    fsrs: [FSR-02.01]
+    params: [P-12]
+    verify: Sensor tests with reference targets at range; supplier evidence
+  - id: TSR-09.03
+    mechanism: SM-09
+    component: CMP-05
+    alloc: hardware
+    text: Return detections with radial velocity from road users and obstacles of the smallest size P-12 out to its range, in the ODD's light and weather, and in the near field down to the bumper in front and behind (FSR-05.01, FSR-05.03)
+    fsrs: [FSR-02.01]
+    params: [P-12]
+    verify: Sensor tests with reference targets at range; supplier evidence
+  - id: TSR-09.04
+    mechanism: SM-09
+    component: CMP-04
+    alloc: hardware
+    text: Keep false detections in the swept path from the LiDAR below its share P-13
+    fsrs: [FSR-03.01]
+    params: [P-13]
+    verify: False-detection rate from field and replay data, per sensor
+  - id: TSR-09.05
+    mechanism: SM-09
+    component: CMP-05
+    alloc: hardware
+    text: Keep false detections in the swept path from the radar below its share P-13
+    fsrs: [FSR-03.01]
+    params: [P-13]
+    verify: False-detection rate from field and replay data, per sensor
+  - id: TSR-09.06
+    mechanism: SM-09
+    component: CMP-03
+    alloc: software
+    text: Keep false detections in the swept path, after fusing both sensors, below the rate P-13 allows for the channel
+    fsrs: [FSR-03.01]
+    params: [P-13]
+    verify: False-detection rate from field and replay data, for the channel
+  - id: TSR-09.07
+    mechanism: SM-09
+    component: CMP-03
+    alloc: hardware
+    text: Detect faults of the safety channel processor itself (lockstep, ECC and watchdog on its safety island), and report itself failed to the monitor or fall silent, so that the monitor follows TSR-03.04
+    fsrs: [FSR-02.01]
+    timing: detect
+    verify: Hardware fault injection on the safety channel processor; diagnostic coverage analysis (WP-H-04); timing measurement
+
+  # SM-10 Safety channel sensor diagnostics
+  - id: TSR-10.01
+    mechanism: SM-10
+    component: CMP-03
+    alloc: software
+    text: Detect blockage, misalignment, loss and degradation of each safety channel sensor and report it to the monitor, which starts TR-05
+    fsrs: [FSR-02.01]
+    timing: detect
+    verify: Fault injection of sensor faults; blockage tests with dirt, water and snow; timing measurement
+
+  # SM-11 Propulsion cut
+  - id: TSR-11.01
+    mechanism: SM-11
+    component: CMP-06
+    alloc: hardware
+    text: Cut propulsion on the monitor's command, whatever else is commanded
+    fsrs: [FSR-01.03]
+    verify: Supplier evidence under the DIA; vehicle test
+
+  # SM-12 Secondary brake path
+  - id: TSR-12.01
+    mechanism: SM-12
+    component: CMP-06
+    alloc: hardware
+    text: Keep a braking path that can stop the vehicle at no less than the braking P-06 assumes after any single fault in the primary one
+    fsrs: [FSR-02.04]
+    params: [P-06]
+    verify: Supplier evidence under the DIA; vehicle test with the primary path disabled
+
+  # SM-13 Fault-tolerant steering for the stop
+  - id: TSR-13.01
+    mechanism: SM-13
+    component: CMP-06
+    alloc: hardware
+    text: Keep steering controllable after any single fault for at least the time of a stop in lane from the top ODD speed at the firm level P-05
+    fsrs: [FSR-04.04]
+    params: [P-05]
+    verify: Supplier evidence under the DIA
+
+  # SM-14 Stop on loss of the monitor
+  - id: TSR-14.01
+    mechanism: SM-14
+    component: CMP-06
+    alloc: both
+    text: When the monitor's commands stop for longer than P-08, brake to a standstill and hold it, whatever Autoware sends
+    fsrs: [FSR-07.06]
+    timing: detect
+    params: [P-08]
+    verify: Vehicle test with the monitor disconnected; timing measurement
+
+  # SM-15 Independent vehicle state
+  - id: TSR-15.01
+    mechanism: SM-15
+    component: CMP-07
+    alloc: hardware
+    text: Deliver speed and longitudinal acceleration to the monitor on a path that does not pass through the Autoware computer, with the sensors' own fault flags, at a rate that fits the detection budget
+    fsrs: [FSR-01.05]
+    timing: detect
+    verify: Supplier evidence; fault injection on the signal path
+  - id: TSR-15.02
+    mechanism: SM-15
+    component: CMP-07
+    alloc: hardware
+    text: Deliver steering angle to the monitor on the same independent path, with its own fault flag, at a rate that fits the detection budget
+    fsrs: [FSR-04.06]
+    timing: detect
+    verify: Supplier evidence; fault injection on the signal path
+
+  # SM-16 Park brake hold
+  - id: TSR-16.01
+    mechanism: SM-16
+    component: CMP-08
+    alloc: hardware
+    text: Apply and hold the park brake on the monitor's command, on the steepest gradient of the geofence
+    fsrs: [FSR-05.04]
+    verify: Supplier evidence under the DIA; vehicle test on the steepest gradient
+
+  # SM-17 Door interlock
+  - id: TSR-17.01
+    mechanism: SM-17
+    component: CMP-09
+    alloc: hardware
+    text: Report the state of every door to the monitor and inhibit motion with any door open
+    fsrs: [FSR-05.05]
+    verify: Supplier evidence; vehicle test with each door
+
+  # SM-18 Independent monitor supply
+  - id: TSR-18.01
+    mechanism: SM-18
+    component: CMP-10
+    alloc: hardware
+    text: Keep CMP-02, CMP-03, its sensors and the actuation path powered after any single fault of the Autoware computer's supply, for at least the time of MRM-4
+    fsrs: [FSR-07.03]
+    verify: Power fault injection
+
+  # SM-19 Remote command protection
+  - id: TSR-19.01
+    mechanism: SM-19
+    component: CMP-11
+    alloc: software
+    text: Stamp every remote command and release with the synchronised time, number it in sequence and sign it (CSR-01) before it leaves the station
+    fsrs: [FSR-08.03]
+    verify: Interface test; cybersecurity verification (WP-W-11)

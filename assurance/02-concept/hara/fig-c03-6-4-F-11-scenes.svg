@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1070" height="512" viewBox="0 0 1070 512" role="img" aria-labelledby="t d">
+<title id="t">F-11 guide-word scenes</title>
+<desc id="d">Guide-word scenes for F-11 Accept trips, mode changes and requests. M03 Unrequested function: A release or departure nobody asked for; the vehicle moves off from a stop (H-05). M07 Functions early: Departure before boarding is complete; as M03 (H-05, rated as M03). M12 Inverse function: A stop request taken as a start; as M03 (H-05, rated as M03).</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg { --req:#23875a; --perf:#c2412b; --road:#e9ebee; --verge:#f7f8f9; --lane:#ffffff; --zeb:#ffffff;
+ --ego:#c2412b; --oth:#9aa1ab; --amber:#e39b00; --a3:#d4644a; --a1:#f5dcd3; --t1:#3b140b; }
+@media (prefers-color-scheme: dark) { svg { --req:#45b882; --perf:#ff7a63; --road:#2b2f36; --verge:#1b1e22;
+ --lane:#7f8792; --zeb:#c9ced6; --ego:#ff7a63; --oth:#6f7782; --amber:#f2b84b; --a3:#bb4f34; --a1:#4a2820; --t1:#f6e3dd; } }
+svg .plot { fill:var(--bg); stroke:var(--grid); stroke-width:1; }
+svg .axis { stroke:var(--ink3); stroke-width:1; }
+svg .ax { font:10.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .req { fill:none; stroke:var(--req); stroke-width:2; stroke-dasharray:5 4; }
+svg .perf { fill:none; stroke:var(--perf); stroke-width:2.4; stroke-linejoin:round; }
+svg .on { stroke:var(--perf); stroke-width:1; stroke-dasharray:2 3; }
+svg .cur { stroke:var(--ink2); stroke-width:1; opacity:.55; }
+svg .verge { fill:var(--verge); stroke:var(--grid); stroke-width:1; }
+svg .road { fill:var(--road); }
+svg .lane { stroke:var(--lane); stroke-width:1.5; stroke-dasharray:8 7; }
+svg .kerb { stroke:var(--ink3); stroke-width:1.2; }
+svg .zebra { fill:var(--zeb); }
+svg .stop { stroke:var(--zeb); stroke-width:3; }
+svg .oth { fill:var(--oth); }
+svg .ego { fill:var(--ego); } svg .egow { fill:var(--bg); opacity:.75; }
+svg .ghost { fill:none; stroke:var(--req); stroke-width:1.4; stroke-dasharray:3 2; } svg .ghostw { fill:none; }
+svg .ped { fill:var(--ink); }
+svg .bike { fill:var(--ink2); }
+svg .mast { fill:none; stroke:var(--ink2); stroke-width:1.6; }
+svg .ipath { fill:none; stroke:var(--req); stroke-width:2; stroke-dasharray:5 4; }
+svg .apath { fill:none; stroke:var(--perf); stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1 1; }
+svg .fault { fill:var(--perf); }
+svg .fx { font:700 10px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--bg); }
+svg .ring { fill:none; stroke:var(--perf); stroke-width:1.6; }
+svg .callout { fill:var(--perf); }
+svg .ct { font:600 11px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--bg); }
+svg .bl-bad { fill:var(--amber); }
+svg .gid { font:700 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .pr { fill:var(--a3); } svg .pf { fill:var(--a1); }
+svg .prt { font:600 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:#ffffff; }
+svg .pft { font:600 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--t1); }
+svg .lr { stroke:var(--req); stroke-width:2; stroke-dasharray:5 4; } svg .lp { stroke:var(--perf); stroke-width:2.4; }
+</style>
+<rect class="bg" width="1070" height="512"/>
+<text x="24" y="34" class="h">F-11 Accept trips, mode changes and requests: what each malfunction does</text>
+<text x="24" y="56" class="t">WP-C-03 §6.1, Figure 6-4 (F-11): the 3 safety-related guide words, 1 rated and 2 folded into another. Schematic, not simulation results.</text>
+<rect x="24" y="84" width="330" height="372" rx="8" class="card"/>
+<text x="38" y="108" class="gid">M03</text>
+<text x="72" y="108" class="tb">Unrequested functi…</text>
+<text x="38" y="125" class="s">Acts when it should not</text>
+<rect x="239" y="95" width="101" height="19" rx="4" class="pr"/>
+<text x="289.5" y="108.5" class="prt" text-anchor="middle">H-05 · ASIL D</text>
+<rect x="60" y="140" width="258" height="80" class="plot"/>
+<line x1="60" y1="216" x2="318" y2="216" class="axis"/>
+<text x="60" y="232" class="ax">↑ Request accepted</text>
+<text x="318" y="232" class="ax" text-anchor="end">time →</text>
+<path d="M60 216 L318 216" class="req"/>
+<path d="M60 216 L137.4 216 L137.4 216 L137.4 164.2 L227.7 164.2 L227.7 164.2 L227.7 216 L318 216" class="perf" pathLength="1"/>
+<line x1="137.4" y1="140" x2="137.4" y2="220" class="on"/>
+<g><line x1="318" y1="140" x2="318" y2="220" class="cur"/><animateTransform attributeName="transform" type="translate" values="-258 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<rect x="39" y="256" width="300" height="120" rx="6" class="verge"/>
+<rect x="39" y="286" width="300" height="64" class="road"/>
+<line x1="39" y1="318" x2="339" y2="318" class="lane"/>
+<line x1="39" y1="286" x2="339" y2="286" class="kerb"/>
+<line x1="39" y1="350" x2="339" y2="350" class="kerb"/>
+<rect x="235" y="289" width="24" height="4" class="zebra"/>
+<rect x="235" y="297" width="24" height="4" class="zebra"/>
+<rect x="235" y="305" width="24" height="4" class="zebra"/>
+<rect x="235" y="313" width="24" height="4" class="zebra"/>
+<rect x="235" y="321" width="24" height="4" class="zebra"/>
+<rect x="235" y="329" width="24" height="4" class="zebra"/>
+<rect x="235" y="337" width="24" height="4" class="zebra"/>
+<rect x="235" y="345" width="24" height="4" class="zebra"/>
+<line x1="228" y1="319" x2="228" y2="349" class="stop"/>
+<circle cx="247" cy="330" r="4.2" class="ped"/>
+<path d="M211 334 L233 334" class="apath" pathLength="1"><animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></path>
+<g><rect x="199" y="327.5" width="24" height="13" rx="3" class="ghost"/><rect x="215" y="329.5" width="4" height="9" rx="1" class="ghostw"/><animateTransform attributeName="transform" type="translate" values="0 0;0 0" keyTimes="0;1" dur="6s" repeatCount="indefinite"/></g>
+<g><rect x="221" y="327.5" width="24" height="13" rx="3" class="ego"/><rect x="237" y="329.5" width="4" height="9" rx="1" class="egow"/><animateTransform attributeName="transform" type="translate" values="-22 0;-20.2 0;-18.3 0;-16.5 0;-14.7 0;-12.8 0;-11 0;-9.2 0;-7.3 0;-5.5 0;-3.7 0;-1.8 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g opacity="1"><circle cx="211" cy="320" r="6.5" class="fault"/><text x="211" y="323.5" class="fx" text-anchor="middle">!</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.1;0.1;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="247" cy="330" r="12" class="ring"/><rect x="159.5" y="290" width="175" height="18" rx="9" class="callout"/><text x="247" y="303" class="ct" text-anchor="middle">moves off into the crosswalk</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="38" y="395" class="s">A release or departure nobody asked for; the vehicle</text>
+<text x="38" y="410" class="s">moves off from a stop</text>
+<text x="38" y="444" class="ax">SG-05 · H-05 Unintended motion from standstill</text>
+<rect x="370" y="84" width="330" height="372" rx="8" class="card"/>
+<text x="384" y="108" class="gid">M07</text>
+<text x="418" y="108" class="tb">Functions early</text>
+<text x="384" y="125" class="s">Acts before its trigger</text>
+<rect x="591.6" y="95" width="94.4" height="19" rx="4" class="pf"/>
+<text x="638.8" y="108.5" class="pft" text-anchor="middle">rated as M03</text>
+<rect x="406" y="140" width="258" height="80" class="plot"/>
+<line x1="406" y1="216" x2="664" y2="216" class="axis"/>
+<text x="406" y="232" class="ax">↑ Request accepted</text>
+<text x="664" y="232" class="ax" text-anchor="end">time →</text>
+<path d="M406 216 L522.1 216 L522.1 216 L522.1 164.2 L664 164.2" class="req"/>
+<path d="M406 216 L457.6 216 L457.6 216 L457.6 164.2 L664 164.2" class="perf" pathLength="1"/>
+<line x1="457.6" y1="140" x2="457.6" y2="220" class="on"/>
+<g><line x1="664" y1="140" x2="664" y2="220" class="cur"/><animateTransform attributeName="transform" type="translate" values="-258 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<rect x="385" y="256" width="300" height="120" rx="6" class="verge"/>
+<rect x="385" y="286" width="300" height="64" class="road"/>
+<line x1="385" y1="318" x2="685" y2="318" class="lane"/>
+<line x1="385" y1="286" x2="685" y2="286" class="kerb"/>
+<line x1="385" y1="350" x2="685" y2="350" class="kerb"/>
+<rect x="581" y="289" width="24" height="4" class="zebra"/>
+<rect x="581" y="297" width="24" height="4" class="zebra"/>
+<rect x="581" y="305" width="24" height="4" class="zebra"/>
+<rect x="581" y="313" width="24" height="4" class="zebra"/>
+<rect x="581" y="321" width="24" height="4" class="zebra"/>
+<rect x="581" y="329" width="24" height="4" class="zebra"/>
+<rect x="581" y="337" width="24" height="4" class="zebra"/>
+<rect x="581" y="345" width="24" height="4" class="zebra"/>
+<line x1="574" y1="319" x2="574" y2="349" class="stop"/>
+<circle cx="593" cy="330" r="4.2" class="ped"/>
+<path d="M557 334 L579 334" class="apath" pathLength="1"><animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></path>
+<g><rect x="545" y="327.5" width="24" height="13" rx="3" class="ghost"/><rect x="561" y="329.5" width="4" height="9" rx="1" class="ghostw"/><animateTransform attributeName="transform" type="translate" values="0 0;0 0" keyTimes="0;1" dur="6s" repeatCount="indefinite"/></g>
+<g><rect x="567" y="327.5" width="24" height="13" rx="3" class="ego"/><rect x="583" y="329.5" width="4" height="9" rx="1" class="egow"/><animateTransform attributeName="transform" type="translate" values="-22 0;-20.2 0;-18.3 0;-16.5 0;-14.7 0;-12.8 0;-11 0;-9.2 0;-7.3 0;-5.5 0;-3.7 0;-1.8 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g opacity="1"><circle cx="557" cy="320" r="6.5" class="fault"/><text x="557" y="323.5" class="fx" text-anchor="middle">!</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.1;0.1;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="593" cy="330" r="12" class="ring"/><rect x="505.5" y="290" width="175" height="18" rx="9" class="callout"/><text x="593" y="303" class="ct" text-anchor="middle">moves off into the crosswalk</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="384" y="395" class="s">Departure before boarding is complete; as M03</text>
+<text x="384" y="444" class="ax">SG-05 · H-05 Unintended motion from standstill</text>
+<rect x="716" y="84" width="330" height="372" rx="8" class="card"/>
+<text x="730" y="108" class="gid">M12</text>
+<text x="764" y="108" class="tb">Inverse function</text>
+<text x="730" y="125" class="s">Acts in the opposite direction or sense</text>
+<rect x="937.6" y="95" width="94.4" height="19" rx="4" class="pf"/>
+<text x="984.8" y="108.5" class="pft" text-anchor="middle">rated as M03</text>
+<rect x="752" y="140" width="258" height="80" class="plot"/>
+<line x1="752" y1="181.0" x2="1010" y2="181.0" class="axis"/>
+<text x="752" y="232" class="ax">↑ Request accepted</text>
+<text x="1010" y="232" class="ax" text-anchor="end">time →</text>
+<path d="M752 181 L803.6 181 L803.6 181 L803.6 158.8 L1010 158.8" class="req"/>
+<path d="M752 181 L803.6 181 L803.6 181 L803.6 203.2 L1010 203.2" class="perf" pathLength="1"/>
+<line x1="803.6" y1="140" x2="803.6" y2="220" class="on"/>
+<g><line x1="1010" y1="140" x2="1010" y2="220" class="cur"/><animateTransform attributeName="transform" type="translate" values="-258 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<rect x="731" y="256" width="300" height="120" rx="6" class="verge"/>
+<rect x="731" y="286" width="300" height="64" class="road"/>
+<line x1="731" y1="318" x2="1031" y2="318" class="lane"/>
+<line x1="731" y1="286" x2="1031" y2="286" class="kerb"/>
+<line x1="731" y1="350" x2="1031" y2="350" class="kerb"/>
+<rect x="927" y="289" width="24" height="4" class="zebra"/>
+<rect x="927" y="297" width="24" height="4" class="zebra"/>
+<rect x="927" y="305" width="24" height="4" class="zebra"/>
+<rect x="927" y="313" width="24" height="4" class="zebra"/>
+<rect x="927" y="321" width="24" height="4" class="zebra"/>
+<rect x="927" y="329" width="24" height="4" class="zebra"/>
+<rect x="927" y="337" width="24" height="4" class="zebra"/>
+<rect x="927" y="345" width="24" height="4" class="zebra"/>
+<line x1="920" y1="319" x2="920" y2="349" class="stop"/>
+<circle cx="939" cy="330" r="4.2" class="ped"/>
+<path d="M903 334 L925 334" class="apath" pathLength="1"><animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></path>
+<g><rect x="891" y="327.5" width="24" height="13" rx="3" class="ghost"/><rect x="907" y="329.5" width="4" height="9" rx="1" class="ghostw"/><animateTransform attributeName="transform" type="translate" values="0 0;0 0" keyTimes="0;1" dur="6s" repeatCount="indefinite"/></g>
+<g><rect x="913" y="327.5" width="24" height="13" rx="3" class="ego"/><rect x="929" y="329.5" width="4" height="9" rx="1" class="egow"/><animateTransform attributeName="transform" type="translate" values="-22 0;-20.2 0;-18.3 0;-16.5 0;-14.7 0;-12.8 0;-11 0;-9.2 0;-7.3 0;-5.5 0;-3.7 0;-1.8 0;0 0;0 0" keyTimes="0.0;0.1;0.1;0.2;0.2;0.3;0.4;0.4;0.5;0.6;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<g opacity="1"><circle cx="903" cy="320" r="6.5" class="fault"/><text x="903" y="323.5" class="fx" text-anchor="middle">!</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.1;0.1;1" dur="6s" repeatCount="indefinite"/></g>
+<g><circle cx="939" cy="330" r="12" class="ring"/><rect x="851.5" y="290" width="175" height="18" rx="9" class="callout"/><text x="939" y="303" class="ct" text-anchor="middle">moves off into the crosswalk</text><animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.8;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="730" y="395" class="s">A stop request taken as a start; as M03</text>
+<text x="730" y="444" class="ax">SG-05 · H-05 Unintended motion from standstill</text>
+<line x1="24" y1="482" x2="50" y2="482" class="lr"/>
+<text x="58" y="486" class="t">required output, intended path</text>
+<line x1="294" y1="482" x2="320" y2="482" class="lp"/>
+<text x="328" y="486" class="t">performed output, path taken</text>
+<circle cx="554" cy="482" r="6.5" class="fault"/>
+<text x="554" y="485.5" class="fx" text-anchor="middle">!</text>
+<text x="568" y="486" class="t">where the deviation starts</text>
+<circle cx="784" cy="482" r="8" class="ring"/>
+<text x="800" y="486" class="t">the moment it matters</text>
+</svg>

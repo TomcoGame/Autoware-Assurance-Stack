@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-S-03 Technical safety concept and system architectural design |
 | Standard reference | UL 4600 §10; ISO 26262-4 §6; ISO 21448 §8; ISO/PAS 8800:2024 (AI architecture measures); ASPICE 4.0 SYS.3 |
-| Version | 0.3 (automotive monitor hardware (DQ-030 A); the safety channel's detection decomposed into LiDAR and radar at ASIL B(D) each (DQ-031 A); 2026-10-23). 0.2 (first content: system components with derived ASILs, safety mechanisms and their placement, redundancy and diversity, AI architecture measures, architecture verification, generated from `tsc/tsc.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.5 (folder page `tsc/README.md` with the whole concept on one page, Figure 3-1 on where each mechanism runs and how fast it must act, and `tsc/mechanisms.csv` tracing every mechanism to its FSRs, budget, technical safety requirements and integration tests; 2026-10-25). 0.4 (the safety LiDAR and radar also carry ASIL C for false detections (DQ-035 A); 2026-10-24). 0.3 (automotive monitor hardware (DQ-030 A); the safety channel's detection decomposed into LiDAR and radar at ASIL B(D) each (DQ-031 A); 2026-10-23). 0.2 (first content: system components with derived ASILs, safety mechanisms and their placement, redundancy and diversity, AI architecture measures, architecture verification, generated from `tsc/tsc.yaml`; 2026-10-23). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | ASIL D |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -41,8 +41,8 @@ The architecture is the doer/checker of DQ-002 A: Autoware drives, and every com
 | CMP-01 | Autoware computer | EL-01 | Yes | **QM** | — | — | — |
 | CMP-02 | Safety monitor controller | EL-02 | Yes | **D** | SM-01, SM-02, SM-03, SM-04, SM-05, SM-06, SM-07, SM-08 | — | — |
 | CMP-03 | Safety channel processor | EL-03 | Yes | **D** | SM-09, SM-10 | SM-01, SM-02, SM-04 | — |
-| CMP-04 | Safety LiDAR | EL-03 | Yes | **B(D)** | — | SM-09, SM-10 | — |
-| CMP-05 | Safety radar | EL-03 | Yes | **B(D)** | — | SM-09, SM-10 | — |
+| CMP-04 | Safety LiDAR | EL-03 | Yes | **B(D)**; C for false detections (DQ-035) | — | SM-09, SM-10 | — |
+| CMP-05 | Safety radar | EL-03 | Yes | **B(D)**; C for false detections (DQ-035) | — | SM-09, SM-10 | — |
 | CMP-06 | Drive-by-wire | EL-04 | No | **D** | SM-11, SM-12, SM-13, SM-14 | SM-03, SM-06 | — |
 | CMP-07 | Vehicle state sensing | EL-06 | No | **D** | SM-15 | SM-01, SM-02, SM-03, SM-06, SM-07 | — |
 | CMP-08 | Park brake | EL-05 | No | **D** | SM-16 | SM-06 | — |
@@ -82,6 +82,14 @@ The monitor runs on an automotive ASIL D microcontroller and its perception on a
 
 <!-- END GENERATED: tsc-mechanisms -->
 
+<!-- BEGIN GENERATED: tsc-mechanism-cards (assurance/03-system/tsc/tsc.py) -->
+
+![Figure 3-1: one card per safety mechanism SM-01 to SM-19. Each shows the system architecture of Figure 2-1 in small with the component the mechanism runs on filled and those it uses outlined; for a time-critical mechanism, a bar dividing the binding fault tolerant time interval of WP-S-04 into time to detect, time to react and reserve, with their ranges; the reaction it starts; what it does; and the functional safety requirements it implements.](tsc/fig-s03-3-1-mechanisms.svg)
+
+*Figure 3-1. Where each safety mechanism runs, and how fast it must act. Budgets are the ranges WP-S-04 computes, not measurements. Drawn by [`tsc/tsc.py`](tsc/tsc.py); CI fails if it is stale. Each mechanism's trace to its FSRs, technical safety requirements and test cases is in [`tsc/mechanisms.csv`](tsc/mechanisms.csv).*
+
+<!-- END GENERATED: tsc-mechanism-cards -->
+
 **The monitor carries most of the weight.** Eight of the mechanisms run on the safety monitor controller. They are deliberately simple: rules over positions, speeds and accelerations, which can be specified completely, verified formally (SM-01, SM-02) and fault-injected. The hard problem, seeing the world, sits in SM-09 on the safety channel processor, and its performance is a SOTIF question as much as a functional safety one (WP-C-06 FI-08).
 
 **The cybersecurity check runs in the monitor.** SM-05 verifies the signature of every remote command (CSR-01). That code is ASIL D software with a timing budget in WP-S-04, as WP-C-10 §4.3 noted.
@@ -101,7 +109,7 @@ The monitor runs on an automotive ASIL D microcontroller and its perception on a
 
 Each redundancy lists the triggering conditions of WP-C-06 that affect both of its sides; those are the starting points of the dependent failure analysis ([WP-A-03](../08-analyses/WP-A-03-dependent-failure-analysis.md)). The lead decided (DQ-031 A, 2026-10-23) that the safety channel's ASIL D detection is decomposed into LiDAR and radar, each developed to ASIL B(D), and a road user seen by either sensor counts. The goal stays ASIL D; the decomposition holds only if RD-02 shows the two sensor chains independent, so the dependent failure analysis must treat spray and dirt (TC-03, TC-24) as common causes, and the rationale goes into [WP-A-01](../08-analyses/WP-A-01-asil-decomposition.md). The generator refuses a decomposition without an answered decision, a partner decomposed the other way, and a redundancy entry between the two.
 
-**A cost of detecting on either sensor.** Counting a road user seen by either sensor is what makes the decomposition work for SG-02, but every false detection of either sensor can now make the monitor brake. FSR-03.01 (false detections rare enough for SG-03) must therefore be met by each sensor chain on its own, which WP-S-02 states as a technical safety requirement per sensor.
+**A cost of detecting on either sensor.** Counting a road user seen by either sensor is what makes the decomposition work for SG-02, but every false detection of either sensor can now make the monitor brake. FSR-03.01 (false detections rare enough for SG-03) must therefore be met by each sensor chain on its own, which WP-S-02 states as a technical safety requirement per sensor. The decomposition does not split that requirement, so the lead decided (DQ-035 A, 2026-10-24) that each sensor is developed to ASIL C for false detections as well as to ASIL B(D) for detection; §2 shows both.
 
 ## 5. AI architecture measures
 

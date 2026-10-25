@@ -1,0 +1,866 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1070" height="3482" viewBox="0 0 1070 3482" role="img" aria-labelledby="t d">
+<title id="t">WP-S-03 Figure 3-1: safety mechanisms</title>
+<desc id="d">Safety mechanisms: SM-01 Longitudinal envelope runs on CMP-02, uses CMP-03, CMP-07, FTTI of SG-01 500–707 ms; SM-02 Lateral envelope runs on CMP-02, uses CMP-03, CMP-07, FTTI of SG-04 447–775 ms; SM-03 Achieved-against-commanded monitor runs on CMP-02, uses CMP-07, CMP-06, FTTI of SG-04 447–707 ms; SM-04 Unconfirmed-braking limiter runs on CMP-02, uses CMP-03, no time budget; SM-05 Command stream watchdog runs on CMP-02, FTTI of SG-08 357 ms; SM-06 Stop, hold and release runs on CMP-02, uses CMP-06, CMP-07, CMP-08, CMP-09, FTTI of SG-05 516–894 ms; SM-07 Indicator cross-check runs on CMP-02, uses CMP-07, no time budget; SM-08 Monitor self-diagnostics and fail-silent output runs on CMP-02, FTTI of SG-07 447–707 ms; SM-09 Geometric obstacle detection runs on CMP-03, uses CMP-04, CMP-05, FTTI of SG-02 500–707 ms; SM-10 Safety channel sensor diagnostics runs on CMP-03, uses CMP-04, CMP-05, FTTI of SG-02 500–707 ms; SM-11 Propulsion cut runs on CMP-06, no time budget; SM-12 Secondary brake path runs on CMP-06, no time budget; SM-13 Fault-tolerant steering for the stop runs on CMP-06, no time budget; SM-14 Stop on loss of the monitor runs on CMP-06, FTTI of SG-07 447–707 ms; SM-15 Independent vehicle state runs on CMP-07, FTTI of SG-04 447–707 ms; SM-16 Park brake hold runs on CMP-08, no time budget; SM-17 Door interlock runs on CMP-09, no time budget; SM-18 Independent monitor supply runs on CMP-10, no time budget; SM-19 Remote command protection runs on CMP-11, no time budget.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg { --req:#23875a; --perf:#c2412b; --road:#e9ebee; --verge:#f7f8f9; --lane:#ffffff; --zeb:#ffffff;
+ --ego:#c2412b; --oth:#9aa1ab; --amber:#e39b00; --a3:#d4644a; --a1:#f5dcd3; --t1:#3b140b; }
+@media (prefers-color-scheme: dark) { svg { --req:#45b882; --perf:#ff7a63; --road:#2b2f36; --verge:#1b1e22;
+ --lane:#7f8792; --zeb:#c9ced6; --ego:#ff7a63; --oth:#6f7782; --amber:#f2b84b; --a3:#bb4f34; --a1:#4a2820; --t1:#f6e3dd; } }
+svg .plot { fill:var(--bg); stroke:var(--grid); stroke-width:1; }
+svg .axis { stroke:var(--ink3); stroke-width:1; }
+svg .ax { font:10.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .req { fill:none; stroke:var(--req); stroke-width:2; stroke-dasharray:5 4; }
+svg .perf { fill:none; stroke:var(--perf); stroke-width:2.4; stroke-linejoin:round; }
+svg .on { stroke:var(--perf); stroke-width:1; stroke-dasharray:2 3; }
+svg .cur { stroke:var(--ink2); stroke-width:1; opacity:.55; }
+svg .verge { fill:var(--verge); stroke:var(--grid); stroke-width:1; }
+svg .road { fill:var(--road); }
+svg .lane { stroke:var(--lane); stroke-width:1.5; stroke-dasharray:8 7; }
+svg .kerb { stroke:var(--ink3); stroke-width:1.2; }
+svg .zebra { fill:var(--zeb); }
+svg .stop { stroke:var(--zeb); stroke-width:3; }
+svg .oth { fill:var(--oth); }
+svg .ego { fill:var(--ego); } svg .egow { fill:var(--bg); opacity:.75; }
+svg .ghost { fill:none; stroke:var(--req); stroke-width:1.4; stroke-dasharray:3 2; } svg .ghostw { fill:none; }
+svg .ped { fill:var(--ink); }
+svg .bike { fill:var(--ink2); }
+svg .mast { fill:none; stroke:var(--ink2); stroke-width:1.6; }
+svg .ipath { fill:none; stroke:var(--req); stroke-width:2; stroke-dasharray:5 4; }
+svg .apath { fill:none; stroke:var(--perf); stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1 1; }
+svg .fault { fill:var(--perf); }
+svg .fx { font:700 10px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--bg); }
+svg .ring { fill:none; stroke:var(--perf); stroke-width:1.6; }
+svg .callout { fill:var(--perf); }
+svg .ct { font:600 11px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--bg); }
+svg .bl-bad { fill:var(--amber); }
+svg .gid { font:700 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .pr { fill:var(--a3); } svg .pf { fill:var(--a1); }
+svg .prt { font:600 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:#ffffff; }
+svg .pft { font:600 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--t1); }
+svg .lr { stroke:var(--req); stroke-width:2; stroke-dasharray:5 4; } svg .lp { stroke:var(--perf); stroke-width:2.4; }
+svg { --mon:#2d55c8; --monsoft:#e7ecfb; --amb2:#b97800; }
+@media (prefers-color-scheme: dark) { svg { --mon:#86a2ff; --monsoft:#232c48; --amb2:#e7a52a; } }
+svg .hst { fill:var(--mon); } svg .hstt { font:600 9.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--bg); }
+svg .use { fill:var(--monsoft); stroke:var(--mon); stroke-width:1.2; }
+svg .uset { font:600 9.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--mon); }
+svg .dim { fill:var(--bg); stroke:var(--grid); stroke-width:1; }
+svg .dimt { font:9.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .lead { stroke:var(--mon); stroke-width:1.2; stroke-dasharray:3 2; }
+svg .det { fill:var(--mon); } svg .rea { fill:var(--amb2); } svg .res { fill:var(--grid); }
+</style>
+<rect class="bg" width="1070" height="3482"/>
+<text x="24" y="34" class="h">Where each safety mechanism runs, and how fast it must act</text>
+<text x="24" y="56" class="t">WP-S-03 §3, Figure 3-1: the component each mechanism runs on (filled) and uses (outlined), and its share of the fault tolerant time interval</text>
+<text x="24" y="73" class="t">from WP-S-04. Budgets are computed ranges, not measurements.</text>
+<rect x="24" y="96" width="330" height="462" rx="8" class="card"/>
+<text x="38" y="120" class="gid">SM-01</text>
+<rect x="285.8" y="107" width="54.2" height="19" rx="4" class="pr"/>
+<text x="312.9" y="120.5" class="prt" text-anchor="middle">ASIL D</text>
+<text x="84" y="120" class="tb">Longitudinal envelope</text>
+<text x="38" y="138" class="ax">Runs on Safety monitor controller; uses Safety</text>
+<text x="38" y="152" class="ax">channel processor, Vehicle state sensing</text>
+<rect x="33" y="178" width="312" height="162" rx="6" class="verge"/>
+<line x1="303.5" y1="240.8" x2="151.5" y2="240.8" class="lead"/>
+<line x1="165" y1="284.8" x2="151.5" y2="240.8" class="lead"/>
+<rect x="122" y="184" width="132" height="24" rx="3" class="dim"/>
+<text x="188" y="199.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="39" y="228" width="225" height="25.6" rx="3" class="hst"/>
+<text x="151.5" y="244.3" class="hstt" text-anchor="middle">Safety monitor</text>
+<rect x="272" y="228" width="63" height="25.6" rx="3" class="use"/>
+<text x="303.5" y="244.3" class="uset" text-anchor="middle">Channel</text>
+<rect x="264" y="184" width="34" height="24" rx="3" class="dim"/>
+<text x="281" y="199.5" class="dimt" text-anchor="middle">LiDAR</text>
+<rect x="301" y="184" width="34" height="24" rx="3" class="dim"/>
+<text x="318" y="199.5" class="dimt" text-anchor="middle">Radar</text>
+<rect x="39" y="272.8" width="95" height="24" rx="3" class="dim"/>
+<text x="86.5" y="288.3" class="dimt" text-anchor="middle">Drive-by-wire</text>
+<rect x="140" y="272.8" width="50" height="24" rx="3" class="use"/>
+<text x="165" y="288.3" class="uset" text-anchor="middle">State</text>
+<rect x="196" y="272.8" width="45" height="24" rx="3" class="dim"/>
+<text x="218.5" y="288.3" class="dimt" text-anchor="middle">Brake</text>
+<rect x="247" y="272.8" width="50" height="24" rx="3" class="dim"/>
+<text x="272" y="288.3" class="dimt" text-anchor="middle">Doors</text>
+<rect x="39" y="314.4" width="150" height="17.6" rx="3" class="dim"/>
+<text x="114" y="326.7" class="dimt" text-anchor="middle">Monitor power</text>
+<rect x="39" y="184" width="75" height="24" rx="3" class="dim"/>
+<text x="76.5" y="199.5" class="dimt" text-anchor="middle">Remote ops</text>
+<rect x="39" y="356" width="119" height="14" class="det"/>
+<text x="42" y="382" class="ax">detect 200–283 ms</text>
+<rect x="159" y="356" width="119" height="14" class="rea"/>
+<text x="162" y="382" class="ax">react 200–283 ms</text>
+<rect x="279" y="356" width="59" height="14" class="res"/>
+<text x="282" y="382" class="ax">reserve…</text>
+<text x="39" y="398" class="ax">FTTI of SG-01: 500–707 ms (largest fault first)</text>
+<g><line x1="339" y1="353" x2="339" y2="373" class="cur"/><animateTransform attributeName="transform" type="translate" values="-300 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="38" y="416" class="s">Reaction: MRM-4 Safety monitor stop in lane</text>
+<text x="38" y="434" class="ax">Bounds acceleration to the envelope for the current</text>
+<text x="38" y="448" class="ax">speed, and commands the braking that keeps the safe</text>
+<text x="38" y="462" class="ax">longitudinal distance to every road user and</text>
+<text x="38" y="476" class="ax">obstacle the safety channel reports, including</text>
+<text x="38" y="490" class="ax">across conflict areas and at occlusions; applies the</text>
+<text x="38" y="504" class="ax">same to remote commands</text>
+<text x="38" y="521" class="s">Implements FSR-01.01, FSR-02.02, FSR-03.03,</text>
+<text x="38" y="536" class="s">FSR-06.01, FSR-06.02, FSR-08.02</text>
+<rect x="370" y="96" width="330" height="462" rx="8" class="card"/>
+<text x="384" y="120" class="gid">SM-02</text>
+<rect x="631.8" y="107" width="54.2" height="19" rx="4" class="pr"/>
+<text x="658.9" y="120.5" class="prt" text-anchor="middle">ASIL D</text>
+<text x="430" y="120" class="tb">Lateral envelope</text>
+<text x="384" y="138" class="ax">Runs on Safety monitor controller; uses Safety</text>
+<text x="384" y="152" class="ax">channel processor, Vehicle state sensing</text>
+<rect x="379" y="178" width="312" height="162" rx="6" class="verge"/>
+<line x1="649.5" y1="240.8" x2="497.5" y2="240.8" class="lead"/>
+<line x1="511" y1="284.8" x2="497.5" y2="240.8" class="lead"/>
+<rect x="468" y="184" width="132" height="24" rx="3" class="dim"/>
+<text x="534" y="199.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="385" y="228" width="225" height="25.6" rx="3" class="hst"/>
+<text x="497.5" y="244.3" class="hstt" text-anchor="middle">Safety monitor</text>
+<rect x="618" y="228" width="63" height="25.6" rx="3" class="use"/>
+<text x="649.5" y="244.3" class="uset" text-anchor="middle">Channel</text>
+<rect x="610" y="184" width="34" height="24" rx="3" class="dim"/>
+<text x="627" y="199.5" class="dimt" text-anchor="middle">LiDAR</text>
+<rect x="647" y="184" width="34" height="24" rx="3" class="dim"/>
+<text x="664" y="199.5" class="dimt" text-anchor="middle">Radar</text>
+<rect x="385" y="272.8" width="95" height="24" rx="3" class="dim"/>
+<text x="432.5" y="288.3" class="dimt" text-anchor="middle">Drive-by-wire</text>
+<rect x="486" y="272.8" width="50" height="24" rx="3" class="use"/>
+<text x="511" y="288.3" class="uset" text-anchor="middle">State</text>
+<rect x="542" y="272.8" width="45" height="24" rx="3" class="dim"/>
+<text x="564.5" y="288.3" class="dimt" text-anchor="middle">Brake</text>
+<rect x="593" y="272.8" width="50" height="24" rx="3" class="dim"/>
+<text x="618" y="288.3" class="dimt" text-anchor="middle">Doors</text>
+<rect x="385" y="314.4" width="150" height="17.6" rx="3" class="dim"/>
+<text x="460" y="326.7" class="dimt" text-anchor="middle">Monitor power</text>
+<rect x="385" y="184" width="75" height="24" rx="3" class="dim"/>
+<text x="422.5" y="199.5" class="dimt" text-anchor="middle">Remote ops</text>
+<rect x="385" y="356" width="119" height="14" class="det"/>
+<text x="388" y="382" class="ax">detect 179–310 ms</text>
+<rect x="505" y="356" width="119" height="14" class="rea"/>
+<text x="508" y="382" class="ax">react 179–310 ms</text>
+<rect x="625" y="356" width="59" height="14" class="res"/>
+<text x="628" y="382" class="ax">reserve…</text>
+<text x="385" y="398" class="ax">FTTI of SG-04: 447–775 ms (largest fault first)</text>
+<g><line x1="685" y1="353" x2="685" y2="373" class="cur"/><animateTransform attributeName="transform" type="translate" values="-300 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="384" y="416" class="s">Reaction: MRM-4 Safety monitor stop in lane</text>
+<text x="384" y="434" class="ax">Bounds steering angle and rate to the envelope for</text>
+<text x="384" y="448" class="ax">the current speed and rejects steering whose swept</text>
+<text x="384" y="462" class="ax">path comes within the safe lateral distance of a</text>
+<text x="384" y="476" class="ax">detected road user, obstacle or kerb</text>
+<text x="384" y="493" class="s">Implements FSR-04.01, FSR-04.02</text>
+<rect x="716" y="96" width="330" height="462" rx="8" class="card"/>
+<text x="730" y="120" class="gid">SM-03</text>
+<rect x="977.8" y="107" width="54.2" height="19" rx="4" class="pr"/>
+<text x="1004.9" y="120.5" class="prt" text-anchor="middle">ASIL D</text>
+<text x="776" y="120" class="tb">Achieved-against-comman…</text>
+<text x="730" y="138" class="ax">Runs on Safety monitor controller; uses Vehicle</text>
+<text x="730" y="152" class="ax">state sensing, Drive-by-wire</text>
+<rect x="725" y="178" width="312" height="162" rx="6" class="verge"/>
+<line x1="778.5" y1="284.8" x2="843.5" y2="240.8" class="lead"/>
+<line x1="857" y1="284.8" x2="843.5" y2="240.8" class="lead"/>
+<rect x="814" y="184" width="132" height="24" rx="3" class="dim"/>
+<text x="880" y="199.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="731" y="228" width="225" height="25.6" rx="3" class="hst"/>
+<text x="843.5" y="244.3" class="hstt" text-anchor="middle">Safety monitor</text>
+<rect x="964" y="228" width="63" height="25.6" rx="3" class="dim"/>
+<text x="995.5" y="244.3" class="dimt" text-anchor="middle">Channel</text>
+<rect x="956" y="184" width="34" height="24" rx="3" class="dim"/>
+<text x="973" y="199.5" class="dimt" text-anchor="middle">LiDAR</text>
+<rect x="993" y="184" width="34" height="24" rx="3" class="dim"/>
+<text x="1010" y="199.5" class="dimt" text-anchor="middle">Radar</text>
+<rect x="731" y="272.8" width="95" height="24" rx="3" class="use"/>
+<text x="778.5" y="288.3" class="uset" text-anchor="middle">Drive-by-wire</text>
+<rect x="832" y="272.8" width="50" height="24" rx="3" class="use"/>
+<text x="857" y="288.3" class="uset" text-anchor="middle">State</text>
+<rect x="888" y="272.8" width="45" height="24" rx="3" class="dim"/>
+<text x="910.5" y="288.3" class="dimt" text-anchor="middle">Brake</text>
+<rect x="939" y="272.8" width="50" height="24" rx="3" class="dim"/>
+<text x="964" y="288.3" class="dimt" text-anchor="middle">Doors</text>
+<rect x="731" y="314.4" width="150" height="17.6" rx="3" class="dim"/>
+<text x="806" y="326.7" class="dimt" text-anchor="middle">Monitor power</text>
+<rect x="731" y="184" width="75" height="24" rx="3" class="dim"/>
+<text x="768.5" y="199.5" class="dimt" text-anchor="middle">Remote ops</text>
+<rect x="731" y="356" width="119" height="14" class="det"/>
+<text x="734" y="382" class="ax">detect 179–283 ms</text>
+<rect x="851" y="356" width="119" height="14" class="rea"/>
+<text x="854" y="382" class="ax">react 179–283 ms</text>
+<rect x="971" y="356" width="59" height="14" class="res"/>
+<text x="974" y="382" class="ax">reserve…</text>
+<text x="731" y="398" class="ax">FTTI of SG-04: 447–707 ms (largest fault first)</text>
+<g><line x1="1031" y1="353" x2="1031" y2="373" class="cur"/><animateTransform attributeName="transform" type="translate" values="-300 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="730" y="416" class="s">Reaction: MRM-4 Safety monitor stop in lane</text>
+<text x="730" y="434" class="ax">Compares achieved acceleration, deceleration and</text>
+<text x="730" y="448" class="ax">steering with what was commanded, switches to the</text>
+<text x="730" y="462" class="ax">secondary brake path on a braking shortfall, and</text>
+<text x="730" y="476" class="ax">checks Autoware's stop when the safety channel has</text>
+<text x="730" y="490" class="ax">failed</text>
+<text x="730" y="507" class="s">Implements FSR-01.02, FSR-02.03, FSR-04.03,</text>
+<text x="730" y="522" class="s">FSR-07.08</text>
+<rect x="24" y="574" width="330" height="462" rx="8" class="card"/>
+<text x="38" y="598" class="gid">SM-04</text>
+<rect x="285.8" y="585" width="54.2" height="19" rx="4" class="pr"/>
+<text x="312.9" y="598.5" class="prt" text-anchor="middle">ASIL C</text>
+<text x="84" y="598" class="tb">Unconfirmed-braking lim…</text>
+<text x="38" y="616" class="ax">Runs on Safety monitor controller; uses Safety</text>
+<text x="38" y="630" class="ax">channel processor</text>
+<rect x="33" y="656" width="312" height="162" rx="6" class="verge"/>
+<line x1="303.5" y1="718.8" x2="151.5" y2="718.8" class="lead"/>
+<rect x="122" y="662" width="132" height="24" rx="3" class="dim"/>
+<text x="188" y="677.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="39" y="706" width="225" height="25.6" rx="3" class="hst"/>
+<text x="151.5" y="722.3" class="hstt" text-anchor="middle">Safety monitor</text>
+<rect x="272" y="706" width="63" height="25.6" rx="3" class="use"/>
+<text x="303.5" y="722.3" class="uset" text-anchor="middle">Channel</text>
+<rect x="264" y="662" width="34" height="24" rx="3" class="dim"/>
+<text x="281" y="677.5" class="dimt" text-anchor="middle">LiDAR</text>
+<rect x="301" y="662" width="34" height="24" rx="3" class="dim"/>
+<text x="318" y="677.5" class="dimt" text-anchor="middle">Radar</text>
+<rect x="39" y="750.8" width="95" height="24" rx="3" class="dim"/>
+<text x="86.5" y="766.3" class="dimt" text-anchor="middle">Drive-by-wire</text>
+<rect x="140" y="750.8" width="50" height="24" rx="3" class="dim"/>
+<text x="165" y="766.3" class="dimt" text-anchor="middle">State</text>
+<rect x="196" y="750.8" width="45" height="24" rx="3" class="dim"/>
+<text x="218.5" y="766.3" class="dimt" text-anchor="middle">Brake</text>
+<rect x="247" y="750.8" width="50" height="24" rx="3" class="dim"/>
+<text x="272" y="766.3" class="dimt" text-anchor="middle">Doors</text>
+<rect x="39" y="792.4" width="150" height="17.6" rx="3" class="dim"/>
+<text x="114" y="804.7" class="dimt" text-anchor="middle">Monitor power</text>
+<rect x="39" y="662" width="75" height="24" rx="3" class="dim"/>
+<text x="76.5" y="677.5" class="dimt" text-anchor="middle">Remote ops</text>
+<rect x="39" y="834" width="300" height="14" rx="3" class="dim"/>
+<text x="189" y="845" class="dimt" text-anchor="middle">no time budget in WP-S-04</text>
+<text x="39" y="864" class="ax">Acts by design or as a limit, not a race against a fault</text>
+<text x="38" y="894" class="s">Reaction: none of its own</text>
+<text x="38" y="912" class="ax">Holds decelerations above the comfortable level that</text>
+<text x="38" y="926" class="ax">the safety channel does not confirm to the firm</text>
+<text x="38" y="940" class="ax">level</text>
+<text x="38" y="957" class="s">Implements FSR-03.02</text>
+<rect x="370" y="574" width="330" height="462" rx="8" class="card"/>
+<text x="384" y="598" class="gid">SM-05</text>
+<rect x="631.8" y="585" width="54.2" height="19" rx="4" class="pr"/>
+<text x="658.9" y="598.5" class="prt" text-anchor="middle">ASIL D</text>
+<text x="430" y="598" class="tb">Command stream watchdog</text>
+<text x="384" y="616" class="ax">Runs on Safety monitor controller</text>
+<rect x="379" y="656" width="312" height="162" rx="6" class="verge"/>
+<rect x="468" y="662" width="132" height="24" rx="3" class="dim"/>
+<text x="534" y="677.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="385" y="706" width="225" height="25.6" rx="3" class="hst"/>
+<text x="497.5" y="722.3" class="hstt" text-anchor="middle">Safety monitor</text>
+<rect x="618" y="706" width="63" height="25.6" rx="3" class="dim"/>
+<text x="649.5" y="722.3" class="dimt" text-anchor="middle">Channel</text>
+<rect x="610" y="662" width="34" height="24" rx="3" class="dim"/>
+<text x="627" y="677.5" class="dimt" text-anchor="middle">LiDAR</text>
+<rect x="647" y="662" width="34" height="24" rx="3" class="dim"/>
+<text x="664" y="677.5" class="dimt" text-anchor="middle">Radar</text>
+<rect x="385" y="750.8" width="95" height="24" rx="3" class="dim"/>
+<text x="432.5" y="766.3" class="dimt" text-anchor="middle">Drive-by-wire</text>
+<rect x="486" y="750.8" width="50" height="24" rx="3" class="dim"/>
+<text x="511" y="766.3" class="dimt" text-anchor="middle">State</text>
+<rect x="542" y="750.8" width="45" height="24" rx="3" class="dim"/>
+<text x="564.5" y="766.3" class="dimt" text-anchor="middle">Brake</text>
+<rect x="593" y="750.8" width="50" height="24" rx="3" class="dim"/>
+<text x="618" y="766.3" class="dimt" text-anchor="middle">Doors</text>
+<rect x="385" y="792.4" width="150" height="17.6" rx="3" class="dim"/>
+<text x="460" y="804.7" class="dimt" text-anchor="middle">Monitor power</text>
+<rect x="385" y="662" width="75" height="24" rx="3" class="dim"/>
+<text x="422.5" y="677.5" class="dimt" text-anchor="middle">Remote ops</text>
+<rect x="385" y="834" width="119" height="14" class="det"/>
+<text x="388" y="860" class="ax">detect 143 ms</text>
+<rect x="505" y="834" width="119" height="14" class="rea"/>
+<text x="508" y="860" class="ax">react 143 ms</text>
+<rect x="625" y="834" width="59" height="14" class="res"/>
+<text x="628" y="860" class="ax">reserve…</text>
+<text x="385" y="876" class="ax">FTTI of SG-08: 357 ms (largest fault first)</text>
+<g><line x1="685" y1="831" x2="685" y2="851" class="cur"/><animateTransform attributeName="transform" type="translate" values="-300 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="384" y="894" class="s">Reaction: MRM-4 Safety monitor stop in lane</text>
+<text x="384" y="912" class="ax">Checks every command from Autoware and from remote</text>
+<text x="384" y="926" class="ax">operations for loss, delay, sequence, age, signature</text>
+<text x="384" y="940" class="ax">(CSR-01) and plausibility</text>
+<text x="384" y="957" class="s">Implements FSR-07.01, FSR-08.01</text>
+<rect x="716" y="574" width="330" height="462" rx="8" class="card"/>
+<text x="730" y="598" class="gid">SM-06</text>
+<rect x="977.8" y="585" width="54.2" height="19" rx="4" class="pr"/>
+<text x="1004.9" y="598.5" class="prt" text-anchor="middle">ASIL D</text>
+<text x="776" y="598" class="tb">Stop, hold and release</text>
+<text x="730" y="616" class="ax">Runs on Safety monitor controller; uses</text>
+<text x="730" y="630" class="ax">Drive-by-wire, Vehicle state sensing, Park brake,</text>
+<text x="730" y="644" class="ax">Door system</text>
+<rect x="725" y="656" width="312" height="162" rx="6" class="verge"/>
+<line x1="778.5" y1="762.8" x2="843.5" y2="718.8" class="lead"/>
+<line x1="857" y1="762.8" x2="843.5" y2="718.8" class="lead"/>
+<line x1="910.5" y1="762.8" x2="843.5" y2="718.8" class="lead"/>
+<line x1="964" y1="762.8" x2="843.5" y2="718.8" class="lead"/>
+<rect x="814" y="662" width="132" height="24" rx="3" class="dim"/>
+<text x="880" y="677.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="731" y="706" width="225" height="25.6" rx="3" class="hst"/>
+<text x="843.5" y="722.3" class="hstt" text-anchor="middle">Safety monitor</text>
+<rect x="964" y="706" width="63" height="25.6" rx="3" class="dim"/>
+<text x="995.5" y="722.3" class="dimt" text-anchor="middle">Channel</text>
+<rect x="956" y="662" width="34" height="24" rx="3" class="dim"/>
+<text x="973" y="677.5" class="dimt" text-anchor="middle">LiDAR</text>
+<rect x="993" y="662" width="34" height="24" rx="3" class="dim"/>
+<text x="1010" y="677.5" class="dimt" text-anchor="middle">Radar</text>
+<rect x="731" y="750.8" width="95" height="24" rx="3" class="use"/>
+<text x="778.5" y="766.3" class="uset" text-anchor="middle">Drive-by-wire</text>
+<rect x="832" y="750.8" width="50" height="24" rx="3" class="use"/>
+<text x="857" y="766.3" class="uset" text-anchor="middle">State</text>
+<rect x="888" y="750.8" width="45" height="24" rx="3" class="use"/>
+<text x="910.5" y="766.3" class="uset" text-anchor="middle">Brake</text>
+<rect x="939" y="750.8" width="50" height="24" rx="3" class="use"/>
+<text x="964" y="766.3" class="uset" text-anchor="middle">Doors</text>
+<rect x="731" y="792.4" width="150" height="17.6" rx="3" class="dim"/>
+<text x="806" y="804.7" class="dimt" text-anchor="middle">Monitor power</text>
+<rect x="731" y="662" width="75" height="24" rx="3" class="dim"/>
+<text x="768.5" y="677.5" class="dimt" text-anchor="middle">Remote ops</text>
+<rect x="731" y="834" width="119" height="14" class="det"/>
+<text x="734" y="860" class="ax">detect 207–358 ms</text>
+<rect x="851" y="834" width="119" height="14" class="rea"/>
+<text x="854" y="860" class="ax">react 207–358 ms</text>
+<rect x="971" y="834" width="59" height="14" class="res"/>
+<text x="974" y="860" class="ax">reserve…</text>
+<text x="731" y="876" class="ax">FTTI of SG-05: 516–894 ms (largest fault first)</text>
+<g><line x1="1031" y1="831" x2="1031" y2="851" class="cur"/><animateTransform attributeName="transform" type="translate" values="-300 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="730" y="894" class="s">Reaction: MRM-4 Safety monitor stop in lane</text>
+<text x="730" y="912" class="ax">Brings the vehicle to a stop in lane with hazard</text>
+<text x="730" y="926" class="ax">lights and holds it, detects motion while holding,</text>
+<text x="730" y="940" class="ax">gates reverse, and releases only on a verified</text>
+<text x="730" y="954" class="ax">release with every release condition met</text>
+<text x="730" y="971" class="s">Implements FSR-07.02, FSR-07.04, FSR-05.01,</text>
+<text x="730" y="986" class="s">FSR-05.02, FSR-05.03</text>
+<rect x="24" y="1052" width="330" height="462" rx="8" class="card"/>
+<text x="38" y="1076" class="gid">SM-07</text>
+<rect x="285.8" y="1063" width="54.2" height="19" rx="4" class="pr"/>
+<text x="312.9" y="1076.5" class="prt" text-anchor="middle">ASIL C</text>
+<text x="84" y="1076" class="tb">Indicator cross-check</text>
+<text x="38" y="1094" class="ax">Runs on Safety monitor controller; uses Vehicle</text>
+<text x="38" y="1108" class="ax">state sensing</text>
+<rect x="33" y="1134" width="312" height="162" rx="6" class="verge"/>
+<line x1="165" y1="1240.8" x2="151.5" y2="1196.8" class="lead"/>
+<rect x="122" y="1140" width="132" height="24" rx="3" class="dim"/>
+<text x="188" y="1155.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="39" y="1184" width="225" height="25.6" rx="3" class="hst"/>
+<text x="151.5" y="1200.3" class="hstt" text-anchor="middle">Safety monitor</text>
+<rect x="272" y="1184" width="63" height="25.6" rx="3" class="dim"/>
+<text x="303.5" y="1200.3" class="dimt" text-anchor="middle">Channel</text>
+<rect x="264" y="1140" width="34" height="24" rx="3" class="dim"/>
+<text x="281" y="1155.5" class="dimt" text-anchor="middle">LiDAR</text>
+<rect x="301" y="1140" width="34" height="24" rx="3" class="dim"/>
+<text x="318" y="1155.5" class="dimt" text-anchor="middle">Radar</text>
+<rect x="39" y="1228.8" width="95" height="24" rx="3" class="dim"/>
+<text x="86.5" y="1244.3" class="dimt" text-anchor="middle">Drive-by-wire</text>
+<rect x="140" y="1228.8" width="50" height="24" rx="3" class="use"/>
+<text x="165" y="1244.3" class="uset" text-anchor="middle">State</text>
+<rect x="196" y="1228.8" width="45" height="24" rx="3" class="dim"/>
+<text x="218.5" y="1244.3" class="dimt" text-anchor="middle">Brake</text>
+<rect x="247" y="1228.8" width="50" height="24" rx="3" class="dim"/>
+<text x="272" y="1244.3" class="dimt" text-anchor="middle">Doors</text>
+<rect x="39" y="1270.4" width="150" height="17.6" rx="3" class="dim"/>
+<text x="114" y="1282.7" class="dimt" text-anchor="middle">Monitor power</text>
+<rect x="39" y="1140" width="75" height="24" rx="3" class="dim"/>
+<text x="76.5" y="1155.5" class="dimt" text-anchor="middle">Remote ops</text>
+<rect x="39" y="1312" width="300" height="14" rx="3" class="dim"/>
+<text x="189" y="1323" class="dimt" text-anchor="middle">no time budget in WP-S-04</text>
+<text x="39" y="1342" class="ax">Acts by design or as a limit, not a race against a fault</text>
+<text x="38" y="1372" class="s">Reaction: none of its own</text>
+<text x="38" y="1390" class="ax">Compares the commanded indicator with commanded and</text>
+<text x="38" y="1404" class="ax">achieved steering, and switches to hazard lights on</text>
+<text x="38" y="1418" class="ax">a mismatch</text>
+<text x="38" y="1435" class="s">Implements FSR-09.01</text>
+<rect x="370" y="1052" width="330" height="462" rx="8" class="card"/>
+<text x="384" y="1076" class="gid">SM-08</text>
+<rect x="631.8" y="1063" width="54.2" height="19" rx="4" class="pr"/>
+<text x="658.9" y="1076.5" class="prt" text-anchor="middle">ASIL D</text>
+<text x="430" y="1076" class="tb">Monitor self-diagnostic…</text>
+<text x="384" y="1094" class="ax">Runs on Safety monitor controller</text>
+<rect x="379" y="1134" width="312" height="162" rx="6" class="verge"/>
+<rect x="468" y="1140" width="132" height="24" rx="3" class="dim"/>
+<text x="534" y="1155.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="385" y="1184" width="225" height="25.6" rx="3" class="hst"/>
+<text x="497.5" y="1200.3" class="hstt" text-anchor="middle">Safety monitor</text>
+<rect x="618" y="1184" width="63" height="25.6" rx="3" class="dim"/>
+<text x="649.5" y="1200.3" class="dimt" text-anchor="middle">Channel</text>
+<rect x="610" y="1140" width="34" height="24" rx="3" class="dim"/>
+<text x="627" y="1155.5" class="dimt" text-anchor="middle">LiDAR</text>
+<rect x="647" y="1140" width="34" height="24" rx="3" class="dim"/>
+<text x="664" y="1155.5" class="dimt" text-anchor="middle">Radar</text>
+<rect x="385" y="1228.8" width="95" height="24" rx="3" class="dim"/>
+<text x="432.5" y="1244.3" class="dimt" text-anchor="middle">Drive-by-wire</text>
+<rect x="486" y="1228.8" width="50" height="24" rx="3" class="dim"/>
+<text x="511" y="1244.3" class="dimt" text-anchor="middle">State</text>
+<rect x="542" y="1228.8" width="45" height="24" rx="3" class="dim"/>
+<text x="564.5" y="1244.3" class="dimt" text-anchor="middle">Brake</text>
+<rect x="593" y="1228.8" width="50" height="24" rx="3" class="dim"/>
+<text x="618" y="1244.3" class="dimt" text-anchor="middle">Doors</text>
+<rect x="385" y="1270.4" width="150" height="17.6" rx="3" class="dim"/>
+<text x="460" y="1282.7" class="dimt" text-anchor="middle">Monitor power</text>
+<rect x="385" y="1140" width="75" height="24" rx="3" class="dim"/>
+<text x="422.5" y="1155.5" class="dimt" text-anchor="middle">Remote ops</text>
+<rect x="385" y="1312" width="119" height="14" class="det"/>
+<text x="388" y="1338" class="ax">detect 179–283 ms</text>
+<rect x="505" y="1312" width="119" height="14" class="rea"/>
+<text x="508" y="1338" class="ax">react 179–283 ms</text>
+<rect x="625" y="1312" width="59" height="14" class="res"/>
+<text x="628" y="1338" class="ax">reserve…</text>
+<text x="385" y="1354" class="ax">FTTI of SG-07: 447–707 ms (largest fault first)</text>
+<g><line x1="685" y1="1309" x2="685" y2="1329" class="cur"/><animateTransform attributeName="transform" type="translate" values="-300 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="384" y="1372" class="s">Reaction: MRM-5 Vehicle's own stop on loss of the</text>
+<text x="384" y="1387" class="s">monitor</text>
+<text x="384" y="1405" class="ax">Detects faults of the monitor's own processor,</text>
+<text x="384" y="1419" class="ax">memory, clock and software (lockstep, memory</text>
+<text x="384" y="1433" class="ax">protection, independent watchdog) and stops its</text>
+<text x="384" y="1447" class="ax">output so the vehicle's own stop takes over</text>
+<text x="384" y="1464" class="s">Implements FSR-07.07</text>
+<rect x="716" y="1052" width="330" height="462" rx="8" class="card"/>
+<text x="730" y="1076" class="gid">SM-09</text>
+<rect x="977.8" y="1063" width="54.2" height="19" rx="4" class="pr"/>
+<text x="1004.9" y="1076.5" class="prt" text-anchor="middle">ASIL D</text>
+<text x="776" y="1076" class="tb">Geometric obstacle dete…</text>
+<text x="730" y="1094" class="ax">Runs on Safety channel processor; uses Safety LiDAR,</text>
+<text x="730" y="1108" class="ax">Safety radar</text>
+<rect x="725" y="1134" width="312" height="162" rx="6" class="verge"/>
+<line x1="973" y1="1152" x2="995.5" y2="1196.8" class="lead"/>
+<line x1="1010" y1="1152" x2="995.5" y2="1196.8" class="lead"/>
+<rect x="814" y="1140" width="132" height="24" rx="3" class="dim"/>
+<text x="880" y="1155.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="731" y="1184" width="225" height="25.6" rx="3" class="dim"/>
+<text x="843.5" y="1200.3" class="dimt" text-anchor="middle">Safety monitor</text>
+<rect x="964" y="1184" width="63" height="25.6" rx="3" class="hst"/>
+<text x="995.5" y="1200.3" class="hstt" text-anchor="middle">Channel</text>
+<rect x="956" y="1140" width="34" height="24" rx="3" class="use"/>
+<text x="973" y="1155.5" class="uset" text-anchor="middle">LiDAR</text>
+<rect x="993" y="1140" width="34" height="24" rx="3" class="use"/>
+<text x="1010" y="1155.5" class="uset" text-anchor="middle">Radar</text>
+<rect x="731" y="1228.8" width="95" height="24" rx="3" class="dim"/>
+<text x="778.5" y="1244.3" class="dimt" text-anchor="middle">Drive-by-wire</text>
+<rect x="832" y="1228.8" width="50" height="24" rx="3" class="dim"/>
+<text x="857" y="1244.3" class="dimt" text-anchor="middle">State</text>
+<rect x="888" y="1228.8" width="45" height="24" rx="3" class="dim"/>
+<text x="910.5" y="1244.3" class="dimt" text-anchor="middle">Brake</text>
+<rect x="939" y="1228.8" width="50" height="24" rx="3" class="dim"/>
+<text x="964" y="1244.3" class="dimt" text-anchor="middle">Doors</text>
+<rect x="731" y="1270.4" width="150" height="17.6" rx="3" class="dim"/>
+<text x="806" y="1282.7" class="dimt" text-anchor="middle">Monitor power</text>
+<rect x="731" y="1140" width="75" height="24" rx="3" class="dim"/>
+<text x="768.5" y="1155.5" class="dimt" text-anchor="middle">Remote ops</text>
+<rect x="731" y="1312" width="119" height="14" class="det"/>
+<text x="734" y="1338" class="ax">detect 200–283 ms</text>
+<rect x="851" y="1312" width="119" height="14" class="rea"/>
+<text x="854" y="1338" class="ax">react 200–283 ms</text>
+<rect x="971" y="1312" width="59" height="14" class="res"/>
+<text x="974" y="1338" class="ax">reserve…</text>
+<text x="731" y="1354" class="ax">FTTI of SG-02: 500–707 ms (largest fault first)</text>
+<g><line x1="1031" y1="1309" x2="1031" y2="1329" class="cur"/><animateTransform attributeName="transform" type="translate" values="-300 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="730" y="1372" class="s">Reaction: none of its own</text>
+<text x="730" y="1390" class="ax">Finds road users and obstacles in and beside the</text>
+<text x="730" y="1404" class="ax">swept path from LiDAR and radar returns by geometry</text>
+<text x="730" y="1418" class="ax">and motion, without learned classification, and</text>
+<text x="730" y="1432" class="ax">counts a road user seen by either sensor type</text>
+<text x="730" y="1446" class="ax">(DQ-031 A), each sensor's chain meeting its share of</text>
+<text x="730" y="1460" class="ax">the requirement at ASIL B(D)</text>
+<text x="730" y="1477" class="s">Implements FSR-02.01, FSR-03.01</text>
+<rect x="24" y="1530" width="330" height="462" rx="8" class="card"/>
+<text x="38" y="1554" class="gid">SM-10</text>
+<rect x="285.8" y="1541" width="54.2" height="19" rx="4" class="pr"/>
+<text x="312.9" y="1554.5" class="prt" text-anchor="middle">ASIL D</text>
+<text x="84" y="1554" class="tb">Safety channel sensor d…</text>
+<text x="38" y="1572" class="ax">Runs on Safety channel processor; uses Safety LiDAR,</text>
+<text x="38" y="1586" class="ax">Safety radar</text>
+<rect x="33" y="1612" width="312" height="162" rx="6" class="verge"/>
+<line x1="281" y1="1630" x2="303.5" y2="1674.8" class="lead"/>
+<line x1="318" y1="1630" x2="303.5" y2="1674.8" class="lead"/>
+<rect x="122" y="1618" width="132" height="24" rx="3" class="dim"/>
+<text x="188" y="1633.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="39" y="1662" width="225" height="25.6" rx="3" class="dim"/>
+<text x="151.5" y="1678.3" class="dimt" text-anchor="middle">Safety monitor</text>
+<rect x="272" y="1662" width="63" height="25.6" rx="3" class="hst"/>
+<text x="303.5" y="1678.3" class="hstt" text-anchor="middle">Channel</text>
+<rect x="264" y="1618" width="34" height="24" rx="3" class="use"/>
+<text x="281" y="1633.5" class="uset" text-anchor="middle">LiDAR</text>
+<rect x="301" y="1618" width="34" height="24" rx="3" class="use"/>
+<text x="318" y="1633.5" class="uset" text-anchor="middle">Radar</text>
+<rect x="39" y="1706.8" width="95" height="24" rx="3" class="dim"/>
+<text x="86.5" y="1722.3" class="dimt" text-anchor="middle">Drive-by-wire</text>
+<rect x="140" y="1706.8" width="50" height="24" rx="3" class="dim"/>
+<text x="165" y="1722.3" class="dimt" text-anchor="middle">State</text>
+<rect x="196" y="1706.8" width="45" height="24" rx="3" class="dim"/>
+<text x="218.5" y="1722.3" class="dimt" text-anchor="middle">Brake</text>
+<rect x="247" y="1706.8" width="50" height="24" rx="3" class="dim"/>
+<text x="272" y="1722.3" class="dimt" text-anchor="middle">Doors</text>
+<rect x="39" y="1748.4" width="150" height="17.6" rx="3" class="dim"/>
+<text x="114" y="1760.7" class="dimt" text-anchor="middle">Monitor power</text>
+<rect x="39" y="1618" width="75" height="24" rx="3" class="dim"/>
+<text x="76.5" y="1633.5" class="dimt" text-anchor="middle">Remote ops</text>
+<rect x="39" y="1790" width="119" height="14" class="det"/>
+<text x="42" y="1816" class="ax">detect 200–283 ms</text>
+<rect x="159" y="1790" width="119" height="14" class="rea"/>
+<text x="162" y="1816" class="ax">react 200–283 ms</text>
+<rect x="279" y="1790" width="59" height="14" class="res"/>
+<text x="282" y="1816" class="ax">reserve…</text>
+<text x="39" y="1832" class="ax">FTTI of SG-02: 500–707 ms (largest fault first)</text>
+<g><line x1="339" y1="1787" x2="339" y2="1807" class="cur"/><animateTransform attributeName="transform" type="translate" values="-300 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="38" y="1850" class="s">Reaction: TR-05 (a fallback trigger of WP-C-12)</text>
+<text x="38" y="1868" class="ax">Detects blockage, misalignment, loss and degradation</text>
+<text x="38" y="1882" class="ax">of the safety channel's sensors and reports it to</text>
+<text x="38" y="1896" class="ax">the monitor</text>
+<text x="38" y="1913" class="s">Implements FSR-02.01</text>
+<rect x="370" y="1530" width="330" height="462" rx="8" class="card"/>
+<text x="384" y="1554" class="gid">SM-11</text>
+<rect x="631.8" y="1541" width="54.2" height="19" rx="4" class="pr"/>
+<text x="658.9" y="1554.5" class="prt" text-anchor="middle">ASIL D</text>
+<text x="430" y="1554" class="tb">Propulsion cut</text>
+<text x="384" y="1572" class="ax">Runs on Drive-by-wire</text>
+<rect x="379" y="1612" width="312" height="162" rx="6" class="verge"/>
+<rect x="468" y="1618" width="132" height="24" rx="3" class="dim"/>
+<text x="534" y="1633.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="385" y="1662" width="225" height="25.6" rx="3" class="dim"/>
+<text x="497.5" y="1678.3" class="dimt" text-anchor="middle">Safety monitor</text>
+<rect x="618" y="1662" width="63" height="25.6" rx="3" class="dim"/>
+<text x="649.5" y="1678.3" class="dimt" text-anchor="middle">Channel</text>
+<rect x="610" y="1618" width="34" height="24" rx="3" class="dim"/>
+<text x="627" y="1633.5" class="dimt" text-anchor="middle">LiDAR</text>
+<rect x="647" y="1618" width="34" height="24" rx="3" class="dim"/>
+<text x="664" y="1633.5" class="dimt" text-anchor="middle">Radar</text>
+<rect x="385" y="1706.8" width="95" height="24" rx="3" class="hst"/>
+<text x="432.5" y="1722.3" class="hstt" text-anchor="middle">Drive-by-wire</text>
+<rect x="486" y="1706.8" width="50" height="24" rx="3" class="dim"/>
+<text x="511" y="1722.3" class="dimt" text-anchor="middle">State</text>
+<rect x="542" y="1706.8" width="45" height="24" rx="3" class="dim"/>
+<text x="564.5" y="1722.3" class="dimt" text-anchor="middle">Brake</text>
+<rect x="593" y="1706.8" width="50" height="24" rx="3" class="dim"/>
+<text x="618" y="1722.3" class="dimt" text-anchor="middle">Doors</text>
+<rect x="385" y="1748.4" width="150" height="17.6" rx="3" class="dim"/>
+<text x="460" y="1760.7" class="dimt" text-anchor="middle">Monitor power</text>
+<rect x="385" y="1618" width="75" height="24" rx="3" class="dim"/>
+<text x="422.5" y="1633.5" class="dimt" text-anchor="middle">Remote ops</text>
+<rect x="385" y="1790" width="300" height="14" rx="3" class="dim"/>
+<text x="535" y="1801" class="dimt" text-anchor="middle">no time budget in WP-S-04</text>
+<text x="385" y="1820" class="ax">Acts by design or as a limit, not a race against a fault</text>
+<text x="384" y="1850" class="s">Reaction: none of its own</text>
+<text x="384" y="1868" class="ax">Cuts propulsion on the monitor's command, whatever</text>
+<text x="384" y="1882" class="ax">else is commanded</text>
+<text x="384" y="1899" class="s">Implements FSR-01.03</text>
+<rect x="716" y="1530" width="330" height="462" rx="8" class="card"/>
+<text x="730" y="1554" class="gid">SM-12</text>
+<rect x="977.8" y="1541" width="54.2" height="19" rx="4" class="pr"/>
+<text x="1004.9" y="1554.5" class="prt" text-anchor="middle">ASIL D</text>
+<text x="776" y="1554" class="tb">Secondary brake path</text>
+<text x="730" y="1572" class="ax">Runs on Drive-by-wire</text>
+<rect x="725" y="1612" width="312" height="162" rx="6" class="verge"/>
+<rect x="814" y="1618" width="132" height="24" rx="3" class="dim"/>
+<text x="880" y="1633.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="731" y="1662" width="225" height="25.6" rx="3" class="dim"/>
+<text x="843.5" y="1678.3" class="dimt" text-anchor="middle">Safety monitor</text>
+<rect x="964" y="1662" width="63" height="25.6" rx="3" class="dim"/>
+<text x="995.5" y="1678.3" class="dimt" text-anchor="middle">Channel</text>
+<rect x="956" y="1618" width="34" height="24" rx="3" class="dim"/>
+<text x="973" y="1633.5" class="dimt" text-anchor="middle">LiDAR</text>
+<rect x="993" y="1618" width="34" height="24" rx="3" class="dim"/>
+<text x="1010" y="1633.5" class="dimt" text-anchor="middle">Radar</text>
+<rect x="731" y="1706.8" width="95" height="24" rx="3" class="hst"/>
+<text x="778.5" y="1722.3" class="hstt" text-anchor="middle">Drive-by-wire</text>
+<rect x="832" y="1706.8" width="50" height="24" rx="3" class="dim"/>
+<text x="857" y="1722.3" class="dimt" text-anchor="middle">State</text>
+<rect x="888" y="1706.8" width="45" height="24" rx="3" class="dim"/>
+<text x="910.5" y="1722.3" class="dimt" text-anchor="middle">Brake</text>
+<rect x="939" y="1706.8" width="50" height="24" rx="3" class="dim"/>
+<text x="964" y="1722.3" class="dimt" text-anchor="middle">Doors</text>
+<rect x="731" y="1748.4" width="150" height="17.6" rx="3" class="dim"/>
+<text x="806" y="1760.7" class="dimt" text-anchor="middle">Monitor power</text>
+<rect x="731" y="1618" width="75" height="24" rx="3" class="dim"/>
+<text x="768.5" y="1633.5" class="dimt" text-anchor="middle">Remote ops</text>
+<rect x="731" y="1790" width="300" height="14" rx="3" class="dim"/>
+<text x="881" y="1801" class="dimt" text-anchor="middle">no time budget in WP-S-04</text>
+<text x="731" y="1820" class="ax">Acts by design or as a limit, not a race against a fault</text>
+<text x="730" y="1850" class="s">Reaction: none of its own</text>
+<text x="730" y="1868" class="ax">Keeps a braking path that can stop the vehicle after</text>
+<text x="730" y="1882" class="ax">any single fault in the primary one</text>
+<text x="730" y="1899" class="s">Implements FSR-02.04</text>
+<rect x="24" y="2008" width="330" height="462" rx="8" class="card"/>
+<text x="38" y="2032" class="gid">SM-13</text>
+<rect x="285.8" y="2019" width="54.2" height="19" rx="4" class="pr"/>
+<text x="312.9" y="2032.5" class="prt" text-anchor="middle">ASIL D</text>
+<text x="84" y="2032" class="tb">Fault-tolerant steering…</text>
+<text x="38" y="2050" class="ax">Runs on Drive-by-wire</text>
+<rect x="33" y="2090" width="312" height="162" rx="6" class="verge"/>
+<rect x="122" y="2096" width="132" height="24" rx="3" class="dim"/>
+<text x="188" y="2111.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="39" y="2140" width="225" height="25.6" rx="3" class="dim"/>
+<text x="151.5" y="2156.3" class="dimt" text-anchor="middle">Safety monitor</text>
+<rect x="272" y="2140" width="63" height="25.6" rx="3" class="dim"/>
+<text x="303.5" y="2156.3" class="dimt" text-anchor="middle">Channel</text>
+<rect x="264" y="2096" width="34" height="24" rx="3" class="dim"/>
+<text x="281" y="2111.5" class="dimt" text-anchor="middle">LiDAR</text>
+<rect x="301" y="2096" width="34" height="24" rx="3" class="dim"/>
+<text x="318" y="2111.5" class="dimt" text-anchor="middle">Radar</text>
+<rect x="39" y="2184.8" width="95" height="24" rx="3" class="hst"/>
+<text x="86.5" y="2200.3" class="hstt" text-anchor="middle">Drive-by-wire</text>
+<rect x="140" y="2184.8" width="50" height="24" rx="3" class="dim"/>
+<text x="165" y="2200.3" class="dimt" text-anchor="middle">State</text>
+<rect x="196" y="2184.8" width="45" height="24" rx="3" class="dim"/>
+<text x="218.5" y="2200.3" class="dimt" text-anchor="middle">Brake</text>
+<rect x="247" y="2184.8" width="50" height="24" rx="3" class="dim"/>
+<text x="272" y="2200.3" class="dimt" text-anchor="middle">Doors</text>
+<rect x="39" y="2226.4" width="150" height="17.6" rx="3" class="dim"/>
+<text x="114" y="2238.7" class="dimt" text-anchor="middle">Monitor power</text>
+<rect x="39" y="2096" width="75" height="24" rx="3" class="dim"/>
+<text x="76.5" y="2111.5" class="dimt" text-anchor="middle">Remote ops</text>
+<rect x="39" y="2268" width="300" height="14" rx="3" class="dim"/>
+<text x="189" y="2279" class="dimt" text-anchor="middle">no time budget in WP-S-04</text>
+<text x="39" y="2298" class="ax">Acts by design or as a limit, not a race against a fault</text>
+<text x="38" y="2328" class="s">Reaction: none of its own</text>
+<text x="38" y="2346" class="ax">Keeps steering controllable after any single fault</text>
+<text x="38" y="2360" class="ax">long enough to complete a stop in lane</text>
+<text x="38" y="2377" class="s">Implements FSR-04.04</text>
+<rect x="370" y="2008" width="330" height="462" rx="8" class="card"/>
+<text x="384" y="2032" class="gid">SM-14</text>
+<rect x="631.8" y="2019" width="54.2" height="19" rx="4" class="pr"/>
+<text x="658.9" y="2032.5" class="prt" text-anchor="middle">ASIL D</text>
+<text x="430" y="2032" class="tb">Stop on loss of the mon…</text>
+<text x="384" y="2050" class="ax">Runs on Drive-by-wire</text>
+<rect x="379" y="2090" width="312" height="162" rx="6" class="verge"/>
+<rect x="468" y="2096" width="132" height="24" rx="3" class="dim"/>
+<text x="534" y="2111.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="385" y="2140" width="225" height="25.6" rx="3" class="dim"/>
+<text x="497.5" y="2156.3" class="dimt" text-anchor="middle">Safety monitor</text>
+<rect x="618" y="2140" width="63" height="25.6" rx="3" class="dim"/>
+<text x="649.5" y="2156.3" class="dimt" text-anchor="middle">Channel</text>
+<rect x="610" y="2096" width="34" height="24" rx="3" class="dim"/>
+<text x="627" y="2111.5" class="dimt" text-anchor="middle">LiDAR</text>
+<rect x="647" y="2096" width="34" height="24" rx="3" class="dim"/>
+<text x="664" y="2111.5" class="dimt" text-anchor="middle">Radar</text>
+<rect x="385" y="2184.8" width="95" height="24" rx="3" class="hst"/>
+<text x="432.5" y="2200.3" class="hstt" text-anchor="middle">Drive-by-wire</text>
+<rect x="486" y="2184.8" width="50" height="24" rx="3" class="dim"/>
+<text x="511" y="2200.3" class="dimt" text-anchor="middle">State</text>
+<rect x="542" y="2184.8" width="45" height="24" rx="3" class="dim"/>
+<text x="564.5" y="2200.3" class="dimt" text-anchor="middle">Brake</text>
+<rect x="593" y="2184.8" width="50" height="24" rx="3" class="dim"/>
+<text x="618" y="2200.3" class="dimt" text-anchor="middle">Doors</text>
+<rect x="385" y="2226.4" width="150" height="17.6" rx="3" class="dim"/>
+<text x="460" y="2238.7" class="dimt" text-anchor="middle">Monitor power</text>
+<rect x="385" y="2096" width="75" height="24" rx="3" class="dim"/>
+<text x="422.5" y="2111.5" class="dimt" text-anchor="middle">Remote ops</text>
+<rect x="385" y="2268" width="119" height="14" class="det"/>
+<text x="388" y="2294" class="ax">detect 179–283 ms</text>
+<rect x="505" y="2268" width="119" height="14" class="rea"/>
+<text x="508" y="2294" class="ax">react 179–283 ms</text>
+<rect x="625" y="2268" width="59" height="14" class="res"/>
+<text x="628" y="2294" class="ax">reserve…</text>
+<text x="385" y="2310" class="ax">FTTI of SG-07: 447–707 ms (largest fault first)</text>
+<g><line x1="685" y1="2265" x2="685" y2="2285" class="cur"/><animateTransform attributeName="transform" type="translate" values="-300 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="384" y="2328" class="s">Reaction: MRM-5 Vehicle's own stop on loss of the</text>
+<text x="384" y="2343" class="s">monitor</text>
+<text x="384" y="2361" class="ax">Brakes to a standstill and holds it when the</text>
+<text x="384" y="2375" class="ax">monitor's commands stop for longer than WP-S-04</text>
+<text x="384" y="2389" class="ax">allows</text>
+<text x="384" y="2406" class="s">Implements FSR-07.06</text>
+<rect x="716" y="2008" width="330" height="462" rx="8" class="card"/>
+<text x="730" y="2032" class="gid">SM-15</text>
+<rect x="977.8" y="2019" width="54.2" height="19" rx="4" class="pr"/>
+<text x="1004.9" y="2032.5" class="prt" text-anchor="middle">ASIL D</text>
+<text x="776" y="2032" class="tb">Independent vehicle sta…</text>
+<text x="730" y="2050" class="ax">Runs on Vehicle state sensing</text>
+<rect x="725" y="2090" width="312" height="162" rx="6" class="verge"/>
+<rect x="814" y="2096" width="132" height="24" rx="3" class="dim"/>
+<text x="880" y="2111.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="731" y="2140" width="225" height="25.6" rx="3" class="dim"/>
+<text x="843.5" y="2156.3" class="dimt" text-anchor="middle">Safety monitor</text>
+<rect x="964" y="2140" width="63" height="25.6" rx="3" class="dim"/>
+<text x="995.5" y="2156.3" class="dimt" text-anchor="middle">Channel</text>
+<rect x="956" y="2096" width="34" height="24" rx="3" class="dim"/>
+<text x="973" y="2111.5" class="dimt" text-anchor="middle">LiDAR</text>
+<rect x="993" y="2096" width="34" height="24" rx="3" class="dim"/>
+<text x="1010" y="2111.5" class="dimt" text-anchor="middle">Radar</text>
+<rect x="731" y="2184.8" width="95" height="24" rx="3" class="dim"/>
+<text x="778.5" y="2200.3" class="dimt" text-anchor="middle">Drive-by-wire</text>
+<rect x="832" y="2184.8" width="50" height="24" rx="3" class="hst"/>
+<text x="857" y="2200.3" class="hstt" text-anchor="middle">State</text>
+<rect x="888" y="2184.8" width="45" height="24" rx="3" class="dim"/>
+<text x="910.5" y="2200.3" class="dimt" text-anchor="middle">Brake</text>
+<rect x="939" y="2184.8" width="50" height="24" rx="3" class="dim"/>
+<text x="964" y="2200.3" class="dimt" text-anchor="middle">Doors</text>
+<rect x="731" y="2226.4" width="150" height="17.6" rx="3" class="dim"/>
+<text x="806" y="2238.7" class="dimt" text-anchor="middle">Monitor power</text>
+<rect x="731" y="2096" width="75" height="24" rx="3" class="dim"/>
+<text x="768.5" y="2111.5" class="dimt" text-anchor="middle">Remote ops</text>
+<rect x="731" y="2268" width="119" height="14" class="det"/>
+<text x="734" y="2294" class="ax">detect 179–283 ms</text>
+<rect x="851" y="2268" width="119" height="14" class="rea"/>
+<text x="854" y="2294" class="ax">react 179–283 ms</text>
+<rect x="971" y="2268" width="59" height="14" class="res"/>
+<text x="974" y="2294" class="ax">reserve…</text>
+<text x="731" y="2310" class="ax">FTTI of SG-04: 447–707 ms (largest fault first)</text>
+<g><line x1="1031" y1="2265" x2="1031" y2="2285" class="cur"/><animateTransform attributeName="transform" type="translate" values="-300 0;0 0;0 0" keyTimes="0;0.75;1" dur="6s" repeatCount="indefinite"/></g>
+<text x="730" y="2328" class="s">Reaction: none of its own</text>
+<text x="730" y="2346" class="ax">Delivers speed, acceleration and steering angle to</text>
+<text x="730" y="2360" class="ax">the monitor on its own path, with the sensors' own</text>
+<text x="730" y="2374" class="ax">fault flags</text>
+<text x="730" y="2391" class="s">Implements FSR-01.05, FSR-04.06</text>
+<rect x="24" y="2486" width="330" height="462" rx="8" class="card"/>
+<text x="38" y="2510" class="gid">SM-16</text>
+<rect x="285.8" y="2497" width="54.2" height="19" rx="4" class="pr"/>
+<text x="312.9" y="2510.5" class="prt" text-anchor="middle">ASIL D</text>
+<text x="84" y="2510" class="tb">Park brake hold</text>
+<text x="38" y="2528" class="ax">Runs on Park brake</text>
+<rect x="33" y="2568" width="312" height="162" rx="6" class="verge"/>
+<rect x="122" y="2574" width="132" height="24" rx="3" class="dim"/>
+<text x="188" y="2589.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="39" y="2618" width="225" height="25.6" rx="3" class="dim"/>
+<text x="151.5" y="2634.3" class="dimt" text-anchor="middle">Safety monitor</text>
+<rect x="272" y="2618" width="63" height="25.6" rx="3" class="dim"/>
+<text x="303.5" y="2634.3" class="dimt" text-anchor="middle">Channel</text>
+<rect x="264" y="2574" width="34" height="24" rx="3" class="dim"/>
+<text x="281" y="2589.5" class="dimt" text-anchor="middle">LiDAR</text>
+<rect x="301" y="2574" width="34" height="24" rx="3" class="dim"/>
+<text x="318" y="2589.5" class="dimt" text-anchor="middle">Radar</text>
+<rect x="39" y="2662.8" width="95" height="24" rx="3" class="dim"/>
+<text x="86.5" y="2678.3" class="dimt" text-anchor="middle">Drive-by-wire</text>
+<rect x="140" y="2662.8" width="50" height="24" rx="3" class="dim"/>
+<text x="165" y="2678.3" class="dimt" text-anchor="middle">State</text>
+<rect x="196" y="2662.8" width="45" height="24" rx="3" class="hst"/>
+<text x="218.5" y="2678.3" class="hstt" text-anchor="middle">Brake</text>
+<rect x="247" y="2662.8" width="50" height="24" rx="3" class="dim"/>
+<text x="272" y="2678.3" class="dimt" text-anchor="middle">Doors</text>
+<rect x="39" y="2704.4" width="150" height="17.6" rx="3" class="dim"/>
+<text x="114" y="2716.7" class="dimt" text-anchor="middle">Monitor power</text>
+<rect x="39" y="2574" width="75" height="24" rx="3" class="dim"/>
+<text x="76.5" y="2589.5" class="dimt" text-anchor="middle">Remote ops</text>
+<rect x="39" y="2746" width="300" height="14" rx="3" class="dim"/>
+<text x="189" y="2757" class="dimt" text-anchor="middle">no time budget in WP-S-04</text>
+<text x="39" y="2776" class="ax">Acts by design or as a limit, not a race against a fault</text>
+<text x="38" y="2806" class="s">Reaction: none of its own</text>
+<text x="38" y="2824" class="ax">Applies and holds the park brake on the monitor's</text>
+<text x="38" y="2838" class="ax">command</text>
+<text x="38" y="2855" class="s">Implements FSR-05.04</text>
+<rect x="370" y="2486" width="330" height="462" rx="8" class="card"/>
+<text x="384" y="2510" class="gid">SM-17</text>
+<rect x="631.8" y="2497" width="54.2" height="19" rx="4" class="pr"/>
+<text x="658.9" y="2510.5" class="prt" text-anchor="middle">ASIL D</text>
+<text x="430" y="2510" class="tb">Door interlock</text>
+<text x="384" y="2528" class="ax">Runs on Door system</text>
+<rect x="379" y="2568" width="312" height="162" rx="6" class="verge"/>
+<rect x="468" y="2574" width="132" height="24" rx="3" class="dim"/>
+<text x="534" y="2589.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="385" y="2618" width="225" height="25.6" rx="3" class="dim"/>
+<text x="497.5" y="2634.3" class="dimt" text-anchor="middle">Safety monitor</text>
+<rect x="618" y="2618" width="63" height="25.6" rx="3" class="dim"/>
+<text x="649.5" y="2634.3" class="dimt" text-anchor="middle">Channel</text>
+<rect x="610" y="2574" width="34" height="24" rx="3" class="dim"/>
+<text x="627" y="2589.5" class="dimt" text-anchor="middle">LiDAR</text>
+<rect x="647" y="2574" width="34" height="24" rx="3" class="dim"/>
+<text x="664" y="2589.5" class="dimt" text-anchor="middle">Radar</text>
+<rect x="385" y="2662.8" width="95" height="24" rx="3" class="dim"/>
+<text x="432.5" y="2678.3" class="dimt" text-anchor="middle">Drive-by-wire</text>
+<rect x="486" y="2662.8" width="50" height="24" rx="3" class="dim"/>
+<text x="511" y="2678.3" class="dimt" text-anchor="middle">State</text>
+<rect x="542" y="2662.8" width="45" height="24" rx="3" class="dim"/>
+<text x="564.5" y="2678.3" class="dimt" text-anchor="middle">Brake</text>
+<rect x="593" y="2662.8" width="50" height="24" rx="3" class="hst"/>
+<text x="618" y="2678.3" class="hstt" text-anchor="middle">Doors</text>
+<rect x="385" y="2704.4" width="150" height="17.6" rx="3" class="dim"/>
+<text x="460" y="2716.7" class="dimt" text-anchor="middle">Monitor power</text>
+<rect x="385" y="2574" width="75" height="24" rx="3" class="dim"/>
+<text x="422.5" y="2589.5" class="dimt" text-anchor="middle">Remote ops</text>
+<rect x="385" y="2746" width="300" height="14" rx="3" class="dim"/>
+<text x="535" y="2757" class="dimt" text-anchor="middle">no time budget in WP-S-04</text>
+<text x="385" y="2776" class="ax">Acts by design or as a limit, not a race against a fault</text>
+<text x="384" y="2806" class="s">Reaction: none of its own</text>
+<text x="384" y="2824" class="ax">Reports door state to the monitor and inhibits</text>
+<text x="384" y="2838" class="ax">motion with any door open</text>
+<text x="384" y="2855" class="s">Implements FSR-05.05</text>
+<rect x="716" y="2486" width="330" height="462" rx="8" class="card"/>
+<text x="730" y="2510" class="gid">SM-18</text>
+<rect x="977.8" y="2497" width="54.2" height="19" rx="4" class="pr"/>
+<text x="1004.9" y="2510.5" class="prt" text-anchor="middle">ASIL D</text>
+<text x="776" y="2510" class="tb">Independent monitor sup…</text>
+<text x="730" y="2528" class="ax">Runs on Monitor power supply</text>
+<rect x="725" y="2568" width="312" height="162" rx="6" class="verge"/>
+<rect x="814" y="2574" width="132" height="24" rx="3" class="dim"/>
+<text x="880" y="2589.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="731" y="2618" width="225" height="25.6" rx="3" class="dim"/>
+<text x="843.5" y="2634.3" class="dimt" text-anchor="middle">Safety monitor</text>
+<rect x="964" y="2618" width="63" height="25.6" rx="3" class="dim"/>
+<text x="995.5" y="2634.3" class="dimt" text-anchor="middle">Channel</text>
+<rect x="956" y="2574" width="34" height="24" rx="3" class="dim"/>
+<text x="973" y="2589.5" class="dimt" text-anchor="middle">LiDAR</text>
+<rect x="993" y="2574" width="34" height="24" rx="3" class="dim"/>
+<text x="1010" y="2589.5" class="dimt" text-anchor="middle">Radar</text>
+<rect x="731" y="2662.8" width="95" height="24" rx="3" class="dim"/>
+<text x="778.5" y="2678.3" class="dimt" text-anchor="middle">Drive-by-wire</text>
+<rect x="832" y="2662.8" width="50" height="24" rx="3" class="dim"/>
+<text x="857" y="2678.3" class="dimt" text-anchor="middle">State</text>
+<rect x="888" y="2662.8" width="45" height="24" rx="3" class="dim"/>
+<text x="910.5" y="2678.3" class="dimt" text-anchor="middle">Brake</text>
+<rect x="939" y="2662.8" width="50" height="24" rx="3" class="dim"/>
+<text x="964" y="2678.3" class="dimt" text-anchor="middle">Doors</text>
+<rect x="731" y="2704.4" width="150" height="17.6" rx="3" class="hst"/>
+<text x="806" y="2716.7" class="hstt" text-anchor="middle">Monitor power</text>
+<rect x="731" y="2574" width="75" height="24" rx="3" class="dim"/>
+<text x="768.5" y="2589.5" class="dimt" text-anchor="middle">Remote ops</text>
+<rect x="731" y="2746" width="300" height="14" rx="3" class="dim"/>
+<text x="881" y="2757" class="dimt" text-anchor="middle">no time budget in WP-S-04</text>
+<text x="731" y="2776" class="ax">Acts by design or as a limit, not a race against a fault</text>
+<text x="730" y="2806" class="s">Reaction: none of its own</text>
+<text x="730" y="2824" class="ax">Keeps the monitor, the safety channel and the</text>
+<text x="730" y="2838" class="ax">actuation path powered after any single fault of the</text>
+<text x="730" y="2852" class="ax">Autoware computer's supply</text>
+<text x="730" y="2869" class="s">Implements FSR-07.03</text>
+<rect x="24" y="2964" width="330" height="462" rx="8" class="card"/>
+<text x="38" y="2988" class="gid">SM-19</text>
+<rect x="285.8" y="2975" width="54.2" height="19" rx="4" class="pr"/>
+<text x="312.9" y="2988.5" class="prt" text-anchor="middle">ASIL C</text>
+<text x="84" y="2988" class="tb">Remote command protecti…</text>
+<text x="38" y="3006" class="ax">Runs on Remote operations station</text>
+<rect x="33" y="3046" width="312" height="162" rx="6" class="verge"/>
+<rect x="122" y="3052" width="132" height="24" rx="3" class="dim"/>
+<text x="188" y="3067.5" class="dimt" text-anchor="middle">Autoware</text>
+<rect x="39" y="3096" width="225" height="25.6" rx="3" class="dim"/>
+<text x="151.5" y="3112.3" class="dimt" text-anchor="middle">Safety monitor</text>
+<rect x="272" y="3096" width="63" height="25.6" rx="3" class="dim"/>
+<text x="303.5" y="3112.3" class="dimt" text-anchor="middle">Channel</text>
+<rect x="264" y="3052" width="34" height="24" rx="3" class="dim"/>
+<text x="281" y="3067.5" class="dimt" text-anchor="middle">LiDAR</text>
+<rect x="301" y="3052" width="34" height="24" rx="3" class="dim"/>
+<text x="318" y="3067.5" class="dimt" text-anchor="middle">Radar</text>
+<rect x="39" y="3140.8" width="95" height="24" rx="3" class="dim"/>
+<text x="86.5" y="3156.3" class="dimt" text-anchor="middle">Drive-by-wire</text>
+<rect x="140" y="3140.8" width="50" height="24" rx="3" class="dim"/>
+<text x="165" y="3156.3" class="dimt" text-anchor="middle">State</text>
+<rect x="196" y="3140.8" width="45" height="24" rx="3" class="dim"/>
+<text x="218.5" y="3156.3" class="dimt" text-anchor="middle">Brake</text>
+<rect x="247" y="3140.8" width="50" height="24" rx="3" class="dim"/>
+<text x="272" y="3156.3" class="dimt" text-anchor="middle">Doors</text>
+<rect x="39" y="3182.4" width="150" height="17.6" rx="3" class="dim"/>
+<text x="114" y="3194.7" class="dimt" text-anchor="middle">Monitor power</text>
+<rect x="39" y="3052" width="75" height="24" rx="3" class="hst"/>
+<text x="76.5" y="3067.5" class="hstt" text-anchor="middle">Remote ops</text>
+<rect x="39" y="3224" width="300" height="14" rx="3" class="dim"/>
+<text x="189" y="3235" class="dimt" text-anchor="middle">no time budget in WP-S-04</text>
+<text x="39" y="3254" class="ax">Acts by design or as a limit, not a race against a fault</text>
+<text x="38" y="3284" class="s">Reaction: none of its own</text>
+<text x="38" y="3302" class="ax">Stamps, numbers and signs every remote command and</text>
+<text x="38" y="3316" class="ax">release before it leaves the station (CSR-01)</text>
+<text x="38" y="3333" class="s">Implements FSR-08.03</text>
+<rect x="24" y="3445" width="22" height="14" rx="3" class="hst"/>
+<text x="54" y="3456" class="t">runs on</text>
+<rect x="124" y="3445" width="22" height="14" rx="3" class="use"/>
+<text x="154" y="3456" class="t">uses</text>
+<rect x="224" y="3445" width="22" height="14" class="det"/>
+<text x="254" y="3456" class="t">time to detect</text>
+<rect x="374" y="3445" width="22" height="14" class="rea"/>
+<text x="404" y="3456" class="t">time to react</text>
+<rect x="514" y="3445" width="22" height="14" class="res"/>
+<text x="544" y="3456" class="t">reserve, within the FTTI</text>
+</svg>

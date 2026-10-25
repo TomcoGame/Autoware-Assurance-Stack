@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="512" viewBox="0 0 640 512" role="img" aria-labelledby="t d">
+<title id="t">WP-S-08 Figure 2-1: integration steps</title>
+<desc id="d">Integration steps: IS-1 Safety monitor adds Safety monitor controller, Monitor power supply and runs IT-01, IT-02, IT-03, IT-04, IT-05; IS-2 Safety channel adds Safety channel processor, Safety LiDAR, Safety radar and runs IT-07, IT-08, IT-09, IT-10; IS-3 Item on the bench adds Autoware computer, Remote operations station and runs IT-06, IT-11, IT-12; IS-4 Item in the vehicle adds Drive-by-wire, Vehicle state sensing, Park brake, Door system and runs IT-13, IT-14, IT-15, IT-16, IT-17, IT-18.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg .st { fill:var(--accsoft); stroke:var(--acc); stroke-width:1.4; }
+svg .done { fill:var(--card); stroke:var(--grid); stroke-width:1; }
+</style>
+<rect class="bg" width="640" height="512"/>
+<text x="24" y="32" class="h">How the item is put together and tested</text>
+<text x="24" y="54" class="t">WP-S-08 §2: each step adds components (blue) to what is already</text>
+<text x="24" y="71" class="t">integrated (grey), and runs its cases</text>
+<text x="24" y="96" class="tb">IS-1</text>
+<text x="24" y="112" class="s">Safety monitor</text>
+<rect x="24" y="124" width="139" height="36" rx="4" class="st"/>
+<text x="30" y="139" class="s">Safety monitor</text>
+<text x="30" y="153" class="s">controller</text>
+<rect x="24" y="164" width="139" height="22" rx="4" class="st"/>
+<text x="30" y="179" class="s">Monitor power supply</text>
+<text x="24" y="208" class="s">IT-01, IT-02, IT-03,</text>
+<text x="24" y="222" class="s">IT-04, IT-05</text>
+<text x="175" y="96" class="tb">IS-2</text>
+<text x="175" y="112" class="s">Safety channel</text>
+<rect x="175" y="124" width="139" height="36" rx="4" class="done"/>
+<text x="181" y="139" class="s">Safety monitor</text>
+<text x="181" y="153" class="s">controller</text>
+<rect x="175" y="164" width="139" height="36" rx="4" class="st"/>
+<text x="181" y="179" class="s">Safety channel</text>
+<text x="181" y="193" class="s">processor</text>
+<rect x="175" y="204" width="139" height="22" rx="4" class="st"/>
+<text x="181" y="219" class="s">Safety LiDAR</text>
+<rect x="175" y="230" width="139" height="22" rx="4" class="st"/>
+<text x="181" y="245" class="s">Safety radar</text>
+<rect x="175" y="256" width="139" height="22" rx="4" class="done"/>
+<text x="181" y="271" class="s">Monitor power supply</text>
+<text x="175" y="300" class="s">IT-07, IT-08, IT-09,</text>
+<text x="175" y="314" class="s">IT-10</text>
+<text x="326" y="96" class="tb">IS-3</text>
+<text x="326" y="112" class="s">Item on the bench</text>
+<rect x="326" y="124" width="139" height="22" rx="4" class="st"/>
+<text x="332" y="139" class="s">Autoware computer</text>
+<rect x="326" y="150" width="139" height="36" rx="4" class="done"/>
+<text x="332" y="165" class="s">Safety monitor</text>
+<text x="332" y="179" class="s">controller</text>
+<rect x="326" y="190" width="139" height="36" rx="4" class="done"/>
+<text x="332" y="205" class="s">Safety channel</text>
+<text x="332" y="219" class="s">processor</text>
+<rect x="326" y="230" width="139" height="22" rx="4" class="done"/>
+<text x="332" y="245" class="s">Safety LiDAR</text>
+<rect x="326" y="256" width="139" height="22" rx="4" class="done"/>
+<text x="332" y="271" class="s">Safety radar</text>
+<rect x="326" y="282" width="139" height="22" rx="4" class="done"/>
+<text x="332" y="297" class="s">Monitor power supply</text>
+<rect x="326" y="308" width="139" height="36" rx="4" class="st"/>
+<text x="332" y="323" class="s">Remote operations</text>
+<text x="332" y="337" class="s">station</text>
+<text x="326" y="366" class="s">IT-06, IT-11, IT-12</text>
+<text x="477" y="96" class="tb">IS-4</text>
+<text x="477" y="112" class="s">Item in the vehicle</text>
+<rect x="477" y="124" width="139" height="22" rx="4" class="done"/>
+<text x="483" y="139" class="s">Autoware computer</text>
+<rect x="477" y="150" width="139" height="36" rx="4" class="done"/>
+<text x="483" y="165" class="s">Safety monitor</text>
+<text x="483" y="179" class="s">controller</text>
+<rect x="477" y="190" width="139" height="36" rx="4" class="done"/>
+<text x="483" y="205" class="s">Safety channel</text>
+<text x="483" y="219" class="s">processor</text>
+<rect x="477" y="230" width="139" height="22" rx="4" class="done"/>
+<text x="483" y="245" class="s">Safety LiDAR</text>
+<rect x="477" y="256" width="139" height="22" rx="4" class="done"/>
+<text x="483" y="271" class="s">Safety radar</text>
+<rect x="477" y="282" width="139" height="22" rx="4" class="st"/>
+<text x="483" y="297" class="s">Drive-by-wire</text>
+<rect x="477" y="308" width="139" height="22" rx="4" class="st"/>
+<text x="483" y="323" class="s">Vehicle state sensing</text>
+<rect x="477" y="334" width="139" height="22" rx="4" class="st"/>
+<text x="483" y="349" class="s">Park brake</text>
+<rect x="477" y="360" width="139" height="22" rx="4" class="st"/>
+<text x="483" y="375" class="s">Door system</text>
+<rect x="477" y="386" width="139" height="22" rx="4" class="done"/>
+<text x="483" y="401" class="s">Monitor power supply</text>
+<rect x="477" y="412" width="139" height="36" rx="4" class="done"/>
+<text x="483" y="427" class="s">Remote operations</text>
+<text x="483" y="441" class="s">station</text>
+<text x="477" y="470" class="s">IT-13, IT-14, IT-15,</text>
+<text x="477" y="484" class="s">IT-16, IT-17, IT-18</text>
+</svg>

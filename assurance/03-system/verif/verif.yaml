@@ -1,0 +1,170 @@
+# System verification model for WP-S-09 (ISO 26262-4 §7, ISO 21448 §10). verif.py checks it against the functional
+# safety requirements (WP-C-04), the triggering conditions (WP-C-06), the functional modifications (WP-C-07), the known
+# scenarios (WP-V-03) and the test environments of WP-S-08, and writes the WP-S-09 tables and Figure 2-1.
+# A case covers what it names in `covers` and, through each scenario it runs, the requirements and modifications that
+# scenario's pass criterion refers to and the triggering conditions it varies.
+# A case's environment is one of WP-S-08's; a case that is only a review needs none. `excludes` names elements that do
+# not act in the case (the monitor in shadow mode): their requirements are not verified by it.
+# Every entry is a draft by Claude (I0). No case has been run; nothing here is a result.
+
+methods:
+  requirements: Requirements-based test
+  fault-injection: Fault injection test
+  timing: Timing measurement against the WP-S-04 budget
+  scenario: Scenario test (WP-V-03 logical scenarios, sampled into concrete runs)
+  performance: Statistical performance test (detection and false-detection rates)
+  interface: Interface test
+  formal: Formal check of a rule against its model
+  review: Review or analysis
+  supplier: Review of supplier evidence under the development interface agreement
+
+# What each WP-S-08 environment can run, in the terms of the scenario catalogue (scenarios.yaml `methods`).
+runs:
+  ENV-1: [sim]
+  ENV-2: [xil, bench]
+  ENV-3: [bench]
+  ENV-4: [track]
+
+# A known scenario marked for any of these is run by a case here; one only for bench or drill is an operations
+# exercise of validation (WP-V-07), unless a case chooses to run it.
+must_run: [sim, xil, track]
+
+cases:
+  - id: VC-01
+    name: Nominal driving with the monitor in shadow mode
+    env: ENV-1
+    methods: [scenario, requirements]
+    scenarios: [SC-01, SC-02, SC-03, SC-04, SC-05, SC-06, SC-07, SC-08, SC-09, SC-10, SC-11, SC-12, SC-13, SC-14, SC-18, SC-22, SC-23]
+    excludes: [EL-02, EL-03]
+    covers: [FSR-01.04, FSR-02.05, FSR-04.05, FSR-06.03, FSR-07.05, FM-04, FM-18, FM-12]
+    pass: Autoware alone, with the monitor recording but not acting, meets each scenario's pass criterion over its concrete runs; every run in which the monitor would have intervened is a finding against the nominal function, counted for WP-V-03
+  - id: VC-02
+    name: The integrated item over the known scenarios in simulation
+    env: ENV-1
+    methods: [scenario]
+    scenarios: [SC-01, SC-02, SC-03, SC-04, SC-05, SC-06, SC-07, SC-08, SC-09, SC-10, SC-11, SC-12, SC-13, SC-14, SC-15, SC-18, SC-19, SC-20, SC-22, SC-23]
+    covers: [FM-02]
+    pass: With the monitor acting, every concrete run meets its scenario's pass criterion; the runs VC-01 failed and this case passes show what the safety channel and envelope (FM-02) add. A run counts as evidence only where WP-V-08 §3 has checked the simulator for its attributes (DQ-036 A)
+  - id: VC-03
+    name: The known scenarios on the closed track
+    env: ENV-4
+    methods: [scenario, requirements]
+    scenarios: [SC-01, SC-02, SC-03, SC-04, SC-05, SC-06, SC-07, SC-08, SC-10, SC-11, SC-12, SC-13, SC-15, SC-16, SC-17, SC-18]
+    covers: [FSR-01.04, FSR-02.05, FSR-04.05, FSR-06.03, FSR-07.05, FM-12]
+    pass: Concrete runs at the corners of each scenario's parameter ranges, and the worst runs VC-02 found, meet their pass criteria with soft targets, including on the wet surface of TC-25; each result agrees with its run in VC-02 within the tolerance WP-V-08 §3 sets, or the disagreement is a finding against the simulator
+  - id: VC-04
+    name: The envelope over its whole range on the HIL bench
+    env: ENV-2
+    methods: [requirements, fault-injection, timing]
+    scenarios: []
+    covers: [FSR-01.01, FSR-02.02, FSR-04.02]
+    pass: Commanded and injected acceleration, deceleration and steering over the whole speed range and the corners of P-01, P-05, P-06 and P-10 are bounded as the envelope requires, at speeds and fault combinations the track cannot reach safely
+  - id: VC-05
+    name: Acceleration bounded and propulsion cut in the vehicle
+    env: ENV-4
+    methods: [requirements, fault-injection, timing, scenario]
+    scenarios: [SC-03, SC-16]
+    covers: [FSR-01.01, FSR-01.02]
+    pass: Every injected acceleration command beyond the envelope is bounded (P-01, P-06); an injected propulsion fault that drives acceleration above the bounded command beyond P-11 is detected, propulsion cut and the vehicle braked to standstill within the fault tolerant time interval of SG-01 (WP-S-04)
+  - id: VC-06
+    name: Deceleration and the secondary brake path in the vehicle
+    env: ENV-4
+    methods: [requirements, fault-injection, timing, scenario]
+    scenarios: [SC-01, SC-03, SC-13]
+    covers: [FSR-02.02, FSR-02.03]
+    pass: With Autoware's braking withheld, the monitor restores the safe distance (P-05, P-06) in every run; an injected fault of the primary brake path is detected within P-11 and the secondary path stops the vehicle within the fault tolerant time interval of SG-02 (WP-S-04)
+  - id: VC-07
+    name: Detection performance of the safety channel across the ODD
+    env: ENV-3
+    methods: [performance, fault-injection]
+    scenarios: []
+    covers: [FSR-02.01, FM-10, TC-01, TC-02, TC-03, TC-04, TC-05, TC-24]
+    pass: Reference targets down to the smallest object of P-12 are detected out to its range with the probability WP-V-02 sets, in each light and weather condition of ODD-10 to ODD-13; soiled, wet and blocked sensors and injected sensor faults are reported to the monitor (FM-10)
+  - id: VC-08
+    name: False detections of the safety channel over recorded data
+    env: ENV-1
+    methods: [performance, review]
+    scenarios: []
+    covers: [FSR-03.01, FSR-03.03]
+    pass: Replayed over recorded drives in the ODD of the length WP-V-02 sets, false detections in the swept path stay below P-13 for each sensor and the channel, at the confidence WP-V-02 sets; the review of the intervention logic finds no path to an emergency-level stop that FSR-02.02 does not require
+  - id: VC-09
+    name: Spurious braking with a road user following
+    env: ENV-4
+    methods: [fault-injection, scenario]
+    scenarios: [SC-04]
+    covers: [FSR-03.02]
+    pass: Injected spurious hard braking from Autoware that the safety channel does not confirm is limited to the firm level of P-05; the following vehicle in SC-04 keeps a gap in every run
+  - id: VC-10
+    name: Steering envelope and lateral monitoring in the vehicle
+    env: ENV-4
+    methods: [fault-injection, scenario, timing]
+    scenarios: [SC-08]
+    covers: [FSR-04.01, FSR-04.02, FSR-04.03]
+    pass: Injected steering commands beyond the envelope (P-10) are limited, and those whose swept path comes within P-02 of a road user or kerb are rejected; an injected steering deviation beyond P-11 stops the vehicle in lane within the fault tolerant time interval of SG-04 (WP-S-04)
+  - id: VC-11
+    name: Hold, release and reverse at standstill
+    env: ENV-4
+    methods: [fault-injection, scenario, requirements]
+    scenarios: [SC-15, SC-16]
+    covers: [FSR-05.01, FSR-05.02, FSR-05.03, FSR-07.04]
+    pass: The hold is released only with every condition met, under each injected fault of the release conditions; motion while holding is caught within P-03 and the park brake applied; reverse is refused unless at standstill, requested and with the rear clear; after a minimal risk condition the vehicle stays held until an explicit release
+  - id: VC-12
+    name: Right of way and speed near occlusions
+    env: ENV-4
+    methods: [scenario]
+    scenarios: [SC-02, SC-05, SC-06, SC-07]
+    covers: [FSR-06.01, FSR-06.02]
+    pass: The monitor permits no motion whose swept path crosses a detected road user's predicted path within the bounds of P-07, and limits speed near occlusions so that the vehicle stops for a road user emerging at those bounds, in every run
+  - id: VC-13
+    name: The right-of-way and envelope rules against their formal model
+    methods: [formal, review]
+    scenarios: []
+    covers: [FSR-06.01, FSR-01.01, FSR-04.01]
+    pass: The monitor's rules are shown to keep the vehicle out of a collision it can cause under the assumptions of P-06 and P-07, over the whole state space of the formal model (WP-W-05); each assumption the proof needs is in WP-S-02
+  - id: VC-14
+    name: Loss of Autoware and the minimal risk manoeuvre
+    env: ENV-4
+    methods: [fault-injection, timing, scenario]
+    scenarios: [SC-17, SC-18]
+    covers: [FSR-07.01, FSR-07.02, FSR-07.07, FSR-07.08]
+    pass: Injected computer, network and process faults are detected within the WP-S-04 budget and the vehicle stopped in lane with hazard lights and held; a fault injected inside the monitor silences its outputs; with the safety channel failed, Autoware's comfortable stop is checked and the monitor stops the vehicle when Autoware does not slow as expected
+  - id: VC-15
+    name: Remote driving, bounded and aged
+    env: ENV-2
+    methods: [fault-injection, scenario, interface]
+    scenarios: [SC-20, SC-21]
+    covers: [FSR-08.01, FSR-08.02, FSR-08.03]
+    pass: Delayed, repeated, corrupted and unsigned remote commands are rejected (P-09); accepted remote commands are bounded like Autoware's; every command carries its time stamp, sequence number and integrity check; a release reaches only the vehicle and the moment it was meant for
+  - id: VC-16
+    name: Turn indicators against the manoeuvre
+    env: ENV-2
+    methods: [fault-injection, scenario]
+    scenarios: [SC-22]
+    covers: [FSR-09.01]
+    pass: Every injected indicator command that disagrees with the commanded and achieved steering is caught and hazard lights switched on
+  - id: VC-17
+    name: Vehicle elements against the development interface agreement
+    env: ENV-4
+    methods: [supplier, requirements, fault-injection]
+    scenarios: []
+    covers: [FSR-01.03, FSR-01.05, FSR-02.04, FSR-04.04, FSR-04.06, FSR-05.04, FSR-05.05, FSR-07.03, FSR-07.06]
+    pass: The supplier's evidence for each requirement meets the DIA (DQ-008); on the vehicle, propulsion is cut and the park brake applied on the monitor's command whatever Autoware commands, the secondary brake and steering paths stop the vehicle after an injected single fault, measured state and door state reach the monitor with their fault flags, power faults leave the monitor and actuation powered, and with the monitor silenced the vehicle stops and holds after P-08
+  - id: VC-18
+    name: ODD monitors at the boundary
+    env: ENV-1
+    methods: [scenario, requirements]
+    scenarios: [SC-10, SC-11, SC-14]
+    covers: [FM-14, FSR-07.05]
+    pass: Each ODD monitor (MON-01 to MON-04) detects its condition as the scenario crosses the ODD boundary and starts its minimal risk manoeuvre before the boundary the scenario sweeps to is reached
+  - id: VC-19
+    name: Review of the monitor's restart and its own diagnostics
+    methods: [review]
+    scenarios: []
+    covers: [FSR-07.04, FSR-07.07]
+    pass: No path in the monitor's logic resumes motion after a minimal risk condition without an explicit release; the diagnostic coverage of the monitor's own faults reaches what WP-H-04 needs for ASIL D
+  - id: VC-20
+    name: Modifications that are verified by review
+    methods: [review]
+    scenarios: []
+    covers: [FM-01, FM-08]
+    pass: The training and test data cover the input space of WP-C-02 §6 with the classes FM-01 names, and the gaps WP-C-11 found are filled; route planning prefers a route without unprotected left turns across more than one oncoming lane or multi-lane roundabouts wherever one of similar length exists (FM-08)

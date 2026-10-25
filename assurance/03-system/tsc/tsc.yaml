@@ -6,14 +6,15 @@
 # `host` is the component a mechanism runs on, `uses` those it depends on.
 # `box` places a component in Figure 2-1; `x` places a link's arrow (`y` for a horizontal one).
 # Every entry is a draft by Claude (I0). `pending` names a decision an entry waits on; `decomposed` records an ASIL
-# decomposition the lead has decided, with its partner component and the redundancy that must show their independence.
+# decomposition the lead has decided, with its partner component and the redundancy that must show their independence;
+# `also` an ASIL the component carries beyond the decomposed one, for requirements the decomposition does not split.
 
 components:
   - {id: CMP-01, name: Autoware computer, element: EL-01, box: [190, 96, 264, 60]}
   - {id: CMP-02, name: Safety monitor controller, element: EL-02, box: [24, 206, 450, 64]}
   - {id: CMP-03, name: Safety channel processor, element: EL-03, box: [490, 206, 126, 64]}
-  - {id: CMP-04, name: Safety LiDAR, element: EL-03, box: [474, 96, 68, 60], decomposed: {asil: B(D), with: CMP-05, decision: DQ-031}}
-  - {id: CMP-05, name: Safety radar, element: EL-03, box: [548, 96, 68, 60], decomposed: {asil: B(D), with: CMP-04, decision: DQ-031}}
+  - {id: CMP-04, name: Safety LiDAR, element: EL-03, box: [474, 96, 68, 60], decomposed: {asil: B(D), with: CMP-05, decision: DQ-031}, also: {asil: C, for: false detections, decision: DQ-035}}
+  - {id: CMP-05, name: Safety radar, element: EL-03, box: [548, 96, 68, 60], decomposed: {asil: B(D), with: CMP-04, decision: DQ-031}, also: {asil: C, for: false detections, decision: DQ-035}}
   - {id: CMP-06, name: Drive-by-wire, element: EL-04, box: [24, 318, 190, 60]}
   - {id: CMP-07, name: Vehicle state sensing, element: EL-06, box: [226, 318, 100, 60]}
   - {id: CMP-08, name: Park brake, element: EL-05, box: [338, 318, 90, 60]}

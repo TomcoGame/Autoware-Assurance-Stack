@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-M-00 Work product register |
 | Standard reference | UL 4600 §5 (safety case work products); ISO 26262-2:2018 §6 (safety plan, work product list); ISO/SAE 21434:2021 §6; ASPICE 4.0 MAN.3 (define work products), SUP.8 (configuration items) |
-| Version | 0.17 (WP-S-04 drafted; 2026-10-23). 0.16 (WP-S-03 drafted; 2026-10-23). 0.15 (WP-C-08 drafted; 2026-10-23). 0.14 (WP-C-11 drafted; 2026-10-23). 0.13 (WP-C-10 drafted; 2026-10-23). 0.12 (WP-C-09 drafted; 2026-10-23). 0.11 (WP-A-05 drafted; 2026-10-23). 0.10 (WP-C-07 drafted; 2026-10-23). 0.9 (WP-C-06 drafted; 2026-10-23). 0.8 (WP-C-12 drafted; 2026-10-23). 0.7 (WP-C-05 drafted; 2026-10-23). 0.6 (WP-C-04 drafted; 2026-10-23). 0.5 (WP-C-03 drafted; 2026-10-23). 0.4 (WP-C-02 drafted; 2026-10-23). 0.3 (WP-C-01 drafted; 2026-10-23). 0.2 (G2 exit criterion adds the vehicle choice, deferred to G2 by DQ-003 C; 2026-10-23). 0.1 (first issue: every work product of the assurance path, its clauses, gate and status; 2026-10-22) |
+| Version | 0.23 (WP-S-09 drafted; 2026-10-24). 0.22 (WP-S-08 drafted; 2026-10-24). 0.21 (WP-S-07 drafted; 2026-10-24). 0.20 (WP-S-05 drafted; 2026-10-24). 0.19 (WP-V-03 and WP-V-08 drafted; 2026-10-24). 0.18 (WP-S-02 drafted; 2026-10-24). 0.17 (WP-S-04 drafted; 2026-10-23). 0.16 (WP-S-03 drafted; 2026-10-23). 0.15 (WP-C-08 drafted; 2026-10-23). 0.14 (WP-C-11 drafted; 2026-10-23). 0.13 (WP-C-10 drafted; 2026-10-23). 0.12 (WP-C-09 drafted; 2026-10-23). 0.11 (WP-A-05 drafted; 2026-10-23). 0.10 (WP-C-07 drafted; 2026-10-23). 0.9 (WP-C-06 drafted; 2026-10-23). 0.8 (WP-C-12 drafted; 2026-10-23). 0.7 (WP-C-05 drafted; 2026-10-23). 0.6 (WP-C-04 drafted; 2026-10-23). 0.5 (WP-C-03 drafted; 2026-10-23). 0.4 (WP-C-02 drafted; 2026-10-23). 0.3 (WP-C-01 drafted; 2026-10-23). 0.2 (G2 exit criterion adds the vehicle choice, deferred to G2 by DQ-003 C; 2026-10-23). 0.1 (first issue: every work product of the assurance path, its clauses, gate and status; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | All |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -82,14 +82,14 @@ Clause columns cite the editions in [assurance/README.md](../README.md#standards
 | ID | Work product | UL 4600 | ISO 26262 | ISO 21448 | ISO/SAE 21434 | ISO/PAS 8800 | ASPICE | Gate | Status |
 |---|---|---|---|---|---|---|---|---|---|
 | [WP-S-01](../03-system/WP-S-01-system-requirements.md) | System requirements specification | §9 | | §5 | | | SYS.2 | G2 | S |
-| [WP-S-02](../03-system/WP-S-02-technical-safety-requirements.md) | Technical safety requirements specification | §10 | 4 §6 | | | | SYS.2 | G2 | S |
+| [WP-S-02](../03-system/WP-S-02-technical-safety-requirements.md) | Technical safety requirements specification | §10 | 4 §6 | | | | SYS.2 | G2 | D |
 | [WP-S-03](../03-system/WP-S-03-technical-safety-concept-architecture.md) | Technical safety concept and system architectural design | §10 | 4 §6 | §8 | | AI architecture measures | SYS.3 | G2 | D |
 | [WP-S-04](../03-system/WP-S-04-timing-ftti-budget.md) | Timing: FTTI, detection and reaction budget, fallback timing | §10 | 4 §6 | | | | SYS.3 | G2 | D |
-| [WP-S-05](../03-system/WP-S-05-hsi-specification.md) | Hardware-software interface, including the drive-by-wire interface | §10 | 4 §6 | | | | SYS.3 | G2 | S |
+| [WP-S-05](../03-system/WP-S-05-hsi-specification.md) | Hardware-software interface, including the drive-by-wire interface | §10 | 4 §6 | | | | SYS.3 | G2 | D |
 | [WP-S-06](../03-system/WP-S-06-requirements-production-operation.md) | Requirements for production, operation, service and decommissioning | §14, §15 | 4 §6 | §13 | §10 | | SYS.2 | G2 | S |
-| [WP-S-07](../03-system/WP-S-07-cybersecurity-requirements-architecture.md) | Cybersecurity requirements and architectural design | §11 | | | §10 | | SEC.1, SYS.3 | G2 | S |
-| [WP-S-08](../03-system/WP-S-08-system-integration-test.md) | System integration and test strategy, specification and report | §12 | 4 §7 | | | | SYS.4 | G4 | S |
-| [WP-S-09](../03-system/WP-S-09-system-verification.md) | System verification specification and report | §12 | 4 §7 | §10 | | | SYS.5 | G4 | S |
+| [WP-S-07](../03-system/WP-S-07-cybersecurity-requirements-architecture.md) | Cybersecurity requirements and architectural design | §11 | | | §10 | | SEC.1, SYS.3 | G2 | D |
+| [WP-S-08](../03-system/WP-S-08-system-integration-test.md) | System integration and test strategy, specification and report | §12 | 4 §7 | | | | SYS.4 | G4 | D |
+| [WP-S-09](../03-system/WP-S-09-system-verification.md) | System verification specification and report | §12 | 4 §7 | §10 | | | SYS.5 | G4 | D |
 
 ### 3.4 Hardware level (`04-hardware/`)
 
@@ -126,12 +126,12 @@ Clause columns cite the editions in [assurance/README.md](../README.md#standards
 |---|---|---|---|---|---|---|---|---|---|
 | [WP-V-01](../06-validation/WP-V-01-safety-validation.md) | Safety validation plan, specification and report | §12 | 4 §8 | | | | VAL.1 | G5 | S |
 | [WP-V-02](../06-validation/WP-V-02-sotif-vv-strategy.md) | SOTIF verification and validation strategy, validation targets | §12 | | §9 | | AI V&V | VAL.1 | G2 | S |
-| [WP-V-03](../06-validation/WP-V-03-sotif-known-scenarios.md) | Evaluation of known hazardous scenarios | §12 | | §10 | | | SYS.5, VAL.1 | G4 | S |
+| [WP-V-03](../06-validation/WP-V-03-sotif-known-scenarios.md) | Evaluation of known hazardous scenarios | §12 | | §10 | | | SYS.5, VAL.1 | G4 | D |
 | [WP-V-04](../06-validation/WP-V-04-sotif-unknown-scenarios.md) | Evaluation of unknown hazardous scenarios | §12 | | §11 | | | VAL.1 | G5 | S |
 | [WP-V-05](../06-validation/WP-V-05-fault-injection.md) | Fault injection test specification and report | §12 | 4 §7, 5 §10, 6 §10–11 | | | | SYS.4, SWE.6 | G4 | S |
 | [WP-V-06](../06-validation/WP-V-06-cybersecurity-validation.md) | Cybersecurity validation and penetration testing | §11 | | | §11 | | SEC.4 | G5 | S |
 | [WP-V-07](../06-validation/WP-V-07-test-operations.md) | Test operations: safety drivers, remote supervisors, test sites | §12, §14 | 4 §8 | §10–11 | | | VAL.1 | G1 | S |
-| [WP-V-08](../06-validation/WP-V-08-simulation-credibility.md) | Simulation credibility and scenario coverage | §12, §13 | 8 §11 | §9 | | AI V&V | VAL.1 | G2 | S |
+| [WP-V-08](../06-validation/WP-V-08-simulation-credibility.md) | Simulation credibility and scenario coverage | §12, §13 | 8 §11 | §9 | | AI V&V | VAL.1 | G2 | D |
 
 ### 3.7 Supporting processes (`07-supporting/`)
 

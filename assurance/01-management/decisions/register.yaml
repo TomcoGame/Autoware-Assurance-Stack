@@ -1031,3 +1031,219 @@
   status: applied
   answer: {choice: A, via: inbox, at: 2026-10-23, by: u_X1u501HWo3YGVNlzcvkvmg}
   applied: {ref: "#29", record: WP-S-04 v0.3 §2; WP-C-07 FM-11, at: 2026-10-23}
+
+- id: DQ-033
+  question: How hard may the safety monitor brake when its own sensors cannot see the reason?
+  context: >-
+    You decided the monitor softens hard braking from Autoware that its sensors cannot match to an object, down to a
+    firm level (DQ-019 A). The same level is how hard the monitor's own stop brakes (MRM-4). **A low level is kinder
+    to the car behind; a high level lets more of Autoware's braking through when only Autoware sees the danger.**
+    From 50 km/h a stop takes 4.6 s and 32 m at 3 m/s², 6.9 s and 48 m at 2 m/s², 3.5 s and 24 m at 4 m/s².
+  reversibility: revisit
+  blocks: WP-S-02 P-05, TSR-04.01, TSR-06.01, TSR-13.01; MRM-4 stop time in WP-S-04 §5 and WP-C-12
+  gate: G2
+  asked: 2026-10-24
+  batch: 11
+  options:
+    - key: A
+      recommended: true
+      title: 3 m/s², firm braking
+      detail: >-
+        Above Autoware's own emergency stop (2.5 m/s²), so that stop always passes unchanged; well below full braking,
+        so a following driver can react. Cost: Autoware's harder braking for something only it sees is held to
+        3 m/s², and the monitor's sensors must carry the collision goal on their own, which they must anyway.
+    - key: B
+      title: 2 m/s², gentle braking
+      detail: >-
+        Kindest to a following vehicle or motorcycle. Cost: Autoware's emergency stop is softened too when the
+        monitor cannot confirm it, and the monitor's own stop takes 2.3 s longer from 50 km/h.
+    - key: C
+      title: 4 m/s², hard braking
+      detail: >-
+        More of Autoware's braking passes and the monitor's stop is shortest. Cost: a spurious stop at 4 m/s² is more
+        likely to be hit from behind, which is the hazard SG-03 (ASIL C) guards against.
+  sources: [DQ-019, FSR-03.02, WP-C-12 §3.2, WP-S-04 §5, WP-S-02 §2.1]
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-24, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#32", record: WP-S-02 v0.3 P-05; FSR-03.02 (WP-C-04 v0.6); MRM-4 (WP-C-12 v0.4); WP-S-04 v0.4 SG-03, at: 2026-10-24}
+
+- id: DQ-034
+  question: How cautious should the safety monitor's assumptions about other road users be?
+  context: >-
+    The monitor keeps a safe distance and checks crossing paths using stated bounds on what others can do: how hard
+    the vehicle ahead may brake, how fast a pedestrian or cyclist may come out from behind a parked car (DQ-017 A).
+    **These bounds decide how close the vehicle follows and how slowly it passes parked cars; anything outside them is
+    not covered by the rated argument.** Figures below assume the vehicle responds within 0.5 s and can always brake
+    at 4 m/s², to be confirmed with the vehicle (DQ-008).
+  reversibility: revisit
+  blocks: WP-S-02 P-06, P-07, TSR-01.01, TSR-01.03 to TSR-01.05, TSR-12.01; Autoware's following distance
+  gate: G2
+  asked: 2026-10-24
+  batch: 11
+  figure: figures/dq-034.svg
+  caption: Following distance the monitor keeps behind a vehicle at the same speed, for each option. Higher is more cautious.
+  options:
+    - key: A
+      recommended: true
+      title: Cautious, the vehicle ahead may brake as hard as a car can
+      detail: >-
+        The vehicle ahead may brake at 8 m/s²; pedestrians may run at 3 m/s and cyclists ride at 8 m/s out of a blind
+        spot. At 50 km/h the monitor keeps 19.5 m (1.4 s). Cost: Autoware must follow at least that far back, and
+        passes parked cars more slowly; other drivers may cut in.
+    - key: B
+      title: Typical, the vehicle ahead brakes firmly at most
+      detail: >-
+        The vehicle ahead may brake at 6 m/s²; pedestrians walk briskly at 2 m/s, cyclists ride at 6 m/s. At 50 km/h
+        the monitor keeps 15.5 m (1.1 s). Cost: a vehicle ahead in a real emergency stop, or a running child, is
+        outside the rated argument and rests on Autoware alone.
+    - key: C
+      title: Minimal, the vehicle ahead brakes no harder than ours
+      detail: >-
+        At 50 km/h the monitor keeps 7.4 m (0.5 s). Cost: the monitor protects only against our own response time; a
+        vehicle ahead braking harder than ours can be hit, and the rated argument barely covers following.
+  sources: [FSR-01.01, FSR-02.02, FSR-06.01, FSR-06.02, DQ-017, WP-S-02 §2.1, WP-S-04 §2]
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-24, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#32", record: "WP-S-02 v0.3 P-06, P-07", at: 2026-10-24}
+
+- id: DQ-035
+  question: Must each safety sensor also avoid false alarms to ASIL C, or should the monitor brake hard only when both agree?
+  context: >-
+    You split the safety channel's detection across LiDAR and radar, each to ASIL B(D), so that a road user seen by
+    either counts (DQ-031 A). The other side of that choice: **a false detection by either sensor can make the monitor
+    brake hard, which is the ASIL C hazard of unexpected braking (SG-03).** Decomposition does not split that
+    requirement, so each sensor must keep its own false alarms rare at ASIL C.
+  reversibility: hard
+  blocks: WP-S-02 TSR-09.04, TSR-09.05; ASIL of CMP-04 and CMP-05 in WP-S-03; sensor choice (WP-H-02)
+  gate: G2
+  asked: 2026-10-24
+  batch: 11
+  options:
+    - key: A
+      recommended: true
+      title: Each sensor avoids false alarms to ASIL C
+      detail: >-
+        Detection stays as decided: either sensor is enough. Cost: each sensor and its processing is developed to
+        ASIL C for false alarms as well as B(D) for detection, more than the decomposition alone suggested.
+    - key: B
+      title: Brake hard only when both sensors agree; one sensor alone brakes firmly
+      detail: >-
+        A false alarm from one sensor causes only firm braking (DQ-033). Cost: a road user only one sensor sees gets
+        firm braking, not emergency braking, which weakens the collision goal (SG-02, ASIL D) and needs its own
+        analysis.
+    - key: C
+      title: Decide when the sensors are chosen
+      detail: >-
+        Wait for the candidate sensors' false-alarm data (DQ-008). Cost: the sensor requirements of WP-S-02 stay
+        provisional, and the sensor choice cannot use them.
+  sources: [DQ-031, FSR-03.01, FSR-02.01, WP-S-03 RD-02, ISO 26262-9 §5, WP-S-02 §2]
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-24, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#32", record: "WP-S-02 v0.3 TSR-09.04, TSR-09.05; WP-S-03 v0.4 CMP-04, CMP-05", at: 2026-10-24}
+
+- id: DQ-036
+  question: How much may simulation count as evidence that the vehicle is safe?
+  context: >-
+    The scenario catalogue (WP-V-03) can be run far more often in simulation than on a track or road, and some of its
+    scenarios (a red-light runner, an emergency vehicle, a child stepping out) are hard to stage safely in reality.
+    But a simulator can be wrong in ways that hide a failure, and an assessor will ask why its results should be
+    believed (UL 4600 §13). **This sets how many track and road miles the validation needs, and how much the
+    simulators must be qualified.**
+  reversibility: revisit
+  blocks: WP-V-08 §3 and §5, the tool confidence of SIM-02 and SIM-03 in WP-P-07, the validation targets of WP-V-02
+  gate: G2
+  asked: 2026-10-24
+  batch: 11
+  options:
+    - key: A
+      recommended: true
+      title: Counts where it has been checked against the real vehicle
+      detail: >-
+        A simulator's result counts for a scenario only where its corners have been repeated on the track, or its
+        sensor data compared with recordings, and agreed. Elsewhere simulation is for exploring. Cost: track time for
+        every logical scenario and recordings in every sensor condition; the simulators need qualification at TCL2.
+    - key: B
+      title: Never counts; only for exploring and regression
+      detail: >-
+        All validation credit comes from track tests and road driving. Simplest to argue. Cost: far more road miles
+        and staged tests; the rare and dangerous scenarios get little evidence, because they cannot be staged often.
+    - key: C
+      title: Counts everywhere once the simulator is qualified
+      detail: >-
+        Qualify each simulator once (TCL3) and accept its results across the ODD without checking each scenario.
+        Cheapest in track time. Cost: an assessor is unlikely to accept it for sensor-level effects such as rain and
+        glare, which simulators reproduce least well; a mistake in the simulator spreads to every result.
+  sources: [WP-V-03 §3, WP-V-08 §3 and §5, WP-P-07 §4, WP-V-02, UL 4600 §12 and §13, ISO 26262-8 §11, ISO 21448 §9]
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-24, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#36", record: "WP-V-08 v0.3 §1, §3, §5; WP-V-03 v0.3; WP-P-07 v0.3 §4", at: 2026-10-24}
+
+- id: DQ-037
+  question: Should the vehicle have any short-range wireless, such as Wi-Fi or Bluetooth?
+  context: >-
+    The design so far reaches the vehicle only through its two cellular links, its sensors, the passenger interface
+    and service ports behind a sealed housing. Wi-Fi or Bluetooth would let a passenger's phone talk to the vehicle
+    directly, or give passengers internet access. **Every radio added is a way in for an attacker standing next to
+    the vehicle,** and the threat analysis (WP-C-09) has not covered one.
+  reversibility: revisit
+  blocks: WP-S-07 EX-07, the threat analysis of any radio added (WP-C-09), the vehicle and its options (DQ-008)
+  gate: G2
+  asked: 2026-10-24
+  batch: 11
+  options:
+    - key: A
+      recommended: true
+      title: None; passengers use the app through the backend
+      detail: >-
+        The phone talks to the fleet backend over its own connection, and the backend to the vehicle over the
+        signed cellular path. Cost: no direct phone-to-vehicle features (for example unlocking by proximity), and no
+        passenger Wi-Fi.
+    - key: B
+      title: Bluetooth Low Energy to identify the passenger at the door
+      detail: >-
+        The passenger's phone proves the booking at the vehicle. Cost: a radio reachable by anyone nearby, its own
+        threat analysis, and its stack kept out of the safety and vehicle zones.
+    - key: C
+      title: Passenger Wi-Fi hotspot
+      detail: >-
+        Internet access for passengers. Cost: the largest exposure of the three; it must be a separate network with no
+        path to the Autoware computer, shown by test.
+  sources: [WP-S-07 §4, WP-C-09, WP-C-10, CSR-12, ISO/SAE 21434 §15]
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-24, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#36", record: "WP-S-07 v0.3 §4, EX-07", at: 2026-10-24}
+
+- id: DQ-038
+  question: Up to what speed may faults be injected on the real vehicle on a closed track?
+  context: >-
+    Integration tests cut propulsion, fail a brake path, silence the safety monitor and send unsafe steering, to show
+    the vehicle stops in time. These faults matter most at the top of the speed range, 50 km/h, where stopping takes
+    longest. **Injecting them on the real vehicle puts the test crew and the vehicle at risk; not injecting them
+    leaves the vehicle's own reaction shown only on the bench.**
+  reversibility: revisit
+  blocks: WP-S-08 ENV-4 and IT-13, IT-14, IT-17; the test safety plan (WP-V-07); track booking
+  gate: G3
+  asked: 2026-10-24
+  batch: 12
+  options:
+    - key: A
+      recommended: true
+      title: Up to 50 km/h, the full speed range, on a closed track
+      detail: >-
+        Every fault is shown on the real vehicle where it is worst, with an independent stop the test crew holds, no
+        one inside the run-off area, and a test safety plan reviewed before the first run. Cost: track time, the stop
+        system, and the residual risk to the vehicle.
+    - key: B
+      title: Up to 30 km/h on the track; faster only on the bench
+      detail: >-
+        Lower energy if a test goes wrong. Cost: the vehicle's reaction at the top speeds rests on the bench and on
+        extrapolation, which an assessor may not accept for the brakes and steering.
+    - key: C
+      title: Bench only, no fault injection on the vehicle
+      detail: >-
+        No risk on the track. Cost: the vehicle's own stop when the monitor falls silent (MRM-5) and the secondary
+        brake path are never shown on the real vehicle; the supplier's evidence must carry them alone.
+  sources: [WP-S-08 §3, ISO 26262-4 §7, WP-S-04 §6, WP-V-07, UL 4600 §12]
+  status: applied
+  answer: {choice: A, via: inbox, at: 2026-10-24, by: u_X1u501HWo3YGVNlzcvkvmg}
+  applied: {ref: "#38", record: "WP-S-08 v0.3 §3, ENV-4, OI-1", at: 2026-10-24}

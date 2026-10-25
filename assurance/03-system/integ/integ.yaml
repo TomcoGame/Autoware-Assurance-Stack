@@ -1,0 +1,184 @@
+# System integration test model for WP-S-08 (ISO 26262-4 §7). integ.py checks it against the technical safety
+# requirements (WP-S-02), the hardware-software interface (WP-S-05), the cybersecurity requirements (WP-S-07) and the
+# timing budget (WP-S-04): the steps integrate every component and exercise every interface; every requirement and
+# signal is covered by a test case run at a step where all it needs is integrated; a time-critical requirement is
+# tested for time, and a fault-detecting one by fault injection. It writes the WP-S-08 tables and Figure 2-1.
+# Every entry is a draft by Claude (I0). No test has been run; nothing here is a result.
+
+environments:
+  - id: ENV-1
+    name: Software in the loop
+    what: Autoware and the monitor's software on a workstation, with scenario_simulator_v2 (SIM-02) for the scene and a vehicle model; for development and regression, evidence only where WP-V-08 §3 has checked it (DQ-036 A)
+  - id: ENV-2
+    name: Hardware in the loop
+    what: The monitor's controller, the safety channel processor and the Autoware computer on a bench, with the vehicle simulated behind real bus interfaces, signal-level fault injection, and time stamps at every interface
+  - id: ENV-3
+    name: Sensor bench and closed track
+    what: The safety LiDAR and radar with reference targets at measured positions, in the light and weather the ODD allows, indoors and on a closed track
+  - id: ENV-4
+    name: Vehicle on a closed track
+    what: The item in the chosen vehicle on a closed track, with an independent stop the test crew holds, no one in the run-off area, measuring equipment for speed, acceleration, brake pressure and steering, and fault injection at the bus and the actuators over the full speed range up to 50 km/h (DQ-038 A), under a test safety plan reviewed before the first run (WP-V-07)
+
+# Integration steps, in order. Each adds components and the interfaces of WP-S-05 between them.
+steps:
+  - id: IS-1
+    name: Safety monitor
+    adds: [CMP-02, CMP-10]
+    interfaces: []
+    envs: [ENV-1, ENV-2]
+    note: The monitor's software on its controller and supply; every other input simulated at the controller's pins
+  - id: IS-2
+    name: Safety channel
+    adds: [CMP-03, CMP-04, CMP-05]
+    interfaces: [IF-03, IF-04, IF-05]
+    envs: [ENV-2, ENV-3]
+    note: The safety channel processor with its sensors, reporting to the monitor of IS-1
+  - id: IS-3
+    name: Item on the bench
+    adds: [CMP-01, CMP-11]
+    interfaces: [IF-01, IF-02]
+    envs: [ENV-1, ENV-2]
+    note: The Autoware computer and a remote operations station join the monitor and the channel; the vehicle is still simulated behind its real bus interfaces
+  - id: IS-4
+    name: Item in the vehicle
+    adds: [CMP-06, CMP-07, CMP-08, CMP-09]
+    interfaces: [IF-06, IF-07, IF-08, IF-09]
+    envs: [ENV-4]
+    note: The item in the chosen vehicle, with its drive-by-wire, vehicle state, park brake and doors (DQ-008)
+
+methods:
+  requirements: Requirements-based test
+  fault-injection: Fault injection test
+  interface: Interface test (content, range, timing, protection)
+  timing: Timing measurement against the WP-S-04 budget
+  back-to-back: Back-to-back test against a model of the requirement
+  stress: Stress and load test
+  security: Security test (fuzzing, penetration, attack)
+
+cases:
+  - id: IT-01
+    name: Monitor self-diagnostics, secure boot and fail-silent output
+    step: IS-1
+    env: ENV-2
+    methods: [fault-injection, timing, security]
+    covers: [TSR-08.01, TSR-08.02, CSTR-01.03, CSTR-05.01, CSTR-05.05, CSTR-05.07]
+    pass: Every injected processor, memory, clock and boot fault is detected and the outputs fall silent; keys cannot be read out; unsigned, altered and older images do not run
+  - id: IT-02
+    name: Monitor supply after a fault of the Autoware computer's supply
+    step: IS-1
+    env: ENV-2
+    methods: [fault-injection]
+    covers: [TSR-18.01]
+    pass: The monitor, the channel and the actuation path stay powered through every single supply fault, for at least the time of MRM-4
+  - id: IT-03
+    name: Longitudinal envelope against its model
+    step: IS-1
+    env: ENV-2
+    methods: [requirements, back-to-back, fault-injection, timing]
+    covers: [TSR-01.01, TSR-01.02, TSR-01.03, TSR-01.04, TSR-01.05, TSR-04.01]
+    pass: Commands and limits agree with the formal model of the envelope (P-01, P-05 to P-07) over the speed range; injected unsafe commands are bounded
+  - id: IT-04
+    name: Lateral envelope against its model
+    step: IS-1
+    env: ENV-2
+    methods: [requirements, back-to-back, fault-injection, timing]
+    covers: [TSR-02.01, TSR-02.02]
+    pass: Steering limits and rejections agree with the model of the envelope (P-02, P-10); injected unsafe steering is bounded or rejected
+  - id: IT-05
+    name: Stop, hold, release and indicator logic
+    step: IS-1
+    env: ENV-2
+    methods: [requirements, fault-injection, timing, security]
+    covers: [TSR-06.01, TSR-06.02, TSR-06.03, TSR-06.04, TSR-06.05, TSR-07.01, CSTR-03.03]
+    pass: The hold is released only with every condition met; motion while holding is caught within the creep distance (P-03); mismatched indicators switch to hazard lights; a local release needs valid credentials
+  - id: IT-06
+    name: Command streams from Autoware and remote operations
+    step: IS-3
+    env: ENV-2
+    methods: [interface, fault-injection, timing, security]
+    covers: [TSR-05.01, TSR-05.02, TSR-05.03, TSR-01.06, TSR-19.01, SIG-01, SIG-02, SIG-03, SIG-04, SIG-05, CSTR-01.01, CSTR-01.02, CSTR-01.04]
+    pass: Lost, late, repeated, corrupted, unsigned, misaddressed and aged messages are rejected and start MRM-4; remote commands are bounded like Autoware's; the link accepts nothing but SIG-03 to SIG-05
+  - id: IT-07
+    name: Safety channel detection
+    step: IS-2
+    env: ENV-3
+    methods: [requirements, interface, timing]
+    covers: [TSR-09.01, TSR-09.02, TSR-09.03, TSR-09.06, TSR-04.02, SIG-07, SIG-08, SIG-09]
+    pass: Every reference target of the smallest size (P-12) is reported out to its range, with position and velocity, within the budget, in each light and weather condition of the ODD
+  - id: IT-08
+    name: Safety channel false detections, per sensor
+    step: IS-2
+    env: ENV-3
+    methods: [requirements, stress]
+    covers: [TSR-09.04, TSR-09.05, TSR-09.06]
+    pass: The false-detection rate of each sensor and of the channel stays below its share of P-13 over the replayed and recorded data
+  - id: IT-09
+    name: Safety channel diagnostics and secure boot
+    step: IS-2
+    env: ENV-2
+    methods: [fault-injection, timing, security]
+    covers: [TSR-10.01, TSR-09.07, SIG-10, CSTR-05.02]
+    pass: Every injected sensor and processor fault is reported in SIG-10, or SIG-10 stops, within the budget; unsigned images do not run
+  - id: IT-10
+    name: Physical attacks on the safety sensors
+    step: IS-2
+    env: ENV-3
+    methods: [security]
+    covers: [CSTR-07.01]
+    pass: Spoofed, jammed and relayed returns from the attack list do not create or hide road users beyond the rates of IT-07 and IT-08, or the sensor is reported degraded
+  - id: IT-11
+    name: Autoware's stop when the safety channel fails
+    step: IS-3
+    env: ENV-2
+    methods: [fault-injection, interface, timing]
+    covers: [TSR-03.04, SIG-06]
+    pass: With the channel failed, Autoware is told and stops comfortably; if it does not slow as expected, the monitor stops the vehicle within the budget
+  - id: IT-12
+    name: Autoware computer's cybersecurity functions
+    step: IS-3
+    env: ENV-2
+    methods: [security, requirements]
+    covers: [CSTR-03.01, CSTR-03.02, CSTR-05.03, CSTR-05.04, CSTR-07.02, CSTR-08.01, CSTR-09.01, CSTR-11.01, CSTR-12.01]
+    pass: Each requirement holds under its attack or fault (link loss, unsigned package, mixed versions, spoofed GNSS, siren without lights, unsigned route change, fuzzed passenger commands)
+  - id: IT-13
+    name: Bounded command and the vehicle's own stop
+    step: IS-4
+    env: ENV-4
+    methods: [interface, fault-injection, timing]
+    covers: [TSR-11.01, TSR-03.05, TSR-12.01, TSR-13.01, TSR-14.01, SIG-11, SIG-12, SIG-13, CSTR-05.06]
+    pass: Propulsion cut and the switch to the secondary brake path act within the reaction budget; with the monitor silenced the vehicle stops on its own after P-08; no message from the Autoware computer reaches the by-wire bus
+  - id: IT-14
+    name: Achieved against commanded on the vehicle
+    step: IS-4
+    env: ENV-4
+    methods: [fault-injection, timing, interface]
+    covers: [TSR-03.01, TSR-03.02, TSR-03.03, TSR-15.01, TSR-15.02, TSR-01.07, SIG-14, SIG-15]
+    pass: Injected propulsion, braking and steering deviations beyond P-11 are detected within the budget; vehicle state arrives on its own path with its fault flags
+  - id: IT-15
+    name: Park brake and doors
+    step: IS-4
+    env: ENV-4
+    methods: [requirements, fault-injection, interface]
+    covers: [TSR-16.01, TSR-17.01, SIG-17, SIG-18, SIG-19, CSTR-12.02]
+    pass: The park brake holds on the steepest gradient of the geofence; the vehicle does not move with any door open, whatever is commanded
+  - id: IT-16
+    name: Collision signal
+    step: IS-4
+    env: ENV-4
+    methods: [interface]
+    covers: [SIG-16]
+    pass: A collision flag from the vehicle reaches the monitor and starts TR-15
+  - id: IT-17
+    name: Minimal risk manoeuvre and the sensing-to-actuation chain on the track
+    step: IS-4
+    env: ENV-4
+    methods: [timing, requirements]
+    covers: [TSR-06.01]
+    pass: MRM-4 brings the vehicle to a held stop at the firm level P-05 from the speed range; the measured chain from a target appearing to brake pressure stays within the response time of P-06 (WP-S-04 §3)
+  - id: IT-18
+    name: Remote driving over the real cellular links
+    step: IS-4
+    env: ENV-4
+    methods: [timing, interface]
+    covers: [TSR-05.02, SIG-01, CSTR-03.01]
+    pass: The age of remote commands at the monitor stays within P-09 over both links, in the worst hours measured in the geofence (WP-S-04 §6); older commands stop the vehicle

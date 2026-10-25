@@ -14,7 +14,9 @@ The model is refused when:
 - a rated FSR (any ASIL but QM) is implemented by no mechanism;
 - a component's derived ASIL exceeds the ASIL the functional safety concept derives for its element;
 - a reaction, triggering condition or decision named does not exist, or a pending decision is no
-  longer open.
+  longer open;
+- a component carries an ASIL beyond its decomposed one (`also`) without a decomposition or without
+  an answered decision.
 
     python3 tsc.py            # write WP-S-03's generated tables and Figure 2-1
     python3 tsc.py --check    # fail if either is stale or the model breaks a rule
@@ -42,9 +44,15 @@ import figkit as fk  # noqa: E402
 import fsc  # noqa: E402
 import triggering  # noqa: E402
 
+sys.path.insert(0, str(HERE))
+import cards  # noqa: E402
+
 MODEL = HERE / "tsc.yaml"
 DOC = ASSURANCE / "03-system" / "WP-S-03-technical-safety-concept-architecture.md"
 FIG = HERE / "fig-s03-2-1-architecture.svg"
+FIG3 = HERE / "fig-s03-3-1-mechanisms.svg"
+CSV = HERE / "mechanisms.csv"
+README = HERE / "README.md"
 W = 640
 
 
@@ -71,10 +79,20 @@ def rank(a: str) -> int:
     return fsc.hara.ASILS.index(a)
 
 
+def dec_ok(k: dict, d: str | None) -> bool:
+    return k["decisions"].get(d) in ("answered", "applied")
+
+
 def label(m: dict, k: dict, cid: str) -> str:
     """The ASIL shown for a component: its decomposed ASIL where the lead decided one, else the derived one."""
     c = next(x for x in m["components"] if x["id"] == cid)
     return c["decomposed"]["asil"] if c.get("decomposed") else component_asil(m, k)[cid]
+
+
+def also(c: dict) -> str:
+    """An ASIL a component carries beyond its decomposed one, as a table suffix."""
+    a = c.get("also")
+    return f"; {a['asil']} for {a['for']} ({a['decision']})" if a else ""
 
 
 def component_asil(m: dict, k: dict) -> dict[str, str]:
@@ -153,6 +171,9 @@ def check(m: dict, k: dict) -> list[str]:
                 errs.append(f"{r['id']}: triggering condition {t} does not exist")
         pending(r["id"], r)
     for c in m.get("components", []):
+        a = c.get("also")
+        if a and (not dec_ok(k, a.get("decision")) or not c.get("decomposed")):
+            errs.append(f"{c['id']}: also needs a decomposed component and an answered decision")
         dec = c.get("decomposed")
         if not dec:
             continue
@@ -222,7 +243,7 @@ def tables(m: dict, k: dict) -> dict[str, str]:
         hosted = [s["id"] for s in m["mechanisms"] if s["host"] == c["id"]]
         serves = [s["id"] for s in m["mechanisms"] if c["id"] in s.get("uses", [])]
         rows.append(
-            f"| {c['id']} | {cell(c['name'])} | {c['element']} | {'Yes' if el['in_item'] else 'No'} | **{label(m, k, c['id'])}** "
+            f"| {c['id']} | {cell(c['name'])} | {c['element']} | {'Yes' if el['in_item'] else 'No'} | **{label(m, k, c['id'])}**{also(c)} "
             f"| {', '.join(hosted) or '—'} | {', '.join(serves) or '—'} | {c.get('pending', '—')} |"
         )
     t["tsc-components"] = "\n".join(rows)
@@ -247,6 +268,17 @@ def tables(m: dict, k: dict) -> dict[str, str]:
             f"| {', '.join(r['common']) or '—'} | {r.get('pending') or r.get('decision') or '—'} |"
         )
     t["tsc-redundancy"] = "\n".join(rows)
+    t["tsc-mechanism-cards"] = (
+        "![Figure 3-1: one card per safety mechanism SM-01 to SM-19. Each shows the system architecture of "
+        "Figure 2-1 in small with the component the mechanism runs on filled and those it uses outlined; for a "
+        "time-critical mechanism, a bar dividing the binding fault tolerant time interval of WP-S-04 into time "
+        "to detect, time to react and reserve, with their ranges; the reaction it starts; what it does; and the "
+        f"functional safety requirements it implements.](tsc/{FIG3.name})\n\n"
+        "*Figure 3-1. Where each safety mechanism runs, and how fast it must act. Budgets are the ranges WP-S-04 "
+        "computes, not measurements. Drawn by [`tsc/tsc.py`](tsc/tsc.py); CI fails if it is stale. Each "
+        f"mechanism's trace to its FSRs, technical safety requirements and test cases is in "
+        f"[`tsc/{CSV.name}`](tsc/{CSV.name}).*"
+    )
     rows = ["| Mechanism | Verified by |", "|---|---|"]
     rows += [f"| {s['id']} {cell(s['name'])} | {cell(s['verify'])} |" for s in m["mechanisms"]]
     t["tsc-verification"] = "\n".join(rows)
@@ -373,12 +405,159 @@ def figure(m: dict, k: dict) -> str:
     return fk.svg(W, int(y), "WP-S-03 Figure 2-1: system architecture", desc, body, EXTRA)
 
 
+def card_known(m: dict, k: dict) -> dict:
+    fb = fallback.load()
+    names = {x["id"]: x["name"] for x in fb["mrms"]}
+    names.update({x["id"]: "(a fallback trigger of WP-C-12)" for x in fb["triggers"]})
+    return {**k, "components_list": m["components"], "reaction_names": names}
+
+
+def mechanisms_csv(m: dict, k: dict) -> str:
+    """Each mechanism with its placement, budget and trace to WP-S-02, WP-S-08 and WP-S-04."""
+    import csv
+    import io
+
+    import yaml
+
+    tm, tmech = cards.timed()
+    tsrs = yaml.safe_load((HERE.parent / "tsr" / "tsr.yaml").read_text(encoding="utf-8"))["tsrs"]
+    its = yaml.safe_load((HERE.parent / "integ" / "integ.yaml").read_text(encoding="utf-8"))[
+        "cases"
+    ]
+    comps = {c["id"]: c["name"] for c in m["components"]}
+    buf = io.StringIO()
+    w = csv.writer(buf, lineterminator="\n")
+    w.writerow(
+        [
+            "ID",
+            "Safety mechanism",
+            "ASIL",
+            "Runs on",
+            "Uses",
+            "What it does",
+            "Implements (WP-C-04)",
+            "Safety goals",
+            "Reaction",
+            "Binding FTTI (WP-S-04)",
+            "Time to detect",
+            "Time to react",
+            "Technical safety requirements (WP-S-02)",
+            "Integration test cases (WP-S-08)",
+            "Verified by (WP-S-03)",
+        ]
+    )
+    for s in m["mechanisms"]:
+        a = max((k["fsrs"][f]["asil"] for f in s["implements"]), key=rank)
+        b = cards.budget(s, tm, tmech)
+        rs = [r["id"] for r in tsrs if r["mechanism"] == s["id"]]
+        cs = [c["id"] for c in its if set(c["covers"]) & set(rs)]
+        goals = sorted({k["fsrs"][f]["goal"] for f in s["implements"]})
+        w.writerow(
+            [
+                s["id"],
+                s["name"],
+                a,
+                f"{s['host']} {comps[s['host']]}",
+                ", ".join(f"{c} {comps[c]}" for c in s.get("uses") or []) or "—",
+                s["does"],
+                ", ".join(s["implements"]),
+                ", ".join(goals),
+                ", ".join(s["reaction"]) or "—",
+                f"{cards.span(b['worst'], b['best'])} ({b['goal']})" if b else "—",
+                cards.span(b["worst"] * b["detect"], b["best"] * b["detect"]) if b else "—",
+                cards.span(b["worst"] * b["react"], b["best"] * b["react"]) if b else "—",
+                ", ".join(rs) or "—",
+                ", ".join(cs) or "—",
+                s["verify"],
+            ]
+        )
+    return buf.getvalue()
+
+
+def here(md: str) -> str:
+    """Text of WP-S-03 with its relative links rewritten to work from this folder."""
+    md = md.replace("](tsc/", "](")
+    return re.sub(r"\]\((?!https?:|#|fig-|mechanisms\.csv|tsc\.|README)", "](../", md)
+
+
+def readme(m: dict, k: dict, t: dict[str, str], doc: str) -> str:
+    """The folder page: the whole technical safety concept on one page."""
+
+    def part(heading: str) -> str:
+        return here(fk.section(doc, heading).strip())
+
+    files = [
+        "| File | What it holds |",
+        "|---|---|",
+        f"| [`{CSV.name}`]({CSV.name}) | Every safety mechanism with where it runs, its ASIL, the FSRs it implements, its reaction, its time budget, and the technical safety requirements and integration test cases that trace to it |",
+        f"| [`{FIG.name}`]({FIG.name}) | Figure 2-1, the system architecture |",
+        f"| [`{FIG3.name}`]({FIG3.name}) | Figure 3-1, where each safety mechanism runs and how fast it must act |",
+        "| [`tsc.yaml`](tsc.yaml) | Components, links, safety mechanisms and redundancies |",
+        "| [`tsc.py`](tsc.py), [`cards.py`](cards.py) | The generator: checks the model against the functional safety concept, the fallback concept and the triggering conditions, and writes WP-S-03's tables and everything here |",
+    ]
+    lines = [
+        "<!-- Generated by assurance/03-system/tsc/tsc.py; do not edit by hand. -->",
+        "",
+        "# Technical safety concept",
+        "",
+        "The whole technical safety concept and system architecture of "
+        "[WP-S-03](../WP-S-03-technical-safety-concept-architecture.md) on one page: the components that "
+        "refine the elements of the [functional safety concept](../../02-concept/fsc/README.md), the safety "
+        "mechanisms placed on them and how fast each must act, the redundancies and their independence, the AI "
+        "measures and how the architecture is verified. Everything here is generated by `tsc.py` from "
+        "`tsc.yaml`; CI fails if it is stale. Everything is a draft by Claude (I0) until it is reviewed.",
+        "",
+        t["tsc-summary"],
+        "",
+        "1. [The architecture](#1-the-architecture)",
+        "2. [Safety mechanisms](#2-safety-mechanisms)",
+        "3. [Redundancy and diversity](#3-redundancy-and-diversity)",
+        "4. [AI architecture measures](#4-ai-architecture-measures)",
+        "5. [Architecture verification](#5-architecture-verification)",
+        "6. [Files in this folder](#6-files-in-this-folder)",
+        "",
+        "## 1. The architecture",
+        "",
+        part("## 2. Architecture overview"),
+        "",
+        "## 2. Safety mechanisms",
+        "",
+        part("## 3. Safety mechanisms"),
+        "",
+        "## 3. Redundancy and diversity",
+        "",
+        part("## 4. Redundancy and diversity"),
+        "",
+        "## 4. AI architecture measures",
+        "",
+        part("## 5. AI architecture measures"),
+        "",
+        "## 5. Architecture verification",
+        "",
+        part("## 6. Architecture verification"),
+        "",
+        "## 6. Files in this folder",
+        "",
+        *files,
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def build() -> dict[Path, str]:
     m, k = load(), known()
     errs = check(m, k)
     if errs:
         raise fk.FigureError("tsc.yaml: " + "; ".join(errs))
-    return {DOC: fill(DOC.read_text(encoding="utf-8"), tables(m, k)), FIG: figure(m, k)}
+    t = tables(m, k)
+    doc = fill(DOC.read_text(encoding="utf-8"), t)
+    return {
+        DOC: doc,
+        FIG: figure(m, k),
+        FIG3: cards.sheet(m, card_known(m, k)),
+        CSV: mechanisms_csv(m, k),
+        README: readme(m, k, t, doc),
+    }
 
 
 if __name__ == "__main__":

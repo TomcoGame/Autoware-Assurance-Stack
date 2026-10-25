@@ -29,10 +29,10 @@ across the whole operational design domain. The other standards supply the metho
 | Indicator | Value |
 |---|---|
 | Assurance state | Before G0: hazard analysis draft |
-| Work products in the register | 91 (17 draft, 74 skeleton) |
+| Work products in the register | 91 (24 draft, 67 skeleton) |
 | Work products approved or baselined | 0 |
 | Decisions waiting on the safety authority | 0 open |
-| Decisions applied | 27 |
+| Decisions applied | 33 |
 | Safety case claims | 0 |
 | Evidence items | 0 |
 | Open defeaters | 0 |
@@ -87,6 +87,8 @@ Each numbered folder has a README page generated from this table and the registe
 | `TS-<nn>` / `CSG-<nn>` / `CSR-<nn>` | Threat scenario / cybersecurity goal / cybersecurity requirement | `CSG-02` |
 | `AOU-<nn>` | Assumption (on the vehicle, infrastructure, people or environment) | `AOU-05` |
 | `SPI-<nn>` | Safety performance indicator | `SPI-03` |
+| `SC-<nn>` | Logical scenario of the scenario catalogue (WP-V-03) | `SC-14` |
+| `SIM-<nn>` / `SNS-<nn>` | Simulator / sensor stand-in in the simulation environment (WP-V-08) | `SIM-02` |
 | `CL-<nnn>` / `EV-<nnn>` / `DF-<nnn>` | Safety case claim / evidence item / defeater | `CL-001` |
 | `OI-<n>` | Open item, numbered per document | `OI-3` |
 
@@ -136,8 +138,8 @@ and commit the result.
 | `python3 assurance/01-management/decisions/fig_lifecycle.py` | Decision register Figure 1 | The status table of `decisions/README.md` |
 | `python3 assurance/01-management/decisions/fig_questions.py` | The figures of decision register entries | Its own option data, checked against `register.yaml` |
 | `python3 assurance/02-concept/figures/fig_c01_boundary.py` | WP-C-01 Figure 5-1 | WP-C-01 §3, §5.1, §5.2 |
-| `python3 assurance/02-concept/hara/hara.py` | WP-C-03 §1 summary, §4 to §7 tables and Figure 6-1 (every ASIL computed) | `02-concept/hara/hara.yaml` |
-| `python3 assurance/02-concept/fsc/fsc.py` | WP-C-04 §1 summary, §3 to §5 tables and Figure 4-1 (element ASILs derived) | `02-concept/fsc/fsc.yaml`, `hara/hara.yaml`, WP-C-01 §8, the decision register |
+| `python3 assurance/02-concept/hara/hara.py` | WP-C-03 §1 summary, §4 to §7 tables, Figures 6-1 and 6-2, the hazardous rows in `hara/` (one file per hazard), `hara/not-hazardous.csv`, `hara/guide-words.csv` and `hara/README.md` (every ASIL computed) | `02-concept/hara/hara.yaml`, `02-concept/hara/analysis.yaml` |
+| `python3 assurance/02-concept/fsc/fsc.py` | WP-C-04 §1 summary, §3 to §5 tables, Figures 4-1 and 4-2 (element ASILs derived), the folder page `fsc/README.md` and `fsc/fsrs.csv` | `02-concept/fsc/fsc.yaml`, `hara/hara.yaml`, WP-C-01 §8, the decision register; for the trace, `03-system/tsc/tsc.yaml`, `tsr/tsr.yaml`, `verif/verif.yaml` |
 | `python3 assurance/02-concept/sotif/sotif.py` | WP-C-05 §1 summary, §4 to §6 tables and Figure 4-1 | `02-concept/sotif/sotif.yaml`, WP-C-01 §3, `hara/hara.yaml` |
 | `python3 assurance/02-concept/fallback/fallback.py` | WP-C-12 §1 summary, §2 to §4 and §6 tables, Figure 3-1 | `02-concept/fallback/fallback.yaml`, `fsc/fsc.yaml`, `hara/hara.yaml`, `sotif/sotif.yaml`, WP-C-01 §8, WP-C-02 §3 and §4, decision register |
 | `python3 assurance/02-concept/triggering/triggering.py` | WP-C-06 §1 summary, §3 to §6 tables and Figure 5-1 | `02-concept/triggering/triggering.yaml`, `sotif/sotif.yaml`, WP-C-01 §3, WP-C-02 §3 and §4 |
@@ -147,8 +149,15 @@ and commit the result.
 | `python3 assurance/02-concept/cybersecurity/cybersecurity.py` | WP-C-10 §1 summary, §2 to §4 tables and Figure 2-1 | `02-concept/cybersecurity/cybersecurity.yaml`, `tara/tara.yaml` and the references it checks |
 | `python3 assurance/02-concept/ai/ai.py` | WP-C-11 §1 summary, §2 to §5 tables and Figure 4-1 | `02-concept/ai/ai.yaml`, WP-C-01 §3, WP-C-02 §6, `fsc/fsc.yaml`, `triggering/triggering.yaml`, `cybersecurity/cybersecurity.yaml` |
 | `python3 assurance/02-concept/misuse/misuse.py` | WP-C-08 §1 summary, §2 and §4 to §6 tables, Figure 5-1 | `02-concept/misuse/misuse.yaml` and the analyses it refers to, decision register |
-| `python3 assurance/03-system/tsc/tsc.py` | WP-S-03 §1 summary, §2 to §4 and §6 tables, Figure 2-1 | `03-system/tsc/tsc.yaml`, `fsc/fsc.yaml`, `fallback/fallback.yaml`, `triggering/triggering.yaml`, decision register |
-| `python3 assurance/03-system/timing/timing.py` | WP-S-04 §1 summary, §2 to §5 tables and Figure 2-1 | `03-system/timing/timing.yaml`, `hara/hara.yaml`, `tsc/tsc.yaml`, `fallback/fallback.yaml`, WP-C-02 ODD-20 |
+| `python3 assurance/03-system/tsc/tsc.py` | WP-S-03 §1 summary, §2 to §4 and §6 tables, Figures 2-1 and 3-1, the folder page `tsc/README.md` and `tsc/mechanisms.csv` | `03-system/tsc/tsc.yaml`, `fsc/fsc.yaml`, `fallback/fallback.yaml`, `triggering/triggering.yaml`, decision register; for the budgets and trace, `timing/timing.yaml`, `tsr/tsr.yaml`, `integ/integ.yaml` |
+| `python3 assurance/03-system/timing/timing.py` | WP-S-04 §1 summary, §2 to §5 tables, Figures 2-1 and 2-2, the folder page `timing/README.md` and `timing/measurements.csv` | `03-system/timing/timing.yaml`, `hara/hara.yaml`, `tsc/tsc.yaml`, `fallback/fallback.yaml`, WP-C-02 ODD-20; for the measurement list, `tsr/tsr.yaml`, `integ/integ.yaml` |
+| `python3 assurance/03-system/tsr/tsr.py` | WP-S-02 §1 summary, §2 to §5 tables, Figures 2-1 and 4-1, the folder page `tsr/README.md` and `tsr/tsrs.csv` | `03-system/tsr/tsr.yaml`, `tsc/tsc.yaml`, `timing/timing.yaml`, `fsc/fsc.yaml`, decision register; for the trace, `integ/integ.yaml`, `verif/verif.yaml` |
+| `python3 assurance/03-system/hsi/hsi.py` | WP-S-05 §1 to §5 tables, Figures 1-1 and 1-2, the folder page `hsi/README.md` and `hsi/signals.csv` | `03-system/hsi/hsi.yaml`, `tsr/tsr.yaml`, `tsc/tsc.yaml`, `timing/timing.yaml`, WP-C-01 §5.2 and §8, `fallback/fallback.yaml` |
+| `python3 assurance/03-system/secarch/secarch.py` | WP-S-07 §1 to §4 tables, Figures 3-1 and 4-1, the folder page `secarch/README.md` and `secarch/requirements.csv` | `03-system/secarch/secarch.yaml`, `cybersecurity/cybersecurity.yaml`, `tara/tara.yaml`, `tsc/tsc.yaml`, `hsi/hsi.yaml`, decision register; for the trace, `integ/integ.yaml` |
+| `python3 assurance/03-system/integ/integ.py` | WP-S-08 §1 to §4 tables and Figure 2-1 | `03-system/integ/integ.yaml`, `tsr/tsr.yaml`, `hsi/hsi.yaml`, `secarch/secarch.yaml`, `timing/timing.yaml`, decision register |
+| `python3 assurance/03-system/verif/verif.py` | WP-S-09 §1 to §3 tables and Figure 2-1 | `03-system/verif/verif.yaml`, `02-concept/fsc/fsc.yaml`, `triggering/triggering.yaml`, `modifications/modifications.yaml`, `06-validation/scenarios/scenarios.yaml`, `03-system/integ/integ.yaml` |
+| `python3 assurance/06-validation/scenarios/scenarios.py` | WP-V-03 §1 summary and §2 tables, WP-V-08 §4 tables and Figure 4-1 | `06-validation/scenarios/scenarios.yaml`, WP-C-02 §3 and §5, `hara/hara.yaml`, `sotif/sotif.yaml`, `triggering/triggering.yaml`, `misuse/misuse.yaml`, `stpa/stpa.yaml`, `fsc/fsc.yaml` and the references `misuse.py` checks |
+| `python3 assurance/06-validation/simenv/simenv.py` | WP-V-08 §1 summary and §2 tables, WP-P-07 §4 table | `06-validation/simenv/simenv.yaml`, `scenarios/scenarios.yaml`, WP-C-01 §5.1 and §6, `tsc/tsc.yaml`, `repositories/*.repos`, decision register |
 | `python3 assurance/case/tools/dashboard.py` | `case/figures/dashboard.svg`, the summary block above | WP-M-00, `register.yaml`, `case/records/` |
 
 The decision inbox page is built by `decisions/build_inbox.py` and published outside the repository; CI builds it

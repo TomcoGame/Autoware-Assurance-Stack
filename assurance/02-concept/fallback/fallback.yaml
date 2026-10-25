@@ -184,7 +184,7 @@ mrms:
     fails_when: The monitor itself fails (TR-07)
     decel: null
     jerk: null
-    source: Firm level of FSR-03.02, raised to emergency braking only when FSR-02.02 requires it; set in WP-S-04
+    source: Firm level of FSR-03.02, 3 m/s² (DQ-033 A), raised to emergency braking only when FSR-02.02 requires it; jerk set with the vehicle (DQ-008)
     reaches: MRC-2
     fallback: MRM-5
   - id: MRM-5

@@ -1,0 +1,321 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1070" height="1300" viewBox="0 0 1070 1300" role="img" aria-labelledby="t d">
+<title id="t">WP-S-05 Figure 1-2: interfaces and their signals</title>
+<desc id="d">Interfaces: IF-01 Remote operations station to Safety monitor controller (I-08): SIG-01 Remote driving command SIGNED timeout 143 ms, SIG-02 Release after a minimal risk condition SIGNED; IF-02 Autoware computer to Safety monitor controller (I-03): SIG-03 Control command E2E timeout 143 ms, SIG-04 Lamp command E2E, SIG-05 Autoware heartbeat and state E2E timeout 143 ms, SIG-06 Monitor status to Autoware E2E; IF-03 Safety LiDAR to Safety channel processor (I-13): SIG-07 LiDAR point cloud E2E timeout 200 ms; IF-04 Safety radar to Safety channel processor (I-13): SIG-08 Radar detections E2E timeout 200 ms; IF-05 Safety channel processor to Safety monitor controller (I-13): SIG-09 Obstacle and free-space report E2E timeout 179 ms, SIG-10 Safety channel status E2E timeout 179 ms; IF-06 Safety monitor controller to Drive-by-wire (I-04): SIG-11 Bounded motion command E2E timeout 179 ms, SIG-12 Propulsion cut and brake switch E2E timeout 179 ms, SIG-13 Drive-by-wire status E2E timeout 179 ms; IF-07 Vehicle state sensing to Safety monitor controller (I-05): SIG-14 Longitudinal vehicle state E2E timeout 179 ms, SIG-15 Steering and gear state E2E timeout 179 ms, SIG-16 Collision detected E2E; IF-08 Safety monitor controller to Park brake (I-04): SIG-17 Park brake command E2E, SIG-18 Park brake state E2E; IF-09 Door system to Safety monitor controller (I-05): SIG-19 Door state E2E.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg { --mon:#2d55c8; --monsoft:#e7ecfb; --perf:#c2412b; --amb2:#b97800; }
+@media (prefers-color-scheme: dark) { svg { --mon:#86a2ff; --monsoft:#232c48; --perf:#ff7a63; --amb2:#e7a52a; } }
+svg .ax { font:10.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .gid { font:700 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .cb { fill:var(--monsoft); stroke:var(--mon); stroke-width:1.2; }
+svg .cbt { font:600 11px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .fw { stroke:var(--mon); stroke-width:2; } svg .fwh { fill:var(--mon); }
+svg .bk { stroke:var(--ink3); stroke-width:1.6; stroke-dasharray:4 2; } svg .bkh { fill:var(--ink3); }
+svg .ip { fill:var(--card); stroke:var(--ink3); stroke-width:1; }
+svg .ipt { font:600 10px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink2); }
+svg .ut { fill:var(--bg); stroke:var(--perf); stroke-width:1.2; stroke-dasharray:3 2; }
+svg .utt { font:600 10px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--perf); }
+svg .sid { font:700 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .sn { font:600 11px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .pe { fill:var(--monsoft); stroke:var(--mon); stroke-width:1; } svg .pet { font:700 9px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--mon); }
+svg .ps { fill:var(--bg); stroke:var(--perf); stroke-width:1; } svg .pst { font:700 9px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--perf); }
+svg .pn { fill:var(--bg); stroke:var(--ink3); stroke-width:1; } svg .pnt { font:700 9px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink3); }
+svg .win { fill:var(--bg); stroke:var(--amb2); stroke-width:1.4; stroke-dasharray:4 2; }
+svg .fr { fill:var(--mon); } svg .frx { fill:none; stroke:var(--perf); stroke-width:1.4; stroke-dasharray:2 2; }
+</style>
+<rect class="bg" width="1070" height="1300"/>
+<text x="24" y="34" class="h">What crosses each interface, and how fast</text>
+<text x="24" y="56" class="t">WP-S-05 §1, Figure 1-2: each interface of the WP-S-03 architecture, its signals with their protection, the ASIL of the requirements they serve at each</text>
+<text x="24" y="73" class="t">end, their receive timeout from WP-S-04 and the longest period that keeps 3 frames in it. Nothing is measured or selected yet.</text>
+<rect x="24" y="96" width="330" height="372" rx="8" class="card"/>
+<text x="38" y="120" class="gid">IF-01</text>
+<rect x="304.2" y="107" width="35.8" height="17" rx="4" class="ip"/>
+<text x="322.1" y="119.5" class="ipt" text-anchor="middle">I-08</text>
+<rect x="232.6" y="107" width="65.6" height="17" rx="4" class="ut"/>
+<text x="265.4" y="119.5" class="utt" text-anchor="middle">UNTRUSTED</text>
+<rect x="38" y="136" width="112" height="46" rx="5" class="cb"/>
+<text x="94" y="156" class="cbt" text-anchor="middle">Remote operations</text>
+<text x="94" y="170" class="cbt" text-anchor="middle">station</text>
+<rect x="228" y="136" width="112" height="46" rx="5" class="cb"/>
+<text x="284" y="156" class="cbt" text-anchor="middle">Safety monitor</text>
+<text x="284" y="170" class="cbt" text-anchor="middle">controller</text>
+<line x1="154" y1="159" x2="217" y2="159" class="fw"/>
+<path d="M224 159 L216 154.5 L216 163.5 Z" class="fwh"/>
+<text x="38" y="200" class="ax">Cellular link to the vehicle, then through the</text>
+<text x="38" y="213" class="ax">Autoware computer's network to the monitor</text>
+<text x="38" y="236" class="sid">→ SIG-01</text>
+<text x="106" y="236" class="sn">Remote driving command</text>
+<rect x="292.3" y="224" width="47.7" height="17" rx="4" class="ps"/>
+<text x="316.1" y="236.5" class="pst" text-anchor="middle">SIGNED</text>
+<text x="54" y="250" class="ax">C → C · timeout 143 ms (SM-05) · every 48 ms</text>
+<text x="38" y="270" class="sid">→ SIG-02</text>
+<text x="106" y="270" class="sn">Release after a minimal risk c…</text>
+<rect x="292.3" y="258" width="47.7" height="17" rx="4" class="ps"/>
+<text x="316.1" y="270.5" class="pst" text-anchor="middle">SIGNED</text>
+<text x="54" y="284" class="ax">C → D · event, checked when used</text>
+<rect x="38" y="416" width="302" height="22" rx="3" class="win"/>
+<text x="38" y="411" class="ax">SIG-01: 3 frames per 143 ms timeout, so one may be lost</text>
+<rect x="83.3" y="420" width="10" height="14" rx="2" class="fr"/>
+<rect x="184" y="420" width="10" height="14" rx="2" class="frx"/>
+<rect x="284.7" y="420" width="10" height="14" rx="2" class="fr"/>
+<text x="340" y="452" class="ax" text-anchor="end">sent at least every 48 ms</text>
+<rect x="370" y="96" width="330" height="372" rx="8" class="card"/>
+<text x="384" y="120" class="gid">IF-02</text>
+<rect x="650.2" y="107" width="35.8" height="17" rx="4" class="ip"/>
+<text x="668.1" y="119.5" class="ipt" text-anchor="middle">I-03</text>
+<rect x="384" y="136" width="112" height="46" rx="5" class="cb"/>
+<text x="440" y="163" class="cbt" text-anchor="middle">Autoware computer</text>
+<rect x="574" y="136" width="112" height="46" rx="5" class="cb"/>
+<text x="630" y="156" class="cbt" text-anchor="middle">Safety monitor</text>
+<text x="630" y="170" class="cbt" text-anchor="middle">controller</text>
+<line x1="500" y1="152" x2="563" y2="152" class="fw"/>
+<path d="M570 152 L562 147.5 L562 156.5 Z" class="fwh"/>
+<line x1="570" y1="168" x2="507" y2="168" class="bk"/>
+<path d="M500 168 L508 163.5 L508 172.5 Z" class="bkh"/>
+<text x="384" y="200" class="ax">Dedicated point-to-point Automotive Ethernet, not</text>
+<text x="384" y="213" class="ax">shared with Autoware's other traffic (proposed)</text>
+<text x="384" y="236" class="sid">→ SIG-03</text>
+<text x="452" y="236" class="sn">Control command</text>
+<rect x="656.1" y="224" width="29.9" height="17" rx="4" class="pe"/>
+<text x="671.1" y="236.5" class="pet" text-anchor="middle">E2E</text>
+<text x="400" y="250" class="ax">QM → D, C · timeout 143 ms (SM-05) · every 48 ms</text>
+<text x="384" y="270" class="sid">→ SIG-04</text>
+<text x="452" y="270" class="sn">Lamp command</text>
+<rect x="656.1" y="258" width="29.9" height="17" rx="4" class="pe"/>
+<text x="671.1" y="270.5" class="pet" text-anchor="middle">E2E</text>
+<text x="400" y="284" class="ax">QM → C · event, checked when used</text>
+<text x="384" y="304" class="sid">→ SIG-05</text>
+<text x="452" y="304" class="sn">Autoware heartbeat and state</text>
+<rect x="656.1" y="292" width="29.9" height="17" rx="4" class="pe"/>
+<text x="671.1" y="304.5" class="pet" text-anchor="middle">E2E</text>
+<text x="400" y="318" class="ax">QM → D · timeout 143 ms (SM-05) · every 48 ms</text>
+<text x="384" y="338" class="sid">← SIG-06</text>
+<text x="452" y="338" class="sn">Monitor status to Autoware</text>
+<rect x="656.1" y="326" width="29.9" height="17" rx="4" class="pe"/>
+<text x="671.1" y="338.5" class="pet" text-anchor="middle">E2E</text>
+<text x="400" y="352" class="ax">D → QM · event, checked when used</text>
+<rect x="384" y="416" width="302" height="22" rx="3" class="win"/>
+<text x="384" y="411" class="ax">SIG-03: 3 frames per 143 ms timeout, so one may be lost</text>
+<rect x="429.3" y="420" width="10" height="14" rx="2" class="fr"/>
+<rect x="530" y="420" width="10" height="14" rx="2" class="frx"/>
+<rect x="630.7" y="420" width="10" height="14" rx="2" class="fr"/>
+<text x="686" y="452" class="ax" text-anchor="end">sent at least every 48 ms</text>
+<rect x="716" y="96" width="330" height="372" rx="8" class="card"/>
+<text x="730" y="120" class="gid">IF-03</text>
+<rect x="996.2" y="107" width="35.8" height="17" rx="4" class="ip"/>
+<text x="1014.1" y="119.5" class="ipt" text-anchor="middle">I-13</text>
+<rect x="730" y="136" width="112" height="46" rx="5" class="cb"/>
+<text x="786" y="163" class="cbt" text-anchor="middle">Safety LiDAR</text>
+<rect x="920" y="136" width="112" height="46" rx="5" class="cb"/>
+<text x="976" y="156" class="cbt" text-anchor="middle">Safety channel</text>
+<text x="976" y="170" class="cbt" text-anchor="middle">processor</text>
+<line x1="846" y1="159" x2="909" y2="159" class="fw"/>
+<path d="M916 159 L908 154.5 L908 163.5 Z" class="fwh"/>
+<text x="730" y="200" class="ax">Automotive Ethernet from the LiDAR, as the sensor</text>
+<text x="730" y="213" class="ax">offers (WP-H-02)</text>
+<text x="730" y="236" class="sid">→ SIG-07</text>
+<text x="798" y="236" class="sn">LiDAR point cloud</text>
+<rect x="1002.1" y="224" width="29.9" height="17" rx="4" class="pe"/>
+<text x="1017.1" y="236.5" class="pet" text-anchor="middle">E2E</text>
+<text x="746" y="250" class="ax">C, B(D) → D · timeout 200 ms (SM-09) · every 67 ms</text>
+<rect x="730" y="416" width="302" height="22" rx="3" class="win"/>
+<text x="730" y="411" class="ax">SIG-07: 3 frames per 200 ms timeout, so one may be lost</text>
+<rect x="775.3" y="420" width="10" height="14" rx="2" class="fr"/>
+<rect x="876" y="420" width="10" height="14" rx="2" class="frx"/>
+<rect x="976.7" y="420" width="10" height="14" rx="2" class="fr"/>
+<text x="1032" y="452" class="ax" text-anchor="end">sent at least every 67 ms</text>
+<rect x="24" y="484" width="330" height="372" rx="8" class="card"/>
+<text x="38" y="508" class="gid">IF-04</text>
+<rect x="304.2" y="495" width="35.8" height="17" rx="4" class="ip"/>
+<text x="322.1" y="507.5" class="ipt" text-anchor="middle">I-13</text>
+<rect x="38" y="524" width="112" height="46" rx="5" class="cb"/>
+<text x="94" y="551" class="cbt" text-anchor="middle">Safety radar</text>
+<rect x="228" y="524" width="112" height="46" rx="5" class="cb"/>
+<text x="284" y="544" class="cbt" text-anchor="middle">Safety channel</text>
+<text x="284" y="558" class="cbt" text-anchor="middle">processor</text>
+<line x1="154" y1="547" x2="217" y2="547" class="fw"/>
+<path d="M224 547 L216 542.5 L216 551.5 Z" class="fwh"/>
+<text x="38" y="588" class="ax">CAN FD or Automotive Ethernet from the radar, as the</text>
+<text x="38" y="601" class="ax">sensor offers (WP-H-02)</text>
+<text x="38" y="624" class="sid">→ SIG-08</text>
+<text x="106" y="624" class="sn">Radar detections</text>
+<rect x="310.1" y="612" width="29.9" height="17" rx="4" class="pe"/>
+<text x="325.1" y="624.5" class="pet" text-anchor="middle">E2E</text>
+<text x="54" y="638" class="ax">C, B(D) → D · timeout 200 ms (SM-09) · every 67 ms</text>
+<rect x="38" y="804" width="302" height="22" rx="3" class="win"/>
+<text x="38" y="799" class="ax">SIG-08: 3 frames per 200 ms timeout, so one may be lost</text>
+<rect x="83.3" y="808" width="10" height="14" rx="2" class="fr"/>
+<rect x="184" y="808" width="10" height="14" rx="2" class="frx"/>
+<rect x="284.7" y="808" width="10" height="14" rx="2" class="fr"/>
+<text x="340" y="840" class="ax" text-anchor="end">sent at least every 67 ms</text>
+<rect x="370" y="484" width="330" height="372" rx="8" class="card"/>
+<text x="384" y="508" class="gid">IF-05</text>
+<rect x="650.2" y="495" width="35.8" height="17" rx="4" class="ip"/>
+<text x="668.1" y="507.5" class="ipt" text-anchor="middle">I-13</text>
+<rect x="384" y="524" width="112" height="46" rx="5" class="cb"/>
+<text x="440" y="544" class="cbt" text-anchor="middle">Safety channel</text>
+<text x="440" y="558" class="cbt" text-anchor="middle">processor</text>
+<rect x="574" y="524" width="112" height="46" rx="5" class="cb"/>
+<text x="630" y="544" class="cbt" text-anchor="middle">Safety monitor</text>
+<text x="630" y="558" class="cbt" text-anchor="middle">controller</text>
+<line x1="500" y1="547" x2="563" y2="547" class="fw"/>
+<path d="M570 547 L562 542.5 L562 551.5 Z" class="fwh"/>
+<text x="384" y="588" class="ax">Dedicated point-to-point link between the two</text>
+<text x="384" y="601" class="ax">processors, inside the monitor's enclosure</text>
+<text x="384" y="614" class="ax">(proposed)</text>
+<text x="384" y="637" class="sid">→ SIG-09</text>
+<text x="452" y="637" class="sn">Obstacle and free-space report</text>
+<rect x="656.1" y="625" width="29.9" height="17" rx="4" class="pe"/>
+<text x="671.1" y="637.5" class="pet" text-anchor="middle">E2E</text>
+<text x="400" y="651" class="ax">D, C → D, C · timeout 179 ms (SM-02) · every 60 ms</text>
+<text x="384" y="671" class="sid">→ SIG-10</text>
+<text x="452" y="671" class="sn">Safety channel status</text>
+<rect x="656.1" y="659" width="29.9" height="17" rx="4" class="pe"/>
+<text x="671.1" y="671.5" class="pet" text-anchor="middle">E2E</text>
+<text x="400" y="685" class="ax">D → D · timeout 179 ms (SM-03) · every 60 ms</text>
+<rect x="384" y="804" width="302" height="22" rx="3" class="win"/>
+<text x="384" y="799" class="ax">SIG-09: 3 frames per 179 ms timeout, so one may be lost</text>
+<rect x="429.3" y="808" width="10" height="14" rx="2" class="fr"/>
+<rect x="530" y="808" width="10" height="14" rx="2" class="frx"/>
+<rect x="630.7" y="808" width="10" height="14" rx="2" class="fr"/>
+<text x="686" y="840" class="ax" text-anchor="end">sent at least every 60 ms</text>
+<rect x="716" y="484" width="330" height="372" rx="8" class="card"/>
+<text x="730" y="508" class="gid">IF-06</text>
+<rect x="996.2" y="495" width="35.8" height="17" rx="4" class="ip"/>
+<text x="1014.1" y="507.5" class="ipt" text-anchor="middle">I-04</text>
+<rect x="730" y="524" width="112" height="46" rx="5" class="cb"/>
+<text x="786" y="544" class="cbt" text-anchor="middle">Safety monitor</text>
+<text x="786" y="558" class="cbt" text-anchor="middle">controller</text>
+<rect x="920" y="524" width="112" height="46" rx="5" class="cb"/>
+<text x="976" y="551" class="cbt" text-anchor="middle">Drive-by-wire</text>
+<line x1="846" y1="540" x2="909" y2="540" class="fw"/>
+<path d="M916 540 L908 535.5 L908 544.5 Z" class="fwh"/>
+<line x1="916" y1="556" x2="853" y2="556" class="bk"/>
+<path d="M846 556 L854 551.5 L854 560.5 Z" class="bkh"/>
+<text x="730" y="588" class="ax">The vehicle's by-wire bus, set by the vehicle</text>
+<text x="730" y="601" class="ax">(DQ-008); the only command path into the</text>
+<text x="730" y="614" class="ax">drive-by-wire</text>
+<text x="730" y="637" class="sid">→ SIG-11</text>
+<text x="798" y="637" class="sn">Bounded motion command</text>
+<rect x="1002.1" y="625" width="29.9" height="17" rx="4" class="pe"/>
+<text x="1017.1" y="637.5" class="pet" text-anchor="middle">E2E</text>
+<text x="746" y="651" class="ax">D, C → D · timeout 179 ms (SM-14) · every 60 ms</text>
+<text x="730" y="671" class="sid">→ SIG-12</text>
+<text x="798" y="671" class="sn">Propulsion cut and brake switch</text>
+<rect x="1002.1" y="659" width="29.9" height="17" rx="4" class="pe"/>
+<text x="1017.1" y="671.5" class="pet" text-anchor="middle">E2E</text>
+<text x="746" y="685" class="ax">D → D · timeout 179 ms (SM-03) · every 60 ms</text>
+<text x="730" y="705" class="sid">← SIG-13</text>
+<text x="798" y="705" class="sn">Drive-by-wire status</text>
+<rect x="1002.1" y="693" width="29.9" height="17" rx="4" class="pe"/>
+<text x="1017.1" y="705.5" class="pet" text-anchor="middle">E2E</text>
+<text x="746" y="719" class="ax">D → D · timeout 179 ms (SM-03) · every 60 ms</text>
+<rect x="730" y="804" width="302" height="22" rx="3" class="win"/>
+<text x="730" y="799" class="ax">SIG-11: 3 frames per 179 ms timeout, so one may be lost</text>
+<rect x="775.3" y="808" width="10" height="14" rx="2" class="fr"/>
+<rect x="876" y="808" width="10" height="14" rx="2" class="frx"/>
+<rect x="976.7" y="808" width="10" height="14" rx="2" class="fr"/>
+<text x="1032" y="840" class="ax" text-anchor="end">sent at least every 60 ms</text>
+<rect x="24" y="872" width="330" height="372" rx="8" class="card"/>
+<text x="38" y="896" class="gid">IF-07</text>
+<rect x="304.2" y="883" width="35.8" height="17" rx="4" class="ip"/>
+<text x="322.1" y="895.5" class="ipt" text-anchor="middle">I-05</text>
+<rect x="38" y="912" width="112" height="46" rx="5" class="cb"/>
+<text x="94" y="932" class="cbt" text-anchor="middle">Vehicle state</text>
+<text x="94" y="946" class="cbt" text-anchor="middle">sensing</text>
+<rect x="228" y="912" width="112" height="46" rx="5" class="cb"/>
+<text x="284" y="932" class="cbt" text-anchor="middle">Safety monitor</text>
+<text x="284" y="946" class="cbt" text-anchor="middle">controller</text>
+<line x1="154" y1="935" x2="217" y2="935" class="fw"/>
+<path d="M224 935 L216 930.5 L216 939.5 Z" class="fwh"/>
+<text x="38" y="976" class="ax">A vehicle bus segment the Autoware computer is not</text>
+<text x="38" y="989" class="ax">connected to (AOU-03), set by the vehicle (DQ-008)</text>
+<text x="38" y="1012" class="sid">→ SIG-14</text>
+<text x="106" y="1012" class="sn">Longitudinal vehicle state</text>
+<rect x="310.1" y="1000" width="29.9" height="17" rx="4" class="pe"/>
+<text x="325.1" y="1012.5" class="pet" text-anchor="middle">E2E</text>
+<text x="54" y="1026" class="ax">D → D · timeout 179 ms (SM-03) · every 60 ms</text>
+<text x="38" y="1046" class="sid">→ SIG-15</text>
+<text x="106" y="1046" class="sn">Steering and gear state</text>
+<rect x="310.1" y="1034" width="29.9" height="17" rx="4" class="pe"/>
+<text x="325.1" y="1046.5" class="pet" text-anchor="middle">E2E</text>
+<text x="54" y="1060" class="ax">D → D, C · timeout 179 ms (SM-03) · every 60 ms</text>
+<text x="38" y="1080" class="sid">→ SIG-16</text>
+<text x="106" y="1080" class="sn">Collision detected</text>
+<rect x="310.1" y="1068" width="29.9" height="17" rx="4" class="pe"/>
+<text x="325.1" y="1080.5" class="pet" text-anchor="middle">E2E</text>
+<text x="54" y="1094" class="ax">QM → QM · event, checked when used</text>
+<rect x="38" y="1192" width="302" height="22" rx="3" class="win"/>
+<text x="38" y="1187" class="ax">SIG-14: 3 frames per 179 ms timeout, so one may be lost</text>
+<rect x="83.3" y="1196" width="10" height="14" rx="2" class="fr"/>
+<rect x="184" y="1196" width="10" height="14" rx="2" class="frx"/>
+<rect x="284.7" y="1196" width="10" height="14" rx="2" class="fr"/>
+<text x="340" y="1228" class="ax" text-anchor="end">sent at least every 60 ms</text>
+<rect x="370" y="872" width="330" height="372" rx="8" class="card"/>
+<text x="384" y="896" class="gid">IF-08</text>
+<rect x="650.2" y="883" width="35.8" height="17" rx="4" class="ip"/>
+<text x="668.1" y="895.5" class="ipt" text-anchor="middle">I-04</text>
+<rect x="384" y="912" width="112" height="46" rx="5" class="cb"/>
+<text x="440" y="932" class="cbt" text-anchor="middle">Safety monitor</text>
+<text x="440" y="946" class="cbt" text-anchor="middle">controller</text>
+<rect x="574" y="912" width="112" height="46" rx="5" class="cb"/>
+<text x="630" y="939" class="cbt" text-anchor="middle">Park brake</text>
+<line x1="500" y1="928" x2="563" y2="928" class="fw"/>
+<path d="M570 928 L562 923.5 L562 932.5 Z" class="fwh"/>
+<line x1="570" y1="944" x2="507" y2="944" class="bk"/>
+<path d="M500 944 L508 939.5 L508 948.5 Z" class="bkh"/>
+<text x="384" y="976" class="ax">The vehicle's by-wire bus, set by the vehicle</text>
+<text x="384" y="989" class="ax">(DQ-008)</text>
+<text x="384" y="1012" class="sid">→ SIG-17</text>
+<text x="452" y="1012" class="sn">Park brake command</text>
+<rect x="656.1" y="1000" width="29.9" height="17" rx="4" class="pe"/>
+<text x="671.1" y="1012.5" class="pet" text-anchor="middle">E2E</text>
+<text x="400" y="1026" class="ax">D → D · event, checked when used</text>
+<text x="384" y="1046" class="sid">← SIG-18</text>
+<text x="452" y="1046" class="sn">Park brake state</text>
+<rect x="656.1" y="1034" width="29.9" height="17" rx="4" class="pe"/>
+<text x="671.1" y="1046.5" class="pet" text-anchor="middle">E2E</text>
+<text x="400" y="1060" class="ax">D → D · event, checked when used</text>
+<rect x="716" y="872" width="330" height="372" rx="8" class="card"/>
+<text x="730" y="896" class="gid">IF-09</text>
+<rect x="996.2" y="883" width="35.8" height="17" rx="4" class="ip"/>
+<text x="1014.1" y="895.5" class="ipt" text-anchor="middle">I-05</text>
+<rect x="730" y="912" width="112" height="46" rx="5" class="cb"/>
+<text x="786" y="939" class="cbt" text-anchor="middle">Door system</text>
+<rect x="920" y="912" width="112" height="46" rx="5" class="cb"/>
+<text x="976" y="932" class="cbt" text-anchor="middle">Safety monitor</text>
+<text x="976" y="946" class="cbt" text-anchor="middle">controller</text>
+<line x1="846" y1="935" x2="909" y2="935" class="fw"/>
+<path d="M916 935 L908 930.5 L908 939.5 Z" class="fwh"/>
+<text x="730" y="976" class="ax">The vehicle's by-wire bus, set by the vehicle</text>
+<text x="730" y="989" class="ax">(DQ-008)</text>
+<text x="730" y="1012" class="sid">→ SIG-19</text>
+<text x="798" y="1012" class="sn">Door state</text>
+<rect x="1002.1" y="1000" width="29.9" height="17" rx="4" class="pe"/>
+<text x="1017.1" y="1012.5" class="pet" text-anchor="middle">E2E</text>
+<text x="746" y="1026" class="ax">D → D · event, checked when used</text>
+<line x1="24" y1="1270" x2="45" y2="1270" class="fw"/>
+<path d="M52 1270 L44 1265.5 L44 1274.5 Z" class="fwh"/>
+<text x="60" y="1274" class="t">forward, as WP-S-03 draws the link</text>
+<line x1="333" y1="1270" x2="312" y2="1270" class="bk"/>
+<path d="M305 1270 L313 1265.5 L313 1274.5 Z" class="bkh"/>
+<text x="341" y="1274" class="t">back</text>
+<rect x="391.0" y="1262" width="10" height="14" rx="2" class="fr"/>
+<text x="409" y="1274" class="t">frame</text>
+<rect x="465.5" y="1262" width="10" height="14" rx="2" class="frx"/>
+<text x="483.5" y="1274" class="t">lost frame</text>
+<rect x="572.5" y="1262" width="26" height="14" rx="2" class="win"/>
+<text x="606.5" y="1274" class="t">receive timeout</text>
+</svg>
