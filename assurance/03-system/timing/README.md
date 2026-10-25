@@ -136,3 +136,30 @@ Results are recorded as evidence in the safety case; a budget that a measurement
 | [`fig-s04-2-2-goals.svg`](fig-s04-2-2-goals.svg) | Figure 2-2, how long each safety goal lets a fault last |
 | [`timing.yaml`](timing.yaml) | Margins, fault ranges, the allocation of each FTTI, the time-critical mechanisms, the chain and the fallback |
 | [`timing.py`](timing.py), [`gcards.py`](gcards.py) | The generator: computes every FTTI and budget, checks the model against the HARA, the technical safety concept and the fallback concept, and writes WP-S-04's tables and everything here |
+
+## Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| 21434, 21448, 26262, PAS 8800 | ISO/SAE 21434 (cybersecurity), ISO 21448 (SOTIF), ISO 26262 (functional safety), ISO/PAS 8800 (AI safety). "26262-3" is part 3 of ISO 26262 |
+| CI | Continuous integration: the automated checks GitHub runs on every pull request and push |
+| CMP | Component identifier, as in CMP-02: a part of the system architecture (WP-S-03) |
+| DQ | A question in the decision register, as in DQ-004. "DQ-015 B" means option B |
+| FSR | Functional safety requirement, as in FSR-08.01 (WP-C-04) |
+| FTTI | Fault tolerant time interval: how long a fault can last before it can lead to harm |
+| G0 to G6 | Gates: project milestones with exit criteria, defined in WP-M-00 §2 |
+| HARA | Hazard analysis and risk assessment: finds the hazards and sets the safety goals |
+| HIL | Hardware in the loop: testing the real controller against a simulated vehicle |
+| I0 to I3 | Independence of a reviewer from the author, from none (I0) to an independent assessor (I3). Work drafted by the AI assistant is I0 |
+| ISO | International Organization for Standardization |
+| MRM | Minimal risk manoeuvre: the manoeuvre that brings the vehicle to a minimal risk condition |
+| P | Safety envelope parameter identifier, as in P-01 (WP-S-02) |
+| QM | Quality management: no ASIL is needed, ordinary quality processes are enough |
+| SG | Safety goal: a top-level safety requirement from the HARA, as in SG-01 |
+| SM | Safety mechanism identifier, as in SM-01 (WP-S-03) |
+| WP | Work product: a document or record the assurance path needs. WP-M-00 is the register that lists them all |
+| YAML | A plain-text data format; the generator's source data is a `.yaml` file |
+| § | Section or clause, as in "UL 4600 §5" |
+| — | Nothing: no value, or the subfolder has no README of its own |
+
+Other terms are defined in the [Glossary](../../../wiki/Glossary.md).

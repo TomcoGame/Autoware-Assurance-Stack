@@ -46,6 +46,7 @@ import check_decisions  # noqa: E402
 import cybersecurity  # noqa: E402
 import figkit as fk  # noqa: E402
 import hsi  # noqa: E402
+import terms  # noqa: E402
 import tsc  # noqa: E402
 
 sys.path.insert(0, str(HERE))
@@ -593,7 +594,7 @@ def build() -> dict[Path, str]:
         FIG: figure(m, k),
         FIG2: acards.sheet(exposed, zones),
         CSV: requirements_csv(m, k),
-        README: readme(t, doc),
+        README: terms.close(readme(t, doc), README),
     }
 
 

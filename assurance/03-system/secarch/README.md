@@ -160,3 +160,47 @@ Every way the item can be reached from outside the vehicle, with the attack vect
 | [`fig-s07-4-1-attack-paths.svg`](fig-s07-4-1-attack-paths.svg) | Figure 4-1, where an attacker can reach the item and what stops them |
 | [`secarch.yaml`](secarch.yaml) | Trust zones, conduits, exposed interfaces and the technical cybersecurity requirements |
 | [`secarch.py`](secarch.py), [`acards.py`](acards.py) | The generator: checks the model against the cybersecurity concept, the TARA, the architecture and the hardware-software interface, and writes WP-S-07's tables and everything here |
+
+## Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| 21434, 21448, 26262, PAS 8800 | ISO/SAE 21434 (cybersecurity), ISO 21448 (SOTIF), ISO 26262 (functional safety), ISO/PAS 8800 (AI safety). "26262-3" is part 3 of ISO 26262 |
+| ASIL | Automotive Safety Integrity Level, A (lowest) to D (highest), set by ISO 26262 for each safety goal. B(D) means rated B as part of a decomposition of D |
+| CAL | Cybersecurity assurance level, CAL1 (lowest) to CAL4 (highest), from ISO/SAE 21434: how much rigour a cybersecurity requirement needs |
+| CC | Cybersecurity claim identifier, as in CC-01 (WP-C-10) |
+| CG | Cybersecurity goal identifier, as in CG-01 (WP-C-10) |
+| CI | Continuous integration: the automated checks GitHub runs on every pull request and push |
+| CMP | Component identifier, as in CMP-02: a part of the system architecture (WP-S-03) |
+| CR | Cybersecurity control identifier from the TARA, as in CR-01 (WP-C-09) |
+| CSR | Cybersecurity requirement identifier, as in CSR-01 (WP-C-10) |
+| CSTR | Technical cybersecurity requirement identifier, as in CSTR-01.01 (WP-S-07) |
+| DQ | A question in the decision register, as in DQ-004. "DQ-015 B" means option B |
+| EX | External interface identifier, as in EX-05: a way into the vehicle from outside (WP-S-07) |
+| G0 to G6 | Gates: project milestones with exit criteria, defined in WP-M-00 §2 |
+| GNSS | Global navigation satellite system, such as GPS; here also a source of exact time |
+| H | Hazard identifier, as in H-01 (WP-C-03) |
+| I0 to I3 | Independence of a reviewer from the author, from none (I0) to an independent assessor (I3). Work drafted by the AI assistant is I0 |
+| ID | Identifier |
+| IF | Interface identifier of the hardware–software interface, as in IF-01 (WP-S-05) |
+| ISO | International Organization for Standardization |
+| ML | Machine learning |
+| MRM | Minimal risk manoeuvre: the manoeuvre that brings the vehicle to a minimal risk condition |
+| ODD | Operational design domain: the roads, conditions and traffic the system is designed for |
+| P | Safety envelope parameter identifier, as in P-01 (WP-S-02) |
+| QM | Quality management: no ASIL is needed, ordinary quality processes are enough |
+| SAE | SAE International, formerly the Society of Automotive Engineers |
+| SIG | Signal identifier, as in SIG-01: one message that crosses an interface (WP-S-05) |
+| SM | Safety mechanism identifier, as in SM-01 (WP-S-03) |
+| SZ | Security zone identifier, as in SZ-1: a part of the system with one level of trust (WP-S-07) |
+| TARA | Threat analysis and risk assessment (ISO/SAE 21434) |
+| TR | Fallback trigger identifier, as in TR-01: a condition that starts a minimal risk manoeuvre (WP-C-12) |
+| TS | Threat scenario identifier, as in TS-01 (WP-C-09) |
+| TSR | Technical safety requirement, as in TSR-01.01 (WP-S-02) |
+| WP | Work product: a document or record the assurance path needs. WP-M-00 is the register that lists them all |
+| YAML | A plain-text data format; the generator's source data is a `.yaml` file |
+| § | Section or clause, as in "UL 4600 §5" |
+| → | From one component to another, or leads to |
+| — | Nothing: no value, or the subfolder has no README of its own |
+
+Other terms are defined in the [Glossary](../../../wiki/Glossary.md).

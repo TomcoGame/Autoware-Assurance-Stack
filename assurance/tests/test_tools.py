@@ -73,6 +73,7 @@ import simenv  # noqa: E402
 import sotif  # noqa: E402
 import stpa  # noqa: E402
 import tara  # noqa: E402
+import terms  # noqa: E402
 import timing  # noqa: E402
 import triggering  # noqa: E402
 import tsc  # noqa: E402
@@ -1472,6 +1473,16 @@ class Generators(unittest.TestCase):
                         doc.getElementsByTagName("title") and doc.getElementsByTagName("desc"), path
                     )
                     self.assertIn("prefers-color-scheme: dark", content, path)
+
+    def test_readme_defines_its_abbreviations(self):
+        page = terms.close(
+            "HARA and SOTIF, see UL 4600 §6–8.", figkit.ASSURANCE / "02-concept" / "README.md"
+        )
+        self.assertIn("| HARA | Hazard analysis and risk assessment", page)
+        self.assertIn("| § |", page)
+        self.assertIn("[Glossary](../../wiki/Glossary.md)", page)
+        with self.assertRaises(figkit.FigureError):
+            terms.close("An undefined XYZQ.", figkit.ASSURANCE / "02-concept" / "README.md")
 
     def test_figure_disagreeing_with_register_is_refused(self):
         self.assertEqual(sorted(fig_questions.FIGURES), ["DQ-001", "DQ-002", "DQ-034"])

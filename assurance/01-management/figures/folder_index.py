@@ -6,7 +6,8 @@ A page is built only from records that already exist, so it never needs editing 
 - the folder's row of the Layout table in assurance/README.md (what it holds, its clauses);
 - its section of the WP-M-00 §3 register: the figure (one row per work product, a chip at each gate
   it is needed for, coloured by status) and a table linking each work product;
-- its subfolders, with the title of their README when they have one.
+- its subfolders, with the title of their README when they have one;
+- a closing table of the abbreviations, terms and symbols the page uses, from terms.py.
 
 Files are not listed (GitHub shows them above the page), so adding a file never makes a page stale.
 
@@ -23,6 +24,7 @@ import sys
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import figkit as fk  # noqa: E402
+import terms  # noqa: E402
 import wpregister  # noqa: E402
 
 README = fk.ASSURANCE / "README.md"
@@ -206,7 +208,7 @@ def page(folder: str, lay: dict, reg: wpregister.Register) -> tuple[str, str | N
         out.append("")
     if not items:
         out += ["This folder has no work products in the register.", ""]
-    return "\n".join(out), svg
+    return terms.close("\n".join(out), fk.ASSURANCE / folder / "README.md"), svg
 
 
 def build() -> dict[Path, str]:

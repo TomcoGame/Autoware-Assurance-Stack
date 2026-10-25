@@ -51,3 +51,25 @@ AI assistant is I0 and is never the review that accepts a claim or evidence.
 `dashboard.py` reads the WP-M-00 register, the decision register and these records. A gate counts as passed only when
 every work product it needs is approved or baselined. The figure and the text block are written together, so they
 cannot disagree; `--check` fails when either is stale.
+
+## 5. Abbreviations, terms and symbols
+
+| Term | Meaning |
+|---|---|
+| AI | Artificial intelligence; here the AI assistant that drafts much of the work |
+| CI | Continuous integration: the automated checks GitHub runs on every pull request and push |
+| CL, EV, DF | Prefixes of claim, evidence item and defeater identifiers, as in `CL-001` |
+| Claim | A statement the safety case asserts and has to support with evidence or sub-claims |
+| Defeater | A known reason a claim or an evidence item may not hold, kept until something closes it |
+| DQ | A question in the [decision register](../01-management/decisions/README.md), as in DQ-001 |
+| I0 | Independence level 0: no independence from the author. It never counts as an accepting review |
+| ID | Identifier |
+| ODD | Operational design domain: the roads, conditions and traffic the system is designed for |
+| UL 4600 | The standard for the safety of autonomous products; it sets the structure of the safety case |
+| WP, WP-M-00 | Work product; WP-M-00 is the [register](../01-management/WP-M-00-work-product-register.md) that lists every work product |
+| YAML | A plain-text data format; the records are `.yaml` files |
+| `nnn` | Placeholder for a three-digit number in an identifier |
+| `--check` | The mode of a generator that changes nothing and fails if the committed output is stale |
+| § | Section or clause, as in "§3" of this page or "UL 4600 §5" |
+
+Other terms are defined in the [Glossary](../../wiki/Glossary.md).
