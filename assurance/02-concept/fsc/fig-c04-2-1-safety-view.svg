@@ -1,0 +1,175 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="824" height="754" viewBox="0 0 824 754" role="img" aria-labelledby="t d">
+<title id="t">WP-C-04 Figure 2-1: safety view of the item architecture</title>
+<desc id="d">Elements: EL-01 Autoware computer, inside the item, derived ASIL QM, 5 FSRs; EL-02 Safety monitor, inside the item, derived ASIL D, 22 FSRs; EL-03 Safety perception channel, inside the item, derived ASIL D, 2 FSRs; EL-04 Vehicle drive-by-wire, outside the item, derived ASIL D, 4 FSRs; EL-05 Park brake, outside the item, derived ASIL D, 1 FSRs; EL-06 Vehicle state sensing, outside the item, derived ASIL D, 2 FSRs; EL-07 Monitor power supply, outside the item, derived ASIL D, 1 FSRs; EL-08 Door system, outside the item, derived ASIL D, 1 FSRs; EL-09 Remote operations station, outside the item, derived ASIL C, 1 FSRs. Flows: Other road users to EL-03 (I-01); Autoware's sensors (EL-01) to EL-01 (I-02); EL-03 to EL-02 (I-13 detections); EL-01 to EL-02 (I-03 commands (QM)); HD map data to EL-01 (I-07); Update backend to EL-01 (I-10); Passengers to EL-01 (I-09); EL-09 to EL-02 (I-08 signed); EL-06 to EL-02 (I-05 state); EL-08 to EL-02 (door state); EL-02 to EL-05 (hold); EL-02 to EL-04 (I-04 bounded); EL-07 to EL-02 (I-12 power). Autoware's commands reach the drive-by-wire only through the safety monitor.</desc>
+<style>
+svg { --bg:#ffffff; --ink:#14171c; --ink2:#4b525c; --ink3:#868d97; --grid:#e2e5e9; --card:#f5f6f8; --amb:#b97800; --ambsoft:#fbf0d6; --ok:#23875a; --acc:#2d55c8; --accsoft:#e7ecfb; --bad:#b3261e; --badsoft:#fbe5e2; }
+@media (prefers-color-scheme: dark) { svg { --bg:#16181c; --ink:#eceef1; --ink2:#b9bfc8; --ink3:#7f8792; --grid:#30343b; --card:#1f2227; --amb:#e7a52a; --ambsoft:#3a2e14; --ok:#45b882; --acc:#86a2ff; --accsoft:#232c48; --bad:#ff8b80; --badsoft:#3d1c1a; } }
+svg .bg { fill:var(--bg); } svg .card { fill:var(--card); } svg .hair { stroke:var(--grid); stroke-width:1; fill:none; }
+svg .h { font:600 20px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .tb { font:600 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink); }
+svg .t { font:13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .s { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .m { font:500 12px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink); }
+svg .st-s { fill:var(--bg); stroke:var(--ink3); stroke-width:1.3; stroke-dasharray:4 3; }
+svg .st-d { fill:var(--amb); }
+svg .st-r { fill:var(--ambsoft); stroke:var(--amb); stroke-width:1.5; }
+svg .st-a { fill:var(--ok); } svg .st-b { fill:var(--ok); stroke:var(--ink); stroke-width:1.6; }
+svg .st-na { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:2 2; }
+svg { --a1:#f5dcd3; --a2:#eaa48f; --a3:#d4644a; --a4:#9e2f1c; --t1:#3b140b; --t4:#ffffff; }
+@media (prefers-color-scheme: dark) { svg { --a1:#4a2820; --a2:#7d3a28; --a3:#bb4f34; --a4:#f07656; --t1:#f6e3dd; --t4:#1b0a05; } }
+svg .qm { fill:var(--card); stroke:var(--ink3); stroke-width:1; }
+svg .aa { fill:var(--a1); } svg .ab { fill:var(--a2); } svg .ac { fill:var(--a3); } svg .ad { fill:var(--a4); }
+svg .tq { font:600 12px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink2); }
+svg .t1 { font:700 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--t1); }
+svg .t4 { font:700 13px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--t4); }
+svg .col { font:500 11px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink2); }
+svg .in { fill:var(--accsoft); stroke:var(--acc); stroke-width:1.6; }
+svg .ck { fill:var(--accsoft); stroke:var(--acc); stroke-width:3; }
+svg .out { fill:var(--card); stroke:var(--ink3); stroke-width:1.2; }
+svg .ctx { fill:var(--bg); stroke:var(--grid); stroke-width:1.2; stroke-dasharray:4 3; }
+svg .bound { fill:none; stroke:var(--acc); stroke-width:1.4; stroke-dasharray:7 5; }
+svg .vp { fill:none; stroke:var(--ink3); stroke-width:1; stroke-dasharray:3 3; }
+svg .bl { font:600 12px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--acc); letter-spacing:.06em; }
+svg .safe { stroke:var(--acc); stroke-width:2.4; fill:none; }
+svg .doer { stroke:var(--ink2); stroke-width:1.4; fill:none; stroke-dasharray:6 3; }
+svg .ctxw { stroke:var(--ink3); stroke-width:1; fill:none; }
+svg .hs { fill:var(--acc); } svg .hd { fill:var(--ink2); } svg .hc { fill:var(--ink3); }
+svg .iid { font:500 10.5px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink2); }
+svg .ctxt { font:11.5px -apple-system,'Segoe UI',Helvetica,Arial,sans-serif; fill:var(--ink3); }
+svg .eid { font:700 11px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--acc); }
+svg .eido { font:700 11px ui-monospace,'SF Mono',Menlo,Consolas,monospace; fill:var(--ink2); }
+</style>
+<rect class="bg" width="824" height="754"/>
+<text x="24" y="32" class="h">Safety view of the item architecture</text>
+<text x="24" y="54" class="t">WP-C-04 §2: the item of WP-C-01 Figure 5-1 as the functional safety concept sees it,</text>
+<text x="24" y="71" class="t">with each element's derived ASIL and the flows the rated requirements rest on</text>
+<rect x="254" y="74" width="268" height="524" rx="12" class="bound"/>
+<text x="262" y="90" class="bl">ITEM</text>
+<rect x="588" y="356" width="220" height="272" rx="8" class="vp"/>
+<text x="596" y="372" class="ctxt">Vehicle platform</text>
+<path d="M596 130 L508 130" class="ctxw"/>
+<path d="M508 130 L516 134.5 L516 125.5 Z" class="hc"/>
+<text x="552" y="124" class="iid" text-anchor="middle">I-01</text>
+<path d="M306 164 L306 214" class="doer"/>
+<path d="M306 214 L310.5 206 L301.5 206 Z" class="hd"/>
+<text x="314" y="194" class="iid">I-02</text>
+<path d="M478 164 L478 176 L515 176 L515 360 L478 360 L478 380" class="safe"/>
+<path d="M478 380 L482.5 372 L473.5 372 Z" class="hs"/>
+<text x="526" y="272" class="iid">I-13 detections</text>
+<path d="M338 326 L338 380" class="doer"/>
+<path d="M338 380 L342.5 372 L333.5 372 Z" class="hd"/>
+<text x="346" y="357" class="iid">I-03 commands (QM)</text>
+<path d="M174 231 L268 231" class="ctxw"/>
+<path d="M268 231 L260 226.5 L260 235.5 Z" class="hc"/>
+<text x="221" y="225" class="iid" text-anchor="middle">I-07</text>
+<path d="M174 273 L268 273" class="ctxw"/>
+<path d="M268 273 L260 268.5 L260 277.5 Z" class="hc"/>
+<text x="221" y="267" class="iid" text-anchor="middle">I-10</text>
+<path d="M174 315 L268 315" class="ctxw"/>
+<path d="M268 315 L260 310.5 L260 319.5 Z" class="hc"/>
+<text x="221" y="309" class="iid" text-anchor="middle">I-09</text>
+<path d="M174 480 L268 480" class="safe"/>
+<path d="M268 480 L260 475.5 L260 484.5 Z" class="hs"/>
+<text x="221" y="474" class="iid" text-anchor="middle">I-08 signed</text>
+<path d="M596 405 L508 405" class="safe"/>
+<path d="M508 405 L516 409.5 L516 400.5 Z" class="hs"/>
+<text x="552" y="399" class="iid" text-anchor="middle">I-05 state</text>
+<path d="M596 459 L508 459" class="safe"/>
+<path d="M508 459 L516 463.5 L516 454.5 Z" class="hs"/>
+<text x="552" y="453" class="iid" text-anchor="middle">door state</text>
+<path d="M508 513 L596 513" class="safe"/>
+<path d="M596 513 L588 508.5 L588 517.5 Z" class="hs"/>
+<text x="552" y="507" class="iid" text-anchor="middle">hold</text>
+<path d="M508 562 L596 562" class="safe"/>
+<path d="M596 562 L588 557.5 L588 566.5 Z" class="hs"/>
+<text x="552" y="556" class="iid" text-anchor="middle">I-04 bounded</text>
+<path d="M388 624 L388 580" class="safe"/>
+<path d="M388 580 L383.5 588 L392.5 588 Z" class="hs"/>
+<text x="396" y="616" class="iid">I-12 power</text>
+<rect x="268" y="100" width="76" height="64" rx="6" class="ctx"/>
+<text x="306" y="122" class="ctxt" text-anchor="middle">Autoware's</text>
+<text x="306" y="136" class="ctxt" text-anchor="middle">sensors</text>
+<text x="306" y="150" class="ctxt" text-anchor="middle">(EL-01)</text>
+<rect x="356" y="100" width="152" height="64" rx="7" class="in"/>
+<rect x="457.5" y="106" width="44.5" height="16" rx="3" class="ad"/>
+<text x="479.8" y="118" class="t4" text-anchor="middle">ASIL D</text>
+<text x="364" y="118" class="eid">EL-03</text>
+<text x="408" y="118" class="s">2 FSRs</text>
+<text x="364" y="136" class="tb">Safety perception</text>
+<text x="364" y="152" class="tb">channel</text>
+<rect x="268" y="214" width="240" height="112" rx="7" class="in"/>
+<rect x="480.5" y="220" width="21.5" height="16" rx="3" class="qm"/>
+<text x="491.2" y="232" class="tq" text-anchor="middle">QM</text>
+<text x="276" y="232" class="eid">EL-01</text>
+<text x="320" y="232" class="s">5 FSRs</text>
+<text x="276" y="250" class="tb">Autoware computer</text>
+<text x="276" y="266" class="s">Perceives, plans and drives; its</text>
+<text x="276" y="280" class="s">commands reach the vehicle only</text>
+<text x="276" y="294" class="s">through EL-02</text>
+<rect x="268" y="380" width="240" height="200" rx="7" class="ck"/>
+<rect x="457.5" y="386" width="44.5" height="16" rx="3" class="ad"/>
+<text x="479.8" y="398" class="t4" text-anchor="middle">ASIL D</text>
+<text x="276" y="398" class="eid">EL-02</text>
+<text x="320" y="398" class="s">22 FSRs</text>
+<text x="276" y="416" class="tb">Safety monitor</text>
+<text x="276" y="432" class="s">Bounds every command to the safety</text>
+<text x="276" y="446" class="s">envelope, and can stop the vehicle</text>
+<text x="276" y="460" class="s">alone</text>
+<rect x="24" y="214" width="150" height="34" rx="6" class="ctx"/>
+<text x="99" y="235" class="ctxt" text-anchor="middle">HD map data</text>
+<rect x="24" y="256" width="150" height="34" rx="6" class="ctx"/>
+<text x="99" y="277" class="ctxt" text-anchor="middle">Update backend</text>
+<rect x="24" y="298" width="150" height="34" rx="6" class="ctx"/>
+<text x="99" y="319" class="ctxt" text-anchor="middle">Passengers</text>
+<rect x="24" y="450" width="150" height="60" rx="7" class="out"/>
+<rect x="123.5" y="456" width="44.5" height="16" rx="3" class="ac"/>
+<text x="145.8" y="468" class="t4" text-anchor="middle">ASIL C</text>
+<text x="32" y="468" class="eido">EL-09</text>
+<text x="76" y="468" class="s">1 FSR</text>
+<text x="32" y="486" class="tb">Remote operations</text>
+<text x="32" y="502" class="tb">station</text>
+<rect x="596" y="100" width="204" height="60" rx="6" class="ctx"/>
+<text x="698" y="134" class="ctxt" text-anchor="middle">Other road users</text>
+<rect x="596" y="382" width="204" height="46" rx="7" class="out"/>
+<rect x="749.5" y="388" width="44.5" height="16" rx="3" class="ad"/>
+<text x="771.8" y="400" class="t4" text-anchor="middle">ASIL D</text>
+<text x="604" y="400" class="eido">EL-06</text>
+<text x="648" y="400" class="s">2 FSRs</text>
+<text x="604" y="418" class="tb">Vehicle state sensing</text>
+<rect x="596" y="436" width="204" height="46" rx="7" class="out"/>
+<rect x="749.5" y="442" width="44.5" height="16" rx="3" class="ad"/>
+<text x="771.8" y="454" class="t4" text-anchor="middle">ASIL D</text>
+<text x="604" y="454" class="eido">EL-08</text>
+<text x="648" y="454" class="s">1 FSR</text>
+<text x="604" y="472" class="tb">Door system</text>
+<rect x="596" y="490" width="204" height="46" rx="7" class="out"/>
+<rect x="749.5" y="496" width="44.5" height="16" rx="3" class="ad"/>
+<text x="771.8" y="508" class="t4" text-anchor="middle">ASIL D</text>
+<text x="604" y="508" class="eido">EL-05</text>
+<text x="648" y="508" class="s">1 FSR</text>
+<text x="604" y="526" class="tb">Park brake</text>
+<rect x="596" y="544" width="204" height="76" rx="7" class="out"/>
+<rect x="749.5" y="550" width="44.5" height="16" rx="3" class="ad"/>
+<text x="771.8" y="562" class="t4" text-anchor="middle">ASIL D</text>
+<text x="604" y="562" class="eido">EL-04</text>
+<text x="648" y="562" class="s">4 FSRs</text>
+<text x="604" y="580" class="tb">Vehicle drive-by-wire</text>
+<text x="604" y="596" class="s">Stops on its own if the monitor</text>
+<text x="604" y="610" class="s">falls silent</text>
+<rect x="268" y="624" width="240" height="46" rx="7" class="out"/>
+<rect x="457.5" y="630" width="44.5" height="16" rx="3" class="ad"/>
+<text x="479.8" y="642" class="t4" text-anchor="middle">ASIL D</text>
+<text x="276" y="642" class="eido">EL-07</text>
+<text x="320" y="642" class="s">1 FSR</text>
+<text x="276" y="660" class="tb">Monitor power supply</text>
+<rect x="24" y="696" width="22" height="16" rx="4" class="in"/>
+<text x="54" y="708" class="t">Element in the item</text>
+<rect x="199.5" y="696" width="22" height="16" rx="4" class="out"/>
+<text x="229.5" y="708" class="t">Element outside the item</text>
+<rect x="407.5" y="696" width="22" height="16" rx="4" class="ctx"/>
+<text x="437.5" y="708" class="t">Context, not an element</text>
+<line x1="24" y1="728" x2="50" y2="728" class="safe"/>
+<text x="58" y="732" class="t">flow a rated requirement rests on</text>
+<line x1="296.5" y1="728" x2="322.5" y2="728" class="doer"/>
+<text x="330.5" y="732" class="t">Autoware's commands and data (QM)</text>
+</svg>

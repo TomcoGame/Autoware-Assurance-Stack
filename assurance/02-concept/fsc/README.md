@@ -18,9 +18,9 @@ The whole functional safety concept of [WP-C-04](../WP-C-04-functional-safety-co
 
 ## 1. The item
 
-![The item boundary: inside it the sensors, the Autoware computer and the safety monitor; outside it, on the left, the HD map data, the update backend, the remote operations centre and the passengers; on the right, the vehicle platform with its drive-by-wire system, the power supply and the other road users. Arrows numbered I-01 to I-13 show what crosses the boundary.](../figures/fig-c01-5-1-boundary.svg)
+![Figure 2-1: the item boundary of WP-C-01 redrawn with the elements of the functional safety concept. Inside the item: Autoware computer (EL-01, QM), Safety monitor (EL-02, ASIL D), Safety perception channel (EL-03, ASIL D). Outside it: Vehicle drive-by-wire (EL-04, ASIL D), Park brake (EL-05, ASIL D), Vehicle state sensing (EL-06, ASIL D), Monitor power supply (EL-07, ASIL D), Door system (EL-08, ASIL D), Remote operations station (EL-09, ASIL C). Autoware's commands (dashed) reach the drive-by-wire only through the safety monitor; every flow a rated requirement rests on (solid) starts or ends at the monitor. Each element shows its derived ASIL and the number of FSRs allocated to it; the same data are in the elements table.](fig-c04-2-1-safety-view.svg)
 
-*The item and its boundary, from [WP-C-01](../WP-C-01-item-definition.md) §5. The concept places its requirements on the elements below.*
+*Figure 2-1. The safety view of the item architecture: the item of [WP-C-01](../WP-C-01-item-definition.md) §5 (its [boundary drawing](../figures/fig-c01-5-1-boundary.svg)) with the elements this concept places its requirements on.*
 
 | ID | Element | In the item | Derived ASIL | Role | Assumption | FSRs |
 |---|---|---|---|---|---|---|
@@ -155,7 +155,8 @@ The elements outside the item carry rated requirements through the assumptions o
 | File | What it holds |
 |---|---|
 | [`fsrs.csv`](fsrs.csv) | Every functional safety requirement with its goal, ASIL, element, how WP-C-04 says to verify it, and the safety mechanisms, technical safety requirements and verification cases that trace to it |
+| [`fig-c04-2-1-safety-view.svg`](fig-c04-2-1-safety-view.svg) | Figure 2-1, the safety view of the item architecture |
 | [`fig-c04-4-1-allocation.svg`](fig-c04-4-1-allocation.svg) | Figure 4-1, which element carries which safety goal |
 | [`fig-c04-4-2-goals.svg`](fig-c04-4-2-goals.svg) | Figure 4-2, how the concept holds each safety goal |
 | [`fsc.yaml`](fsc.yaml) | The elements and the functional safety requirements |
-| [`fsc.py`](fsc.py), [`envelope.py`](envelope.py) | The generator: checks the model against the HARA, the item definition and the decision register, and writes WP-C-04's tables and everything here |
+| [`fsc.py`](fsc.py), [`envelope.py`](envelope.py), [`safetyview.py`](safetyview.py) | The generator: checks the model against the HARA, the item definition and the decision register, and writes WP-C-04's tables and everything here |
