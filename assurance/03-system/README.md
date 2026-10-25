@@ -28,7 +28,7 @@ Standard clauses: UL 4600 §9–10; 26262-4; SYS.1–5.
 
 | Folder | What it holds |
 |---|---|
-| [`hsi/`](hsi/) | — |
+| [`hsi/`](hsi/README.md) | Hardware-software interface |
 | [`integ/`](integ/) | — |
 | [`secarch/`](secarch/) | — |
 | [`timing/`](timing/README.md) | Timing: FTTI, detection and reaction budget |

@@ -49,9 +49,15 @@ import timing  # noqa: E402
 import tsc  # noqa: E402
 import tsr  # noqa: E402
 
+sys.path.insert(0, str(HERE))
+import icards  # noqa: E402
+
 MODEL = HERE / "hsi.yaml"
 DOC = ASSURANCE / "03-system" / "WP-S-05-hsi-specification.md"
 FIG = HERE / "fig-s05-1-1-signals.svg"
+FIG2 = HERE / "fig-s05-1-2-interfaces.svg"
+CSV = HERE / "signals.csv"
+README = HERE / "README.md"
 PROTECTION = ("e2e", "signature", "none")
 KEYS = {"id", "interface", "dir", "name", "content", "serves", "protection"}
 # Which section of WP-S-05 an interface belongs to, by the components at its ends.
@@ -255,7 +261,20 @@ PROT = {"e2e": "End-to-end", "signature": "Signed (CSR-01) and aged", "none": "N
 
 def tables(m: dict, k: dict) -> dict[str, str]:
     comps = k["components"]
-    t = {}
+    t = {
+        "hsi-interface-cards": (
+            "![Figure 1-2: one card per interface IF-01 to IF-09. Each shows the two components it joins, its "
+            "item interface and medium, and every signal crossing it with its direction, protection (end to "
+            "end, or signed), the ASIL of the requirements it serves at the sending and the receiving end, its "
+            "receive timeout and the mechanism that sets it, and the longest period that keeps three frames in "
+            "the timeout; where the interface carries a timed signal, a strip shows the tightest one with its "
+            "frames in the timeout window, one of them lost. The same values are in the tables below.]"
+            f"(hsi/{FIG2.name})\n\n"
+            "*Figure 1-2. What crosses each interface, and how fast. Drawn by [`hsi/hsi.py`](hsi/hsi.py) from "
+            "`hsi/hsi.yaml`; CI fails if it is stale. Every signal is also in "
+            f"[`hsi/{CSV.name}`](hsi/{CSV.name}).*"
+        )
+    }
     rows = [
         "| ID | From → to | Item interface | Medium | Signals |",
         "|---|---|---|---|---|",
@@ -388,12 +407,194 @@ def figure(m: dict, k: dict) -> str:
     return fk.svg(W, int(y + 6), "WP-S-05 Figure 1-1: signal timeouts", desc + ".", body, EXTRA)
 
 
+def card_data(m: dict, k: dict) -> list[dict]:
+    """Each interface with its ends and signals worked out, for the interface cards."""
+    comps = k["components"]
+    n = m["frames_per_timeout"]
+    out = []
+    for f in m["interfaces"]:
+        sigs = []
+        for s in m["signals"]:
+            if s["interface"] != f["id"]:
+                continue
+            a, b = ends(s, f)
+            to = tmo(m, s, k)
+            sigs.append(
+                {
+                    "id": s["id"],
+                    "name": s["name"],
+                    "dir": s.get("dir", "forward"),
+                    "protection": s["protection"],
+                    "asil_tx": asils(s, k, a),
+                    "asil_rx": asils(s, k, b),
+                    "timeout": timing.ms(to[0]) if to else "",
+                    "timeout_s": to[0] if to else None,
+                    "by": to[1] if to else "",
+                    "period": timing.ms(to[0] / n) if to else "",
+                }
+            )
+        out.append(
+            {
+                "id": f["id"],
+                "a": comps[f["link"][0]]["name"],
+                "b": comps[f["link"][1]]["name"],
+                "item": f["item"],
+                "medium": f["medium"],
+                "untrusted": bool(f.get("untrusted")),
+                "signals": sigs,
+            }
+        )
+    return out
+
+
+def signals_csv(m: dict, k: dict) -> str:
+    """Every signal with its interface, ends, protection, ASILs, timing and the requirements it serves."""
+    import csv
+    import io
+
+    ifs = {f["id"]: f for f in m["interfaces"]}
+    comps = k["components"]
+    n = m["frames_per_timeout"]
+    buf = io.StringIO()
+    w = csv.writer(buf, lineterminator="\n")
+    w.writerow(
+        [
+            "ID",
+            "Signal",
+            "Interface",
+            "Item interface (WP-C-01)",
+            "From",
+            "To",
+            "Content",
+            "Protection",
+            "Sender ASIL",
+            "Receiver ASIL",
+            "Receive timeout (WP-S-04)",
+            "Set by",
+            "Maximum period",
+            "Medium",
+            "Serves",
+        ]
+    )
+    for s in m["signals"]:
+        f = ifs[s["interface"]]
+        a, b = ends(s, f)
+        to = tmo(m, s, k)
+        w.writerow(
+            [
+                s["id"],
+                s["name"],
+                f["id"],
+                f["item"],
+                f"{a} {comps[a]['name']}",
+                f"{b} {comps[b]['name']}",
+                s["content"],
+                PROT[s["protection"]],
+                asils(s, k, a),
+                asils(s, k, b),
+                timing.ms(to[0]) if to else "Event; checked when used",
+                to[1] if to else "—",
+                timing.ms(to[0] / n) if to else "—",
+                f["medium"],
+                ", ".join(s["serves"]),
+            ]
+        )
+    return buf.getvalue()
+
+
+def here(md: str) -> str:
+    """Text of WP-S-05 with its relative links rewritten to work from this folder."""
+    md = md.replace("](hsi/", "](")
+    return re.sub(r"\]\((?!https?:|#|fig-|signals\.csv|hsi\.|README)", "](../", md)
+
+
+def readme(t: dict[str, str], doc: str) -> str:
+    """The folder page: the whole hardware-software interface on one page."""
+
+    def part(heading: str) -> str:
+        return here(fk.section(doc, heading).strip())
+
+    files = [
+        "| File | What it holds |",
+        "|---|---|",
+        f"| [`{CSV.name}`]({CSV.name}) | Every signal with its interface, ends, content, protection, the ASIL at each end, its receive timeout and maximum period, its medium and the requirements it serves |",
+        f"| [`{FIG.name}`]({FIG.name}) | Figure 1-1, receive timeout and longest period of each timed signal |",
+        f"| [`{FIG2.name}`]({FIG2.name}) | Figure 1-2, what crosses each interface and how fast |",
+        "| [`hsi.yaml`](hsi.yaml) | Interfaces, signals, clocks, hardware diagnostics and supplier-internal requirements |",
+        "| [`hsi.py`](hsi.py), [`icards.py`](icards.py) | The generator: checks the model against the architecture, the technical safety requirements, the item definition and the timing budget, and writes WP-S-05's tables and everything here |",
+    ]
+    lines = [
+        "<!-- Generated by assurance/03-system/hsi/hsi.py; do not edit by hand. -->",
+        "",
+        "# Hardware-software interface",
+        "",
+        "The whole hardware-software interface of [WP-S-05](../WP-S-05-hsi-specification.md) on one page: "
+        "every interface of the [technical safety concept](../tsc/README.md)'s architecture and the signals "
+        "that cross it, their protection and timing, the clocks they are stamped against, and the hardware "
+        "diagnostics the monitor's software relies on. The timeouts come from the [timing budget](../timing/README.md) "
+        "and the signals serve the [technical safety requirements](../tsr/README.md). Everything here is "
+        "generated by `hsi.py` from `hsi.yaml`; CI fails if it is stale. Everything is a draft by Claude (I0) "
+        "until it is reviewed.",
+        "",
+        t["hsi-summary"],
+        "",
+        "1. [Interfaces, protection and timing](#1-interfaces-protection-and-timing)",
+        "2. [Compute and safety monitor](#2-compute-and-safety-monitor)",
+        "3. [Drive-by-wire command and feedback](#3-drive-by-wire-command-and-feedback)",
+        "4. [Sensors and time synchronisation](#4-sensors-and-time-synchronisation)",
+        "5. [Diagnostics and status](#5-diagnostics-and-status)",
+        "6. [Files in this folder](#6-files-in-this-folder)",
+        "",
+        "## 1. Interfaces, protection and timing",
+        "",
+        re.sub(
+            r"<!-- BEGIN GENERATED: hsi-summary .*?END GENERATED: hsi-summary -->\n\n",
+            "",
+            part("## 1. Purpose"),
+            flags=re.S,
+        ),
+        "",
+        f"Every signal is also in [`{CSV.name}`]({CSV.name}), which GitHub shows as a table that can be "
+        "searched.",
+        "",
+        "## 2. Compute and safety monitor",
+        "",
+        part("## 2. Compute and safety monitor interfaces"),
+        "",
+        "## 3. Drive-by-wire command and feedback",
+        "",
+        part("## 3. Drive-by-wire command and feedback signals"),
+        "",
+        "## 4. Sensors and time synchronisation",
+        "",
+        part("## 4. Sensor interfaces and time synchronisation"),
+        "",
+        "## 5. Diagnostics and status",
+        "",
+        part("## 5. Diagnostics and status signals"),
+        "",
+        "## 6. Files in this folder",
+        "",
+        *files,
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def build() -> dict[Path, str]:
     m, k = load(), known()
     errs = check(m, k)
     if errs:
         raise fk.FigureError("hsi.yaml: " + "; ".join(errs))
-    return {DOC: fill(DOC.read_text(encoding="utf-8"), tables(m, k)), FIG: figure(m, k)}
+    t = tables(m, k)
+    doc = fill(DOC.read_text(encoding="utf-8"), t)
+    return {
+        DOC: doc,
+        FIG: figure(m, k),
+        FIG2: icards.sheet(card_data(m, k), m["frames_per_timeout"]),
+        CSV: signals_csv(m, k),
+        README: readme(t, doc),
+    }
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@
 |---|---|
 | Work product | WP-S-05 Hardware-software interface, including the drive-by-wire interface |
 | Standard reference | UL 4600 §10; ISO 26262-4 §6; ASPICE 4.0 SYS.3 |
-| Version | 0.2 (first content: interfaces, signals with their protection, receive timeouts and maximum periods, clocks, and the hardware diagnostics the monitor's software uses, generated from `hsi/hsi.yaml`; 2026-10-24). 0.1 (skeleton; 2026-10-22) |
+| Version | 0.3 (folder page `hsi/README.md` with the whole interface on one page, Figure 1-2 on what crosses each interface and how fast, and `hsi/signals.csv` with every signal; 2026-10-25). 0.2 (first content: interfaces, signals with their protection, receive timeouts and maximum periods, clocks, and the hardware diagnostics the monitor's software uses, generated from `hsi/hsi.yaml`; 2026-10-24). 0.1 (skeleton; 2026-10-22) |
 | Status | Draft |
 | ASIL / scope | ASIL D |
 | Author | Claude (AI assistant; I0 per WP-M-02) |
@@ -50,6 +50,14 @@ The model is kept in `hsi/hsi.yaml`; `hsi/hsi.py` checks it and writes the table
 | IF-09 | CMP-09 Door system → CMP-02 Safety monitor controller | I-05 | The vehicle's by-wire bus, set by the vehicle (DQ-008) | SIG-19 |
 
 <!-- END GENERATED: hsi-interfaces -->
+
+<!-- BEGIN GENERATED: hsi-interface-cards (assurance/03-system/hsi/hsi.py) -->
+
+![Figure 1-2: one card per interface IF-01 to IF-09. Each shows the two components it joins, its item interface and medium, and every signal crossing it with its direction, protection (end to end, or signed), the ASIL of the requirements it serves at the sending and the receiving end, its receive timeout and the mechanism that sets it, and the longest period that keeps three frames in the timeout; where the interface carries a timed signal, a strip shows the tightest one with its frames in the timeout window, one of them lost. The same values are in the tables below.](hsi/fig-s05-1-2-interfaces.svg)
+
+*Figure 1-2. What crosses each interface, and how fast. Drawn by [`hsi/hsi.py`](hsi/hsi.py) from `hsi/hsi.yaml`; CI fails if it is stale. Every signal is also in [`hsi/signals.csv`](hsi/signals.csv).*
+
+<!-- END GENERATED: hsi-interface-cards -->
 
 ### 1.2 Protection, timeouts and periods
 
