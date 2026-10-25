@@ -393,6 +393,15 @@ def here(md: str) -> str:
     return re.sub(r"\]\((?!https?:|#|\.\./\.\./|fig-|fsrs|README)", "](../", md)
 
 
+def item_figure() -> str:
+    """WP-C-01 Figure 5-1 as WP-C-01 shows it, with its path rewritten to work from this folder."""
+    md = ITEM.read_text(encoding="utf-8")
+    hit = re.search(r"^!\[[^\n]*\]\(figures/fig-c01-5-1-boundary\.svg\)$", md, flags=re.M)
+    if not hit:
+        raise fk.FigureError("WP-C-01 §5 no longer shows figures/fig-c01-5-1-boundary.svg")
+    return hit.group(0).replace("](figures/", "](../figures/")
+
+
 def readme(m: dict, sg: dict[str, dict], t: dict[str, str], doc: str) -> str:
     """The folder page: the whole functional safety concept on one page."""
 
@@ -441,11 +450,19 @@ def readme(m: dict, sg: dict[str, dict], t: dict[str, str], doc: str) -> str:
         "",
         "## 1. The item",
         "",
+        "The item as [WP-C-01](../WP-C-01-item-definition.md) defines it, before any safety analysis: what is "
+        "inside it, what is outside, and the interfaces that cross its boundary.",
+        "",
+        item_figure(),
+        "",
+        "*WP-C-01 Figure 5-1. The item boundary and its interfaces I-01 to I-13 (WP-C-01 §5).*",
+        "",
+        "The same item as this concept sees it: the elements it places its requirements on, each with its "
+        "derived ASIL, and the flows the rated requirements rest on.",
+        "",
         f"![{safetyview.alt(m, element_asil(m))}]({FIG0.name})",
         "",
-        "*Figure 2-1. The safety view of the item architecture: the item of [WP-C-01](../WP-C-01-item-definition.md) "
-        "§5 (its [boundary drawing](../figures/fig-c01-5-1-boundary.svg)) with the elements this concept places "
-        "its requirements on.*",
+        "*Figure 2-1. The safety view of the item architecture.*",
         "",
         here(t["fsc-elements"]),
         "",
