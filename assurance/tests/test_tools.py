@@ -73,6 +73,7 @@ import secarch  # noqa: E402
 import simenv  # noqa: E402
 import sotif  # noqa: E402
 import stpa  # noqa: E402
+import sysml  # noqa: E402
 import tara  # noqa: E402
 import terms  # noqa: E402
 import timing  # noqa: E402
@@ -844,6 +845,47 @@ class Tsc(unittest.TestCase):
             self.assertTrue(any(needle in x for x in tsc.check(model, k)), needle)
 
 
+class Sysml(unittest.TestCase):
+    def test_real_model_reads_back(self):
+        m, k = tsc.load(), tsc.known()
+        self.assertEqual(sysml.check(m, k, sysml.write(m, k)), [])
+
+    def test_component_carries_the_derived_asil(self):
+        m, k = tsc.load(), tsc.known()
+        got, _ = sysml.read(sysml.write(m, k))
+        self.assertEqual(got["components"]["CMP-04"], ("EL-03", tsc.label(m, k, "CMP-04")))
+        self.assertIn(("SM-01", "CMP-02"), got["allocations"])
+
+    def test_text_that_differs_from_the_architecture_is_refused(self):
+        m, k = tsc.load(), tsc.known()
+        text = sysml.write(m, k)
+        cases = [
+            (
+                text.replace("allocate 'SM-01' to 'CMP-02';", "allocate 'SM-01' to 'CMP-03';"),
+                "allocations ('SM-01', 'CMP-02'): in tsc.yaml but not in the SysML model",
+            ),
+            (
+                text.replace("satisfy 'FSR-02.02' by 'SM-01';\n", ""),
+                "satisfies ('FSR-02.02', 'SM-01'): in tsc.yaml but not in the SysML model",
+            ),
+            (
+                text.replace("allocate 'SM-01' to 'CMP-02';", "allocate 'SM-01' to 'CMP-99';"),
+                "CMP-99: used but not declared",
+            ),
+            (
+                text.replace(':>> asil = "QM";', ':>> asil = "B";', 1),
+                "components CMP-01: SysML says",
+            ),
+            (text + "}\n", "braces do not balance"),
+        ]
+        for bad, needle in cases:
+            self.assertNotEqual(bad, text, needle)
+            self.assertTrue(any(needle in x for x in sysml.check(m, k, bad)), needle)
+        bad = copy.deepcopy(m)
+        bad["mechanisms"][0]["host"] = "CMP-01"
+        self.assertTrue(sysml.check(bad, k, text))
+
+
 class Timing(unittest.TestCase):
     def test_real_model_passes(self):
         self.assertEqual(timing.check(timing.load(), timing.known()), [])
@@ -1490,6 +1532,7 @@ class Generators(unittest.TestCase):
             ai,
             misuse,
             tsc,
+            sysml,
             timing,
             tsr,
             hsi,

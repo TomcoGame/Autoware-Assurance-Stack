@@ -52,7 +52,7 @@ for g in assurance/01-management/figures/fig_m00_register.py assurance/01-manage
          assurance/02-concept/modifications/modifications.py assurance/08-analyses/stpa/stpa.py \
          assurance/02-concept/tara/tara.py assurance/02-concept/cybersecurity/cybersecurity.py \
          assurance/02-concept/ai/ai.py assurance/02-concept/misuse/misuse.py \
-         assurance/03-system/tsc/tsc.py assurance/03-system/timing/timing.py \
+         assurance/03-system/tsc/tsc.py assurance/03-system/tsc/sysml.py assurance/03-system/timing/timing.py \
          assurance/03-system/tsr/tsr.py assurance/03-system/hsi/hsi.py assurance/03-system/secarch/secarch.py \
          assurance/03-system/integ/integ.py assurance/03-system/verif/verif.py \
          assurance/06-validation/scenarios/scenarios.py assurance/06-validation/simenv/simenv.py \
