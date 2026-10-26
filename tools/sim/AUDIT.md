@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Item audited | [`tools/sim/`](README.md) (scene descriptions, Blender builder, review dashboards, gallery), the workflows [`sim.yaml`](../../.github/workflows/sim.yaml) and [`sim-render.yaml`](../../.github/workflows/sim-render.yaml), the added section of [`tools/readme/models/CREDITS.md`](../readme/models/CREDITS.md) and the added line of `CLAUDE.md` |
-| Baseline | First round: `4295f6b` on `origin/main` `310b1be`, fixed in `a9dc860`. Second round (picture quality): `a9dc860`, fixed in the commit after it (pull request #57) |
+| Baseline | First round: `4295f6b` on `origin/main` `310b1be`, fixed in `a9dc860`. Second round (picture quality): `a9dc860`, fixed in the commit after it. Third round: `05e8495`. Fourth round (every drawable scenario, variants): the working tree before `7194991`, fixed in `7194991` and the commits after it (pull request #57) |
 | Review type | Pre-review audit (author-side self-check), in the form of the LionDriver review records. **Not** a verification review: WP-P-05 (verification and review procedure) is still a skeleton, and this record does not count as one |
 | Checklist | The brief of the task (below, C-01 to C-14) and the rules of `CLAUDE.md` |
 | Date | 2026-10-25 |
@@ -17,7 +17,7 @@ FC fully met, PC partly met, NO not met.
 | # | Requirement (brief, `CLAUDE.md`) | Result | Evidence |
 |---|---|---|---|
 | C-01 | Find out whether Blender runs here; do not fake renders | FC | `bpy` 5.2.3 from PyPI runs headless with Cycles on the CPU; the dashboards in [`dashboards/`](dashboards/README.md) were rendered by it, and their manifests record the version |
-| C-02 | A tool that turns a scenario into a Blender scene: road layout, the ego and the other road users placed from the scenario's parameters, Autoware's planned path and the monitor's envelope, ODD conditions | FC | Five scenes (SC-01, SC-02, SC-03, SC-06, SC-14); `--verify` checks the road users' positions and the conditions and features drawn (F-09) |
+| C-02 | A tool that turns a scenario into a Blender scene: road layout, the ego and the other road users placed from the scenario's parameters, Autoware's planned path and the monitor's envelope, ODD conditions | FC | 34 scenes: every scenario that may be drawn (21) and 13 condition variants (round 4); `--verify` checks the road users' positions and the conditions and features drawn (F-09) |
 | C-03 | A sample inside the stated ranges, chosen deterministically | FC | `test_samples_lie_inside_the_stated_ranges`, `test_the_draw_is_deterministic`, `test_each_parameter_has_its_own_draw`, `test_ego_speed_never_above_the_posted_limit` (F-02, F-03) |
 | C-04 | Every label and number read from the records, never typed | FC | [README, where the labels come from](README.md#where-the-labels-come-from); `test_labels_come_from_the_records`. The envelope legend's "vehicle not chosen" is now tied to DQ-008 (F-12). Panel headings and filmstrip captions describe the picture, not the item |
 | C-05 | Motion is a qualitative illustration; every render stamped; never presented as V&V evidence | FC | The stamp is checked on every dashboard and clip by `--verify` (`test_a_missing_stamp_fails`); the gallery and README open with the warning; road users are tagged *qualitative* |
@@ -161,22 +161,23 @@ the author's own new overlap test had already caught three drawn collisions (F-5
 | F-58 | SC-10 | The red planned path runs into the barrier: it stands for Autoware following the map that still shows the lane open. The legend calls it Autoware's planned path, which is what it is in that scenario | Note | **Kept** |
 | F-59 | SC-05 | The ego starts to slow after the main view's moment, so the still shows it cruising up to the line while the red-runner crosses | Note | **Kept:** consistent with the pass criterion (it does not enter while the path is crossed) |
 | F-60 | SC-13 (cold read) | At the stop the e-scooter lying in the lane is mostly hidden by the ego in the chase view; it shows in the forward and top views | Note | **Kept:** the stop before the object is the point of the still; the forward view shows what the vehicle stops for |
+| F-61 | Dashboard header (cold read) | The header's condition names only light and weather, so the variant SC-09--markings-visible read "Condition (variant): not set by the scenario" | Minor | **Fixed:** a variant's header names what it changes |
 
 ## Checks run before pushing
 
-Run on the commit of the third round, in the session's container (Python 3.13, PyYAML 6.0.2, `bpy` 5.2.3):
+Run on the commit of the fourth round, in the session's container (Python 3.13, PyYAML 6.0.2, `bpy` 5.2.3):
 
 | Check | Result |
 |---|---|
 | Everything `CLAUDE.md` lists: the decision register, the safety case records, headers, links, tables, `check_restricted.py`, every generator with `--check`, the assurance tests, the README figures | All pass |
-| `python3 tools/sim/scene.py --check` | 6 generated files current |
-| `python3 -m unittest discover -s tools/sim -p 'test_*.py'` | 36 tests pass |
-| `build_blend.py tools/sim/scenes/*.json --out tools/sim/dashboards --verify` (32 samples, CC0 look after `fetch_assets.py --locked`) | All five scenes match their descriptions; the gallery shows each dashboard as current |
-| The wiki's tests and `build_wiki.py --check` | Pass |
+| `python3 tools/sim/scene.py --check` | 35 generated files current (34 descriptions and the gallery) |
+| `python3 -m unittest discover -s tools/sim -p 'test_*.py'` | 44 tests pass |
+| `build_blend.py <scene> --out tools/sim/dashboards --verify` for all 34 scenes (32 samples, CC0 look after `fetch_assets.py --locked`) | All 34 match their descriptions; the gallery shows each dashboard as current |
+| `sim-render.yaml` on pull request #57, one job per scene (48 samples) | All 34 jobs built, verified and rendered, about 15 minutes in all |
 | black and isort at line length 100 | Clean |
 | `git diff origin/main -- assurance/` | Empty |
 
 ## What this record does not do
 
 It does not verify the tool in the sense of WP-P-05, accept anything, or make any picture evidence. The open items
-(F-10 for the clip's overlay, F-16, F-17, F-27, F-28) wait on the lead's review of pull request #57.
+(F-10 for the clip's overlay, F-16, F-17, F-27, F-28, F-50, F-57) wait on the lead's review of pull request #57.

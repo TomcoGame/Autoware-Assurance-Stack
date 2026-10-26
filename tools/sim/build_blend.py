@@ -316,11 +316,19 @@ def moments(desc: dict) -> list[tuple[float, str]]:
     return kept
 
 
+def condition(desc: dict) -> str:
+    """The header's condition: the sample's light and weather, and for a variant what it changes."""
+    text, v = desc["condition_label"], desc.get("variant")
+    if v and v["label"] not in text:
+        text = v["label"] if text == "not set by the scenario" else f"{text} · {v['label']}"
+    return text
+
+
 def header_fields(desc: dict) -> list[tuple[str, str]]:
     speed = next((p for p in desc["sample"]["parameters"] if p["parameter"] == "ODD-20"), None)
     return [
         ("Motion", "choreography (qualitative)"),
-        ("Condition (variant)" if desc.get("variant") else "Condition", desc["condition_label"]),
+        ("Condition (variant)" if desc.get("variant") else "Condition", condition(desc)),
         ("Ego speed (sample)", f"{speed['value']:g} {speed['unit']}" if speed else "—"),
         ("Methods (WP-V-03)", ", ".join(desc["scenario"]["methods"])),
     ]

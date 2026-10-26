@@ -1,0 +1,202 @@
+{
+ "scenario": "SC-13",
+ "scene": "SC-13--night",
+ "blender": "5.2.3 LTS",
+ "render": {
+  "engine": "CYCLES",
+  "samples": 32,
+  "size": [
+   1600,
+   900
+  ],
+  "still_frame": 46,
+  "frames": 58,
+  "fps": 12,
+  "dashboard_samples": {
+   "chase": 32,
+   "dashboard": 16
+  },
+  "supersample": 1.5
+ },
+ "objects": {
+  "ego": [
+   1.75,
+   35.0
+  ],
+  "actor0-e-scooter": [
+   1.9,
+   40.0
+  ],
+  "actor1-car": [
+   -1.75,
+   29.65
+  ]
+ },
+ "drawn": {
+  "light": "night",
+  "wet": false,
+  "rain": false,
+  "fog": false,
+  "beyond": [],
+  "features": [],
+  "stop_line": false,
+  "speed_sign": false,
+  "occlusion": false,
+  "props": [
+   "debris"
+  ],
+  "signal": null,
+  "ego_lights": null,
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [
+   "e-scooter"
+  ],
+  "overlay_top_m": 0.05
+ },
+ "look": {
+  "assets": [
+   {
+    "slot": "asphalt",
+    "id": "asphalt_02",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "bin",
+    "id": "metal_trash_can",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "concrete",
+    "id": "Concrete034",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_a",
+    "id": "Facade018A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_b",
+    "id": "Facade019A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_c",
+    "id": "Facade020A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "grass",
+    "id": "Grass004",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "hdri_night",
+    "id": "dikhololo_night",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "hydrant",
+    "id": "fire_hydrant",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "tree",
+    "id": "tree_small_02",
+    "source": "polyhaven"
+   }
+  ],
+  "furniture": {
+   "tree": 11,
+   "bin": 5,
+   "hydrant": 3
+  },
+  "pedestrians": "primitives"
+ },
+ "description": "tools/sim/scenes/SC-13--night.json",
+ "description_sha256": "a8b82ef7205e1d679829637c8805d3eff80b55840055b01a71d721d94342c173",
+ "clip_texts": [
+  "SC-13 Rare object or debris in the lane",
+  "A fallen load, low debris, an animal, an e-scooter lying in the lane, or cones placed to trap the vehicle",
+  "One concrete scenario (seeded sample of the logical\nscenario)",
+  "ODD-20 Ego speed: 30.9 km/h (range 0 to 48 km/h)",
+  "ODD-16 Traffic participants: e-scooter",
+  "ODD-12 Illumination: night",
+  "ODD-13 Road surface condition: dry",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033);\nchoreography, not Autoware's planned braking",
+  "Safety goals at stake",
+  "SG-02 (ASIL D): Decelerate at least as much as needed to avoid a\ncollision the planned trajectory avoids",
+  "SG-03 (ASIL C): Avoid unintended hard deceleration",
+  "Pass criterion",
+  "The vehicle stops before the object or passes it within the lane\nwhen clear; a vehicle that cannot find a way on reaches a minimal\nrisk condition and asks for help (FSR-02.01, FSR-02.02, FSR-03.01,\nFM-03, TR-14, SR-01, AC-02)",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Meant to do: stops before it, or passes in lane",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: Rare object or debris in the lane",
+  "Amber, ringed: the road user the scenario is about",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "texts": [
+  "SC-13 Rare object or debris in the lane",
+  "SG-02 ASIL D",
+  "SG-03 ASIL C",
+  "Motion",
+  "choreography (qualitative)",
+  "Condition (variant)",
+  "ODD-12 night · ODD-13 dry",
+  "Ego speed (sample)",
+  "30.9 km/h",
+  "Methods (WP-V-03)",
+  "Simulation, Track",
+  "Scenario (WP-V-03)",
+  "A fallen load, low debris, an animal, an e-scooter lying in the lane, or cones placed to trap the vehicle",
+  "Triggering conditions (WP-C-06)",
+  "TC-15 People of unusual shape or posture (wheelchairs, children, people carrying large objects or pushing strollers)",
+  "TC-16 Rare objects (animals, e-scooters, fallen loads, debris low on the road)",
+  "Situations: OS-01",
+  "Misuse (WP-C-08): MU-12",
+  "Loss scenarios (WP-A-05): LS-01",
+  "One concrete scenario (seeded sample)",
+  "ODD-20 Ego speed: 30.9 km/h (range 0 to 48 km/h)",
+  "ODD-16 Traffic participants: e-scooter",
+  "ODD-12 Illumination: night",
+  "ODD-13 Road surface condition: dry",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "Car (qualitative)",
+  "Ego robotaxi (choreography)",
+  "E scooter lying in the lane (qualitative)",
+  "Meant to do: stops before it, or passes in lane",
+  "Pass criterion: The vehicle stops before the object or passes it within the lane when clear; a vehicle that cannot find a way on reaches a minimal risk condition and asks for help (FSR-02.01, FSR-02.02, FSR-03.01, FM-03, TR-14, SR-01, AC-02)",
+  "start",
+  "vehicle starts to slow",
+  "vehicle stands still; main view",
+  "Forward view",
+  "Top view: planned path, envelope, hazard",
+  "Safety goals at stake",
+  "SG-02 (ASIL D): Decelerate at least as much as needed to avoid a collision the planned trajectory avoids",
+  "SG-03 (ASIL C): Avoid unintended hard deceleration",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: Rare object or debris in the lane",
+  "Amber, ringed: the road user the scenario is about",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "tags": [
+  "Ego robotaxi (choreography)",
+  "E scooter lying in the lane (qualitative)",
+  "Car (qualitative)"
+ ],
+ "moments": [
+  "start",
+  "vehicle starts to slow",
+  "vehicle stands still; main view"
+ ],
+ "dashboard": "SC-13--night.jpg",
+ "dashboard_sha256": "238477146d50efa273d8ac52c4b5dc2ab661c2295c082a5b798486e5332caa93"
+}

@@ -1,0 +1,208 @@
+{
+ "scenario": "SC-14",
+ "scene": "SC-14--night",
+ "blender": "5.2.3 LTS",
+ "render": {
+  "engine": "CYCLES",
+  "samples": 32,
+  "size": [
+   1600,
+   900
+  ],
+  "still_frame": 39,
+  "frames": 57,
+  "fps": 12,
+  "dashboard_samples": {
+   "chase": 32,
+   "dashboard": 16
+  },
+  "supersample": 1.5
+ },
+ "objects": {
+  "ego": [
+   1.75,
+   39.69
+  ],
+  "actor0-car": [
+   -1.75,
+   48.21
+  ]
+ },
+ "drawn": {
+  "light": "night",
+  "wet": true,
+  "rain": true,
+  "fog": true,
+  "beyond": [
+   "fog-beyond",
+   "odd-limit"
+  ],
+  "features": [],
+  "stop_line": false,
+  "speed_sign": false,
+  "occlusion": false,
+  "props": [],
+  "signal": null,
+  "ego_lights": null,
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
+  "overlay_top_m": 0.05
+ },
+ "look": {
+  "assets": [
+   {
+    "slot": "asphalt",
+    "id": "asphalt_02",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "bin",
+    "id": "metal_trash_can",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "concrete",
+    "id": "Concrete034",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_a",
+    "id": "Facade018A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_b",
+    "id": "Facade019A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_c",
+    "id": "Facade020A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "grass",
+    "id": "Grass004",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "hdri_night",
+    "id": "dikhololo_night",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "hydrant",
+    "id": "fire_hydrant",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "tree",
+    "id": "tree_small_02",
+    "source": "polyhaven"
+   }
+  ],
+  "furniture": {
+   "tree": 11,
+   "bin": 5,
+   "hydrant": 3
+  },
+  "pedestrians": "primitives"
+ },
+ "description": "tools/sim/scenes/SC-14--night.json",
+ "description_sha256": "462bfa9ae4444db94bffef2658b81d2ce690a16d3f020c9f06c59fd66fbfbdd9",
+ "clip_texts": [
+  "SC-14 Weather changing toward the ODD limits during a trip",
+  "Rain grows heavier or visibility falls during a trip, up to and past the limits of the ODD",
+  "One concrete scenario (seeded sample of the logical\nscenario)",
+  "ODD-20 Ego speed: 30.7 km/h (range 0 to 48 km/h)",
+  "ODD-10 Precipitation: swept from inside the ODD to beyond its\nlimit",
+  "ODD-11 Visibility: swept from inside the ODD to beyond its limit",
+  "ODD-12 Illumination: night",
+  "ODD-13 Road surface condition: wet",
+  "ODD-16 Traffic participants: car",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033);\nchoreography, not Autoware's planned braking",
+  "Safety goals at stake",
+  "SG-02 (ASIL D): Decelerate at least as much as needed to avoid a\ncollision the planned trajectory avoids",
+  "SG-03 (ASIL C): Avoid unintended hard deceleration",
+  "SG-06 (ASIL D): Do not enter an intersection, roundabout or\ncrosswalk against right of way",
+  "SG-07 (ASIL D): Reach a minimal risk condition whenever the item\ncan no longer drive safely",
+  "MON-03 Weather and visibility",
+  "Pass criterion",
+  "The weather monitor detects the exit, treats a reading it cannot\ntell from the limit as outside, and the vehicle reaches a minimal\nrisk condition; detection inside the ODD still meets the safety\nchannel's requirement (MON-03, FSR-07.05, FSR-02.01, FSR-02.02,\nFSR-03.01, FSR-06.01, TR-10, SR-07, AC-02)",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Meant to do: sees the ODD exit and stops safely",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: Weather changing toward the ODD limits during a trip",
+  "Violet band across the road: where the drawing passes the ODD limit of ODD-10, ODD-11; beyond it drawn denser, no value stated",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "texts": [
+  "SC-14 Weather changing toward the ODD limits during a trip",
+  "SG-02 ASIL D",
+  "SG-03 ASIL C",
+  "+2 more",
+  "Motion",
+  "choreography (qualitative)",
+  "Condition (variant)",
+  "ODD-12 night · ODD-13 wet · ODD-10 across the limit · ODD-11 across the limit",
+  "Ego speed (sample)",
+  "30.7 km/h",
+  "Methods (WP-V-03)",
+  "Simulation, Road",
+  "Scenario (WP-V-03)",
+  "Rain grows heavier or visibility falls during a trip, up to and past the limits of the ODD",
+  "Triggering conditions (WP-C-06)",
+  "TC-05 Mist with visibility near the 200 m floor",
+  "TC-28 Weather changing during a trip toward the limits of the ODD",
+  "Situations: OS-01",
+  "Loss scenarios (WP-A-05): LS-07, LS-27",
+  "One concrete scenario (seeded sample)",
+  "ODD-20 Ego speed: 30.7 km/h (range 0 to 48 km/h)",
+  "ODD-10 Precipitation: swept from inside the ODD to beyond its limit",
+  "ODD-11 Visibility: swept from inside the ODD to beyond its limit",
+  "ODD-12 Illumination: night",
+  "ODD-13 Road surface condition: wet",
+  "ODD-16 Traffic participants: car",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "Ego robotaxi (choreography)",
+  "Car (qualitative)",
+  "Meant to do: sees the ODD exit and stops safely",
+  "Pass criterion: The weather monitor detects the exit, treats a reading it cannot tell from the limit as outside, and the vehicle reaches a minimal risk condition; detection inside the ODD still meets the safety channel's requirement (MON-03, FSR-07.05, FSR-02.01, FSR-02.02, FSR-03.01, FSR-06.01, TR-10, SR-07, AC-02)",
+  "start",
+  "vehicle starts to slow",
+  "the moment in the main view",
+  "vehicle stands still",
+  "Forward view",
+  "Top view: planned path, envelope, hazard",
+  "Safety goals at stake",
+  "SG-02 (ASIL D): Decelerate at least as much as needed to avoid a collision the planned trajectory avoids",
+  "SG-03 (ASIL C): Avoid unintended hard deceleration",
+  "SG-06 (ASIL D): Do not enter an intersection, roundabout or crosswalk against right of way",
+  "SG-07 (ASIL D): Reach a minimal risk condition whenever the item can no longer drive safely",
+  "ODD monitors the pass criterion cites (WP-C-02 §4)",
+  "MON-03 Weather and visibility",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: Weather changing toward the ODD limits during a trip",
+  "Violet band across the road: where the drawing passes the ODD limit of ODD-10, ODD-11; beyond it drawn denser, no value stated",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "tags": [
+  "Ego robotaxi (choreography)",
+  "Car (qualitative)"
+ ],
+ "moments": [
+  "start",
+  "vehicle starts to slow",
+  "the moment in the main view",
+  "vehicle stands still"
+ ],
+ "dashboard": "SC-14--night.jpg",
+ "dashboard_sha256": "f7d3da0f7ae70114f024eb95490a46b52269981485f87d6ba31f1991bdacb2d9"
+}
