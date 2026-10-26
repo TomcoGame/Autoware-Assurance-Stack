@@ -1,0 +1,199 @@
+{
+ "scenario": "SC-18",
+ "scene": "SC-18",
+ "blender": "5.2.3 LTS",
+ "render": {
+  "engine": "CYCLES",
+  "samples": 32,
+  "size": [
+   1600,
+   900
+  ],
+  "still_frame": 47,
+  "frames": 68,
+  "fps": 12,
+  "dashboard_samples": {
+   "chase": 32,
+   "dashboard": 16
+  },
+  "supersample": 1.5
+ },
+ "objects": {
+  "ego": [
+   6.2,
+   30.27
+  ],
+  "actor0-bus-at-stop": [
+   6.25,
+   52.0
+  ],
+  "actor1-bicycle": [
+   4.25,
+   37.54
+  ]
+ },
+ "drawn": {
+  "light": "day",
+  "wet": false,
+  "rain": false,
+  "fog": false,
+  "beyond": [],
+  "features": [],
+  "stop_line": false,
+  "speed_sign": false,
+  "occlusion": false,
+  "props": [
+   "bay",
+   "bus_stop"
+  ],
+  "signal": null,
+  "ego_lights": "right",
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": true,
+  "lying": [],
+  "overlay_top_m": 0.05
+ },
+ "look": {
+  "assets": [
+   {
+    "slot": "asphalt",
+    "id": "asphalt_02",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "bin",
+    "id": "metal_trash_can",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "concrete",
+    "id": "Concrete034",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_a",
+    "id": "Facade018A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_b",
+    "id": "Facade019A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_c",
+    "id": "Facade020A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "grass",
+    "id": "Grass004",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "hdri_day",
+    "id": "kloofendal_48d_partly_cloudy_puresky",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "hydrant",
+    "id": "fire_hydrant",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "tree",
+    "id": "tree_small_02",
+    "source": "polyhaven"
+   }
+  ],
+  "furniture": {
+   "tree": 12,
+   "bin": 5,
+   "hydrant": 1
+  },
+  "pedestrians": "primitives"
+ },
+ "description": "tools/sim/scenes/SC-18.json",
+ "description_sha256": "6ad9f11af62bd753460a2ac4d8b0fdbd3395fd199f1da5a706b21e15f4b92eb2",
+ "clip_texts": [
+  "SC-18 Pull-over minimal risk manoeuvre along a busy kerb",
+  "Autoware pulls over after a stop request or a minor fault, where the kerb has bike lanes, driveways, bus stops or\ncrosswalks",
+  "One concrete scenario (seeded sample of the logical\nscenario)",
+  "ODD-20 Ego speed: 43.4 km/h (range 0 to 48 km/h)",
+  "ODD-05 Crossings: cycle-lane",
+  "ODD-09 Stopping places: kerbside-stop",
+  "ODD-18 Special vehicles: bus-at-stop",
+  "ODD-16 Traffic participants: bicycle",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033);\nchoreography, not Autoware's planned braking",
+  "Safety goals at stake",
+  "Pass criterion",
+  "The vehicle pulls over only into a mapped safe stopping place and\nstops in lane otherwise; repeated stop requests go to a remote\noperator (FSR-07.05, FSR-04.01, FSR-02.02, MRM-1, FM-19, HR-01,\nAC-02)",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Meant to do: pulls over only into a mapped stop",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: Pull-over minimal risk manoeuvre along a busy kerb",
+  "Amber, ringed: the road user the scenario is about",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "texts": [
+  "SC-18 Pull-over minimal risk manoeuvre along a busy kerb",
+  "Motion",
+  "choreography (qualitative)",
+  "Condition",
+  "not set by the scenario",
+  "Ego speed (sample)",
+  "43.4 km/h",
+  "Methods (WP-V-03)",
+  "Simulation, Track",
+  "Scenario (WP-V-03)",
+  "Autoware pulls over after a stop request or a minor fault, where the kerb has bike lanes, driveways, bus stops or crosswalks",
+  "Triggering conditions (WP-C-06)",
+  "TC-14 Bike lanes, driveways, bus stops or crosswalks along the kerb where a pull-over is tried",
+  "Situations: OS-01",
+  "Misuse (WP-C-08): MU-03",
+  "Loss scenarios (WP-A-05): LS-25",
+  "One concrete scenario (seeded sample)",
+  "ODD-20 Ego speed: 43.4 km/h (range 0 to 48 km/h)",
+  "ODD-05 Crossings: cycle-lane",
+  "ODD-09 Stopping places: kerbside-stop",
+  "ODD-18 Special vehicles: bus-at-stop",
+  "ODD-16 Traffic participants: bicycle",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "Ego robotaxi (choreography)",
+  "Bicycle (qualitative)",
+  "Bus at stop (qualitative)",
+  "Meant to do: pulls over only into a mapped stop",
+  "Pass criterion: The vehicle pulls over only into a mapped safe stopping place and stops in lane otherwise; repeated stop requests go to a remote operator (FSR-07.05, FSR-04.01, FSR-02.02, MRM-1, FM-19, HR-01, AC-02)",
+  "start",
+  "vehicle starts to slow",
+  "the moment in the main view",
+  "vehicle stands still",
+  "Forward view",
+  "Top view: planned path, envelope, hazard",
+  "Safety goals at stake",
+  "None derived: scenarios.py's stake() finds no safety goal from this scenario's hazardous events and triggering conditions",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: Pull-over minimal risk manoeuvre along a busy kerb",
+  "Amber, ringed: the road user the scenario is about",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "tags": [
+  "Ego robotaxi (choreography)",
+  "Bus at stop (qualitative)",
+  "Bicycle (qualitative)"
+ ],
+ "moments": [
+  "start",
+  "vehicle starts to slow",
+  "the moment in the main view",
+  "vehicle stands still"
+ ],
+ "dashboard": "SC-18.jpg",
+ "dashboard_sha256": "6bfda5182cc9bd80a8a48140cbcbec838b9c61f80ddb81b0730e647b0badd04f"
+}

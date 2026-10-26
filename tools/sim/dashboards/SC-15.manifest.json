@@ -1,0 +1,202 @@
+{
+ "scenario": "SC-15",
+ "scene": "SC-15",
+ "blender": "5.2.3 LTS",
+ "render": {
+  "engine": "CYCLES",
+  "samples": 32,
+  "size": [
+   1600,
+   900
+  ],
+  "still_frame": 169,
+  "frames": 198,
+  "fps": 12,
+  "dashboard_samples": {
+   "chase": 32,
+   "dashboard": 16
+  },
+  "supersample": 1.5
+ },
+ "objects": {
+  "ego": [
+   4.75,
+   30.0
+  ],
+  "actor0-pedestrian": [
+   6.98,
+   28.61
+  ],
+  "actor1-pedestrian": [
+   6.6,
+   26.4
+  ]
+ },
+ "drawn": {
+  "light": "day",
+  "wet": false,
+  "rain": false,
+  "fog": false,
+  "beyond": [],
+  "features": [],
+  "stop_line": false,
+  "speed_sign": false,
+  "occlusion": false,
+  "props": [
+   "bay",
+   "door"
+  ],
+  "signal": null,
+  "ego_lights": null,
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
+  "overlay_top_m": 0.05
+ },
+ "look": {
+  "assets": [
+   {
+    "slot": "asphalt",
+    "id": "asphalt_02",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "bin",
+    "id": "metal_trash_can",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "concrete",
+    "id": "Concrete034",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_a",
+    "id": "Facade018A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_b",
+    "id": "Facade019A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_c",
+    "id": "Facade020A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "grass",
+    "id": "Grass004",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "hdri_day",
+    "id": "kloofendal_48d_partly_cloudy_puresky",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "hydrant",
+    "id": "fire_hydrant",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "tree",
+    "id": "tree_small_02",
+    "source": "polyhaven"
+   }
+  ],
+  "furniture": {
+   "tree": 14,
+   "bin": 4,
+   "hydrant": 4
+  },
+  "pedestrians": "Quaternius (CC0)"
+ },
+ "description": "tools/sim/scenes/SC-15.json",
+ "description_sha256": "c55971883a43b53101a06da8a681ed0ecaa2c4919bfc19af5611e660f308fa9c",
+ "clip_texts": [
+  "SC-15 Kerbside stop while passengers board or alight",
+  "The vehicle pulls in to a mapped stop, passengers get in and out, including slowly or with help, and the vehicle pulls\nout; a person may stand behind it",
+  "One concrete scenario (seeded sample of the logical\nscenario)",
+  "ODD-20 Ego speed: 12.3 km/h (range 0 to 48 km/h)",
+  "ODD-09 Stopping places: kerbside-stop",
+  "ODD-16 Traffic participants: pedestrian",
+  "ODD-06 Road surface and geometry: 1.7 % (range 0 to 8 %)",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033);\nchoreography, not Autoware's planned braking",
+  "Safety goals at stake",
+  "SG-05 (ASIL D): Avoid unintended motion from standstill, forward\nor backward",
+  "Pass criterion",
+  "The vehicle does not move with a door open or a person in the near\nfield in the direction of travel, never reverses, and resumes only\nwhen every release condition holds (FSR-05.01, FSR-05.03,\nFSR-05.05, FSR-07.04, HR-04)",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Meant to do: holds while a door is open",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: HE-05.1 Moves off while a passenger is boarding or alighting; HE-10.1 Reverses into a person behind the vehicle at a kerbside stop",
+  "Amber, ringed: the road user the scenario is about",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "texts": [
+  "SC-15 Kerbside stop while passengers board or alight",
+  "SG-05 ASIL D",
+  "Motion",
+  "choreography (qualitative)",
+  "Condition",
+  "not set by the scenario",
+  "Ego speed (sample)",
+  "12.3 km/h",
+  "Methods (WP-V-03)",
+  "Simulation, Bench, Track",
+  "Scenario (WP-V-03)",
+  "The vehicle pulls in to a mapped stop, passengers get in and out, including slowly or with help, and the vehicle pulls out; a person may stand behind it",
+  "Hazardous events (WP-C-03)",
+  "HE-05.1 Moves off while a passenger is boarding or alighting",
+  "HE-10.1 Reverses into a person behind the vehicle at a kerbside stop",
+  "Situations: OS-07",
+  "Misuse (WP-C-08): MU-01, MU-08, MU-19",
+  "Loss scenarios (WP-A-05): LS-12, LS-16, LS-20",
+  "One concrete scenario (seeded sample)",
+  "ODD-20 Ego speed: 12.3 km/h (range 0 to 48 km/h)",
+  "ODD-09 Stopping places: kerbside-stop",
+  "ODD-16 Traffic participants: pedestrian",
+  "ODD-06 Road surface and geometry: 1.7 % (range 0 to 8 %)",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "Pedestrian (qualitative)",
+  "Pedestrian (qualitative)",
+  "Ego robotaxi (choreography)",
+  "Meant to do: holds while a door is open",
+  "Pass criterion: The vehicle does not move with a door open or a person in the near field in the direction of travel, never reverses, and resumes only when every release condition holds (FSR-05.01, FSR-05.03, FSR-05.05, FSR-07.04, HR-04)",
+  "start",
+  "vehicle starts to slow",
+  "vehicle stands still",
+  "a door opens",
+  "the moment in the main view",
+  "Forward view",
+  "Top view: planned path, envelope, hazard",
+  "Safety goals at stake",
+  "SG-05 (ASIL D): Avoid unintended motion from standstill, forward or backward",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: HE-05.1 Moves off while a passenger is boarding or alighting; HE-10.1 Reverses into a person behind the vehicle at a kerbside stop",
+  "Amber, ringed: the road user the scenario is about",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven; pedestrians: Quaternius (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "tags": [
+  "Ego robotaxi (choreography)",
+  "Pedestrian (qualitative)",
+  "Pedestrian (qualitative)"
+ ],
+ "moments": [
+  "start",
+  "vehicle starts to slow",
+  "vehicle stands still",
+  "a door opens",
+  "the moment in the main view"
+ ],
+ "dashboard": "SC-15.jpg",
+ "dashboard_sha256": "370f8c210d838986fd0100551053798e1234f85d2a5c452bd0003975d1bff5c9"
+}
