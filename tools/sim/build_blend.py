@@ -35,7 +35,8 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent / "readme"))
 
 ENVELOPE_M = 14.0  # drawn length of the monitor's envelope at the clip's start speed; not computed
-HOLD_S = 1.0  # seconds the ego stands still at the end of the clip
+HOLD_S = 1.0  # seconds the ego stands still at the end of the clip, unless the description says
+STAND_S = 6.0  # length of the clip of an ego that stands still throughout
 SUPERSAMPLE = 1.5  # views render at this multiple of their dashboard size, then are scaled down
 OVERLAY_TOP_M = 0.25  # overlays lie on the road or a sidewalk (0.15 m): none stands up
 W, H = 1600, 900
@@ -87,17 +88,46 @@ def ego_profile(desc: dict) -> tuple[float, float, float]:
 
     The ego cruises at its sampled ODD-20 speed over the first `cruise_m` of its path, then slows at
     the description's `decel` (a level the records state) to stand still at the end of its path, and
-    stands for HOLD_S. Without a sampled speed the clip lasts 6 s and nothing is to speed."""
+    stands for its `hold_s` (HOLD_S if none). An ego that stands throughout (no sampled speed, a
+    path of one point) gives a clip of STAND_S, all of it standing."""
     e = desc["ego"]
     v = (e.get("speed_kmh") or 0) / 3.6
     total = length(e["path"])
-    if v <= 0 or total <= 0:
-        return 6.0, 0.0, 0.0
+    if standing(desc):
+        return 0.0, 0.0, e.get("hold_s", STAND_S)
     if not e["stops"]:
         return total / v, 0.0, 0.0
     brake = v / e["decel"]
     cruise = max(0.0, total - v * brake / 2) / v
-    return cruise, brake, HOLD_S
+    return cruise, brake, e.get("hold_s", HOLD_S)
+
+
+def standing(desc: dict) -> bool:
+    """Whether the ego stands still for the whole clip."""
+    return len(desc["ego"]["path"]) == 1
+
+
+def stands_at(desc: dict) -> float:
+    """The clip fraction from which the ego stands still (inf: it never does)."""
+    if standing(desc):
+        return 0.0
+    if not desc["ego"]["stops"]:
+        return math.inf
+    cruise, brake, _ = ego_profile(desc)
+    return (cruise + brake) / clip_seconds(desc)
+
+
+def lights_window(desc: dict) -> tuple[float, float]:
+    """The clip fractions between which the ego's indicator or hazard lights are on. With `lights_m`
+    (metres along its path), while it covers that stretch; otherwise from when it starts to slow for
+    a stop to the end, or all the clip when it stands or does not stop."""
+    span = desc["ego"].get("lights_m")
+    if span:
+        on = [i / 1000 for i in range(1001) if span[0] <= ego_distance(desc, i / 1000) <= span[1]]
+        return (on[0], on[-1]) if on else (1.0, 1.0)
+    if standing(desc) or not desc["ego"]["stops"]:
+        return 0.0, 1.0
+    return ego_profile(desc)[0] / clip_seconds(desc), 1.0
 
 
 def clip_seconds(desc: dict) -> float:
@@ -106,6 +136,8 @@ def clip_seconds(desc: dict) -> float:
 
 def ego_speed_factor(desc: dict, u: float) -> float:
     """The ego's speed as a share of its sampled speed at clip fraction u."""
+    if standing(desc):
+        return 0.0
     cruise, brake, _ = ego_profile(desc)
     t = u * clip_seconds(desc)
     if not desc["ego"]["stops"] or t <= cruise:
@@ -118,8 +150,8 @@ def ego_distance(desc: dict, u: float) -> float:
     cruise, brake, _ = ego_profile(desc)
     v = (desc["ego"].get("speed_kmh") or 0) / 3.6
     total = length(desc["ego"]["path"])
-    if v <= 0:
-        return total * u
+    if standing(desc):
+        return 0.0
     t = u * clip_seconds(desc)
     if t <= cruise or not brake:
         return min(total, v * t)
@@ -138,8 +170,8 @@ def envelope_at(desc: dict, u: float) -> float:
 
 def actor_at(actor: dict, u: float) -> tuple[float, float, float]:
     pts = actor["path"]
-    if len(pts) == 1:
-        return pts[0][0], pts[0][1], 0.0
+    if len(pts) == 1:  # standing, facing +y, or `face` degrees to the left of it
+        return pts[0][0], pts[0][1], math.radians(actor.get("face", 0.0))
     a, b = actor["move"]
     share = 0.0 if u <= a else 1.0 if u >= b else (u - a) / (b - a)
     return point_at(pts, length(pts) * share)
@@ -243,6 +275,9 @@ HEX = {
 }
 
 
+MAIN_VIEW = "the moment in the main view"
+
+
 def moments(desc: dict) -> list[tuple[float, str]]:
     """The moments of the clip the filmstrip shows: (clip fraction, what happens)."""
     out = [(0.0, "start")]
@@ -251,28 +286,41 @@ def moments(desc: dict) -> list[tuple[float, str]]:
             out.append((a["move"][0], f"{a['label']} starts to move"))
     cruise, brake, _ = ego_profile(desc)
     t = clip_seconds(desc)
-    if desc["ego"]["stops"]:
+    for p in desc.get("props", []):
+        if p["kind"] == "door":
+            out.append((p["open"], "a door opens"))
+    still_u = stands_at(desc)
+    if standing(desc):
+        out.append((1.0, "end; the vehicle stood throughout"))
+    elif desc["ego"]["stops"]:
         out.append((cruise / t, "vehicle starts to slow"))
-    out.append((desc["still"], "the moment in the main view"))
-    out.append(
-        ((cruise + brake) / t, "vehicle stands still") if desc["ego"]["stops"] else (1.0, "end")
-    )
-    out.sort(key=lambda m: m[0])
+        out.append((still_u, "vehicle stands still"))
+    else:
+        out.append((1.0, "end"))
+    out.append((desc["still"], MAIN_VIEW))
+    out.sort(key=lambda m: (m[0], m[1] == MAIN_VIEW))
     kept: list[tuple[float, str]] = []
     for u, label in out:
-        if kept and u - kept[-1][0] < 0.05:
-            if label == "the moment in the main view":
-                kept[-1] = (u, label)
+        if kept and u - kept[-1][0] < 0.05:  # one thumbnail for both, its caption naming both
+            if label == MAIN_VIEW:
+                kept[-1] = (u, f"{kept[-1][1]}; main view")
+            elif kept[-1][1] == MAIN_VIEW:
+                kept[-1] = (kept[-1][0], f"{label}; main view")
+            elif label == "vehicle stands still":  # the stop is where the pass criterion is judged
+                main = "main view" in kept[-1][1]
+                kept[-1] = (kept[-1][0] if main else u, label + ("; main view" if main else ""))
             continue
         kept.append((u, label))
-    return kept[:5]
+    while len(kept) > 5:  # five fit the filmstrip: the start and the main view's moment stay
+        kept.remove(next(m for m in reversed(kept) if m[1] != "start" and "main view" not in m[1]))
+    return kept
 
 
 def header_fields(desc: dict) -> list[tuple[str, str]]:
     speed = next((p for p in desc["sample"]["parameters"] if p["parameter"] == "ODD-20"), None)
     return [
         ("Motion", "choreography (qualitative)"),
-        ("Condition", desc["condition_label"]),
+        ("Condition (variant)" if desc.get("variant") else "Condition", desc["condition_label"]),
         ("Ego speed (sample)", f"{speed['value']:g} {speed['unit']}" if speed else "—"),
         ("Methods (WP-V-03)", ", ".join(desc["scenario"]["methods"])),
     ]
@@ -425,6 +473,15 @@ def dashboard_layout(desc: dict, tags: list[dict], look_: dict | None = None) ->
         el.append({"image": key, "box": box})
     goals = [("h", "Safety goals at stake", HEX["red"])]
     goals += [("p", f"{g['id']} (ASIL {g['asil']}): {g['statement']}", INK) for g in sc["goals"]]
+    if not sc["goals"]:
+        goals.append(
+            (
+                "p",
+                "None derived: scenarios.py's stake() finds no safety goal from this scenario's "
+                "hazardous events and triggering conditions",
+                INK2,
+            )
+        )
     if sc["monitors"]:
         goals.append(("h", "ODD monitors the pass criterion cites (WP-C-02 §4)", HEX["blue"]))
         goals += [("p", f"{m['id']} {m['name']}", INK) for m in sc["monitors"]]
@@ -475,6 +532,13 @@ def described(desc: dict) -> dict:
         "stop_line": "stop_line" in rd and "no_stop_line" not in feats,
         "speed_sign": "speed_sign" in rd,
         "occlusion": bool(desc["occlusion"]),
+        "props": sorted({p["kind"] for p in desc.get("props", [])}),
+        "signal": desc.get("signal") if "signals" in feats and "cross" in rd else None,
+        "ego_lights": desc["ego"].get("lights"),
+        "queue": len(desc.get("queue", [])),
+        "roundabout": "roundabout" in rd,
+        "cycle_lane": bool(rd.get("cycle_lane")),
+        "lying": sorted(a["class"] for a in desc["actors"] if a.get("lying")),
     }
     return want
 
@@ -557,6 +621,14 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
     still = still_frame(desc, frames)
     cond = desc["conditions"]
     rnd = random.Random(desc["scenario"]["id"])
+    feats = set(desc["features"])
+    made: dict[str, object] = {
+        "props": set(),
+        "signal": None,
+        "ego_lights": None,
+        "queue": 0,
+        "lying": [],
+    }
     mats: dict[str, object] = {}
 
     def mat(name, colour, rough=0.6, emit=0.0, alpha=1.0, metal=0.0):
@@ -653,6 +725,9 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
     rd = desc["road"]
     y0, y1 = rd["length"]
     lane, park, walk = rd["lane"], rd.get("parking", 0), rd["sidewalk"]
+    lanes, bike = rd.get("lanes", 1), rd.get("cycle_lane", 0)
+    inner = lane * lanes  # the right edge of the ego's lanes
+    marked = "no_markings" not in feats
     wet = cond["surface"] == "wet"
     asphalt = look.surface(
         bpy, assets, "asphalt", "asphalt", "asphalt", (0.09, 0.095, 0.1), 0.75, wet
@@ -664,7 +739,7 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
     paint = mat("paint", (0.85, 0.85, 0.82), 0.5)
     yellow = mat("yellow-paint", (0.85, 0.66, 0.12), 0.5)
     quad("ground", -80, y0 - 20, 80, y1 + 40, -0.02, verge)
-    left, right = -lane, lane + park
+    left, right = -lane, inner + bike + park
     cross = rd.get("cross")
     sides = list(cross["sides"]) if cross else []
     if "t_left" in desc["features"]:
@@ -678,6 +753,28 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
             quad("cross-left", -80, cy - cw / 2, left, cy + cw / 2, 0.0, asphalt)
         if "right" in sides:
             quad("cross-right", right, cy - cw / 2, 80, cy + cw / 2, 0.0, asphalt)
+    rb = rd.get("roundabout")
+    if rb:
+        ry, rr = rb["y"], rb["r"]
+        gaps = [(ry - rr - 1.5, ry + rr + 1.5)]
+        sides = ["left", "right"]
+        n_ = 64
+        obj(
+            "roundabout",
+            [
+                (
+                    rr * math.cos(2 * math.pi * i / n_),
+                    ry + rr * math.sin(2 * math.pi * i / n_),
+                    0.002,
+                )
+                for i in range(n_)
+            ],
+            [tuple(range(n_))],
+            asphalt,
+        )
+        cyl("roundabout-kerb", rb["island"] + 0.3, 0.15, paving, (0, ry, 0.0), n=48)
+        cyl("roundabout-island", rb["island"], 0.22, verge, (0, ry, 0.0), n=48)
+        made["roundabout"] = True
 
     def runs(a, b, side):
         """Stretches of [a, b] along y not cut by a cross street on that side."""
@@ -694,18 +791,31 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
             box(f"sidewalk-{side}-{i}", xa, p, 0.0, xb, q, 0.15, paving)
     if cross:
         cy, cw = cross["y"], cross["width"]
+        clear = rb["r"] + 1.5 if rb else 0.0  # the cross streets' sidewalks end at the roundabout
         for side in sides:
-            xa, xb = (-80, left - 1.5) if side == "left" else (right + 1.5, 80)
+            xa, xb = (
+                (-80, min(left - 1.5, -clear)) if side == "left" else (max(right + 1.5, clear), 80)
+            )
             box(f"cross-walk-{side}-a", xa, cy - cw / 2 - walk, 0.0, xb, cy - cw / 2, 0.15, paving)
             box(f"cross-walk-{side}-b", xa, cy + cw / 2, 0.0, xb, cy + cw / 2 + walk, 0.15, paving)
     # centre line, dashed, with a gap at a junction
     s = y0
-    while s < y1:
+    while s < y1 and marked:
         if not any(g0 - 2 < s < g1 for g0, g1 in gaps):
             quad(f"centre-{s:.0f}", -0.08, s, 0.08, s + 3.0, 0.004, yellow)
+            for i in range(1, lanes):  # lane lines between the ego's lanes, dashed white
+                quad(
+                    f"lane-{i}-{s:.0f}", lane * i - 0.07, s, lane * i + 0.07, s + 3.0, 0.004, paint
+                )
         s += 6.0
-    if park:
-        quad("parking-edge", lane - 0.06, y0, lane + 0.06, y1, 0.004, paint)
+    if bike:
+        green = mat("cycle-lane", (0.1, 0.32, 0.16), 0.7)
+        for i, (p_, q_) in enumerate(runs(y0, y1, "right")):
+            quad(f"cycle-lane-{i}", inner, p_, inner + bike, q_, 0.003, green)
+            quad(f"cycle-edge-{i}", inner + 0.02, p_, inner + 0.16, q_, 0.004, paint)
+        made["cycle_lane"] = True
+    if park and marked:
+        quad("parking-edge", inner + bike - 0.06, y0, inner + bike + 0.06, y1, 0.004, paint)
     if "crosswalk" in rd:
         a, b = rd["crosswalk"]
         x = left + 0.3
@@ -713,7 +823,14 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
             quad(f"zebra-{x:.1f}", x, a, x + 0.5, b, 0.005, paint)
             x += 1.0
     if "stop_line" in rd and "no_stop_line" not in desc["features"]:
-        quad("stop-line", 0.1, rd["stop_line"] - 0.25, lane, rd["stop_line"] + 0.25, 0.005, paint)
+        sl = rd["stop_line"]
+        if rb:  # a give-way line: dashed
+            for i in range(int(inner / 0.9)):
+                quad(
+                    f"stop-line-{i}", 0.1 + i * 0.9, sl - 0.2, 0.6 + i * 0.9, sl + 0.2, 0.005, paint
+                )
+        else:
+            quad("stop-line", 0.1, sl - 0.25, inner, sl + 0.25, 0.005, paint)
     # buildings, seeded, for a sense of place
     concrete = [
         look.surface(bpy, assets, f"building-{i}", slot, "facade", c, 0.85)
@@ -784,8 +901,24 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         t.location = (sx - 0.07, sy, 2.6)
         t.rotation_euler = (math.pi / 2, 0, -math.pi / 2)
         t.data.align_x, t.data.align_y = "CENTER", "CENTER"
-    feats = set(desc["features"])
     head_mat = mat("signal-head", (0.03, 0.03, 0.03), 0.4)
+    lamp_rgb = {"red": (1.0, 0.12, 0.08), "amber": (1.0, 0.6, 0.05), "green": (0.1, 1.0, 0.45)}
+
+    def lamps(name, x, y, facing, state):
+        """Three lamps on a signal head's face toward `facing` (-y, +x, -x); only `state` lit."""
+        for j, (colour, z) in enumerate((("red", 4.45), ("amber", 4.15), ("green", 3.85))):
+            on = colour == state
+            m_ = mat(
+                f"lamp-{colour}-{'on' if on else 'off'}",
+                lamp_rgb[colour] if on else tuple(c * 0.08 for c in lamp_rgb[colour]),
+                0.3,
+                emit=12.0 if on else 0.0,
+            )
+            dx, dy = {"-y": (0, -0.24), "+x": (0.24, 0), "-x": (-0.24, 0)}[facing]
+            axis = "y" if facing == "-y" else "x"
+            o_ = cyl(f"{name}-{colour}", 0.1, 0.03, m_, (x + dx, y + dy, z - 0.1), axis=axis)
+            o_.location.z = z - 0.1
+
     if "ped_signals" in feats and "crosswalk" in rd:
         a, b = rd["crosswalk"]
         for k, (x, y) in enumerate(((right + 0.4, a - 0.6), (left - 0.4, b + 0.6))):
@@ -798,6 +931,12 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         ):
             cyl(f"signal-pole-{k}", 0.09, 4.6, pole, (x, y, 0.15))
             box(f"signal-{k}", x - 0.22, y - 0.22, 3.6, x + 0.22, y + 0.22, 4.7, head_mat)
+            if desc.get("signal"):
+                # the ego's approach sees one state; the cross street the other
+                other = "red" if desc["signal"] == "green" else "green"
+                lamps(f"signal-{k}", x, y, "-y", desc["signal"])
+                lamps(f"signal-{k}-cross", x, y, "+x" if k == 0 else "-x", other)
+                made["signal"] = desc["signal"]
     if "stop_sign" in feats and cross:
         cy, cw = cross["y"], cross["width"]
         x, y = right + 0.4, cy - cw / 2 - 1.0
@@ -811,6 +950,19 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
             n=8,
             axis="y",
         )
+        for side in sides:  # every approach of the cross street stops too (an all-way stop)
+            x = right + 1.2 if side == "right" else left - 1.2
+            y = cy + cw / 2 + 0.5 if side == "right" else cy - cw / 2 - 0.5
+            cyl(f"stop-sign-cross-pole-{side}", 0.05, 2.3, pole, (x, y, 0.15))
+            cyl(
+                f"stop-sign-cross-{side}",
+                0.38,
+                0.04,
+                mat("stop-red", (0.7, 0.04, 0.04), 0.4),
+                (x, y, 2.4),
+                n=8,
+                axis="x",
+            )
 
     # -------- vehicles and road users
     pack = mesh.load_pack()
@@ -847,13 +999,30 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         scene.collection.objects.link(o)
         return o
 
-    def person(name, variant, colour):
+    def person(name, variant, colour, lying=False):
         root = bpy.data.objects.new(name, None)
         scene.collection.objects.link(root)
         cloth = mat(f"{name}-cloth", colour, 0.8)
         skin = mat("skin", (0.55, 0.4, 0.32), 0.7)
         k = {"child": 0.68}.get(variant, 1.0)
         z0 = 0.0
+        if lying:  # the vehicle alone, on its side, no rider
+            made["lying"].append(name.split("-", 1)[1])
+            frame = mat(f"{name}-frame", colour, 0.4, metal=0.4)
+            tyre = mat("tyre", (0.03, 0.03, 0.03), 0.8)
+            if variant == "e-scooter":
+                box(f"{name}-deck", -0.06, -0.45, 0.0, 0.06, 0.45, 0.16, frame, root)
+                box(f"{name}-post", 0.06, 0.38, 0.02, 0.95, 0.44, 0.08, frame, root)
+                box(f"{name}-bar", 0.9, 0.18, 0.02, 0.96, 0.64, 0.08, frame, root)
+            elif variant == "wheelchair":
+                cyl(f"{name}-wheel", 0.3, 0.05, tyre, (0, 0, 0.0), parent=root)
+                box(f"{name}-seat", -0.25, -0.25, 0.05, 0.25, 0.25, 0.5, frame, root)
+                box(f"{name}-back", -0.25, 0.2, 0.05, 0.25, 0.28, 0.75, frame, root)
+            else:
+                box(f"{name}-frame", -0.5, -0.03, 0.02, 0.5, 0.03, 0.4, frame, root)
+                for sx in (-0.55, 0.55):
+                    cyl(f"{name}-wheel{sx}", 0.34, 0.04, tyre, (sx, 0, 0.0), parent=root)
+            return root
         if variant == "wheelchair":
             for sx in (-0.33, 0.33):
                 cyl(
@@ -954,6 +1123,35 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
             ho.rotation_euler = (math.radians(85), 0, 0)  # along +y, slightly down
             ho.parent = ego
             scene.collection.objects.link(ho)
+    blinkers = []  # emission sockets of the ego's lit indicators, keyframed below
+    lights = desc["ego"].get("lights")
+    if lights:
+        on = {"hazard": ("left", "right"), "left": ("left",), "right": ("right",)}[lights]
+        ind = mesh.CLASSES.index("indicator")
+        for side in ("left", "right"):
+            m_ = mat(
+                f"ego-indicator-{side}", (1.0, 0.55, 0.05), 0.3, emit=8.0 if side in on else 0.0
+            )
+            ego.data.materials.append(m_)
+            slot = len(ego.data.materials) - 1
+            for poly in ego.data.polygons:
+                if poly.material_index == ind and (poly.center.x < 0) == (side == "left"):
+                    poly.material_index = slot
+            sx = (-1 if side == "left" else 1) * (ego_w / 2 - 0.15)
+            box(
+                f"ego-indicator-rear-{side}",
+                sx - 0.1,
+                lo_[1] - 0.03,
+                0.82,
+                sx + 0.1,
+                lo_[1] + 0.02,
+                0.92,
+                m_,
+                ego,
+            )
+            if side in on:
+                blinkers.append(m_.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"])
+        made["ego_lights"] = lights
     actors, walkers = [], {}
     for i, a in enumerate(desc["actors"]):
         colour = (
@@ -971,37 +1169,181 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
                 1.2 if variant == "child" else 1.72,
                 colour if a["role"] == "key" else (0.25, 0.3, 0.4),
             )
+        if fig and a.get("lying"):
+            raise ValueError(f"{name}: a pedestrian is not drawn lying")
         if fig:
             o, rig, action = fig
             walkers[name] = (rig, action)
         elif kind == "person":
-            o = person(name, variant, colour)
+            o = person(name, variant, colour, bool(a.get("lying")))
         elif kind == "box":
             o = boxed(name, variant, colour)
         else:
             o = vehicle(name, pack[a["drawn_as"]], colour)
+            if a["class"] == "emergency-vehicle":  # its light bar, lit
+                top = pack[a["drawn_as"]].bounds()[1][2]
+                for side, rgb in ((-1, (1.0, 0.1, 0.08)), (1, (0.15, 0.35, 1.0))):
+                    box(
+                        f"{name}-beacon{side}",
+                        min(0, side * 0.6),
+                        -0.2,
+                        top,
+                        max(0, side * 0.6),
+                        0.2,
+                        top + 0.14,
+                        mat(f"beacon{side}", rgb, 0.3, emit=25.0),
+                        o,
+                    )
         if a["role"] == "key":
             ring(f"{name}-ring", 0.0, 0.0, 1.3, 1.6, mat("key-ring", AMBER, 0.5, emit=3.0), o)
         actors.append((o, a))
-    if "queue" in feats:
-        for k, (x, y, hd) in enumerate(
-            (
-                (1.75, 38.0, 0),
-                (1.75, 45.5, 0),
-                (-1.75, 12.0, math.pi),
-                (-1.75, 4.0, math.pi),
-                (-1.75, -4.0, math.pi),
+    for k, (x, y, deg) in enumerate(desc.get("queue", [])):
+        q = vehicle(
+            f"queue-{k}",
+            pack[("hatchback", "wagon", "suv", "compact", "sedan")[k % 5]],
+            (0.55, 0.57, 0.6),
+        )
+        q.location, q.rotation_euler = (x, y, 0), (0, 0, math.radians(deg))
+        made["queue"] += 1
+
+    # -------- props: what the scenario puts on the road, from the description
+    orange = mat("work-orange", (1.0, 0.32, 0.03), 0.55)
+    white = mat("work-white", (0.9, 0.9, 0.88), 0.5)
+    doors = []
+
+    def cone(name, x, y):
+        n_, v, f = 16, [], []
+        for z, r in ((0.0, 0.2), (0.72, 0.03)):
+            v += [
+                (x + r * math.cos(2 * math.pi * i / n_), y + r * math.sin(2 * math.pi * i / n_), z)
+                for i in range(n_)
+            ]
+        f = [(i, (i + 1) % n_, n_ + (i + 1) % n_, n_ + i) for i in range(n_)]
+        obj(name, v, f + [tuple(range(n_ - 1, -1, -1))], orange)
+        box(f"{name}-base", x - 0.24, y - 0.24, 0.0, x + 0.24, y + 0.24, 0.04, orange)
+        cyl(f"{name}-band", 0.115, 0.1, white, (x, y, 0.36))
+
+    def bar(name, a, b, z0, z1, material, w=0.16):
+        """A box along the line from a to b."""
+        ln = math.dist(a, b)
+        o_ = box(name, -w / 2, 0.0, z0, w / 2, ln, z1, material)
+        o_.location = (a[0], a[1], 0)
+        o_.rotation_euler = (0, 0, math.atan2(-(b[0] - a[0]), b[1] - a[1]))
+        return o_
+
+    def along(p_, n_):
+        (xa, ya), (xb, yb) = p_["from"], p_["to"]
+        return [
+            (xa + (xb - xa) * i / max(1, n_ - 1), ya + (yb - ya) * i / max(1, n_ - 1))
+            for i in range(n_)
+        ]
+
+    prop_spots = []
+    for i, p_ in enumerate(desc.get("props", [])):
+        kind = p_["kind"]
+        if kind == "cones":
+            for j, (x, y) in enumerate(along(p_, p_["n"])):
+                cone(f"cone-{i}-{j}", x, y)
+                prop_spots.append((x, y, 0.8))
+        elif kind == "barrier":
+            pts_ = along(p_, p_["n"] + 1)
+            for j in range(p_["n"]):
+                bar(f"barrier-{i}-{j}", pts_[j], pts_[j + 1], 0.5, 1.0, (orange, white)[j % 2])
+                for x, y in pts_[j : j + 2]:
+                    box(
+                        f"barrier-leg-{i}-{j}-{x:.1f}",
+                        x - 0.04,
+                        y - 0.04,
+                        0,
+                        x + 0.04,
+                        y + 0.04,
+                        0.5,
+                        pole,
+                    )
+                prop_spots.append((*pts_[j], 1.0))
+        elif kind == "work_sign":
+            x, y = p_["at"]
+            cyl(f"work-sign-pole-{i}", 0.04, 1.6, pole, (x, y, 0.0))
+            cyl(f"work-sign-{i}", 0.5, 0.03, orange, (x, y, 1.15), n=4, axis="y")
+            prop_spots.append((x, y, 1.5))
+        elif kind == "steam":
+            x, y = p_["at"]
+            cyl(f"manhole-{i}", 0.4, 0.01, mat("manhole", (0.06, 0.06, 0.06), 0.6), (x, y, 0.0))
+            vm = bpy.data.materials.new(f"steam-{i}")
+            vm.use_nodes = True
+            nt = vm.node_tree
+            nt.nodes.remove(nt.nodes["Principled BSDF"])
+            pv = nt.nodes.new("ShaderNodeVolumePrincipled")
+            pv.inputs["Density"].default_value = 1.4
+            pv.inputs["Color"].default_value = (0.95, 0.95, 0.95, 1)
+            nt.links.new(pv.outputs[0], nt.nodes["Material Output"].inputs["Volume"])
+            cyl(f"steam-{i}", p_["r"], 3.2, vm, (x, y, 0.02), n=24)
+            prop_spots.append((x, y, p_["r"] + 1))
+        elif kind == "debris":
+            x, y = p_["at"]
+            grit = mat("debris", (0.3, 0.27, 0.22), 0.9)
+            for j in range(7):
+                dx, dy = rnd.uniform(-p_["r"], p_["r"]), rnd.uniform(-p_["r"], p_["r"])
+                sz = rnd.uniform(0.08, 0.25)
+                d_ = box(f"debris-{i}-{j}", -sz, -sz * 0.7, 0, sz, sz * 0.7, sz * 0.6, grit)
+                d_.location, d_.rotation_euler = (x + dx, y + dy, 0), (0, 0, rnd.uniform(0, 3))
+            prop_spots.append((x, y, p_["r"] + 1))
+        elif kind == "bay":
+            (xa, ya), (xb, yb) = p_["from"], p_["to"]
+            for j, (a_, b_) in enumerate(
+                (
+                    ((xa, ya), (xb, ya)),
+                    ((xb, ya), (xb, yb)),
+                    ((xb, yb), (xa, yb)),
+                    ((xa, yb), (xa, ya)),
+                )
+            ):
+                ribbon(f"bay-{i}-{j}", [list(a_), list(b_)], 0.12, 0.006, paint, dash=(0.6, 0.4))
+        elif kind == "bus_stop":
+            x, y = p_["at"]
+            cyl(f"bus-stop-pole-{i}", 0.05, 2.8, pole, (x, y, 0.15))
+            box(
+                f"bus-stop-sign-{i}",
+                x - 0.03,
+                y - 0.25,
+                2.3,
+                x + 0.03,
+                y + 0.25,
+                2.9,
+                mat("bus-stop-sign", (0.1, 0.35, 0.75), 0.4),
             )
-        ):
-            q = vehicle(
-                f"queue-{k}",
-                pack[("hatchback", "wagon", "suv", "compact", "sedan")[k]],
-                (0.55, 0.57, 0.6),
+            glass = mat("shelter-glass", (0.6, 0.7, 0.75), 0.05, alpha=0.3)
+            box(f"bus-shelter-{i}", x + 0.6, y + 1.0, 0.15, x + 2.0, y + 4.0, 2.5, glass)
+            box(f"bus-shelter-roof-{i}", x + 0.5, y + 0.9, 2.5, x + 2.1, y + 4.1, 2.6, pole)
+            prop_spots.append((x + 1.0, y + 2.0, 3.0))
+        elif kind == "paddle":
+            x, y = p_["at"]
+            cyl(f"paddle-pole-{i}", 0.02, 1.7, pole, (x, y, 0.0))
+            cyl(
+                f"paddle-{i}",
+                0.25,
+                0.02,
+                mat("stop-red", (0.7, 0.04, 0.04), 0.4),
+                (x, y, 1.55),
+                n=8,
+                axis="y",
             )
-            q.location, q.rotation_euler = (x, y, 0), (0, 0, hd)
+        elif kind == "door":
+            # hinged at the front edge of the front door, opening outward
+            sgn = -1 if p_["side"] == "left" else 1
+            pivot = bpy.data.objects.new(f"door-{i}", None)
+            scene.collection.objects.link(pivot)
+            pivot.parent = ego
+            pivot.location = (sgn * (ego_w / 2 - 0.02), 0.75, 0)
+            box(f"door-{i}-panel", -0.03, -1.05, 0.3, 0.03, 0.0, 1.25, mats["ego-body"], pivot)
+            doors.append((pivot, sgn, p_["open"]))
+        else:
+            raise ValueError(f"no way to draw a prop of kind {kind}")
+        made["props"].add(kind)
 
     # -------- street furniture, kept clear of what the description places
-    avoid = []  # (x, y, r): points nothing may stand near
+    avoid = list(prop_spots)  # (x, y, r): points nothing may stand near
+    avoid += [(q[0], q[1], 3.0) for q in desc.get("queue", [])]
     for a in desc["actors"]:
         for i in range(21):
             x, y, _ = point_at(a["path"], length(a["path"]) * i / 20)
@@ -1044,9 +1386,11 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
 
     # -------- overlays
     plan_m = mat("plan", RED, 0.5, emit=1.6, alpha=0.55)
-    ribbon("plan", desc["plan"], 0.45, 0.03, plan_m)
+    if desc["plan"]:
+        ribbon("plan", desc["plan"], 0.45, 0.03, plan_m)
     meant_m = mat("meant", GREEN, 0.5, emit=2.0, alpha=0.9)
-    ribbon("meant", desc["ego"]["path"], 0.22, 0.045, meant_m, dash=(1.0, 0.8))
+    if not standing(desc):
+        ribbon("meant", desc["ego"]["path"], 0.22, 0.045, meant_m, dash=(1.0, 0.8))
     if desc["ego"]["stops"]:
         ex, ey, _ = point_at(desc["ego"]["path"], length(desc["ego"]["path"]))
         ring("meant-moment", ex, ey + ego_front + 0.6, 2.3, 2.6, meant_m)
@@ -1238,6 +1582,7 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
     # -------- motion
     n_f = scene.frame_end + 1
     walked = {name: [] for name in walkers}
+    lit = lights_window(desc)
     for fr in range(n_f):
         u = fr / (n_f - 1)
         x, y, hd = ego_at(desc, u)
@@ -1248,6 +1593,13 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         env.keyframe_insert("scale", frame=fr)
         env_end.location = (0, ego_front + envelope_at(desc, u), 0)
         env_end.keyframe_insert("location", frame=fr)
+        for pivot, sgn, opens in doors:  # swings open over a tenth of a clip from `opens`
+            share = min(1.0, max(0.0, (u - opens) / 0.1))
+            pivot.rotation_euler = (0, 0, sgn * math.radians(65) * share)
+            pivot.keyframe_insert("rotation_euler", frame=fr)
+        for sock in blinkers:
+            sock.default_value = 8.0 if lit[0] <= u <= lit[1] else 0.0
+            sock.keyframe_insert("default_value", frame=fr)
         for o, a in actors:
             x, y, hd = actor_at(a, u)
             if o.name in walked:
@@ -1255,7 +1607,7 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
                 p0 = o.location.copy() if walked[o.name] else None
                 walked[o.name].append(d0 + (math.dist((x, y), (p0.x, p0.y)) if p0 else 0.0))
             o.location = (x, y, 0)
-            if len(a["path"]) > 1:
+            if len(a["path"]) > 1 or a.get("face"):
                 o.rotation_euler = (0, 0, hd)
                 o.keyframe_insert("rotation_euler", frame=fr)
             o.keyframe_insert("location", frame=fr)
@@ -1281,15 +1633,23 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         "fog": "fog" in names,
         "beyond": sorted(n for n in ("fog-beyond", "odd-limit") if n in names),
         "features": sorted(feats),
-        "stop_line": "stop-line" in names,
+        "stop_line": any(n.startswith("stop-line") for n in names),
         "speed_sign": "speed-sign" in names,
         "occlusion": "occlusion" in names,
+        "props": sorted(made["props"]),
+        "signal": made["signal"],
+        "ego_lights": made["ego_lights"],
+        "queue": made["queue"],
+        "roundabout": bool(made.get("roundabout")),
+        "cycle_lane": bool(made.get("cycle_lane")),
+        "lying": sorted(made["lying"]),
         "overlay_top_m": round(overlay_top, 3),
     }
     ctx = {"scene": scene, "camera": cam, "ego": ego, "actors": actors, "hud": hud}
     ctx["weather"], ctx["ego_size"] = weather, (ego_w, hi_[1] - lo_[1], hi_[2])
     return ctx, {
         "scenario": desc["scenario"]["id"],
+        "scene": desc.get("key") or desc["scenario"]["id"],
         "blender": bpy.app.version_string,
         "render": {
             "engine": "CYCLES",
@@ -1363,7 +1723,7 @@ def dashboard(args, desc: dict, ctx: dict, work: Path, out: Path, manifest: dict
     from mathutils import Vector
 
     scene, ego = ctx["scene"], ctx["ego"]
-    sid = desc["scenario"]["id"]
+    sid = desc.get("key") or desc["scenario"]["id"]
     work.mkdir(parents=True, exist_ok=True)
     for o in ctx["hud"]:
         o.hide_render = True
@@ -1517,7 +1877,7 @@ def clip(args, desc: dict, ctx: dict, out: Path, manifest: dict) -> None:  # pra
     import bpy
 
     scene = ctx["scene"]
-    sid = desc["scenario"]["id"]
+    sid = desc.get("key") or desc["scenario"]["id"]
     scene.camera = ctx["camera"]
     scene.render.resolution_x, scene.render.resolution_y = W, H
     scene.render.resolution_percentage = args.scale
@@ -1562,7 +1922,7 @@ def main(argv: list[str]) -> int:  # pragma: no cover - needs Blender
     for path in args.scene:
         raw = path.read_bytes()
         desc = json.loads(raw)
-        sid = desc["scenario"]["id"]
+        sid = desc.get("key") or desc["scenario"]["id"]
         ctx, manifest = build(desc, args)
         manifest["description"] = f"tools/sim/scenes/{path.name}"
         manifest["description_sha256"] = hashlib.sha256(raw).hexdigest()

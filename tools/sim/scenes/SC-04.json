@@ -1,0 +1,258 @@
+{
+ "version": 1,
+ "generator": "tools/sim/scene.py",
+ "key": "SC-04",
+ "variant": null,
+ "stamp": "qualitative illustration · not a simulation result · draft for engineering review",
+ "scenario": {
+  "id": "SC-04",
+  "name": "Spurious obstacle with a road user following",
+  "description": "Spray, steam, blowing debris or a soiled sensor produces a false obstacle in the path while a car or motorcycle follows closely, possibly with an unbelted passenger",
+  "situations": [
+   "OS-01"
+  ],
+  "events": [
+   {
+    "id": "HE-03.1",
+    "description": "Brakes hard for no reason with a vehicle or motorcycle following"
+   },
+   {
+    "id": "HE-03.2",
+    "description": "Brakes hard for no reason while a passenger is unbelted (foreseeable misuse)"
+   }
+  ],
+  "triggers": [
+   {
+    "id": "TC-03",
+    "condition": "Light rain, spray thrown up by other vehicles, reflections from the wet road"
+   },
+   {
+    "id": "TC-04",
+    "condition": "Steam from vents, exhaust plumes, blowing dust or leaves"
+   },
+   {
+    "id": "TC-24",
+    "condition": "Sensors soiled or blocked by dirt, insects or water drops"
+   }
+  ],
+  "goals": [
+   {
+    "id": "SG-02",
+    "asil": "D",
+    "statement": "Decelerate at least as much as needed to avoid a collision the planned trajectory avoids"
+   },
+   {
+    "id": "SG-03",
+    "asil": "C",
+    "statement": "Avoid unintended hard deceleration"
+   }
+  ],
+  "monitors": [],
+  "misuse": [
+   "MU-04",
+   "MU-07"
+  ],
+  "losses": [
+   "LS-08",
+   "LS-19"
+  ],
+  "methods": [
+   "Simulation",
+   "Track"
+  ],
+  "meant": "no hard brake for an unconfirmed object",
+  "pass": "Braking that the safety channel does not confirm stays at or below the firm level; emergency braking happens only when a road user is confirmed; a blocked safety sensor is detected and Autoware stops comfortably; the belt warning acts",
+  "pass_refs": [
+   "FSR-03.01",
+   "FSR-03.02",
+   "FSR-03.03",
+   "FSR-02.01",
+   "FSR-07.08",
+   "FM-10",
+   "HR-03",
+   "AC-02"
+  ],
+  "source": "assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ },
+ "sample": {
+  "salt": "tools/sim sample 1",
+  "parameters": [
+   {
+    "parameter": "ODD-20",
+    "range": "0 to 48 km/h",
+    "value": 15.1,
+    "unit": "km/h",
+    "crosses": false,
+    "label": "ODD-20 Ego speed: 15.1 km/h (range 0 to 48 km/h)"
+   },
+   {
+    "parameter": "ODD-10",
+    "range": "0 to 2.5 mm/h",
+    "value": 0.5,
+    "unit": "mm/h",
+    "crosses": false,
+    "label": "ODD-10 Precipitation: 0.5 mm/h (range 0 to 2.5 mm/h)"
+   },
+   {
+    "parameter": "ODD-11",
+    "range": "200 m and above",
+    "value": 200,
+    "unit": "m",
+    "crosses": false,
+    "label": "ODD-11 Visibility: 200 m (the stated bound)"
+   },
+   {
+    "parameter": "ODD-13",
+    "range": "dry, wet",
+    "value": "wet",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-13 Road surface condition: wet"
+   },
+   {
+    "parameter": "ODD-16",
+    "range": "car, motorcycle",
+    "value": "car",
+    "chosen": "seeded",
+    "outside": false,
+    "label": "ODD-16 Traffic participants: car"
+   },
+   {
+    "parameter": "Gap of the following road user",
+    "range": "Bound stated by FSR-06.01, not yet fixed",
+    "value": null,
+    "label": "Gap of the following road user: Bound stated by FSR-06.01, not yet fixed; the motion drawn is choreography"
+   }
+  ]
+ },
+ "condition_label": "ODD-13 wet · ODD-10 0.5 mm/h · ODD-11 200 m",
+ "conditions": {
+  "light": "day",
+  "surface": "wet",
+  "rain": 0.5,
+  "visibility": 200,
+  "beyond": null,
+  "rain_limit": 2.5,
+  "visibility_floor": 200
+ },
+ "legend": {
+  "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "meant": "Meant to do: no hard brake for an unconfirmed object",
+  "meant_mark": "Dashed green: the path the pass criterion asks of the vehicle",
+  "hazard": "Where the hazard lies: HE-03.1 Brakes hard for no reason with a vehicle or motorcycle following; HE-03.2 Brakes hard for no reason while a passenger is unbelted (foreseeable misuse)",
+  "key": "Amber, ringed: the road user the scenario is about"
+ },
+ "road": {
+  "length": [
+   -40,
+   120
+  ],
+  "lane": 3.5,
+  "parking": 0,
+  "sidewalk": 3.0
+ },
+ "features": [],
+ "ego": {
+  "path": [
+   [
+    1.75,
+    0.0
+   ],
+   [
+    1.75,
+    60.0
+   ]
+  ],
+  "stops": false,
+  "speed_kmh": 15.1,
+  "decel": 3.0,
+  "motion_label": "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking"
+ },
+ "plan": [
+  [
+   1.75,
+   0.0
+  ],
+  [
+   1.75,
+   110.0
+  ]
+ ],
+ "occlusion": [],
+ "hazard": [
+  0.0,
+  28.0,
+  3.5,
+  32.0
+ ],
+ "actors": [
+  {
+   "role": "key",
+   "class": "car",
+   "drawn_as": "sedan",
+   "label": "car",
+   "path": [
+    [
+     1.75,
+     -10.0
+    ],
+    [
+     1.75,
+     50.0
+    ]
+   ],
+   "move": [
+    0.0,
+    1.0
+   ]
+  },
+  {
+   "role": "other",
+   "class": "car",
+   "drawn_as": "sedan",
+   "label": "car",
+   "path": [
+    [
+     -1.75,
+     90.0
+    ],
+    [
+     -1.75,
+     -10.0
+    ]
+   ],
+   "move": [
+    0.0,
+    1.0
+   ]
+  }
+ ],
+ "props": [
+  {
+   "kind": "steam",
+   "at": [
+    1.6,
+    30.0
+   ],
+   "r": 1.5
+  }
+ ],
+ "signal": null,
+ "queue": [],
+ "still": 0.42,
+ "camera": {
+  "pos": [
+   -1.5,
+   -9.0,
+   5.0
+  ],
+  "look": [
+   1.0,
+   28.0,
+   0.0
+  ],
+  "lens": 28
+ },
+ "credits": "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md)"
+}

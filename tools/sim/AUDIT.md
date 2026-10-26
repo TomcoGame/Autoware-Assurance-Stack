@@ -121,6 +121,42 @@ road-level views only flat marks on the road are drawn.
 | F-35 | Dashboard legend | The dashed green path and the green ring had no legend line on the dashboard (only the green "Meant to do" heading hinted at them) | Minor | **Fixed:** a legend line from the description says what both mean; the footer is re-spaced for it, and `test_footer_lines_do_not_overlap` checks it |
 | F-36 | `sim-render.yaml` | The step added in round 2 to fetch the assets had an unquoted `run:` value containing ": ", which is not valid YAML. GitHub could not parse the workflow, so from `bd2bba6` on every render run failed at once and its check vanished from the pull request; the author then reported the job as "probably still queued" instead of looking | Major | **Fixed:** the step is a block scalar; `test_the_sim_workflows_parse` loads both sim workflows. The committed dashboards were rendered and verified locally, so they are unaffected; the CI render is re-checked on the push that carries this fix |
 
+## Fourth round: every drawable scenario, and condition variants (2026-10-26)
+
+The lead asked for more scenarios, as in LionDriver. This round adds a scene for each of the 16 scenarios that had
+none and may be drawn (SC-04, SC-05, SC-07 to SC-13, SC-15 to SC-19, SC-22, SC-23) and 13 condition variants in
+LionDriver's style (`SC-13--unlit`, `SC-05--low-sun`, ...): 34 scenes in all. SC-20, SC-21 and SC-24 to SC-26 stay
+undrawn (F-11). To draw them, the builder gained lanes, a cycle lane, a roundabout, lit signal states, all-way stop
+signs, cones, a barrier and work sign, steam, debris, a marked stopping place, a bus stop, a traffic paddle, the
+ego's indicators and hazard lights, a door that opens, an emergency vehicle's light bar and an object lying in the
+lane. The render in CI is now one job per scene.
+
+The audit followed the earlier rounds: a second agent reviewed the code and layouts against the brief without the
+author's conclusions (F-37 to F-50), and the author read every dashboard cold (F-51 onwards). Before that review,
+the author's own new overlap test had already caught three drawn collisions (F-52).
+
+| # | Location | Description | Severity | Disposition |
+|---|---|---|---|---|
+| F-37 | SC-22 layout, `lights_from()` | The left indicator stayed lit for the whole clip, also after the lane change, while the ego drove straight. The pass criterion is that the indicator always matches the steering direction, so the scene showed the failure it is about; a test locked the behaviour in | Major | **Fixed:** an indicator can be lit over a stretch of the path (`lights_m`); SC-22's goes off once the lane change ends; `test_the_indicator_matches_the_steering` |
+| F-38 | SC-12 layout | The sample picked ODD-04 `t-junction`, and the dashboard said so, but no junction was drawn | Major | **Fixed:** a T-junction on the left beyond the pull-over |
+| F-39 | README, choreography | The README said the paths imply a pace fit for each kind of road user; nothing checked it, and some did not (an oncoming car at 50 km/h in congested SC-03, two pedestrians at a run in SC-16) | Minor | **Fixed:** SC-03's car and SC-16's clip changed; the sentence now says it is checked by reading the dashboards, not by a test, and is no claim about speed |
+| F-40 | SC-17 layout | The car passing the stopped vehicle drove the wrong way up the oncoming lane for 100 m | Minor | **Fixed:** it waits behind the ego, pulls out round it and back in; the clip holds longer so that it can pass at a road pace |
+| F-41 | SC-08 layout | The main view showed the cyclist already past the junction | Minor | **Fixed:** the still is when the cyclist is alongside |
+| F-42 | `build_blend.py` `drawn` | A prop of an unknown kind and a road user lying in the lane counted as drawn without being built | Minor | **Fixed:** an unknown prop stops the build; lying objects are recorded as they are built |
+| F-43 | Ego lights | The lights are steady, not flashing | Minor | **Kept, said:** a still must show them on; the README says steady |
+| F-44 | `test_no_two_road_users_overlap` | Props and the open door were outside the overlap test | Minor | **Fixed:** cones, barrier, debris, signs and the door's swept box are in it (steam is not solid, a paddle is held) |
+| F-45 | `scene.py` / `build_blend.py` | "Stands throughout" meant one path point in one file and no speed in the other; a seeded speed of 0 would have split them | Minor | **Fixed:** both mean one path point, and `scene.py` refuses a drawn speed of 0 on a path |
+| F-46 | `test_a_variant_pick_outside_the_scenario_is_refused` | The test reached its refusal by a roundabout route and never built a layout holding a bad variant | Minor | **Fixed:** it builds layouts whose variant picks a value outside the scenario and an attribute that is not a parameter |
+| F-47 | `moments()` | Labels within 0.05 of the main view were merged away, so five filmstrips never showed "vehicle stands still", where the pass criterion is judged | Minor | **Fixed:** one thumbnail names both ("vehicle stands still; main view"); a test checks every stopping scene shows its stop |
+| F-48 | `sim-render.yaml` | A job whose verify failed uploaded nothing, losing the manifest that says why | Minor | **Fixed:** the upload runs always |
+| F-49 | SC-23, `stop_sign` | The four-way stop had a sign on the right approach only | Note | **Fixed:** every approach of the cross street has one |
+| F-50 | Scenes SC-11, SC-13, SC-18 | Their pass criteria mention remote assistance or a remote operator. Nothing of it is drawn; the text is public in `scenarios.yaml` and `restricted()` refuses only the remote link (`link-*`) and `CSR-` requirements | Note | **The lead's call:** whether that reading of the cybersecurity rule is right |
+| F-52 | Layouts (author, before the review) | The new overlap test found three collisions in the first layouts: the pull-in path of SC-15 drove through a person standing at the kerb, SC-16's two pedestrians walked into each other, SC-17's passing car met an oncoming van head-on. A pace check by hand found a bicycle at 82 km/h (SC-19) and red-runners and an emergency vehicle at over 75 km/h | Minor | **Fixed** before the review: positions and paths moved, paths shortened |
+| F-53 | Dashboard, SC-18 (cold read) | A scenario with no safety goal at stake showed the "Safety goals at stake" heading over nothing | Minor | **Fixed:** the panel says that `stake()` derives none |
+| F-54 | SC-08, SC-17 | The seeded speeds are 1.6 and 2.3 km/h, so the vehicle crawls and the clips are long; "loss of Autoware while driving" at walking pace is a weak picture | Note | **Kept:** the draw is not tuned to look good (SALT is one for all); the README says so. The lead may ask for a pick |
+| F-55 | SC-10 | The red planned path runs into the barrier: it stands for Autoware following the map that still shows the lane open. The legend calls it Autoware's planned path, which is what it is in that scenario | Note | **Kept** |
+| F-56 | SC-05 | The ego starts to slow after the main view's moment, so the still shows it cruising up to the line while the red-runner crosses | Note | **Kept:** consistent with the pass criterion (it does not enter while the path is crossed) |
+
 ## Checks run before pushing
 
 Run on the commit of the third round, in the session's container (Python 3.13, PyYAML 6.0.2, `bpy` 5.2.3):

@@ -23,6 +23,9 @@ import scene  # noqa: E402
 
 M, K, F = scene.sc.load(), scene.sc.known(), scene.fx.load()
 BY_ID = {s["id"]: s for s in M["scenarios"]}
+ALL = {  # every scene, condition variants included, by its name
+    p.stem: json.loads(text) for p, text in scene.build().items() if p.suffix == ".json"
+}
 
 
 def describe(sid: str, layout: dict | None = None) -> dict:
@@ -43,8 +46,7 @@ class Descriptions(unittest.TestCase):
 
     def test_every_render_is_stamped(self):
         self.assertIn("not a simulation result", scene.STAMP)
-        for sid in scene.LAYOUTS:
-            d = describe(sid)
+        for sid, d in ALL.items():
             self.assertEqual(d["stamp"], scene.STAMP)
             self.assertIn(
                 d["stamp"].upper(), " ".join(" ".join(t.get("lines", [])) for t in bb.hud_texts(d))
@@ -146,8 +148,7 @@ class Descriptions(unittest.TestCase):
 
     def test_the_ego_stops_before_its_stop_line(self):
         front = bb_front()
-        for sid in scene.LAYOUTS:
-            d = describe(sid)
+        for sid, d in ALL.items():
             if (
                 "stop_line" in d["road"]
                 and "no_stop_line" not in d["features"]
@@ -174,23 +175,25 @@ class Motion(unittest.TestCase):
         self.assertAlmostEqual(hd, -1.5707963, places=5)  # heading right of +y
 
     def test_ego_stops_at_the_end_of_its_path(self):
-        for sid in scene.LAYOUTS:
-            d = describe(sid)
+        for sid, d in ALL.items():
             dist = [bb.ego_distance(d, i / 100) for i in range(101)]
             self.assertEqual(dist, sorted(dist), sid)
             self.assertAlmostEqual(dist[-1], bb.length(d["ego"]["path"]), places=6, msg=sid)
-            self.assertEqual(bb.ego_speed_factor(d, 1.0), 0.0)
+            if d["ego"]["stops"]:
+                self.assertEqual(bb.ego_speed_factor(d, 1.0), 0.0, sid)
 
     def test_the_ego_slows_at_the_level_the_records_state(self):
         # FSR-03.02's firm level, read from fsc.yaml; the stop is consistent with it.
         fsr = next(x for x in scene.sc.misuse.ai.fsc.load()["fsrs"] if x["id"] == "FSR-03.02")
-        for sid in scene.LAYOUTS:
-            d = describe(sid)
+        for sid, d in ALL.items():
             self.assertIn(f"{d['ego']['decel']:g} m/s²", fsr["text"])
+            if bb.standing(d) or not d["ego"]["stops"]:
+                continue
             cruise, brake, _ = bb.ego_profile(d)
             v = d["ego"]["speed_kmh"] / 3.6
             self.assertAlmostEqual(v / brake, d["ego"]["decel"], places=6)
-            self.assertAlmostEqual(cruise * v, scene.CRUISE_M, places=1)
+            # at least CRUISE_M: a path whose turns are longer than the stop keeps its start
+            self.assertGreaterEqual(cruise * v, scene.CRUISE_M - 0.05, sid)
 
     def test_envelope_shrinks_as_the_vehicle_slows(self):
         d = describe("SC-01")
@@ -200,20 +203,22 @@ class Motion(unittest.TestCase):
 
     def test_the_clip_runs_at_the_sampled_speed(self):
         # F1: while it cruises, the ego covers its path at the ODD-20 value of the sample.
-        for sid in scene.LAYOUTS:
-            d = describe(sid)
+        for sid, d in ALL.items():
+            if bb.standing(d):
+                self.assertEqual(bb.ego_distance(d, 0.5), 0.0)
+                continue
             t = bb.clip_seconds(d)
             u0, u1 = 0.0, bb.ego_profile(d)[0] / t * 0.9
-            a, b = bb.ego_at(d, u0), bb.ego_at(d, u1)
-            v = math.dist(a[:2], b[:2]) / ((u1 - u0) * t) * 3.6
+            v = (bb.ego_distance(d, u1) - bb.ego_distance(d, u0)) / ((u1 - u0) * t) * 3.6
             self.assertAlmostEqual(v, d["ego"]["speed_kmh"], places=6, msg=sid)
 
     def test_moments_are_ordered_and_include_the_still(self):
-        for sid in scene.LAYOUTS:
-            d = describe(sid)
+        for sid, d in ALL.items():
             m = bb.moments(d)
             self.assertEqual([u for u, _ in m], sorted(u for u, _ in m))
-            self.assertIn("the moment in the main view", [x for _, x in m])
+            self.assertTrue(any("main view" in x for _, x in m), sid)
+            if d["ego"]["stops"] and not bb.standing(d):  # the stop is never merged away
+                self.assertTrue(any("vehicle stands still" in x for _, x in m), sid)
             self.assertLessEqual(len(m), 5)
 
     def test_tags_do_not_overlap(self):
@@ -229,8 +234,8 @@ class Motion(unittest.TestCase):
                 )
 
     def test_the_dashboard_stays_on_its_canvas(self):
-        for sid in scene.LAYOUTS:
-            for e in bb.dashboard_layout(describe(sid), []):
+        for sid, d in ALL.items():
+            for e in bb.dashboard_layout(d, []):
                 if "rect" in e or "image" in e:
                     x, y, w, h = e.get("rect") or e["box"]
                     self.assertTrue(
@@ -243,10 +248,8 @@ class Motion(unittest.TestCase):
                     self.assertLessEqual(right, bb.DW, (sid, e["text"][:1]))
 
     def test_footer_lines_do_not_overlap(self):
-        for sid in scene.LAYOUTS:
-            texts = [
-                e for e in bb.dashboard_layout(describe(sid), []) if "text" in e and e["y"] >= 970
-            ]
+        for sid, d in ALL.items():
+            texts = [e for e in bb.dashboard_layout(d, []) if "text" in e and e["y"] >= 970]
             rows = sorted({(e["y"], e["size"]) for e in texts})
             for (y0, s0), (y1, _) in zip(rows, rows[1:]):
                 self.assertLessEqual(y0 + s0 * 1.2, y1, (sid, y0, y1))
@@ -305,6 +308,165 @@ class Motion(unittest.TestCase):
         self.assertEqual(" ".join(lines), text)
 
 
+# Footprints (width, length) in metres of what the scenes draw, for the overlap test: the models'
+# bounds (tools/readme/mesh.py) rounded up, and the primitives of build_blend.py.
+FOOT = {
+    "ego": (1.71, 4.36),
+    "sedan": (2.19, 4.91),
+    "minivan": (2.11, 5.19),
+    "suv": (2.33, 5.19),
+    "queue": (2.2, 5.19),
+    "box:bus": (2.55, 12.0),
+    "box:truck": (2.5, 8.0),
+    "box:motorcycle": (0.7, 2.1),
+    "box:animal": (0.3, 0.9),
+    "person:adult": (0.6, 0.6),
+    "person:child": (0.5, 0.5),
+    "person:wheelchair": (0.7, 1.0),
+    "person:bicycle": (0.6, 1.8),
+    "person:e-scooter": (0.6, 1.0),
+}
+
+
+def corners(x: float, y: float, hd: float, foot: tuple[float, float]) -> list[tuple[float, float]]:
+    w, ln = foot[0] / 2, foot[1] / 2
+    c, s = math.cos(hd), math.sin(hd)
+    return [
+        (x + dx * c - dy * s, y + dx * s + dy * c)
+        for dx, dy in ((-w, -ln), (w, -ln), (w, ln), (-w, ln))
+    ]
+
+
+def overlap(a: list, b: list, margin: float = 0.2) -> bool:
+    """Separating-axis test of two rectangles, each grown by margin / 2."""
+    for poly in (a, b):
+        for i in range(4):
+            (x0, y0), (x1, y1) = poly[i], poly[(i + 1) % 4]
+            nx, ny = y1 - y0, x0 - x1
+            n = math.hypot(nx, ny)
+            pa = [(px * nx + py * ny) / n for px, py in a]
+            pb = [(px * nx + py * ny) / n for px, py in b]
+            if max(pa) + margin < min(pb) or max(pb) + margin < min(pa):
+                return False
+    return True
+
+
+class Choreography(unittest.TestCase):
+    def test_no_two_road_users_overlap(self):
+        # The choreography never draws a collision: the ego, every road user and every queued
+        # vehicle stay apart at every moment of the clip.
+        for sid, d in ALL.items():
+            static = [
+                corners(q[0], q[1], math.radians(q[2]), FOOT["queue"]) for q in d.get("queue", [])
+            ]
+            n_queue = len(static)
+            for p in d["props"]:  # what stands on the road is in the way too
+                if p["kind"] in ("cones", "barrier"):
+                    (xa, ya), (xb, yb) = p["from"], p["to"]
+                    hd = math.atan2(-(xb - xa), yb - ya)
+                    foot = (0.5, math.dist(p["from"], p["to"]) + 0.5)
+                    static.append(corners((xa + xb) / 2, (ya + yb) / 2, hd, foot))
+                elif p["kind"] == "debris":  # steam is not solid: the ego drives through it
+                    static.append(corners(*p["at"], 0.0, (2 * p["r"], 2 * p["r"])))
+                elif p["kind"] in ("work_sign", "bus_stop"):  # a paddle is held
+                    static.append(corners(*p["at"], 0.0, (0.3, 0.3)))
+            doors = [p for p in d["props"] if p["kind"] == "door"]
+            for i in range(201):
+                u = i / 200
+                boxes = [("ego", corners(*bb.ego_at(d, u), FOOT["ego"]))]
+                for p in doors:  # the open door's swept box, beside the ego
+                    if u >= p["open"]:
+                        x, y, hd = bb.ego_at(d, u)
+                        sgn = -1 if p["side"] == "left" else 1
+                        lx, ly = sgn * (FOOT["ego"][0] / 2 + 0.5), 0.25
+                        c, s_ = math.cos(hd), math.sin(hd)
+                        boxes.append(
+                            (
+                                "door",
+                                corners(x + lx * c - ly * s_, y + lx * s_ + ly * c, hd, (1.0, 1.0)),
+                            )
+                        )
+                for k, a in enumerate(d["actors"]):
+                    boxes.append((f"actor{k}", corners(*bb.actor_at(a, u), FOOT[a["drawn_as"]])))
+                boxes += [
+                    (f"queue{k}" if k < n_queue else f"prop{k - n_queue}", q)
+                    for k, q in enumerate(static)
+                ]
+                for j, (na, ba) in enumerate(boxes):
+                    for nb, bx in boxes[j + 1 :]:
+                        if {na, nb} == {"ego", "door"} or (
+                            na.startswith("queue") and nb.startswith("queue")
+                        ):
+                            continue
+                        self.assertFalse(overlap(ba, bx), f"{sid}: {na} meets {nb} at {u:.3f}")
+
+    def test_every_drawable_scenario_has_a_scene(self):
+        drawable = {s["id"] for s in M["scenarios"] if not scene.restricted(s)}
+        self.assertEqual(set(scene.LAYOUTS), drawable)
+
+    def test_a_variant_changes_only_what_it_picks(self):
+        for key, d in ALL.items():
+            if not d["variant"]:
+                continue
+            base = ALL[d["variant"]["of"]]
+            self.assertTrue(key.startswith(base["key"] + "--"))
+            changed = {
+                a["parameter"]
+                for a, b in zip(d["sample"]["parameters"], base["sample"]["parameters"])
+                if a != b
+            }
+            picked = {part.split(" ")[0] for part in d["variant"]["label"].split(", ")}
+            self.assertTrue(changed, key)
+            self.assertLessEqual(changed, picked, key)
+            self.assertEqual(d["actors"], base["actors"], key)
+            self.assertEqual(d["ego"], base["ego"], key)
+
+    def test_a_variant_pick_outside_the_scenario_is_refused(self):
+        saved = scene.LAYOUTS["SC-13"]
+        for bad in ({"ODD-12": "dusk"}, {"ODD-03": "30"}):  # not one of its values; not a parameter
+            scene.LAYOUTS["SC-13"] = copy.deepcopy(saved) | {"variants": [bad]}
+            try:
+                with self.assertRaises(scene.SceneError, msg=bad):
+                    scene.build()
+            finally:
+                scene.LAYOUTS["SC-13"] = saved
+
+    def test_a_door_never_opens_before_the_vehicle_stands(self):
+        lay = copy.deepcopy(scene.LAYOUTS["SC-15"])
+        lay["props"] = [p | {"open": 0.2} if p["kind"] == "door" else p for p in lay["props"]]
+        with self.assertRaises(scene.SceneError):
+            describe("SC-15", lay)
+        for key, d in ALL.items():
+            for p in d["props"]:
+                if p["kind"] == "door":
+                    self.assertGreaterEqual(p["open"], bb.stands_at(d), key)
+
+    def test_a_vehicle_that_holds_draws_no_plan(self):
+        d = ALL["SC-16"]
+        self.assertEqual(d["plan"], [])
+        self.assertNotIn("plan", d["legend"])
+        self.assertTrue(bb.standing(d))
+        self.assertIn("plan", ALL["SC-01"]["legend"])
+
+    def test_lights_come_on_as_the_vehicle_slows(self):
+        d = ALL["SC-17"]
+        self.assertEqual(d["ego"]["lights"], "hazard")
+        on, off = bb.lights_window(d)
+        self.assertAlmostEqual(on, bb.ego_profile(d)[0] / bb.clip_seconds(d))
+        self.assertEqual(off, 1.0)
+
+    def test_the_indicator_matches_the_steering(self):
+        # SC-22's pass criterion: the indicator matches the commanded and achieved steering
+        # direction, so it is off once the lane change is over and the ego drives straight.
+        d = ALL["SC-22"]
+        on, off = bb.lights_window(d)
+        self.assertEqual(on, 0.0)
+        self.assertLess(off, 1.0)
+        x_after = bb.ego_at(d, off + 0.02)[0]
+        self.assertAlmostEqual(x_after, bb.ego_at(d, 1.0)[0], places=2)  # straight from there on
+        self.assertLess(bb.ego_at(d, off - 0.05)[0], bb.ego_at(d, 0.0)[0])  # it was steering left
+
+
 class Verification(unittest.TestCase):
     def manifest(self, d: dict, frames: int = 72) -> dict:
         clip = [" ".join(t["lines"]) for t in bb.hud_texts(d) if "lines" in t]
@@ -317,8 +479,7 @@ class Verification(unittest.TestCase):
         }
 
     def test_a_faithful_scene_passes(self):
-        for sid in scene.LAYOUTS:
-            d = describe(sid)
+        for sid, d in ALL.items():
             self.assertEqual(bb.verify(d, self.manifest(d)), [], sid)
 
     def test_a_moved_road_user_fails(self):

@@ -1,0 +1,173 @@
+{
+ "version": 1,
+ "generator": "tools/sim/scene.py",
+ "key": "SC-19--night",
+ "variant": {
+  "of": "SC-19",
+  "label": "ODD-12 night"
+ },
+ "stamp": "qualitative illustration · not a simulation result · draft for engineering review",
+ "scenario": {
+  "id": "SC-19",
+  "name": "Passengers leaving at a stop in lane",
+  "description": "After a minimal risk manoeuvre the vehicle stands in a traffic lane and passengers open the doors on the traffic side",
+  "situations": [
+   "OS-01"
+  ],
+  "events": [],
+  "triggers": [
+   {
+    "id": "TC-29",
+    "condition": "Passengers getting out at a stop in lane beside moving traffic"
+   }
+  ],
+  "goals": [
+   {
+    "id": "SG-07",
+    "asil": "D",
+    "statement": "Reach a minimal risk condition whenever the item can no longer drive safely"
+   }
+  ],
+  "monitors": [],
+  "misuse": [
+   "MU-02"
+  ],
+  "losses": [
+   "LS-23"
+  ],
+  "methods": [
+   "Simulation",
+   "Drill"
+  ],
+  "meant": "warns before they step out",
+  "pass": "The vehicle holds the minimal risk condition with hazard lights on and warns passengers of traffic on their side before they leave; the residual risk counts against the SOTIF acceptance criteria",
+  "pass_refs": [
+   "FSR-07.02",
+   "FSR-07.04",
+   "FM-20",
+   "AC-02"
+  ],
+  "source": "assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ },
+ "sample": {
+  "salt": "tools/sim sample 1",
+  "parameters": [
+   {
+    "parameter": "ODD-17",
+    "range": "free-flow, congested",
+    "value": "free-flow",
+    "chosen": "seeded",
+    "outside": false,
+    "label": "ODD-17 Traffic density: free-flow"
+   },
+   {
+    "parameter": "ODD-16",
+    "range": "car, bicycle, motorcycle",
+    "value": "bicycle",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-16 Traffic participants: bicycle"
+   },
+   {
+    "parameter": "ODD-12",
+    "range": "day, night",
+    "value": "night",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-12 Illumination: night"
+   }
+  ]
+ },
+ "condition_label": "ODD-12 night",
+ "conditions": {
+  "light": "night",
+  "surface": "dry",
+  "rain": null,
+  "visibility": null,
+  "beyond": null
+ },
+ "legend": {
+  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "meant": "Meant to do: warns before they step out",
+  "meant_mark": "Green ring: where the pass criterion holds the vehicle",
+  "hazard": "Where the hazard lies: Passengers leaving at a stop in lane",
+  "key": "Amber, ringed: the road user the scenario is about"
+ },
+ "road": {
+  "length": [
+   -40,
+   120
+  ],
+  "lane": 3.5,
+  "parking": 0,
+  "sidewalk": 3.0
+ },
+ "features": [],
+ "ego": {
+  "path": [
+   [
+    1.75,
+    30.0
+   ]
+  ],
+  "stops": true,
+  "speed_kmh": null,
+  "decel": 3.0,
+  "motion_label": "Ego stands still throughout; choreography",
+  "lights": "hazard"
+ },
+ "plan": [],
+ "occlusion": [],
+ "hazard": [
+  -3.0,
+  26.5,
+  0.0,
+  33.5
+ ],
+ "actors": [
+  {
+   "role": "key",
+   "class": "bicycle",
+   "drawn_as": "person:bicycle",
+   "label": "bicycle",
+   "path": [
+    [
+     -1.3,
+     18.0
+    ],
+    [
+     -1.3,
+     42.0
+    ]
+   ],
+   "move": [
+    0.05,
+    0.7
+   ]
+  }
+ ],
+ "props": [
+  {
+   "kind": "door",
+   "side": "left",
+   "open": 0.72
+  }
+ ],
+ "signal": null,
+ "queue": [],
+ "still": 0.38,
+ "camera": {
+  "pos": [
+   -3.0,
+   18.0,
+   5.0
+  ],
+  "look": [
+   0.0,
+   32.0,
+   0.0
+  ],
+  "lens": 26
+ },
+ "credits": "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md)"
+}

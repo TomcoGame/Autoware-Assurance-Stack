@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Scene descriptions for the qualitative Blender scenes of the known scenarios (WP-V-03).
 
-For each scenario that has a layout in layouts.py, this writes tools/sim/scenes/<id>.json: one
+For each scenario that has a layout in layouts.py, this writes tools/sim/scenes/<id>.json (and
+<id>--<values>.json for each condition variant of the layout): one
 concrete scenario drawn from the logical scenario of assurance/06-validation/scenarios/scenarios.yaml
 (a value inside each stated range, chosen deterministically from the scenario id), the road layout,
 the vehicle and the other road users, Autoware's planned path and the safety monitor's envelope,
@@ -71,7 +72,10 @@ DRAWN_AS = {
     "child": "person:child",
     "wheelchair": "person:wheelchair",
     "animal": "box:animal",
+    "directing": "person:adult",
 }
+PROPS = {"cones", "barrier", "work_sign", "steam", "debris", "bay", "bus_stop", "paddle", "door"}
+LIGHTS = {"hazard", "left", "right"}
 LIGHT = {"day", "dusk", "night", "unlit", "low-sun"}
 
 
@@ -239,8 +243,10 @@ def ego_path(sid: str, lay: dict, speed: dict | None, decel: float) -> list[list
     rest = sum(math.dist(pts[i], pts[i + 1]) for i in range(1, len(pts) - 1))
     v = speed["value"] / 3.6
     need = CRUISE_M + v * v / (2 * decel) - rest
-    if need <= 0:
-        raise SceneError(f"{sid}: the ego's path is longer than its cruise and stop need")
+    if need < 1.0:
+        # The turns of the path are already longer than the stop needs: keep its start, so that it
+        # still meets the road where the layout draws it.
+        return pts
     ux, uy = (x1 - x0) / seg, (y1 - y0) / seg
     return [[round(x1 - ux * need, 2), round(y1 - uy * need, 2)]] + pts[1:]
 
@@ -319,6 +325,18 @@ def check_layout(sid: str, lay: dict) -> list[str]:
             errs.append(f"{sid}: actor role {a['role']} is not key, other or parked")
         if len(a["path"]) > 1 and "move" not in a:
             errs.append(f"{sid}: a moving actor needs `move`")
+        if a.get("lying") and len(a["path"]) > 1:
+            errs.append(f"{sid}: a road user lying in the lane does not move")
+    errs += [
+        f"{sid}: prop {p['kind']} is not one of {', '.join(sorted(PROPS))}"
+        for p in lay.get("props", [])
+        if p["kind"] not in PROPS
+    ]
+    lights = lay["ego"].get("lights")
+    if lights is not None and lights not in LIGHTS:
+        errs.append(f"{sid}: ego lights {lights} are not one of {', '.join(sorted(LIGHTS))}")
+    if lay.get("signal") not in (None, "red", "green"):
+        errs.append(f"{sid}: the ego's signal is red or green")
     return errs
 
 
@@ -326,15 +344,26 @@ def points(pts) -> list[list[float]]:
     return [[float(x), float(y)] for x, y in pts]
 
 
-def scene(s: dict, m: dict, k: dict, f: fx.Facts) -> dict:
+def variant_key(sid: str, pick: dict | None) -> str:
+    """The name of a scene: the scenario id, and for a condition variant the values it picks."""
+    return sid if not pick else f"{sid}--" + "-".join(pick[a] for a in sorted(pick))
+
+
+def scene(s: dict, m: dict, k: dict, f: fx.Facts, variant: dict | None = None) -> dict:
     sid = s["id"]
     lay = LAYOUTS[sid]
     why = restricted(s)
     if why:
         raise SceneError(f"{sid}: not drawn, because {why}; remove its layout")
     errs = check_layout(sid, lay)
+    categorical = {p["odd"] for p in s.get("parameters") or [] if "values" in p}
+    for attr in {**(lay.get("pick") or {}), **(variant or {})}:
+        if attr not in categorical:
+            errs.append(f"{sid}: picks {attr}, which is not one of its categorical parameters")
     if errs:
         raise SceneError("; ".join(errs))
+    if variant:
+        lay = {**lay, "pick": {**(lay.get("pick") or {}), **variant}}
     smp = sample(s, m, lay, f.odd)
     goals = []
     for g in sc.stake(s, k):
@@ -372,10 +401,12 @@ def scene(s: dict, m: dict, k: dict, f: fx.Facts) -> dict:
                 "role": a["role"],
                 "class": kind,
                 "drawn_as": DRAWN_AS[kind],
-                "label": human(kind),
+                "label": human(kind) + (" lying in the lane" if a.get("lying") else ""),
                 "path": points(a["path"]),
                 "move": list(a.get("move", (0.0, 0.0))),
             }
+            | ({"lying": True} if a.get("lying") else {})
+            | ({"face": float(a["face"])} if "face" in a else {})
         )
     road = {k_: (list(v) if isinstance(v, tuple) else v) for k_, v in lay["road"].items()}
     if "speed_sign" in road:
@@ -387,6 +418,19 @@ def scene(s: dict, m: dict, k: dict, f: fx.Facts) -> dict:
             "unit": posted["unit"],
         }
     cond = conditions(s, m, smp, lay)
+    path = ego_path(sid, lay, speed, decel)
+    standing = len(path) == 1
+    if standing != (speed is None):
+        raise SceneError(
+            f"{sid}: the ego stands (one point) exactly when the scenario samples no ODD-20 speed"
+        )
+    if speed is not None and speed["value"] == 0 and not standing:
+        raise SceneError(
+            f"{sid}: the draw gives an ego speed of 0 on a path; change SALT or the layout"
+        )
+    if standing:
+        motion_label = "Ego stands still throughout; choreography"
+    hold = float(lay["ego"].get("hold_s", 0.0))
     legend_extra = {}
     if any(a["role"] == "key" for a in actors):
         legend_extra["key"] = "Amber, ringed: the road user the scenario is about"
@@ -398,9 +442,18 @@ def scene(s: dict, m: dict, k: dict, f: fx.Facts) -> dict:
             + ", ".join(cond["beyond"]["attributes"])
             + "; beyond it drawn denser, no value stated"
         )
-    return {
+    feats = features(s, lay, smp)
+    if "queue" in feats and not lay.get("queue"):
+        raise SceneError(f"{sid}: the queue feature needs the queue's positions")
+    desc = {
         "version": VERSION,
         "generator": "tools/sim/scene.py",
+        "key": variant_key(sid, variant),
+        "variant": (
+            {"of": sid, "label": ", ".join(f"{a} {variant[a]}" for a in sorted(variant))}
+            if variant
+            else None
+        ),
         "stamp": STAMP,
         "scenario": {
             "id": sid,
@@ -422,43 +475,70 @@ def scene(s: dict, m: dict, k: dict, f: fx.Facts) -> dict:
         "sample": {"salt": SALT, "parameters": smp},
         "condition_label": condition_label(smp),
         "conditions": cond,
-        "legend": {
-            "plan": f"Autoware's planned path ({aw.eid} {aw.name}, rated {aw.asil})",
+        "legend": (
+            {"plan": f"Autoware's planned path ({aw.eid} {aw.name}, rated {aw.asil})"}
+            if lay["plan"]
+            else {}
+        )
+        | {
             "envelope": (
                 f"{mon.name}'s envelope ({mon.eid}, ASIL {mon.asil}); length not computed: "
                 f"the vehicle is not chosen yet ({VEHICLE})"
             ),
             "meant": f"Meant to do: {call[1]}",
-            "meant_mark": "Dashed green: the path the pass criterion asks of the vehicle; green ring: "
-            "where it is judged",
+            "meant_mark": (
+                "Green ring: where the pass criterion holds the vehicle"
+                if standing
+                else "Dashed green: the path the pass criterion asks of the vehicle"
+                + ("; green ring: where it is judged" if lay["ego"].get("stops") else "")
+            ),
             "hazard": "Where the hazard lies: "
             + ("; ".join(f"{e['id']} {e['description']}" for e in events) or s["name"]),
         }
         | legend_extra,
         "road": road,
-        "features": features(s, lay, smp),
+        "features": feats,
         "ego": {
-            "path": ego_path(sid, lay, speed, decel),
+            "path": path,
             "stops": bool(lay["ego"].get("stops")),
             "speed_kmh": speed["value"] if speed else None,
             "decel": decel,
             "motion_label": motion_label,
-        },
+        }
+        | ({"hold_s": hold} if hold else {})
+        | ({"lights": lay["ego"]["lights"]} if lay["ego"].get("lights") else {})
+        | ({"lights_m": list(lay["ego"]["lights_m"])} if lay["ego"].get("lights_m") else {}),
         "plan": points(lay["plan"]),
         "occlusion": points(lay.get("occlusion", [])),
         "hazard": list(lay["hazard"]),
         "actors": actors,
+        "props": [
+            {k_: (list(v) if isinstance(v, tuple) else v) for k_, v in p.items()}
+            for p in lay.get("props", [])
+        ],
+        "signal": lay.get("signal"),
+        "queue": [list(q) for q in lay.get("queue", [])] if "queue" in feats else [],
         "still": lay["still"],
         "camera": {k_: (list(v) if isinstance(v, tuple) else v) for k_, v in lay["camera"].items()},
         "credits": "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by "
         "Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md)",
     }
+    import build_blend  # noqa: PLC0415  (plain Python above its Blender part)
+
+    stands = build_blend.stands_at(desc)
+    for p in desc["props"]:
+        if p["kind"] == "door" and p["open"] < stands:
+            raise SceneError(
+                f"{sid}: a door opens at {p['open']:g} of the clip, before the ego stands still "
+                f"({stands:.2f}); the pass criterion holds the vehicle while a door is open"
+            )
+    return desc
 
 
-def render_state(sid: str, text: str) -> tuple[str, dict]:
+def render_state(key: str, text: str) -> tuple[str, dict]:
     """Whether the committed dashboard of a scene was rendered from its current description."""
-    mf = GALLERY / f"{sid}.manifest.json"
-    jpg = GALLERY / f"{sid}.jpg"
+    mf = GALLERY / f"{key}.manifest.json"
+    jpg = GALLERY / f"{key}.jpg"
     if not mf.exists() or not jpg.exists():
         return "not rendered", {}
     man = json.loads(mf.read_text(encoding="utf-8"))
@@ -466,16 +546,16 @@ def render_state(sid: str, text: str) -> tuple[str, dict]:
         return "**stale**: the picture is not the one its manifest records", man
     if man.get("description_sha256") != hashlib.sha256(text.encode("utf-8")).hexdigest():
         return "**stale**: the description changed since the render", man
-    errs = verify_manifest(sid, man)
+    errs = verify_manifest(key, man)
     if errs:
         return "**stale**: " + "; ".join(errs), man
     return "current", man
 
 
-def verify_manifest(sid: str, man: dict) -> list[str]:
+def verify_manifest(key: str, man: dict) -> list[str]:
     import build_blend  # noqa: PLC0415  (plain Python above its Blender part)
 
-    desc = json.loads((OUT / f"{sid}.json").read_text(encoding="utf-8"))
+    desc = json.loads((OUT / f"{key}.json").read_text(encoding="utf-8"))
     return build_blend.verify(desc, man)
 
 
@@ -488,14 +568,13 @@ def gallery(descs: dict[str, dict], texts: dict[str, str]) -> str:
     for sid, d in descs.items():
         state, man = render_state(sid, texts[sid])
         sc_ = d["scenario"]
+        cond = d["condition_label"] + (" (condition variant)" if d["variant"] else "")
         goals = ", ".join(f"{g['id']} ({g['asil']})" for g in sc_["goals"]) or "—"
         ev = ", ".join([e["id"] for e in sc_["events"]] + [t["id"] for t in sc_["triggers"]])
         link = f"[{sid}]({sid}.jpg)" if man else sid
         drawn_with = "CC0 assets" if (man.get("look") or {}).get("assets") else "procedural look"
         made = f"{state}; Blender {man.get('blender', '?')}, {drawn_with}" if man else state
-        rows.append(
-            f"| {link} | {sc_['name']} | {goals} | {ev or '—'} | {d['condition_label']} | {made} |"
-        )
+        rows.append(f"| {link} | {sc_['name']} | {goals} | {ev or '—'} | {cond} | {made} |")
     first = next((s for s in descs if (GALLERY / f"{s}.jpg").exists()), None)
     hero = (
         [
@@ -543,9 +622,12 @@ def build() -> dict[Path, str]:
         raise SceneError(f"layouts.py: no scenario {', '.join(missing)} in scenarios.yaml")
     out, descs = {}, {}
     for sid in sorted(LAYOUTS):
-        descs[sid] = scene(by_id[sid], m, k, f)
-        text = json.dumps(descs[sid], indent=1, ensure_ascii=False) + "\n"
-        out[OUT / f"{sid}.json"] = text
+        for variant in [None] + list(LAYOUTS[sid].get("variants", [])):
+            d = scene(by_id[sid], m, k, f, variant)
+            if d["key"] in descs:
+                raise SceneError(f"{sid}: two scenes are named {d['key']}")
+            descs[d["key"]] = d
+            out[OUT / f"{d['key']}.json"] = json.dumps(d, indent=1, ensure_ascii=False) + "\n"
     out[GALLERY / "README.md"] = gallery(descs, {s: out[OUT / f"{s}.json"] for s in descs})
     orphans = sorted(p.name for p in OUT.glob("*.json") if p not in out)
     orphans += sorted(p.name for p in GALLERY.glob("SC-*.*") if p.name.split(".")[0] not in descs)

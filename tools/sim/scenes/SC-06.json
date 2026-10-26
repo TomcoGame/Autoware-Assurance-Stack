@@ -1,6 +1,8 @@
 {
  "version": 1,
  "generator": "tools/sim/scene.py",
+ "key": "SC-06",
+ "variant": null,
  "stamp": "qualitative illustration · not a simulation result · draft for engineering review",
  "scenario": {
   "id": "SC-06",
@@ -215,6 +217,9 @@
    ]
   }
  ],
+ "props": [],
+ "signal": null,
+ "queue": [],
  "still": 0.55,
  "camera": {
   "pos": [

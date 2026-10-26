@@ -20,8 +20,13 @@ A scenario of [`scenarios.yaml`](../../assurance/06-validation/scenarios/scenari
 parameters have ranges. For each scenario that has a layout, the tool picks one concrete scenario from those ranges,
 builds it in Blender, and renders a review dashboard and, if asked, a short clip. The scene holds:
 
-- the road layout (lanes, sidewalks, crosswalk, stop line, junction, signals, posted limit sign);
-- the ego robotaxi (the Kiri '10 model) and the other road users, of the participant classes the sample draws;
+- the road layout (lanes, sidewalks, cycle lane, parking strip, crosswalk, stop or give-way line, junction,
+  roundabout, signals lit red or green where the scenario names the state, stop signs, posted limit sign) and what
+  the scenario puts on it: cones, barrier and work sign, steam from a manhole, debris, a marked stopping place, a bus
+  stop, a traffic paddle;
+- the ego robotaxi (the Kiri '10 model), with its indicators or hazard lights lit (steady, not flashing) while the
+  scenario asks for them (the indicator only while the vehicle steers), and a door that opens once it stands, and the other road users, of the participant classes the sample draws (an
+  emergency vehicle with its lights on, a person directing traffic, an e-scooter lying in the lane);
 - Autoware's planned path (red), the safety monitor's envelope (a blue outline ahead of the vehicle, moving with
   it), what the pass criterion asks of the vehicle (dashed green, its moment ringed), and where the hazard lies (an
   orange outline). Every overlay lies flat on the road, as in LionDriver, so none hides the scene from the road-level
@@ -60,8 +65,14 @@ with a narrow pixel filter so the pictures sit pixel on pixel. The look never mo
 and `--verify` checks a scene the same way under either look. Each manifest records which assets a dashboard was
 drawn with, the dashboard's credit line names them, and the gallery says which look each one has.
 
-Scenes exist for SC-01, SC-02, SC-03, SC-06 and SC-14. The others have no layout yet.
-[`layouts.py`](layouts.py) lists what a layout holds; adding one is enough for a scenario to be drawn.
+Every scenario that may be drawn has a scene: SC-01 to SC-19, SC-22 and SC-23 (a unit test fails if one lacks a
+layout). [`layouts.py`](layouts.py) lists what a layout holds.
+
+**Condition variants**, as in LionDriver: a layout may list `variants`, each a pick of other values for the
+scenario's own categorical parameters (night instead of day, unlit streets, low sun, lane markings visible). Each
+gives one more scene, named `<id>--<values>` (`SC-13--unlit`), with the rest of the draw unchanged: the same road,
+road users, choreography and ego speed. A unit test checks that a variant changes only what it picks. There are 13
+today, so 34 scenes in all. The gallery marks them, and the claude.ai web page above (private) filters base scenes from variants.
 
 A scenario that varies the remote operations link (ODD-15 `link-*`) or whose pass criterion rests on a
 cybersecurity requirement (`CSR-`) is never drawn: its scene would show security architecture (CLAUDE.md, WP-M-09
@@ -71,7 +82,7 @@ cybersecurity requirement (`CSR-`) is never drawn: its scene would show security
 
 | File | Runs in | Does |
 |---|---|---|
-| [`scene.py`](scene.py) | Python, PyYAML | Reads the records and writes [`scenes/<id>.json`](scenes/), the scene description, and the gallery page [`dashboards/README.md`](dashboards/README.md); `--check` fails if one is stale |
+| [`scene.py`](scene.py) | Python, PyYAML | Reads the records and writes [`scenes/<id>.json`](scenes/) (and `<id>--<values>.json` for a variant), the scene description, and the gallery page [`dashboards/README.md`](dashboards/README.md); `--check` fails if one is stale |
 | [`layouts.py`](layouts.py) | (data) | Road geometry and choreography of each scene, in metres; holds no fact |
 | [`build_blend.py`](build_blend.py) | Blender (`bpy`) | Builds the Blender scene from one description, renders the views and lays out the dashboard (in Blender too: no imaging library), writes a manifest of what it built, and with `--verify` fails when the built scene differs from the description |
 | [`look.py`](look.py) | Blender (`bpy`) | The skies, surfaces, street furniture and pedestrians, from the CC0 assets or procedural |
@@ -115,10 +126,20 @@ parameter, so changing or picking one parameter leaves the others as they were.
 
 - **Motion is choreography.** Each road user goes along its path between two moments of the clip. No speed or
   acceleration of another road user is stated, because the requirements that would bound them (FSR-06.01, FSR-06.02)
-  have not fixed one. The ego cruises at its sampled speed, then slows to a stop at the end of its path at the firm
-  level of FSR-03.02 (read from `fsc.yaml`), which is the most a stop that the safety channel does not have to
-  confirm may brake. Its start is placed so that this stop fits, and the clip lasts as long as it takes. Which level
-  Autoware itself would brake at is not modelled; the dashboard says so.
+  have not fixed one. The paths are chosen so that the pace they imply is plausible for the kind of road user (a
+  cyclist is not drawn at car speed, though a pedestrian may hurry and an emergency vehicle goes faster than the
+  traffic); this is checked by reading the dashboards, not by a test, and is no claim about how fast anyone moves.
+  A unit test checks that no two road users, the ego included, ever overlap during the clip, nor touch what stands
+  on the road (cones, barrier, debris) or the ego's open door. The ego cruises at its sampled speed,
+  then slows to a stop at the end of its path at the firm level of FSR-03.02 (read from `fsc.yaml`), which is the
+  most a stop that the safety channel does not have to confirm may brake. Its start is placed so that this stop
+  fits (a pull-over path whose bends are already longer than the stop keeps its start), it stands for `hold_s`, and
+  the clip lasts as long as it takes. Which level Autoware itself would brake at is not modelled; the dashboard says
+  so. Where the scenario samples no speed (SC-16, SC-19), the vehicle stands throughout and draws no planned path.
+  The sampled speed can be low (1.6 km/h in SC-08): the clip is then long, and the draw is kept, not tuned.
+- **What is named but not drawn.** The gradient (ODD-06) and the localisation source (ODD-15 `gnss-lost`, SC-09)
+  are on the dashboard from the sample but not in the scene: the road is flat. Nor are the HD map that SC-10 is
+  about, a soiled sensor or a passenger's belt (SC-04), or a traffic density without a queue to show it.
 - **The envelope's length is not computed.** It is drawn at a fixed length (`ENVELOPE_M`) and shrinks with the
   square of the vehicle's speed share as it slows. The real envelope depends on the vehicle's deceleration and
   response time, which are parameters until the vehicle is chosen (DQ-008, WP-V-08 §2).
@@ -142,7 +163,8 @@ the way the SVG figures are. The check has three parts:
    scene and compares it with the description:
    - every road user at the position the description gives it at the still frame (within 5 cm);
    - the conditions and features drawn: light, wet road, rain, mist, the ODD-limit band and the denser mist
-     beyond it, stop line, speed sign, occlusion, the sampled features;
+     beyond it, stop line, speed sign, occlusion, the sampled features, every prop kind, the signal state, the
+     ego's lights, the queued vehicles, the roundabout, the cycle lane, the road users lying in the lane;
    - on the dashboard and on the clip: the stamp, the scenario id and name, every sampled parameter, every safety
      goal, every monitor, the pass criterion, every legend line, the model credits.
 
@@ -151,7 +173,8 @@ the way the SVG figures are. The check has three parts:
 
    The position check compares the keyframed scene with the same motion functions that made it, so it catches a
    fault in building the scene, not a wrong choreography. Choreography is checked by the unit tests (the clip runs at
-   the sampled speed, the ego stops before its stop line) and by review of the dashboards.
+   the sampled speed, the ego stops before its stop line, no two road users overlap, a door never opens before the
+   vehicle stands, a variant changes only what it picks) and by review of the dashboards.
 3. **The dashboards are committed, and their state is shown.** The JPEGs and manifests in
    [`dashboards/`](dashboards/README.md) are kept out of the byte check. Instead, `scene.py` writes each one's state
    into the gallery page: *current* when its manifest's description hash is that of the committed description, its
@@ -159,7 +182,8 @@ the way the SVG figures are. The check has three parts:
    change therefore never fails CI for want of a render, but the gallery says which pictures are out of date.
 
    The [`sim-render.yaml`](../../.github/workflows/sim-render.yaml) workflow re-renders every scene from the committed
-   descriptions, verifies it and publishes the dashboards as the artifact `scenario-scenes` (30 days). It runs on
+   descriptions, one job per scene in parallel, verifies it and publishes the dashboards together as the artifact
+   `scenario-scenes` (30 days). It runs on
    pull requests that touch `tools/sim/`, the scenario records or the models, and on demand (where it can also
    render the clips). It is advisory: it is not a required check and does not run on pushes to main.
 

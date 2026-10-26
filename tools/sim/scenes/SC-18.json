@@ -1,0 +1,259 @@
+{
+ "version": 1,
+ "generator": "tools/sim/scene.py",
+ "key": "SC-18",
+ "variant": null,
+ "stamp": "qualitative illustration · not a simulation result · draft for engineering review",
+ "scenario": {
+  "id": "SC-18",
+  "name": "Pull-over minimal risk manoeuvre along a busy kerb",
+  "description": "Autoware pulls over after a stop request or a minor fault, where the kerb has bike lanes, driveways, bus stops or crosswalks",
+  "situations": [
+   "OS-01"
+  ],
+  "events": [],
+  "triggers": [
+   {
+    "id": "TC-14",
+    "condition": "Bike lanes, driveways, bus stops or crosswalks along the kerb where a pull-over is tried"
+   }
+  ],
+  "goals": [],
+  "monitors": [],
+  "misuse": [
+   "MU-03"
+  ],
+  "losses": [
+   "LS-25"
+  ],
+  "methods": [
+   "Simulation",
+   "Track"
+  ],
+  "meant": "pulls over only into a mapped stop",
+  "pass": "The vehicle pulls over only into a mapped safe stopping place and stops in lane otherwise; repeated stop requests go to a remote operator",
+  "pass_refs": [
+   "FSR-07.05",
+   "FSR-04.01",
+   "FSR-02.02",
+   "MRM-1",
+   "FM-19",
+   "HR-01",
+   "AC-02"
+  ],
+  "source": "assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ },
+ "sample": {
+  "salt": "tools/sim sample 1",
+  "parameters": [
+   {
+    "parameter": "ODD-20",
+    "range": "0 to 48 km/h",
+    "value": 43.4,
+    "unit": "km/h",
+    "crosses": false,
+    "label": "ODD-20 Ego speed: 43.4 km/h (range 0 to 48 km/h)"
+   },
+   {
+    "parameter": "ODD-05",
+    "range": "cycle-lane, marked-crosswalk",
+    "value": "cycle-lane",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-05 Crossings: cycle-lane"
+   },
+   {
+    "parameter": "ODD-09",
+    "range": "kerbside-stop",
+    "value": "kerbside-stop",
+    "chosen": "seeded",
+    "outside": false,
+    "label": "ODD-09 Stopping places: kerbside-stop"
+   },
+   {
+    "parameter": "ODD-18",
+    "range": "bus-at-stop",
+    "value": "bus-at-stop",
+    "chosen": "seeded",
+    "outside": false,
+    "label": "ODD-18 Special vehicles: bus-at-stop"
+   },
+   {
+    "parameter": "ODD-16",
+    "range": "bicycle, pedestrian",
+    "value": "bicycle",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-16 Traffic participants: bicycle"
+   }
+  ]
+ },
+ "condition_label": "not set by the scenario",
+ "conditions": {
+  "light": "day",
+  "surface": "dry",
+  "rain": null,
+  "visibility": null,
+  "beyond": null
+ },
+ "legend": {
+  "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "meant": "Meant to do: pulls over only into a mapped stop",
+  "meant_mark": "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "hazard": "Where the hazard lies: Pull-over minimal risk manoeuvre along a busy kerb",
+  "key": "Amber, ringed: the road user the scenario is about"
+ },
+ "road": {
+  "length": [
+   -40,
+   120
+  ],
+  "lane": 3.5,
+  "parking": 2.5,
+  "sidewalk": 3.0,
+  "cycle_lane": 1.5
+ },
+ "features": [],
+ "ego": {
+  "path": [
+   [
+    1.75,
+    -0.49
+   ],
+   [
+    1.75,
+    16.0
+   ],
+   [
+    3.3,
+    21.5
+   ],
+   [
+    5.2,
+    26.0
+   ],
+   [
+    6.1,
+    29.0
+   ],
+   [
+    6.25,
+    31.0
+   ]
+  ],
+  "stops": true,
+  "speed_kmh": 43.4,
+  "decel": 3.0,
+  "motion_label": "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "lights": "right"
+ },
+ "plan": [
+  [
+   1.75,
+   0.0
+  ],
+  [
+   1.75,
+   16.0
+  ],
+  [
+   3.3,
+   21.5
+  ],
+  [
+   5.2,
+   26.0
+  ],
+  [
+   6.1,
+   29.0
+  ],
+  [
+   6.25,
+   31.0
+  ]
+ ],
+ "occlusion": [],
+ "hazard": [
+  3.5,
+  16.0,
+  5.0,
+  30.0
+ ],
+ "actors": [
+  {
+   "role": "other",
+   "class": "bus-at-stop",
+   "drawn_as": "box:bus",
+   "label": "bus at stop",
+   "path": [
+    [
+     6.25,
+     52.0
+    ]
+   ],
+   "move": [
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "role": "key",
+   "class": "bicycle",
+   "drawn_as": "person:bicycle",
+   "label": "bicycle",
+   "path": [
+    [
+     4.25,
+     20.0
+    ],
+    [
+     4.25,
+     45.0
+    ]
+   ],
+   "move": [
+    0.0,
+    1.0
+   ]
+  }
+ ],
+ "props": [
+  {
+   "kind": "bay",
+   "from": [
+    5.15,
+    23.0
+   ],
+   "to": [
+    7.4,
+    37.0
+   ]
+  },
+  {
+   "kind": "bus_stop",
+   "at": [
+    8.0,
+    47.0
+   ]
+  }
+ ],
+ "signal": null,
+ "queue": [],
+ "still": 0.7,
+ "camera": {
+  "pos": [
+   -1.0,
+   -6.0,
+   6.5
+  ],
+  "look": [
+   4.5,
+   30.0,
+   0.0
+  ],
+  "lens": 26
+ },
+ "credits": "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md)"
+}

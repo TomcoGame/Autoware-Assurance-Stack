@@ -1,0 +1,226 @@
+{
+ "version": 1,
+ "generator": "tools/sim/scene.py",
+ "key": "SC-13--unlit",
+ "variant": {
+  "of": "SC-13",
+  "label": "ODD-12 unlit"
+ },
+ "stamp": "qualitative illustration · not a simulation result · draft for engineering review",
+ "scenario": {
+  "id": "SC-13",
+  "name": "Rare object or debris in the lane",
+  "description": "A fallen load, low debris, an animal, an e-scooter lying in the lane, or cones placed to trap the vehicle",
+  "situations": [
+   "OS-01"
+  ],
+  "events": [],
+  "triggers": [
+   {
+    "id": "TC-15",
+    "condition": "People of unusual shape or posture (wheelchairs, children, people carrying large objects or pushing strollers)"
+   },
+   {
+    "id": "TC-16",
+    "condition": "Rare objects (animals, e-scooters, fallen loads, debris low on the road)"
+   }
+  ],
+  "goals": [
+   {
+    "id": "SG-02",
+    "asil": "D",
+    "statement": "Decelerate at least as much as needed to avoid a collision the planned trajectory avoids"
+   },
+   {
+    "id": "SG-03",
+    "asil": "C",
+    "statement": "Avoid unintended hard deceleration"
+   }
+  ],
+  "monitors": [],
+  "misuse": [
+   "MU-12"
+  ],
+  "losses": [
+   "LS-01"
+  ],
+  "methods": [
+   "Simulation",
+   "Track"
+  ],
+  "meant": "stops before it, or passes in lane",
+  "pass": "The vehicle stops before the object or passes it within the lane when clear; a vehicle that cannot find a way on reaches a minimal risk condition and asks for help",
+  "pass_refs": [
+   "FSR-02.01",
+   "FSR-02.02",
+   "FSR-03.01",
+   "FM-03",
+   "TR-14",
+   "SR-01",
+   "AC-02"
+  ],
+  "source": "assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ },
+ "sample": {
+  "salt": "tools/sim sample 1",
+  "parameters": [
+   {
+    "parameter": "ODD-20",
+    "range": "0 to 48 km/h",
+    "value": 30.9,
+    "unit": "km/h",
+    "crosses": false,
+    "label": "ODD-20 Ego speed: 30.9 km/h (range 0 to 48 km/h)"
+   },
+   {
+    "parameter": "ODD-16",
+    "range": "animal, e-scooter, wheelchair",
+    "value": "e-scooter",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-16 Traffic participants: e-scooter"
+   },
+   {
+    "parameter": "ODD-12",
+    "range": "day, night, unlit",
+    "value": "unlit",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-12 Illumination: unlit"
+   },
+   {
+    "parameter": "ODD-13",
+    "range": "dry, wet",
+    "value": "dry",
+    "chosen": "seeded",
+    "outside": false,
+    "label": "ODD-13 Road surface condition: dry"
+   }
+  ]
+ },
+ "condition_label": "ODD-12 unlit · ODD-13 dry",
+ "conditions": {
+  "light": "unlit",
+  "surface": "dry",
+  "rain": null,
+  "visibility": null,
+  "beyond": null
+ },
+ "legend": {
+  "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "meant": "Meant to do: stops before it, or passes in lane",
+  "meant_mark": "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "hazard": "Where the hazard lies: Rare object or debris in the lane",
+  "key": "Amber, ringed: the road user the scenario is about"
+ },
+ "road": {
+  "length": [
+   -40,
+   120
+  ],
+  "lane": 3.5,
+  "parking": 0,
+  "sidewalk": 3.0
+ },
+ "features": [],
+ "ego": {
+  "path": [
+   [
+    1.75,
+    14.72
+   ],
+   [
+    1.75,
+    35.0
+   ]
+  ],
+  "stops": true,
+  "speed_kmh": 30.9,
+  "decel": 3.0,
+  "motion_label": "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking"
+ },
+ "plan": [
+  [
+   1.75,
+   0.0
+  ],
+  [
+   1.75,
+   110.0
+  ]
+ ],
+ "occlusion": [],
+ "hazard": [
+  0.3,
+  38.5,
+  3.2,
+  43.0
+ ],
+ "actors": [
+  {
+   "role": "key",
+   "class": "e-scooter",
+   "drawn_as": "person:e-scooter",
+   "label": "e scooter lying in the lane",
+   "path": [
+    [
+     1.9,
+     40.0
+    ]
+   ],
+   "move": [
+    0.0,
+    0.0
+   ],
+   "lying": true
+  },
+  {
+   "role": "other",
+   "class": "car",
+   "drawn_as": "sedan",
+   "label": "car",
+   "path": [
+    [
+     -1.75,
+     70.0
+    ],
+    [
+     -1.75,
+     20.0
+    ]
+   ],
+   "move": [
+    0.0,
+    1.0
+   ]
+  }
+ ],
+ "props": [
+  {
+   "kind": "debris",
+   "at": [
+    1.0,
+    42.0
+   ],
+   "r": 0.7
+  }
+ ],
+ "signal": null,
+ "queue": [],
+ "still": 0.8,
+ "camera": {
+  "pos": [
+   -1.5,
+   -8.0,
+   5.0
+  ],
+  "look": [
+   1.5,
+   38.0,
+   0.0
+  ],
+  "lens": 28
+ },
+ "credits": "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md)"
+}

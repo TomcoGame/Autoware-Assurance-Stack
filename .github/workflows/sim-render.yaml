@@ -1,11 +1,11 @@
 name: sim-render
 
 # Re-renders the qualitative scenario scenes in Blender from the committed descriptions (tools/sim/scenes/*.json),
-# checks that each built scene matches its description (build_blend.py --verify: road users where the description
-# puts them, the conditions drawn, the stamp, the credits and every label on the dashboard), and publishes the review
-# dashboards and manifests as the workflow artifact `scenario-scenes`. Advisory: the committed dashboards and their
-# state are checked by sim.yaml without Blender (tools/sim/README.md). Every dashboard is stamped "qualitative
-# illustration · not a simulation result" and is not evidence.
+# one job per scene, checks that each built scene matches its description (build_blend.py --verify: road users where
+# the description puts them, the conditions drawn, the stamp, the credits and every label on the dashboard), and
+# publishes the review dashboards and manifests as the workflow artifact `scenario-scenes`. Advisory: the committed
+# dashboards and their state are checked by sim.yaml without Blender (tools/sim/README.md). Every dashboard is
+# stamped "qualitative illustration · not a simulation result" and is not evidence.
 
 on:
   pull_request:
@@ -31,10 +31,30 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  render:
-    name: Render and verify the scenario scenes
+  scenes:
+    name: List the scenes
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    outputs:
+      keys: ${{ steps.list.outputs.keys }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - id: list
+        run: |
+          python3 -c 'import json, pathlib; print("keys=" + json.dumps(sorted(p.stem for p in pathlib.Path("tools/sim/scenes").glob("*.json"))))' >> "$GITHUB_OUTPUT"
+
+  render:
+    # One job per scene, in parallel: 34 scenes in one job would not finish in its time limit.
+    name: Render and verify ${{ matrix.key }}
+    needs: scenes
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        key: ${{ fromJSON(needs.scenes.outputs.keys) }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -54,13 +74,28 @@ jobs:
         run: |
           python tools/sim/fetch_assets.py --locked || echo "assets unavailable: rendering the procedural look"
 
-      - name: Build, verify and render every scene
+      - name: Build, verify and render the scene
         env:
           ANIMATE: ${{ inputs.animate && '--animate' || '' }}
-        run: python tools/sim/build_blend.py tools/sim/scenes/*.json --out "$RUNNER_TEMP/sim" --work "$RUNNER_TEMP/work" --verify $ANIMATE
+          KEY: ${{ matrix.key }}
+        run: python tools/sim/build_blend.py "tools/sim/scenes/$KEY.json" --out "$RUNNER_TEMP/sim" --work "$RUNNER_TEMP/work" --verify $ANIMATE
 
       - uses: actions/upload-artifact@v4
+        if: ${{ always() }}  # a failed verify still uploads the manifest that says why
+        with:
+          name: scene-${{ matrix.key }}
+          path: ${{ runner.temp }}/sim
+          retention-days: 30
+
+  collect:
+    name: Collect the dashboards in one artifact
+    needs: render
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/upload-artifact/merge@v4
         with:
           name: scenario-scenes
-          path: ${{ runner.temp }}/sim
+          pattern: scene-*
+          delete-merged: true
           retention-days: 30

@@ -1,6 +1,8 @@
 {
  "version": 1,
  "generator": "tools/sim/scene.py",
+ "key": "SC-03",
+ "variant": null,
  "stamp": "qualitative illustration · not a simulation result · draft for engineering review",
  "scenario": {
   "id": "SC-03",
@@ -230,7 +232,7 @@
    "path": [
     [
      -1.75,
-     80.0
+     60.0
     ],
     [
      -1.75,
@@ -242,6 +244,35 @@
     1
    ]
   }
+ ],
+ "props": [],
+ "signal": null,
+ "queue": [
+  [
+   1.75,
+   38.0,
+   0
+  ],
+  [
+   1.75,
+   45.5,
+   0
+  ],
+  [
+   -1.75,
+   12.0,
+   180
+  ],
+  [
+   -1.75,
+   4.0,
+   180
+  ],
+  [
+   -1.75,
+   -4.0,
+   180
+  ]
  ],
  "still": 0.8,
  "camera": {

@@ -1,0 +1,207 @@
+{
+ "version": 1,
+ "generator": "tools/sim/scene.py",
+ "key": "SC-17",
+ "variant": null,
+ "stamp": "qualitative illustration · not a simulation result · draft for engineering review",
+ "scenario": {
+  "id": "SC-17",
+  "name": "Loss of Autoware while driving",
+  "description": "Autoware's commands stop, freeze or become implausible while driving in lane; other road users then pass the vehicle stopped in lane",
+  "situations": [
+   "OS-01"
+  ],
+  "events": [
+   {
+    "id": "HE-07.1",
+    "description": "After a fault in planning or control, keeps driving without control instead of stopping"
+   }
+  ],
+  "triggers": [],
+  "goals": [
+   {
+    "id": "SG-07",
+    "asil": "D",
+    "statement": "Reach a minimal risk condition whenever the item can no longer drive safely"
+   }
+  ],
+  "monitors": [],
+  "misuse": [
+   "MU-15"
+  ],
+  "losses": [
+   "LS-03",
+   "LS-06",
+   "LS-18",
+   "LS-22"
+  ],
+  "methods": [
+   "In the loop",
+   "Track"
+  ],
+  "meant": "the monitor stops it in lane",
+  "pass": "The monitor detects the loss within its detection budget and stops the vehicle in lane with hazard lights on, without Autoware; a fault of the monitor itself leads to the vehicle's own stop, never to the park brake while moving",
+  "pass_refs": [
+   "FSR-07.01",
+   "FSR-07.02",
+   "FSR-07.06",
+   "FSR-07.07",
+   "FSR-01.01",
+   "FSR-02.02",
+   "FSR-04.01",
+   "TR-01",
+   "SR-01",
+   "SR-04"
+  ],
+  "source": "assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ },
+ "sample": {
+  "salt": "tools/sim sample 1",
+  "parameters": [
+   {
+    "parameter": "ODD-20",
+    "range": "0 to 48 km/h",
+    "value": 2.3,
+    "unit": "km/h",
+    "crosses": false,
+    "label": "ODD-20 Ego speed: 2.3 km/h (range 0 to 48 km/h)"
+   },
+   {
+    "parameter": "ODD-17",
+    "range": "free-flow, congested",
+    "value": "free-flow",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-17 Traffic density: free-flow"
+   },
+   {
+    "parameter": "ODD-02",
+    "range": "urban-street, centre-line",
+    "value": "urban-street",
+    "chosen": "seeded",
+    "outside": false,
+    "label": "ODD-02 Road type: urban-street"
+   },
+   {
+    "parameter": "ODD-12",
+    "range": "day, night",
+    "value": "day",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-12 Illumination: day"
+   }
+  ]
+ },
+ "condition_label": "ODD-12 day",
+ "conditions": {
+  "light": "day",
+  "surface": "dry",
+  "rain": null,
+  "visibility": null,
+  "beyond": null
+ },
+ "legend": {
+  "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "meant": "Meant to do: the monitor stops it in lane",
+  "meant_mark": "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "hazard": "Where the hazard lies: HE-07.1 After a fault in planning or control, keeps driving without control instead of stopping"
+ },
+ "road": {
+  "length": [
+   -40,
+   120
+  ],
+  "lane": 3.5,
+  "parking": 0,
+  "sidewalk": 3.0
+ },
+ "features": [],
+ "ego": {
+  "path": [
+   [
+    1.75,
+    31.93
+   ],
+   [
+    1.75,
+    40.0
+   ]
+  ],
+  "stops": true,
+  "speed_kmh": 2.3,
+  "decel": 3.0,
+  "motion_label": "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "hold_s": 8.0,
+  "lights": "hazard"
+ },
+ "plan": [
+  [
+   1.75,
+   0.0
+  ],
+  [
+   1.75,
+   110.0
+  ]
+ ],
+ "occlusion": [],
+ "hazard": [
+  -3.5,
+  34.0,
+  0.0,
+  46.0
+ ],
+ "actors": [
+  {
+   "role": "other",
+   "class": "car",
+   "drawn_as": "sedan",
+   "label": "car",
+   "path": [
+    [
+     1.75,
+     24.0
+    ],
+    [
+     -1.75,
+     31.0
+    ],
+    [
+     -1.75,
+     50.0
+    ],
+    [
+     1.75,
+     58.0
+    ],
+    [
+     1.75,
+     70.0
+    ]
+   ],
+   "move": [
+    0.65,
+    1.0
+   ]
+  }
+ ],
+ "props": [],
+ "signal": null,
+ "queue": [],
+ "still": 0.8,
+ "camera": {
+  "pos": [
+   -3.0,
+   -8.0,
+   5.5
+  ],
+  "look": [
+   0.5,
+   38.0,
+   0.0
+  ],
+  "lens": 26
+ },
+ "credits": "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md)"
+}

@@ -1,0 +1,265 @@
+{
+ "version": 1,
+ "generator": "tools/sim/scene.py",
+ "key": "SC-15",
+ "variant": null,
+ "stamp": "qualitative illustration · not a simulation result · draft for engineering review",
+ "scenario": {
+  "id": "SC-15",
+  "name": "Kerbside stop while passengers board or alight",
+  "description": "The vehicle pulls in to a mapped stop, passengers get in and out, including slowly or with help, and the vehicle pulls out; a person may stand behind it",
+  "situations": [
+   "OS-07"
+  ],
+  "events": [
+   {
+    "id": "HE-05.1",
+    "description": "Moves off while a passenger is boarding or alighting"
+   },
+   {
+    "id": "HE-10.1",
+    "description": "Reverses into a person behind the vehicle at a kerbside stop"
+   }
+  ],
+  "triggers": [],
+  "goals": [
+   {
+    "id": "SG-05",
+    "asil": "D",
+    "statement": "Avoid unintended motion from standstill, forward or backward"
+   }
+  ],
+  "monitors": [],
+  "misuse": [
+   "MU-01",
+   "MU-08",
+   "MU-19"
+  ],
+  "losses": [
+   "LS-12",
+   "LS-16",
+   "LS-20"
+  ],
+  "methods": [
+   "Simulation",
+   "Bench",
+   "Track"
+  ],
+  "meant": "holds while a door is open",
+  "pass": "The vehicle does not move with a door open or a person in the near field in the direction of travel, never reverses, and resumes only when every release condition holds",
+  "pass_refs": [
+   "FSR-05.01",
+   "FSR-05.03",
+   "FSR-05.05",
+   "FSR-07.04",
+   "HR-04"
+  ],
+  "source": "assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ },
+ "sample": {
+  "salt": "tools/sim sample 1",
+  "parameters": [
+   {
+    "parameter": "ODD-20",
+    "range": "0 to 48 km/h",
+    "value": 12.3,
+    "unit": "km/h",
+    "crosses": false,
+    "label": "ODD-20 Ego speed: 12.3 km/h (range 0 to 48 km/h)"
+   },
+   {
+    "parameter": "ODD-09",
+    "range": "kerbside-stop",
+    "value": "kerbside-stop",
+    "chosen": "seeded",
+    "outside": false,
+    "label": "ODD-09 Stopping places: kerbside-stop"
+   },
+   {
+    "parameter": "ODD-16",
+    "range": "pedestrian, child, wheelchair, bicycle",
+    "value": "pedestrian",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-16 Traffic participants: pedestrian"
+   },
+   {
+    "parameter": "ODD-06",
+    "range": "0 to 8 %",
+    "value": 1.7,
+    "unit": "%",
+    "crosses": false,
+    "label": "ODD-06 Road surface and geometry: 1.7 % (range 0 to 8 %)"
+   }
+  ]
+ },
+ "condition_label": "not set by the scenario",
+ "conditions": {
+  "light": "day",
+  "surface": "dry",
+  "rain": null,
+  "visibility": null,
+  "beyond": null
+ },
+ "legend": {
+  "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "meant": "Meant to do: holds while a door is open",
+  "meant_mark": "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "hazard": "Where the hazard lies: HE-05.1 Moves off while a passenger is boarding or alighting; HE-10.1 Reverses into a person behind the vehicle at a kerbside stop",
+  "key": "Amber, ringed: the road user the scenario is about"
+ },
+ "road": {
+  "length": [
+   -40,
+   120
+  ],
+  "lane": 3.5,
+  "parking": 2.5,
+  "sidewalk": 3.0
+ },
+ "features": [],
+ "ego": {
+  "path": [
+   [
+    1.75,
+    0.0
+   ],
+   [
+    1.75,
+    18.0
+   ],
+   [
+    2.9,
+    22.0
+   ],
+   [
+    4.2,
+    26.0
+   ],
+   [
+    4.7,
+    28.5
+   ],
+   [
+    4.75,
+    30.0
+   ]
+  ],
+  "stops": true,
+  "speed_kmh": 12.3,
+  "decel": 3.0,
+  "motion_label": "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "hold_s": 7.0
+ },
+ "plan": [
+  [
+   1.75,
+   0.0
+  ],
+  [
+   1.75,
+   18.0
+  ],
+  [
+   2.9,
+   22.0
+  ],
+  [
+   4.2,
+   26.0
+  ],
+  [
+   4.7,
+   28.5
+  ],
+  [
+   4.75,
+   30.0
+  ]
+ ],
+ "occlusion": [],
+ "hazard": [
+  3.4,
+  26.0,
+  7.5,
+  34.5
+ ],
+ "actors": [
+  {
+   "role": "key",
+   "class": "pedestrian",
+   "drawn_as": "person:adult",
+   "label": "pedestrian",
+   "path": [
+    [
+     8.2,
+     28.2
+    ],
+    [
+     7.0,
+     28.6
+    ],
+    [
+     6.2,
+     28.95
+    ]
+   ],
+   "move": [
+    0.72,
+    0.95
+   ]
+  },
+  {
+   "role": "other",
+   "class": "pedestrian",
+   "drawn_as": "person:adult",
+   "label": "pedestrian",
+   "path": [
+    [
+     6.6,
+     26.4
+    ]
+   ],
+   "move": [
+    0.0,
+    0.0
+   ]
+  }
+ ],
+ "props": [
+  {
+   "kind": "bay",
+   "from": [
+    3.65,
+    23.0
+   ],
+   "to": [
+    5.9,
+    36.0
+   ]
+  },
+  {
+   "kind": "door",
+   "side": "right",
+   "open": 0.66
+  }
+ ],
+ "signal": null,
+ "queue": [],
+ "still": 0.86,
+ "camera": {
+  "pos": [
+   -1.5,
+   -6.0,
+   6.0
+  ],
+  "look": [
+   4.0,
+   29.0,
+   0.0
+  ],
+  "lens": 26
+ },
+ "credits": "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md)"
+}
