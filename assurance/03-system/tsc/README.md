@@ -21,6 +21,8 @@ The whole technical safety concept and system architecture of [WP-S-03](../WP-S-
 
 The architecture is the doer/checker of DQ-002 A: Autoware drives, and every command it sends reaches the vehicle only through the safety monitor, which bounds it with the safety channel's own perception (DQ-018 A). The only other path into the vehicle's motion is the vehicle's own stop when the monitor falls silent (MRM-5).
 
+The same architecture is available as a machine-readable model for SysML v2 tools, [`tsc/architecture.sysml`](architecture.sysml): the components as parts with their element and derived ASIL, the links and the redundancies as connections, each safety mechanism as an action allocated to its host with dependencies on the components it uses and the reactions it starts, and the FSRs each mechanism satisfies. `tsc/sysml.py` writes it from `tsc/tsc.yaml` alone, so it holds no data of its own, and refuses a file that does not read back to the same architecture. The file was checked once with the SysML v2 Pilot Implementation 0.62.0 (2026-09 release, `jupyter-sysml-kernel` from conda-forge) against its standard library, with no errors or warnings; CI runs only the read-back, because the Pilot is a Java tool outside the standard library and PyYAML (OI-7).
+
 <!-- BEGIN GENERATED: tsc-components (assurance/03-system/tsc/tsc.py) -->
 
 | ID | Component | Element | In the item | ASIL | Mechanisms hosted | Serves | Waits on |
@@ -145,6 +147,8 @@ The architecture itself is verified by review against the functional safety conc
 | [`fig-s03-3-1-mechanisms.svg`](fig-s03-3-1-mechanisms.svg) | Figure 3-1, where each safety mechanism runs and how fast it must act |
 | [`tsc.yaml`](tsc.yaml) | Components, links, safety mechanisms and redundancies |
 | [`tsc.py`](tsc.py), [`cards.py`](cards.py) | The generator: checks the model against the functional safety concept, the fallback concept and the triggering conditions, and writes WP-S-03's tables and everything here |
+| [`architecture.sysml`](architecture.sysml) | The same architecture as a SysML v2 textual model, for SysML v2 tools |
+| [`sysml.py`](sysml.py) | Its generator: writes `architecture.sysml` from `tsc.yaml` and refuses a file that does not read back to it |
 
 ## Abbreviations, terms and symbols
 
@@ -172,6 +176,7 @@ The architecture itself is verified by review against the functional safety conc
 | ISO | International Organization for Standardization |
 | MRM | Minimal risk manoeuvre: the manoeuvre that brings the vehicle to a minimal risk condition |
 | ODD | Operational design domain: the roads, conditions and traffic the system is designed for |
+| OI | Open item: a known gap recorded in a document, numbered per document |
 | QM | Quality management: no ASIL is needed, ordinary quality processes are enough |
 | RD | Redundancy identifier, as in RD-01: a pair of channels that cover each other (WP-S-03) |
 | SG | Safety goal: a top-level safety requirement from the HARA, as in SG-01 |
