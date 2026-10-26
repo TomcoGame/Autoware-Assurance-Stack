@@ -254,5 +254,17 @@
   ],
   "lens": 28
  },
- "credits": "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md)"
+ "credits": "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md)",
+ "chase": {
+  "pos": [
+   -8.0,
+   -16.0,
+   6.5
+  ],
+  "look": [
+   0.5,
+   2.0,
+   0.0
+  ]
+ }
 }

@@ -1,5 +1,6 @@
 {
  "scenario": "SC-03",
+ "scene": "SC-03",
  "blender": "5.2.3 LTS",
  "render": {
   "engine": "CYCLES",
@@ -28,7 +29,7 @@
   ],
   "actor1-car": [
    -1.75,
-   32.0
+   28.0
   ]
  },
  "drawn": {
@@ -43,6 +44,13 @@
   "stop_line": false,
   "speed_sign": false,
   "occlusion": false,
+  "props": [],
+  "signal": null,
+  "ego_lights": null,
+  "queue": 5,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
   "overlay_top_m": 0.05
  },
  "look": {
@@ -99,14 +107,14 @@
    }
   ],
   "furniture": {
-   "tree": 12,
+   "tree": 7,
    "bin": 7,
-   "hydrant": 5
+   "hydrant": 2
   },
   "pedestrians": "primitives"
  },
  "description": "tools/sim/scenes/SC-03.json",
- "description_sha256": "261da76be606a8a8ae9cb2239a78dc800761609bf618b76ba76dc7b698ba48c8",
+ "description_sha256": "ed30718478a8928ad31f283237077bcc6617a1796e856830fb885bd67d06f669",
  "clip_texts": [
   "SC-03 Vehicle ahead braking or stopping in congested traffic",
   "The vehicle follows another in congestion or in free flow; the lead vehicle brakes hard, stops, or another vehicle cuts\nin",
@@ -174,7 +182,7 @@
   "Pass criterion: No collision with the vehicle ahead; acceleration stays inside the envelope, the monitor restores the safe longitudinal distance, and a braking shortfall on a wet road switches to the secondary path (FSR-01.01, FSR-01.02, FSR-02.02, FSR-02.03, FSR-02.05, FSR-03.02, FSR-04.05, FSR-06.01, AC-02)",
   "start",
   "vehicle starts to slow",
-  "the moment in the main view",
+  "vehicle stands still; main view",
   "Forward view",
   "Top view: planned path, envelope, hazard",
   "Safety goals at stake",
@@ -198,8 +206,8 @@
  "moments": [
   "start",
   "vehicle starts to slow",
-  "the moment in the main view"
+  "vehicle stands still; main view"
  ],
  "dashboard": "SC-03.jpg",
- "dashboard_sha256": "9433d5c90f9bbf958c2011b2f5ae89ce2782989dfd43064e12625473c7387faa"
+ "dashboard_sha256": "d6ce6ca5e7c776b4be7bae3f05e4e4a97ee73ec327ca5009127a1db50ec00cf3"
 }

@@ -1,0 +1,195 @@
+{
+ "scenario": "SC-10",
+ "scene": "SC-10",
+ "blender": "5.2.3 LTS",
+ "render": {
+  "engine": "CYCLES",
+  "samples": 32,
+  "size": [
+   1600,
+   900
+  ],
+  "still_frame": 38,
+  "frames": 51,
+  "fps": 12,
+  "dashboard_samples": {
+   "chase": 32,
+   "dashboard": 16
+  },
+  "supersample": 1.5
+ },
+ "objects": {
+  "ego": [
+   1.75,
+   26.5
+  ],
+  "actor0-car": [
+   -1.75,
+   22.0
+  ]
+ },
+ "drawn": {
+  "light": "day",
+  "wet": false,
+  "rain": false,
+  "fog": false,
+  "beyond": [],
+  "features": [],
+  "stop_line": false,
+  "speed_sign": false,
+  "occlusion": false,
+  "props": [
+   "barrier",
+   "cones",
+   "work_sign"
+  ],
+  "signal": null,
+  "ego_lights": null,
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
+  "overlay_top_m": 0.05
+ },
+ "look": {
+  "assets": [
+   {
+    "slot": "asphalt",
+    "id": "asphalt_02",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "bin",
+    "id": "metal_trash_can",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "concrete",
+    "id": "Concrete034",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_a",
+    "id": "Facade018A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_b",
+    "id": "Facade019A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_c",
+    "id": "Facade020A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "grass",
+    "id": "Grass004",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "hdri_day",
+    "id": "kloofendal_48d_partly_cloudy_puresky",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "hydrant",
+    "id": "fire_hydrant",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "tree",
+    "id": "tree_small_02",
+    "source": "polyhaven"
+   }
+  ],
+  "furniture": {
+   "tree": 7,
+   "bin": 4,
+   "hydrant": 3
+  },
+  "pedestrians": "primitives"
+ },
+ "description": "tools/sim/scenes/SC-10.json",
+ "description_sha256": "4ce1bc4d4a4185999d7e703177e20c9a199d384dbe6fbcd08de5b777c9eb2c46",
+ "clip_texts": [
+  "SC-10 Work zone or re-marked lanes not yet in the map",
+  "The road ahead has been re-marked, closed or turned into a work zone that the HD map does not show",
+  "One concrete scenario (seeded sample of the logical\nscenario)",
+  "ODD-20 Ego speed: 16.9 km/h (range 0 to 48 km/h)",
+  "ODD-07 Lane markings: re-marking",
+  "ODD-08 Temporary changes: work-zone",
+  "ODD-12 Illumination: day",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033);\nchoreography, not Autoware's planned braking",
+  "Safety goals at stake",
+  "SG-04 (ASIL D): Avoid unintended lateral motion out of the planned\npath",
+  "SG-06 (ASIL D): Do not enter an intersection, roundabout or\ncrosswalk against right of way",
+  "MON-02 Map–world divergence",
+  "Pass criterion",
+  "The divergence monitor detects the disagreement and the vehicle\ncarries out a minimal risk manoeuvre; it never follows the map\ninto a closed lane (MON-02, FSR-07.05, FSR-04.01, FSR-02.02,\nFSR-06.01, FSR-06.03, TR-09, FM-13, AC-02)",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Meant to do: does not follow the map into the cones",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: Work zone or re-marked lanes not yet in the map",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "texts": [
+  "SC-10 Work zone or re-marked lanes not yet in the map",
+  "SG-04 ASIL D",
+  "SG-06 ASIL D",
+  "Motion",
+  "choreography (qualitative)",
+  "Condition",
+  "ODD-12 day",
+  "Ego speed (sample)",
+  "16.9 km/h",
+  "Methods (WP-V-03)",
+  "Simulation, Track",
+  "Scenario (WP-V-03)",
+  "The road ahead has been re-marked, closed or turned into a work zone that the HD map does not show",
+  "Triggering conditions (WP-C-06)",
+  "TC-09 Construction, re-marked lanes or closures not yet in the map",
+  "Situations: OS-01",
+  "Loss scenarios (WP-A-05): LS-14",
+  "One concrete scenario (seeded sample)",
+  "ODD-20 Ego speed: 16.9 km/h (range 0 to 48 km/h)",
+  "ODD-07 Lane markings: re-marking",
+  "ODD-08 Temporary changes: work-zone",
+  "ODD-12 Illumination: day",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "Car (qualitative)",
+  "Ego robotaxi (choreography)",
+  "Meant to do: does not follow the map into the cones",
+  "Pass criterion: The divergence monitor detects the disagreement and the vehicle carries out a minimal risk manoeuvre; it never follows the map into a closed lane (MON-02, FSR-07.05, FSR-04.01, FSR-02.02, FSR-06.01, FSR-06.03, TR-09, FM-13, AC-02)",
+  "start",
+  "vehicle starts to slow",
+  "vehicle stands still; main view",
+  "Forward view",
+  "Top view: planned path, envelope, hazard",
+  "Safety goals at stake",
+  "SG-04 (ASIL D): Avoid unintended lateral motion out of the planned path",
+  "SG-06 (ASIL D): Do not enter an intersection, roundabout or crosswalk against right of way",
+  "ODD monitors the pass criterion cites (WP-C-02 §4)",
+  "MON-02 Map–world divergence",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: Work zone or re-marked lanes not yet in the map",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "tags": [
+  "Ego robotaxi (choreography)",
+  "Car (qualitative)"
+ ],
+ "moments": [
+  "start",
+  "vehicle starts to slow",
+  "vehicle stands still; main view"
+ ],
+ "dashboard": "SC-10.jpg",
+ "dashboard_sha256": "14c3c3c7e72461158c87df5c197899a8a00b92ea873a9785f32b86a647cc1494"
+}

@@ -1759,8 +1759,9 @@ def dashboard(args, desc: dict, ctx: dict, work: Path, out: Path, manifest: dict
     rig_d.lens, rig_d.clip_start, rig_d.clip_end = 26, 0.1, 600
     rig = bpy.data.objects.new("chase", rig_d)
     rig.parent = ego
-    rig.location = CHASE_RIG[0]
-    aim = Vector(CHASE_RIG[1]) - Vector(CHASE_RIG[0])
+    pos, at = (desc["chase"]["pos"], desc["chase"]["look"]) if desc.get("chase") else CHASE_RIG
+    rig.location = pos
+    aim = Vector(at) - Vector(pos)
     rig.rotation_euler = aim.to_track_quat("-Z", "Y").to_euler()
     scene.collection.objects.link(rig)
     chase = rig

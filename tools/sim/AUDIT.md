@@ -132,8 +132,8 @@ ego's indicators and hazard lights, a door that opens, an emergency vehicle's li
 lane. The render in CI is now one job per scene.
 
 The audit followed the earlier rounds: a second agent reviewed the code and layouts against the brief without the
-author's conclusions (F-37 to F-50), and the author read every dashboard cold (F-51 onwards). Before that review,
-the author's own new overlap test had already caught three drawn collisions (F-52).
+author's conclusions (F-37 to F-50), and the author read every dashboard cold (F-52 onwards). Before that review,
+the author's own new overlap test had already caught three drawn collisions (F-51).
 
 | # | Location | Description | Severity | Disposition |
 |---|---|---|---|---|
@@ -151,11 +151,16 @@ the author's own new overlap test had already caught three drawn collisions (F-5
 | F-48 | `sim-render.yaml` | A job whose verify failed uploaded nothing, losing the manifest that says why | Minor | **Fixed:** the upload runs always |
 | F-49 | SC-23, `stop_sign` | The four-way stop had a sign on the right approach only | Note | **Fixed:** every approach of the cross street has one |
 | F-50 | Scenes SC-11, SC-13, SC-18 | Their pass criteria mention remote assistance or a remote operator. Nothing of it is drawn; the text is public in `scenarios.yaml` and `restricted()` refuses only the remote link (`link-*`) and `CSR-` requirements | Note | **The lead's call:** whether that reading of the cybersecurity rule is right |
-| F-52 | Layouts (author, before the review) | The new overlap test found three collisions in the first layouts: the pull-in path of SC-15 drove through a person standing at the kerb, SC-16's two pedestrians walked into each other, SC-17's passing car met an oncoming van head-on. A pace check by hand found a bicycle at 82 km/h (SC-19) and red-runners and an emergency vehicle at over 75 km/h | Minor | **Fixed** before the review: positions and paths moved, paths shortened |
-| F-53 | Dashboard, SC-18 (cold read) | A scenario with no safety goal at stake showed the "Safety goals at stake" heading over nothing | Minor | **Fixed:** the panel says that `stake()` derives none |
-| F-54 | SC-08, SC-17 | The seeded speeds are 1.6 and 2.3 km/h, so the vehicle crawls and the clips are long; "loss of Autoware while driving" at walking pace is a weak picture | Note | **Kept:** the draw is not tuned to look good (SALT is one for all); the README says so. The lead may ask for a pick |
-| F-55 | SC-10 | The red planned path runs into the barrier: it stands for Autoware following the map that still shows the lane open. The legend calls it Autoware's planned path, which is what it is in that scenario | Note | **Kept** |
-| F-56 | SC-05 | The ego starts to slow after the main view's moment, so the still shows it cruising up to the line while the red-runner crosses | Note | **Kept:** consistent with the pass criterion (it does not enter while the path is crossed) |
+| F-51 | Layouts (author, before the review) | The new overlap test found three collisions in the first layouts: the pull-in path of SC-15 drove through a person standing at the kerb, SC-16's two pedestrians walked into each other, SC-17's passing car met an oncoming van head-on. A pace check by hand found a bicycle at 82 km/h (SC-19) and red-runners and an emergency vehicle at over 75 km/h | Minor | **Fixed** before the review: positions and paths moved, paths shortened |
+| F-52 | Dashboard, SC-18 (cold read) | A scenario with no safety goal at stake showed the "Safety goals at stake" heading over nothing | Minor | **Fixed:** the panel says that `stake()` derives none |
+| F-53 | `build_blend.py` junction corners (cold read) | At every junction corner the cross street's sidewalk overlapped the main one; the overlapping boxes, top faces coplanar, rendered as black squares. Already in the SC-06 dashboard of earlier rounds, unnoticed | Minor | **Fixed:** the sidewalks abut; junction scenes re-rendered |
+| F-54 | Ego indicators (cold read) | An unlit indicator lens was amber, so in SC-22 the right side looked lit during a left lane change, the very mismatch the scenario is about | Major | **Fixed:** a dark lens that glows only while lit; the scenes with lights re-rendered |
+| F-55 | SC-04, SC-22 (cold read) | The road user each scenario is about (the car following, the car relying on the indicator) was behind the chase camera, so the main view never showed it | Minor | **Fixed:** a layout may set its own chase camera (`chase`); both now show it, checked by projecting the road users into the camera before rendering. SC-22's car follows closer |
+| F-56 | Tags (cold read) | Labels come from the participant class, so SC-11's person reads "Directing" (ODD-19's value) and SC-13's "E scooter" | Note | **Kept:** the words are the records' values; a typed "person directing traffic" would break the rule that no label is typed |
+| F-57 | SC-08, SC-17 | The seeded speeds are 1.6 and 2.3 km/h, so the vehicle crawls and the clips are long; "loss of Autoware while driving" at walking pace is a weak picture | Note | **Kept:** the draw is not tuned to look good (SALT is one for all); the README says so. The lead may ask for a pick |
+| F-58 | SC-10 | The red planned path runs into the barrier: it stands for Autoware following the map that still shows the lane open. The legend calls it Autoware's planned path, which is what it is in that scenario | Note | **Kept** |
+| F-59 | SC-05 | The ego starts to slow after the main view's moment, so the still shows it cruising up to the line while the red-runner crosses | Note | **Kept:** consistent with the pass criterion (it does not enter while the path is crossed) |
+| F-60 | SC-13 (cold read) | At the stop the e-scooter lying in the lane is mostly hidden by the ego in the chase view; it shows in the forward and top views | Note | **Kept:** the stop before the object is the point of the still; the forward view shows what the vehicle stops for |
 
 ## Checks run before pushing
 

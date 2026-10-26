@@ -41,6 +41,9 @@ A layout entry:
                 the other; for a scenario whose description names it
     queue       where the stopped vehicles of the `queue` feature stand: (x, y, heading in degrees,
                 0 along +y)
+    chase       the dashboard's chase camera and the point it looks at, in the ego's frame, where the
+                default (build_blend.CHASE_RIG) would leave the road user the scenario is about
+                out of the main view
     variants    condition variants, LionDriver style: each a pick that overrides the layout's own,
                 giving one more scene named <id>--<values>; the rest of the draw is unchanged
 """
@@ -257,6 +260,7 @@ LAYOUTS: dict[str, dict] = {
         "hazard": (0.0, 28.0, 3.5, 32.0),
         "still": 0.42,
         "camera": {"pos": (-1.5, -9.0, 5.0), "look": (1.0, 28.0, 0.0), "lens": 28},
+        "chase": {"pos": (-8.0, -16.0, 6.5), "look": (0.5, 2.0, 0.0)},  # the follower in view
         "pick": {"ODD-13": "wet"},
     },
     "SC-05": {
@@ -613,13 +617,14 @@ LAYOUTS: dict[str, dict] = {
             {
                 "role": "key",
                 "kind": {"from": "ODD-16"},
-                "path": [(1.75, -22.0), (1.75, 50.0)],
+                "path": [(1.75, -10.0), (1.75, 55.0)],
                 "move": (0.0, 1.0),
             },
         ],
         "hazard": (0.0, 24.0, 3.5, 38.0),
         "still": 0.45,
         "camera": {"pos": (1.5, -8.0, 6.0), "look": (3.0, 30.0, 0.0), "lens": 26},
+        "chase": {"pos": (-6.0, -26.0, 10.0), "look": (0.0, -1.0, 0.0)},  # the car behind in view
         "pick": {"ODD-16": "car"},
     },
     "SC-23": {

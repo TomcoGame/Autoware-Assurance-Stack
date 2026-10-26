@@ -523,6 +523,8 @@ def scene(s: dict, m: dict, k: dict, f: fx.Facts, variant: dict | None = None) -
         "credits": "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by "
         "Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md)",
     }
+    if "chase" in lay:  # only where a scene needs it, so the others' descriptions stay as they were
+        desc["chase"] = {k_: list(v) for k_, v in lay["chase"].items()}
     import build_blend  # noqa: PLC0415  (plain Python above its Blender part)
 
     stands = build_blend.stands_at(desc)
