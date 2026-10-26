@@ -1,6 +1,6 @@
 {
- "scenario": "SC-22",
- "scene": "SC-22",
+ "scenario": "SC-23",
+ "scene": "SC-23",
  "blender": "5.2.3 LTS",
  "render": {
   "engine": "CYCLES",
@@ -9,8 +9,8 @@
    1600,
    900
   ],
-  "still_frame": 32,
-  "frames": 71,
+  "still_frame": 40,
+  "frames": 66,
   "fps": 12,
   "dashboard_samples": {
    "chase": 32,
@@ -20,16 +20,12 @@
  },
  "objects": {
   "ego": [
-   1.93,
-   34.06
-  ],
-  "actor0-van": [
-   5.25,
-   44.0
-  ],
-  "actor1-car": [
    1.75,
-   10.91
+   32.78
+  ],
+  "actor0-car": [
+   -0.39,
+   41.75
   ]
  },
  "drawn": {
@@ -38,13 +34,15 @@
   "rain": false,
   "fog": false,
   "beyond": [],
-  "features": [],
-  "stop_line": false,
+  "features": [
+   "stop_sign"
+  ],
+  "stop_line": true,
   "speed_sign": false,
   "occlusion": false,
   "props": [],
   "signal": null,
-  "ego_lights": "left",
+  "ego_lights": null,
   "queue": 0,
   "roundabout": false,
   "cycle_lane": false,
@@ -105,85 +103,88 @@
    }
   ],
   "furniture": {
-   "tree": 12,
+   "tree": 16,
    "bin": 7,
-   "hydrant": 5
+   "hydrant": 2
   },
   "pedestrians": "primitives"
  },
- "description": "tools/sim/scenes/SC-22.json",
- "description_sha256": "be7067dc81e487e9543eab8835971c2a104728972399a1821ce6c15b89eef925",
+ "description": "tools/sim/scenes/SC-23.json",
+ "description_sha256": "51c08081f397e417d6d386458199ec35cb96b5ea583d2798ec6eccc22b7965ab",
  "clip_texts": [
-  "SC-22 Turn indicator during a turn or lane change",
-  "The vehicle changes lane to pass a stopped vehicle, or turns at a junction, with other road users relying on its\nindicator",
+  "SC-23 Give and take with other drivers",
+  "Four-way stops, merging and letting another vehicle out, where other drivers expect the vehicle to negotiate",
   "One concrete scenario (seeded sample of the logical\nscenario)",
-  "ODD-20 Ego speed: 46 km/h (range 0 to 48 km/h)",
-  "ODD-02 Road type: lanes-1-2",
+  "ODD-20 Ego speed: 11.9 km/h (range 0 to 48 km/h)",
+  "ODD-04 Junctions: stop-controlled",
+  "ODD-17 Traffic density: congested",
   "ODD-16 Traffic participants: car",
   "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033);\nchoreography, not Autoware's planned braking",
   "Safety goals at stake",
-  "SG-09 (ASIL C): Avoid signalling a manoeuvre other than the one\nperformed",
+  "SG-03 (ASIL C): Avoid unintended hard deceleration",
   "Pass criterion",
-  "The indicator always matches the commanded and achieved steering\ndirection; on a mismatch hazard lights come on (FSR-09.01,\nFSR-04.01)",
+  "The vehicle takes its turn as the rules give it and shows when it\nyields and when it is about to move; its hesitations and stops\ncount against the SOTIF acceptance criteria (FSR-06.01, FSR-06.03,\nFSR-03.02, FM-17, HR-06, AC-02)",
   "Autoware's planned path (EL-01 Autoware computer, rated QM)",
   "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
-  "Meant to do: its indicator matches the turn",
-  "Dashed green: the path the pass criterion asks of the vehicle",
-  "Where the hazard lies: HE-09.1 Indicates the wrong direction before a turn or lane change",
+  "Meant to do: takes its turn and shows it",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: Give and take with other drivers",
   "Amber, ringed: the road user the scenario is about",
   "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
   "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
  ],
  "texts": [
-  "SC-22 Turn indicator during a turn or lane change",
-  "SG-09 ASIL C",
+  "SC-23 Give and take with other drivers",
+  "SG-03 ASIL C",
   "Motion",
   "choreography (qualitative)",
   "Condition",
   "not set by the scenario",
   "Ego speed (sample)",
-  "46 km/h",
+  "11.9 km/h",
   "Methods (WP-V-03)",
-  "Simulation, In the loop",
+  "Simulation, Road",
   "Scenario (WP-V-03)",
-  "The vehicle changes lane to pass a stopped vehicle, or turns at a junction, with other road users relying on its indicator",
-  "Hazardous events (WP-C-03)",
-  "HE-09.1 Indicates the wrong direction before a turn or lane change",
-  "Situations: OS-01",
-  "Loss scenarios (WP-A-05): LS-17",
+  "Four-way stops, merging and letting another vehicle out, where other drivers expect the vehicle to negotiate",
+  "Triggering conditions (WP-C-06)",
+  "TC-23 Drivers who expect give and take (four-way stops, merging, letting someone out)",
+  "Situations: OS-03, OS-08",
   "One concrete scenario (seeded sample)",
-  "ODD-20 Ego speed: 46 km/h (range 0 to 48 km/h)",
-  "ODD-02 Road type: lanes-1-2",
+  "ODD-20 Ego speed: 11.9 km/h (range 0 to 48 km/h)",
+  "ODD-04 Junctions: stop-controlled",
+  "ODD-17 Traffic density: congested",
   "ODD-16 Traffic participants: car",
   "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
   "Ego robotaxi (choreography)",
-  "Parked van (qualitative)",
-  "Meant to do: its indicator matches the turn",
-  "Pass criterion: The indicator always matches the commanded and achieved steering direction; on a mismatch hazard lights come on (FSR-09.01, FSR-04.01)",
+  "Car (qualitative)",
+  "Meant to do: takes its turn and shows it",
+  "Pass criterion: The vehicle takes its turn as the rules give it and shows when it yields and when it is about to move; its hesitations and stops count against the SOTIF acceptance criteria (FSR-06.01, FSR-06.03, FSR-03.02, FM-17, HR-06, AC-02)",
   "start",
-  "the moment in the main view",
-  "end",
+  "car starts to move",
+  "vehicle starts to slow",
+  "vehicle stands still; main view",
   "Forward view",
   "Top view: planned path, envelope, hazard",
   "Safety goals at stake",
-  "SG-09 (ASIL C): Avoid signalling a manoeuvre other than the one performed",
+  "SG-03 (ASIL C): Avoid unintended hard deceleration",
   "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
   "Autoware's planned path (EL-01 Autoware computer, rated QM)",
   "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
-  "Dashed green: the path the pass criterion asks of the vehicle",
-  "Where the hazard lies: HE-09.1 Indicates the wrong direction before a turn or lane change",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: Give and take with other drivers",
   "Amber, ringed: the road user the scenario is about",
   "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
  ],
  "tags": [
   "Ego robotaxi (choreography)",
-  "Parked van (qualitative)"
+  "Car (qualitative)"
  ],
  "moments": [
   "start",
-  "the moment in the main view",
-  "end"
+  "car starts to move",
+  "vehicle starts to slow",
+  "vehicle stands still; main view"
  ],
- "dashboard": "SC-22.jpg",
- "dashboard_sha256": "ef8d80bd103387d799aaa23075debe4f036ed7eefd4fb05c6580e4c422b952f8"
+ "dashboard": "SC-23.jpg",
+ "dashboard_sha256": "c090f728359bd27d097d8e497ca867533588168cb383e5f3a5c5053d4f7cc486"
 }

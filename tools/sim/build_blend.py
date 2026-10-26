@@ -1133,9 +1133,11 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         on = {"hazard": ("left", "right"), "left": ("left",), "right": ("right",)}[lights]
         ind = mesh.CLASSES.index("indicator")
         for side in ("left", "right"):
-            m_ = mat(
-                f"ego-indicator-{side}", (1.0, 0.55, 0.05), 0.3, emit=8.0 if side in on else 0.0
-            )
+            # a dark lens that glows amber only while lit, so an unlit side never reads as lit
+            m_ = mat(f"ego-indicator-{side}", (0.12, 0.08, 0.04), 0.3)
+            glow = m_.node_tree.nodes["Principled BSDF"].inputs
+            glow["Emission Color"].default_value = (1.0, 0.55, 0.05, 1.0)
+            glow["Emission Strength"].default_value = 8.0 if side in on else 0.0
             ego.data.materials.append(m_)
             slot = len(ego.data.materials) - 1
             for poly in ego.data.polygons:

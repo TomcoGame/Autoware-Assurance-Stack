@@ -38,8 +38,8 @@ One review dashboard per scene of [`../scenes/`](../scenes/), rendered in Blende
 | [SC-16](SC-16.jpg) | Stopped at a red light with pedestrians crossing in front | SG-01 (D), SG-05 (D) | HE-01.1, HE-05.2 | ODD-13 dry | current; Blender 5.2.3 LTS, CC0 assets |
 | SC-17 | Loss of Autoware while driving | SG-07 (D) | HE-07.1 | ODD-12 day | not rendered |
 | SC-17--night | Loss of Autoware while driving | SG-07 (D) | HE-07.1 | ODD-12 night (condition variant) | not rendered |
-| [SC-18](SC-18.jpg) | Pull-over minimal risk manoeuvre along a busy kerb | — | TC-14 | not set by the scenario | current; Blender 5.2.3 LTS, CC0 assets |
-| [SC-19](SC-19.jpg) | Passengers leaving at a stop in lane | SG-07 (D) | TC-29 | ODD-12 day | current; Blender 5.2.3 LTS, CC0 assets |
+| SC-18 | Pull-over minimal risk manoeuvre along a busy kerb | — | TC-14 | not set by the scenario | not rendered |
+| SC-19 | Passengers leaving at a stop in lane | SG-07 (D) | TC-29 | ODD-12 day | not rendered |
 | SC-19--night | Passengers leaving at a stop in lane | SG-07 (D) | TC-29 | ODD-12 night (condition variant) | not rendered |
-| [SC-22](SC-22.jpg) | Turn indicator during a turn or lane change | SG-09 (C) | HE-09.1 | not set by the scenario | current; Blender 5.2.3 LTS, CC0 assets |
-| SC-23 | Give and take with other drivers | SG-03 (C) | TC-23 | not set by the scenario | not rendered |
+| SC-22 | Turn indicator during a turn or lane change | SG-09 (C) | HE-09.1 | not set by the scenario | not rendered |
+| [SC-23](SC-23.jpg) | Give and take with other drivers | SG-03 (C) | TC-23 | not set by the scenario | current; Blender 5.2.3 LTS, CC0 assets |
