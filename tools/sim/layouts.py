@@ -27,9 +27,10 @@ A layout entry:
     hazard      where the hazard lies on the ground: a rectangle (x0, y0, x1, y1)
     still       the moment of the clip that the still shows, as a fraction of it
     camera      position, point looked at, lens in mm
-    pick        concrete values chosen for categorical parameters instead of the seeded draw, so
-                that a still shows the condition the scenario is about; scene.py refuses a value
-                that is not one of the scenario's own
+    pick        concrete values chosen instead of the seeded draw, so that a still shows the
+                condition the scenario is about: one of a categorical parameter's own values, or a
+                number inside a two-sided range (the ego speed where the seeded one gave a crawl);
+                scene.py refuses anything else
     features    scene parts that depend on a sampled value: {ODD-nn: {value: [part, ...]}}
     odd_limit   for a scenario that crosses the ODD boundary: where along y the drawing changes
                 from inside the ODD to beyond its limit
@@ -316,13 +317,13 @@ LAYOUTS: dict[str, dict] = {
             "stop_line": 35.5,
             "cross": {"y": 40.0, "width": 7.0, "sides": ["right"]},
         },
-        "ego": {"path": [(1.75, 0.0), (1.75, 32.8)], "stops": True},
+        "ego": {"path": [(1.75, 0.0), (1.75, 32.8)], "stops": True, "hold_s": 5.0},
         "plan": [(1.75, 0.0), (1.75, 34.0), (2.3, 36.3), (3.7, 37.8), (6.0, 38.25), (40.0, 38.25)],
         "actors": [
             {
                 "role": "key",
                 "kind": {"from": "ODD-16"},
-                "path": [(4.25, 8.0), (4.25, 60.0)],
+                "path": [(4.25, 20.0), (4.25, 50.0)],
                 "move": (0.0, 1.0),
             },
             {
@@ -333,9 +334,9 @@ LAYOUTS: dict[str, dict] = {
             },
         ],
         "hazard": (3.5, 30.0, 5.0, 40.0),
-        "still": 0.4,
+        "still": 0.5,
         "camera": {"pos": (-1.0, -8.0, 6.0), "look": (3.0, 34.0, 0.0), "lens": 26},
-        "pick": {"ODD-04": "stop-controlled", "ODD-16": "bicycle"},
+        "pick": {"ODD-04": "stop-controlled", "ODD-16": "bicycle", "ODD-20": 20.0},
         "features": {"ODD-04": {"signalised": ["signals"], "stop-controlled": ["stop_sign"]}},
     },
     "SC-09": {
@@ -535,14 +536,21 @@ LAYOUTS: dict[str, dict] = {
             {
                 "role": "other",
                 "kind": "car",
-                "path": [(1.75, 24.0), (-1.75, 31.0), (-1.75, 50.0), (1.75, 58.0), (1.75, 70.0)],
-                "move": (0.65, 1.0),
+                "path": [
+                    (1.75, -15.0),
+                    (1.75, 24.0),
+                    (-1.75, 31.0),
+                    (-1.75, 50.0),
+                    (1.75, 58.0),
+                    (1.75, 70.0),
+                ],
+                "move": (0.0, 1.0),
             },
         ],
         "hazard": (-3.5, 34.0, 0.0, 46.0),
-        "still": 0.8,
+        "still": 0.62,
         "camera": {"pos": (-3.0, -8.0, 5.5), "look": (0.5, 38.0, 0.0), "lens": 26},
-        "pick": {"ODD-17": "free-flow", "ODD-12": "day"},
+        "pick": {"ODD-17": "free-flow", "ODD-12": "day", "ODD-20": 30.0},
         "variants": [{"ODD-12": "night"}],
     },
     "SC-18": {

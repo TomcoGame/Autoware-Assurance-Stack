@@ -97,7 +97,8 @@ def human(value: str) -> str:
 def sample(s: dict, m: dict, lay: dict, odd: dict) -> list[dict]:
     """One concrete value per parameter of the logical scenario, in its order.
 
-    Two-sided numeric range: a seeded draw inside it, to 0.1. One-sided range: the stated bound, the
+    Two-sided numeric range: a seeded draw inside it, to 0.1, or the layout's pick inside it (its
+    label says so). One-sided range: the stated bound, the
     hardest case. A range that crosses the ODD limit: no value; the scene shows inside and beyond.
     Categorical: the layout's pick, or a seeded draw among the scenario's values. Behaviour bound: no
     value, since the requirement has not fixed one."""
@@ -140,8 +141,16 @@ def sample(s: dict, m: dict, lay: dict, odd: dict) -> list[dict]:
             )
             continue
         lo, hi, unit = p.get("min"), p.get("max"), a["unit"]
+        pick = (lay.get("pick") or {}).get(attr)
+        if pick is not None and (p.get("crosses") or lo is None or hi is None):
+            raise SceneError(f"{s['id']}: layout picks {attr}, which has no two-sided range")
         if p.get("crosses"):
             v, label = None, f"{title}: swept from inside the ODD to beyond its limit"
+        elif pick is not None:
+            if not lo <= pick <= hi:
+                raise SceneError(f"{s['id']}: layout picks {attr} {pick}, outside {rng_text}")
+            v = float(pick)
+            label = f"{title}: {v:g} {unit} (range {rng_text}; picked, not seeded)"
         elif lo is not None and hi is not None:
             v = round(lo + (hi - lo) * r.random(), 1)
             label = f"{title}: {v:g} {unit} (range {rng_text})"
@@ -157,6 +166,7 @@ def sample(s: dict, m: dict, lay: dict, odd: dict) -> list[dict]:
                 "crosses": bool(p.get("crosses")),
                 "label": label,
             }
+            | ({"chosen": "layout"} if pick is not None else {})
         )
     cap(s, m, out)
     return out
@@ -356,10 +366,16 @@ def scene(s: dict, m: dict, k: dict, f: fx.Facts, variant: dict | None = None) -
     if why:
         raise SceneError(f"{sid}: not drawn, because {why}; remove its layout")
     errs = check_layout(sid, lay)
-    categorical = {p["odd"] for p in s.get("parameters") or [] if "values" in p}
+    pickable = {
+        p["odd"]
+        for p in s.get("parameters") or []
+        if "values" in p or ("min" in p and "max" in p and not p.get("crosses"))
+    }
     for attr in {**(lay.get("pick") or {}), **(variant or {})}:
-        if attr not in categorical:
-            errs.append(f"{sid}: picks {attr}, which is not one of its categorical parameters")
+        if attr not in pickable:
+            errs.append(
+                f"{sid}: picks {attr}, which is not one of its parameters with values or a range"
+            )
     if errs:
         raise SceneError("; ".join(errs))
     if variant:

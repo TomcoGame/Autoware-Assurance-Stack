@@ -64,10 +64,11 @@
    {
     "parameter": "ODD-20",
     "range": "0 to 48 km/h",
-    "value": 2.3,
+    "value": 30.0,
     "unit": "km/h",
     "crosses": false,
-    "label": "ODD-20 Ego speed: 2.3 km/h (range 0 to 48 km/h)"
+    "label": "ODD-20 Ego speed: 30 km/h (range 0 to 48 km/h; picked, not seeded)",
+    "chosen": "layout"
    },
    {
     "parameter": "ODD-17",
@@ -124,7 +125,7 @@
   "path": [
    [
     1.75,
-    31.93
+    20.43
    ],
    [
     1.75,
@@ -132,7 +133,7 @@
    ]
   ],
   "stops": true,
-  "speed_kmh": 2.3,
+  "speed_kmh": 30.0,
   "decel": 3.0,
   "motion_label": "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
   "hold_s": 8.0,
@@ -164,6 +165,10 @@
    "path": [
     [
      1.75,
+     -15.0
+    ],
+    [
+     1.75,
      24.0
     ],
     [
@@ -184,7 +189,7 @@
     ]
    ],
    "move": [
-    0.65,
+    0.0,
     1.0
    ]
   }
@@ -192,7 +197,7 @@
  "props": [],
  "signal": null,
  "queue": [],
- "still": 0.8,
+ "still": 0.62,
  "camera": {
   "pos": [
    -3.0,

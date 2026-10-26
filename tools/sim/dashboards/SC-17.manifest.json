@@ -9,8 +9,8 @@
    1600,
    900
   ],
-  "still_frame": 198,
-  "frames": 249,
+  "still_frame": 87,
+  "frames": 141,
   "fps": 12,
   "dashboard_samples": {
    "chase": 32,
@@ -25,7 +25,7 @@
   ],
   "actor0-car": [
    -1.75,
-   43.34
+   37.96
   ]
  },
  "drawn": {
@@ -101,19 +101,19 @@
    }
   ],
   "furniture": {
-   "tree": 11,
-   "bin": 5,
-   "hydrant": 4
+   "tree": 8,
+   "bin": 3,
+   "hydrant": 7
   },
   "pedestrians": "primitives"
  },
  "description": "tools/sim/scenes/SC-17.json",
- "description_sha256": "e2235870553f130ce9775ab5d3f83e4bd5222702d8424d95acc98cd6d5637b88",
+ "description_sha256": "0021f33506bbcc012a6fc0cabb13ea056d9795ae143769d7eee31ea675ce2dce",
  "clip_texts": [
   "SC-17 Loss of Autoware while driving",
   "Autoware's commands stop, freeze or become implausible while driving in lane; other road users then pass the vehicle\nstopped in lane",
   "One concrete scenario (seeded sample of the logical\nscenario)",
-  "ODD-20 Ego speed: 2.3 km/h (range 0 to 48 km/h)",
+  "ODD-20 Ego speed: 30 km/h (range 0 to 48 km/h; picked, not seeded)",
   "ODD-17 Traffic density: free-flow",
   "ODD-02 Road type: urban-street",
   "ODD-12 Illumination: day",
@@ -138,7 +138,7 @@
   "Condition",
   "ODD-12 day",
   "Ego speed (sample)",
-  "2.3 km/h",
+  "30 km/h",
   "Methods (WP-V-03)",
   "In the loop, Track",
   "Scenario (WP-V-03)",
@@ -149,16 +149,17 @@
   "Misuse (WP-C-08): MU-15",
   "Loss scenarios (WP-A-05): LS-03, LS-06, LS-18, LS-22",
   "One concrete scenario (seeded sample)",
-  "ODD-20 Ego speed: 2.3 km/h (range 0 to 48 km/h)",
+  "ODD-20 Ego speed: 30 km/h (range 0 to 48 km/h; picked, not seeded)",
   "ODD-17 Traffic density: free-flow",
   "ODD-02 Road type: urban-street",
   "ODD-12 Illumination: day",
   "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
-  "Ego robotaxi (choreography)",
   "Car (qualitative)",
+  "Ego robotaxi (choreography)",
   "Meant to do: the monitor stops it in lane",
   "Pass criterion: The monitor detects the loss within its detection budget and stops the vehicle in lane with hazard lights on, without Autoware; a fault of the monitor itself leads to the vehicle's own stop, never to the park brake while moving (FSR-07.01, FSR-07.02, FSR-07.06, FSR-07.07, FSR-01.01, FSR-02.02, FSR-04.01, TR-01, SR-01, SR-04)",
   "start",
+  "vehicle starts to slow",
   "vehicle stands still",
   "the moment in the main view",
   "Forward view",
@@ -178,9 +179,10 @@
  ],
  "moments": [
   "start",
+  "vehicle starts to slow",
   "vehicle stands still",
   "the moment in the main view"
  ],
  "dashboard": "SC-17.jpg",
- "dashboard_sha256": "7bf8df3ebc37511c83f96180f8f01beb90bb90d97332e4b4184195b2231e4b24"
+ "dashboard_sha256": "ed885b1c98f696170ea6c57c51c6e1b5a6d129ad529370acc3abffa4d8c72e8e"
 }

@@ -9,8 +9,8 @@
    1600,
    900
   ],
-  "still_frame": 92,
-  "frames": 230,
+  "still_frame": 49,
+  "frames": 99,
   "fps": 12,
   "dashboard_samples": {
    "chase": 32,
@@ -21,15 +21,15 @@
  "objects": {
   "ego": [
    1.75,
-   28.19
+   32.8
   ],
   "actor0-bicycle": [
    4.25,
-   28.89
+   35.0
   ],
   "actor1-car": [
    -1.75,
-   53.84
+   45.0
   ]
  },
  "drawn": {
@@ -107,19 +107,19 @@
    }
   ],
   "furniture": {
-   "tree": 6,
-   "bin": 6,
+   "tree": 7,
+   "bin": 8,
    "hydrant": 2
   },
   "pedestrians": "primitives"
  },
  "description": "tools/sim/scenes/SC-08.json",
- "description_sha256": "af5053a4c9a3ec7ef45b680820f0ee57199f8743a6b4fe934129f9d27f32d910",
+ "description_sha256": "3fc971e0f953e14c04d6d8eb1164f4d12c4abfd6c3f164b05b93d76e250f3479",
  "clip_texts": [
   "SC-08 Cyclist alongside on the inside of a turn",
   "A cyclist or scooter rider rides up on the inside as the vehicle turns, or swerves between lanes round an obstacle",
   "One concrete scenario (seeded sample of the logical\nscenario)",
-  "ODD-20 Ego speed: 1.6 km/h (range 0 to 48 km/h)",
+  "ODD-20 Ego speed: 20 km/h (range 0 to 48 km/h; picked, not seeded)",
   "ODD-05 Crossings: cycle-lane",
   "ODD-16 Traffic participants: bicycle",
   "ODD-04 Junctions: stop-controlled",
@@ -150,7 +150,7 @@
   "Condition",
   "not set by the scenario",
   "Ego speed (sample)",
-  "1.6 km/h",
+  "20 km/h",
   "Methods (WP-V-03)",
   "Simulation, Track",
   "Scenario (WP-V-03)",
@@ -163,7 +163,7 @@
   "Misuse (WP-C-08): MU-13",
   "Loss scenarios (WP-A-05): LS-02",
   "One concrete scenario (seeded sample)",
-  "ODD-20 Ego speed: 1.6 km/h (range 0 to 48 km/h)",
+  "ODD-20 Ego speed: 20 km/h (range 0 to 48 km/h; picked, not seeded)",
   "ODD-05 Crossings: cycle-lane",
   "ODD-16 Traffic participants: bicycle",
   "ODD-04 Junctions: stop-controlled",
@@ -175,8 +175,9 @@
   "Meant to do: waits for the cyclist",
   "Pass criterion: No steering command whose swept path comes within the safe lateral distance of the cyclist is executed; the vehicle waits or stops in lane (FSR-04.01, FSR-04.05, FSR-06.01, FSR-02.02, FSR-03.01, FM-06, AC-02)",
   "start",
-  "the moment in the main view",
+  "vehicle starts to slow",
   "vehicle stands still",
+  "the moment in the main view",
   "Forward view",
   "Top view: planned path, envelope, hazard",
   "Safety goals at stake",
@@ -198,9 +199,10 @@
  ],
  "moments": [
   "start",
-  "the moment in the main view",
-  "vehicle stands still"
+  "vehicle starts to slow",
+  "vehicle stands still",
+  "the moment in the main view"
  ],
  "dashboard": "SC-08.jpg",
- "dashboard_sha256": "da05b8d9c4838ff8ad7db74baa57707d63c766f4b8ad12173011e70d161d6ef5"
+ "dashboard_sha256": "c320a55bf744bfcac7b3b9eed3a7384c3c16823465ffa8036ada0d5923327112"
 }

@@ -96,6 +96,21 @@ class Descriptions(unittest.TestCase):
         with self.assertRaises(scene.SceneError):
             describe("SC-14", lay)
 
+    def test_a_picked_speed_lies_inside_the_range_and_says_so(self):
+        d = ALL["SC-17"]
+        speed = next(p for p in d["sample"]["parameters"] if p["parameter"] == "ODD-20")
+        self.assertEqual(speed["chosen"], "layout")
+        self.assertIn("picked, not seeded", speed["label"])
+        for bad in (60.0, -1.0):  # outside 0 to 48 km/h
+            lay = copy.deepcopy(scene.LAYOUTS["SC-17"])
+            lay["pick"]["ODD-20"] = bad
+            with self.assertRaises(scene.SceneError):
+                describe("SC-17", lay)
+        lay = copy.deepcopy(scene.LAYOUTS["SC-14"])  # ODD-10 crosses the limit: no pick
+        lay["pick"]["ODD-10"] = 1.0
+        with self.assertRaises(scene.SceneError):
+            describe("SC-14", lay)
+
     def test_an_unknown_road_key_is_refused(self):
         lay = copy.deepcopy(scene.LAYOUTS["SC-01"])
         lay["road"]["tunnel"] = True

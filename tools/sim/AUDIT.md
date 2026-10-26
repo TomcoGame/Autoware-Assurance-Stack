@@ -157,7 +157,7 @@ the author's own new overlap test had already caught three drawn collisions (F-5
 | F-54 | Ego indicators (cold read) | An unlit indicator lens was amber, so in SC-22 the right side looked lit during a left lane change, the very mismatch the scenario is about | Major | **Fixed:** a dark lens that glows only while lit; the scenes with lights re-rendered |
 | F-55 | SC-04, SC-22 (cold read) | The road user each scenario is about (the car following, the car relying on the indicator) was behind the chase camera, so the main view never showed it | Minor | **Fixed:** a layout may set its own chase camera (`chase`); both now show it, checked by projecting the road users into the camera before rendering. SC-22's car follows closer |
 | F-56 | Tags (cold read) | Labels come from the participant class, so SC-11's person reads "Directing" (ODD-19's value) and SC-13's "E scooter" | Note | **Kept:** the words are the records' values; a typed "person directing traffic" would break the rule that no label is typed |
-| F-57 | SC-08, SC-17 | The seeded speeds are 1.6 and 2.3 km/h, so the vehicle crawls and the clips are long; "loss of Autoware while driving" at walking pace is a weak picture | Note | **Kept:** the draw is not tuned to look good (SALT is one for all); the README says so. The lead may ask for a pick |
+| F-57 | SC-08, SC-17 | The seeded speeds are 1.6 and 2.3 km/h, so the vehicle crawls and the clips are long; "loss of Autoware while driving" at walking pace is a weak picture | Note | **Fixed at the lead's request:** a layout may pick a value inside a two-sided range, labelled "picked, not seeded" on the dashboard; SC-08 drives at 20 km/h and SC-17 at 30 km/h, their road users re-timed; `test_a_picked_speed_lies_inside_the_range_and_says_so` |
 | F-58 | SC-10 | The red planned path runs into the barrier: it stands for Autoware following the map that still shows the lane open. The legend calls it Autoware's planned path, which is what it is in that scenario | Note | **Kept** |
 | F-59 | SC-05 | The ego starts to slow after the main view's moment, so the still shows it cruising up to the line while the red-runner crosses | Note | **Kept:** consistent with the pass criterion (it does not enter while the path is crossed) |
 | F-60 | SC-13 (cold read) | At the stop the e-scooter lying in the lane is mostly hidden by the ego in the chase view; it shows in the forward and top views | Note | **Kept:** the stop before the object is the point of the still; the forward view shows what the vehicle stops for |
@@ -171,7 +171,7 @@ Run on the commit of the fourth round, in the session's container (Python 3.13, 
 |---|---|
 | Everything `CLAUDE.md` lists: the decision register, the safety case records, headers, links, tables, `check_restricted.py`, every generator with `--check`, the assurance tests, the README figures | All pass |
 | `python3 tools/sim/scene.py --check` | 35 generated files current (34 descriptions and the gallery) |
-| `python3 -m unittest discover -s tools/sim -p 'test_*.py'` | 44 tests pass |
+| `python3 -m unittest discover -s tools/sim -p 'test_*.py'` | 45 tests pass |
 | `build_blend.py <scene> --out tools/sim/dashboards --verify` for all 34 scenes (32 samples, CC0 look after `fetch_assets.py --locked`) | All 34 match their descriptions; the gallery shows each dashboard as current |
 | `sim-render.yaml` on pull request #57, one job per scene (48 samples) | All 34 jobs built, verified and rendered, about 15 minutes in all |
 | black and isort at line length 100 | Clean |
@@ -180,4 +180,4 @@ Run on the commit of the fourth round, in the session's container (Python 3.13, 
 ## What this record does not do
 
 It does not verify the tool in the sense of WP-P-05, accept anything, or make any picture evidence. The open items
-(F-10 for the clip's overlay, F-16, F-17, F-27, F-28, F-50, F-57) wait on the lead's review of pull request #57.
+(F-10 for the clip's overlay, F-16, F-17, F-27, F-28, F-50) wait on the lead's review of pull request #57.

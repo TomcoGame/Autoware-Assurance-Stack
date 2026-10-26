@@ -112,7 +112,9 @@ to slow") describe the picture, not the item. `build_blend.py` reads only the de
 The sample is deterministic: each parameter has its own generator, seeded from `SALT`, the scenario id and the
 parameter, so changing or picking one parameter leaves the others as they were.
 
-- A two-sided numeric range: a draw inside it, to 0.1.
+- A two-sided numeric range: a draw inside it, to 0.1, unless the layout picks a value inside it. SC-08 and SC-17
+  pick the ego speed (20 and 30 km/h), because the draw gave 1.6 and 2.3 km/h, a crawl that hid what those scenes
+  are about; the dashboard labels a picked value "picked, not seeded".
 - A one-sided range (visibility of 200 m or more, a posted limit at or below 30 mph): the stated bound.
 - A range that crosses the ODD limit: no value; the scene shows inside and beyond.
 - A categorical parameter: a draw among the scenario's own values, unless the layout picks one (`pick`) so that the
@@ -136,7 +138,7 @@ parameter, so changing or picking one parameter leaves the others as they were.
   fits (a pull-over path whose bends are already longer than the stop keeps its start), it stands for `hold_s`, and
   the clip lasts as long as it takes. Which level Autoware itself would brake at is not modelled; the dashboard says
   so. Where the scenario samples no speed (SC-16, SC-19), the vehicle stands throughout and draws no planned path.
-  The sampled speed can be low (1.6 km/h in SC-08): the clip is then long, and the draw is kept, not tuned.
+  Where the draw gave a crawl, the layout picks the speed instead (see the concrete scenario, above).
 - **What is named but not drawn.** The gradient (ODD-06) and the localisation source (ODD-15 `gnss-lost`, SC-09)
   are on the dashboard from the sample but not in the scene: the road is flat. Nor are the HD map that SC-10 is
   about, a soiled sensor or a passenger's belt (SC-04), or a traffic density without a queue to show it.
