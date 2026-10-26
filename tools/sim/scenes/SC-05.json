@@ -1,0 +1,247 @@
+{
+ "version": 1,
+ "generator": "tools/sim/scene.py",
+ "key": "SC-05",
+ "variant": null,
+ "stamp": "qualitative illustration · not a simulation result · draft for engineering review",
+ "scenario": {
+  "id": "SC-05",
+  "name": "Signalised intersection with cross traffic",
+  "description": "The vehicle approaches a signalised intersection; the signal is hard to read, dark or meant for another lane, or a crossing vehicle runs its red",
+  "situations": [
+   "OS-03"
+  ],
+  "events": [
+   {
+    "id": "HE-06.1",
+    "description": "Enters the intersection on red into crossing traffic"
+   }
+  ],
+  "triggers": [
+   {
+    "id": "TC-01",
+    "condition": "Low sun or oncoming headlights in a camera's view"
+   },
+   {
+    "id": "TC-06",
+    "condition": "LED signal heads that flicker against the camera's exposure"
+   },
+   {
+    "id": "TC-07",
+    "condition": "Signal heads that are hidden, damaged, temporary, dark in a power outage, or meant for another lane"
+   },
+   {
+    "id": "TC-19",
+    "condition": "A vehicle running a red light or not stopping at its stop line"
+   }
+  ],
+  "goals": [
+   {
+    "id": "SG-02",
+    "asil": "D",
+    "statement": "Decelerate at least as much as needed to avoid a collision the planned trajectory avoids"
+   },
+   {
+    "id": "SG-06",
+    "asil": "D",
+    "statement": "Do not enter an intersection, roundabout or crosswalk against right of way"
+   }
+  ],
+  "monitors": [],
+  "misuse": [],
+  "losses": [
+   "LS-01",
+   "LS-02"
+  ],
+  "methods": [
+   "Simulation",
+   "Track",
+   "Road"
+  ],
+  "meant": "waits while its path is crossed",
+  "pass": "The vehicle enters only on a recognised green and treats an unknown signal as red; whatever the signal, it does not enter when its swept path crosses that of a detected road user before it could stop or clear",
+  "pass_refs": [
+   "FSR-06.01",
+   "FSR-06.03",
+   "FSR-02.01",
+   "FSR-02.02",
+   "FSR-03.01",
+   "FM-05",
+   "AC-02"
+  ],
+  "source": "assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ },
+ "sample": {
+  "salt": "tools/sim sample 1",
+  "parameters": [
+   {
+    "parameter": "ODD-20",
+    "range": "0 to 48 km/h",
+    "value": 8.4,
+    "unit": "km/h",
+    "crosses": false,
+    "label": "ODD-20 Ego speed: 8.4 km/h (range 0 to 48 km/h)"
+   },
+   {
+    "parameter": "ODD-04",
+    "range": "signalised, protected-turn",
+    "value": "signalised",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-04 Junctions: signalised"
+   },
+   {
+    "parameter": "ODD-12",
+    "range": "day, low-sun, night",
+    "value": "day",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-12 Illumination: day"
+   },
+   {
+    "parameter": "ODD-16",
+    "range": "car, truck, motorcycle, bicycle",
+    "value": "car",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-16 Traffic participants: car"
+   },
+   {
+    "parameter": "ODD-17",
+    "range": "free-flow, congested",
+    "value": "congested",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-17 Traffic density: congested"
+   },
+   {
+    "parameter": "Speed of the crossing vehicle running the red",
+    "range": "Bound stated by FSR-06.01, not yet fixed",
+    "value": null,
+    "label": "Speed of the crossing vehicle running the red: Bound stated by FSR-06.01, not yet fixed; the motion drawn is choreography"
+   }
+  ]
+ },
+ "condition_label": "ODD-12 day",
+ "conditions": {
+  "light": "day",
+  "surface": "dry",
+  "rain": null,
+  "visibility": null,
+  "beyond": null
+ },
+ "legend": {
+  "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "meant": "Meant to do: waits while its path is crossed",
+  "meant_mark": "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "hazard": "Where the hazard lies: HE-06.1 Enters the intersection on red into crossing traffic",
+  "key": "Amber, ringed: the road user the scenario is about"
+ },
+ "road": {
+  "length": [
+   -40,
+   120
+  ],
+  "lane": 3.5,
+  "parking": 0,
+  "sidewalk": 3.0,
+  "stop_line": 35.5,
+  "cross": {
+   "y": 40.0,
+   "width": 7.0,
+   "sides": [
+    "left",
+    "right"
+   ]
+  }
+ },
+ "features": [
+  "queue",
+  "signals"
+ ],
+ "ego": {
+  "path": [
+   [
+    1.75,
+    23.89
+   ],
+   [
+    1.75,
+    32.8
+   ]
+  ],
+  "stops": true,
+  "speed_kmh": 8.4,
+  "decel": 3.0,
+  "motion_label": "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking"
+ },
+ "plan": [
+  [
+   1.75,
+   0.0
+  ],
+  [
+   1.75,
+   110.0
+  ]
+ ],
+ "occlusion": [],
+ "hazard": [
+  0.0,
+  36.5,
+  3.5,
+  43.5
+ ],
+ "actors": [
+  {
+   "role": "key",
+   "class": "car",
+   "drawn_as": "sedan",
+   "label": "car",
+   "path": [
+    [
+     25.0,
+     41.75
+    ],
+    [
+     -25.0,
+     41.75
+    ]
+   ],
+   "move": [
+    0.1,
+    1.0
+   ]
+  }
+ ],
+ "props": [],
+ "signal": "green",
+ "queue": [
+  [
+   -9.0,
+   38.25,
+   -90
+  ],
+  [
+   -15.5,
+   38.25,
+   -90
+  ]
+ ],
+ "still": 0.6,
+ "camera": {
+  "pos": [
+   -1.5,
+   -8.0,
+   6.0
+  ],
+  "look": [
+   1.0,
+   38.0,
+   0.0
+  ],
+  "lens": 26
+ },
+ "credits": "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md)"
+}

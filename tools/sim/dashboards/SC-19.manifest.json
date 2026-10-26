@@ -1,0 +1,190 @@
+{
+ "scenario": "SC-19",
+ "scene": "SC-19",
+ "blender": "5.2.3 LTS",
+ "render": {
+  "engine": "CYCLES",
+  "samples": 32,
+  "size": [
+   1600,
+   900
+  ],
+  "still_frame": 27,
+  "frames": 72,
+  "fps": 12,
+  "dashboard_samples": {
+   "chase": 32,
+   "dashboard": 16
+  },
+  "supersample": 1.5
+ },
+ "objects": {
+  "ego": [
+   1.75,
+   30.0
+  ],
+  "actor0-bicycle": [
+   -1.3,
+   30.2
+  ]
+ },
+ "drawn": {
+  "light": "day",
+  "wet": false,
+  "rain": false,
+  "fog": false,
+  "beyond": [],
+  "features": [],
+  "stop_line": false,
+  "speed_sign": false,
+  "occlusion": false,
+  "props": [
+   "door"
+  ],
+  "signal": null,
+  "ego_lights": "hazard",
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
+  "overlay_top_m": 0.05
+ },
+ "look": {
+  "assets": [
+   {
+    "slot": "asphalt",
+    "id": "asphalt_02",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "bin",
+    "id": "metal_trash_can",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "concrete",
+    "id": "Concrete034",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_a",
+    "id": "Facade018A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_b",
+    "id": "Facade019A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_c",
+    "id": "Facade020A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "grass",
+    "id": "Grass004",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "hdri_day",
+    "id": "kloofendal_48d_partly_cloudy_puresky",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "hydrant",
+    "id": "fire_hydrant",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "tree",
+    "id": "tree_small_02",
+    "source": "polyhaven"
+   }
+  ],
+  "furniture": {
+   "tree": 12,
+   "bin": 3,
+   "hydrant": 3
+  },
+  "pedestrians": "primitives"
+ },
+ "description": "tools/sim/scenes/SC-19.json",
+ "description_sha256": "21307e9baaf644ebf214ecb60cc12e3e815853f34d1a9d1f05755c0626286d33",
+ "clip_texts": [
+  "SC-19 Passengers leaving at a stop in lane",
+  "After a minimal risk manoeuvre the vehicle stands in a traffic lane and passengers open the doors on the traffic side",
+  "One concrete scenario (seeded sample of the logical\nscenario)",
+  "ODD-17 Traffic density: free-flow",
+  "ODD-16 Traffic participants: bicycle",
+  "ODD-12 Illumination: day",
+  "Ego stands still throughout; choreography",
+  "Safety goals at stake",
+  "SG-07 (ASIL D): Reach a minimal risk condition whenever the item\ncan no longer drive safely",
+  "Pass criterion",
+  "The vehicle holds the minimal risk condition with hazard lights on\nand warns passengers of traffic on their side before they leave;\nthe residual risk counts against the SOTIF acceptance criteria\n(FSR-07.02, FSR-07.04, FM-20, AC-02)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Meant to do: warns before they step out",
+  "Green ring: where the pass criterion holds the vehicle",
+  "Where the hazard lies: Passengers leaving at a stop in lane",
+  "Amber, ringed: the road user the scenario is about",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "texts": [
+  "SC-19 Passengers leaving at a stop in lane",
+  "SG-07 ASIL D",
+  "Motion",
+  "choreography (qualitative)",
+  "Condition",
+  "ODD-12 day",
+  "Ego speed (sample)",
+  "—",
+  "Methods (WP-V-03)",
+  "Simulation, Drill",
+  "Scenario (WP-V-03)",
+  "After a minimal risk manoeuvre the vehicle stands in a traffic lane and passengers open the doors on the traffic side",
+  "Triggering conditions (WP-C-06)",
+  "TC-29 Passengers getting out at a stop in lane beside moving traffic",
+  "Situations: OS-01",
+  "Misuse (WP-C-08): MU-02",
+  "Loss scenarios (WP-A-05): LS-23",
+  "One concrete scenario (seeded sample)",
+  "ODD-17 Traffic density: free-flow",
+  "ODD-16 Traffic participants: bicycle",
+  "ODD-12 Illumination: day",
+  "Ego stands still throughout; choreography",
+  "Bicycle (qualitative)",
+  "Ego robotaxi (choreography)",
+  "Meant to do: warns before they step out",
+  "Pass criterion: The vehicle holds the minimal risk condition with hazard lights on and warns passengers of traffic on their side before they leave; the residual risk counts against the SOTIF acceptance criteria (FSR-07.02, FSR-07.04, FM-20, AC-02)",
+  "start",
+  "bicycle starts to move",
+  "the moment in the main view",
+  "a door opens",
+  "end; the vehicle stood throughout",
+  "Forward view",
+  "Top view: planned path, envelope, hazard",
+  "Safety goals at stake",
+  "SG-07 (ASIL D): Reach a minimal risk condition whenever the item can no longer drive safely",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Green ring: where the pass criterion holds the vehicle",
+  "Where the hazard lies: Passengers leaving at a stop in lane",
+  "Amber, ringed: the road user the scenario is about",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "tags": [
+  "Ego robotaxi (choreography)",
+  "Bicycle (qualitative)"
+ ],
+ "moments": [
+  "start",
+  "bicycle starts to move",
+  "the moment in the main view",
+  "a door opens",
+  "end; the vehicle stood throughout"
+ ],
+ "dashboard": "SC-19.jpg",
+ "dashboard_sha256": "0bb789dd407b50a78027ca331880a49f7edaa5c921e13ed3bce6e4326b9bdcdb"
+}

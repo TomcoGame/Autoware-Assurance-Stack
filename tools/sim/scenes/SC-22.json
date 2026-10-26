@@ -1,0 +1,239 @@
+{
+ "version": 1,
+ "generator": "tools/sim/scene.py",
+ "key": "SC-22",
+ "variant": null,
+ "stamp": "qualitative illustration · not a simulation result · draft for engineering review",
+ "scenario": {
+  "id": "SC-22",
+  "name": "Turn indicator during a turn or lane change",
+  "description": "The vehicle changes lane to pass a stopped vehicle, or turns at a junction, with other road users relying on its indicator",
+  "situations": [
+   "OS-01"
+  ],
+  "events": [
+   {
+    "id": "HE-09.1",
+    "description": "Indicates the wrong direction before a turn or lane change"
+   }
+  ],
+  "triggers": [],
+  "goals": [
+   {
+    "id": "SG-09",
+    "asil": "C",
+    "statement": "Avoid signalling a manoeuvre other than the one performed"
+   }
+  ],
+  "monitors": [],
+  "misuse": [],
+  "losses": [
+   "LS-17"
+  ],
+  "methods": [
+   "Simulation",
+   "In the loop"
+  ],
+  "meant": "its indicator matches the turn",
+  "pass": "The indicator always matches the commanded and achieved steering direction; on a mismatch hazard lights come on",
+  "pass_refs": [
+   "FSR-09.01",
+   "FSR-04.01"
+  ],
+  "source": "assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ },
+ "sample": {
+  "salt": "tools/sim sample 1",
+  "parameters": [
+   {
+    "parameter": "ODD-20",
+    "range": "0 to 48 km/h",
+    "value": 46.0,
+    "unit": "km/h",
+    "crosses": false,
+    "label": "ODD-20 Ego speed: 46 km/h (range 0 to 48 km/h)"
+   },
+   {
+    "parameter": "ODD-02",
+    "range": "lanes-1-2",
+    "value": "lanes-1-2",
+    "chosen": "seeded",
+    "outside": false,
+    "label": "ODD-02 Road type: lanes-1-2"
+   },
+   {
+    "parameter": "ODD-16",
+    "range": "car, bicycle, pedestrian",
+    "value": "car",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-16 Traffic participants: car"
+   }
+  ]
+ },
+ "condition_label": "not set by the scenario",
+ "conditions": {
+  "light": "day",
+  "surface": "dry",
+  "rain": null,
+  "visibility": null,
+  "beyond": null
+ },
+ "legend": {
+  "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "meant": "Meant to do: its indicator matches the turn",
+  "meant_mark": "Dashed green: the path the pass criterion asks of the vehicle",
+  "hazard": "Where the hazard lies: HE-09.1 Indicates the wrong direction before a turn or lane change",
+  "key": "Amber, ringed: the road user the scenario is about"
+ },
+ "road": {
+  "length": [
+   -40,
+   120
+  ],
+  "lane": 3.5,
+  "parking": 0,
+  "sidewalk": 3.0,
+  "lanes": 2
+ },
+ "features": [],
+ "ego": {
+  "path": [
+   [
+    5.25,
+    0.0
+   ],
+   [
+    5.25,
+    20.0
+   ],
+   [
+    4.4,
+    25.0
+   ],
+   [
+    2.6,
+    30.5
+   ],
+   [
+    1.75,
+    35.0
+   ],
+   [
+    1.75,
+    75.0
+   ]
+  ],
+  "stops": false,
+  "speed_kmh": 46.0,
+  "decel": 3.0,
+  "motion_label": "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "lights": "left",
+  "lights_m": [
+   0.0,
+   36.0
+  ]
+ },
+ "plan": [
+  [
+   5.25,
+   0.0
+  ],
+  [
+   5.25,
+   20.0
+  ],
+  [
+   4.4,
+   25.0
+  ],
+  [
+   2.6,
+   30.5
+  ],
+  [
+   1.75,
+   35.0
+  ],
+  [
+   1.75,
+   110.0
+  ]
+ ],
+ "occlusion": [],
+ "hazard": [
+  0.0,
+  24.0,
+  3.5,
+  38.0
+ ],
+ "actors": [
+  {
+   "role": "parked",
+   "class": "van",
+   "drawn_as": "minivan",
+   "label": "van",
+   "path": [
+    [
+     5.25,
+     44.0
+    ]
+   ],
+   "move": [
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "role": "key",
+   "class": "car",
+   "drawn_as": "sedan",
+   "label": "car",
+   "path": [
+    [
+     1.75,
+     -10.0
+    ],
+    [
+     1.75,
+     55.0
+    ]
+   ],
+   "move": [
+    0.0,
+    1.0
+   ]
+  }
+ ],
+ "props": [],
+ "signal": null,
+ "queue": [],
+ "still": 0.45,
+ "camera": {
+  "pos": [
+   1.5,
+   -8.0,
+   6.0
+  ],
+  "look": [
+   3.0,
+   30.0,
+   0.0
+  ],
+  "lens": 26
+ },
+ "credits": "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md)",
+ "chase": {
+  "pos": [
+   -6.0,
+   -26.0,
+   10.0
+  ],
+  "look": [
+   0.0,
+   -1.0,
+   0.0
+  ]
+ }
+}

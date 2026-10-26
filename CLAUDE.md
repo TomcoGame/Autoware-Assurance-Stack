@@ -60,6 +60,7 @@ for g in assurance/01-management/figures/fig_m00_register.py assurance/01-manage
          assurance/case/tools/dashboard.py; do python3 "$g" --check; done
 python3 -m unittest discover -s assurance/tests -p 'test_*.py'
 python3 tools/readme/figures.py --check   # README and wiki figures: read WP-C-02/03/04/09, WP-S-04 timing, WP-M-00/01, the register, assurance/README.md
+python3 tools/sim/scene.py --check && python3 -m unittest discover -s tools/sim -p 'test_*.py'   # scenario scene descriptions: read scenarios.yaml, WP-C-02/03/04
 ```
 
 - Python in `assurance/` uses the standard library and PyYAML only, formatted with black and isort at line length

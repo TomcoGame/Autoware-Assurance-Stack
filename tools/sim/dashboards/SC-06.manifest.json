@@ -1,0 +1,200 @@
+{
+ "scenario": "SC-06",
+ "scene": "SC-06",
+ "blender": "5.2.3 LTS",
+ "render": {
+  "engine": "CYCLES",
+  "samples": 32,
+  "size": [
+   1600,
+   900
+  ],
+  "still_frame": 35,
+  "frames": 64,
+  "fps": 12,
+  "dashboard_samples": {
+   "chase": 32,
+   "dashboard": 16
+  },
+  "supersample": 1.5
+ },
+ "objects": {
+  "ego": [
+   1.75,
+   20.58
+  ],
+  "actor0-motorcycle": [
+   -1.75,
+   38.89
+  ]
+ },
+ "drawn": {
+  "light": "dusk",
+  "wet": false,
+  "rain": false,
+  "fog": false,
+  "beyond": [],
+  "features": [
+   "no_stop_line",
+   "t_left"
+  ],
+  "stop_line": false,
+  "speed_sign": false,
+  "occlusion": false,
+  "props": [],
+  "signal": null,
+  "ego_lights": null,
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
+  "overlay_top_m": 0.05
+ },
+ "look": {
+  "assets": [
+   {
+    "slot": "asphalt",
+    "id": "asphalt_02",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "bin",
+    "id": "metal_trash_can",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "concrete",
+    "id": "Concrete034",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_a",
+    "id": "Facade018A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_b",
+    "id": "Facade019A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_c",
+    "id": "Facade020A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "grass",
+    "id": "Grass004",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "hdri_low_sun",
+    "id": "spruit_sunrise",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "hydrant",
+    "id": "fire_hydrant",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "tree",
+    "id": "tree_small_02",
+    "source": "polyhaven"
+   }
+  ],
+  "furniture": {
+   "tree": 8,
+   "bin": 7,
+   "hydrant": 3
+  },
+  "pedestrians": "primitives"
+ },
+ "description": "tools/sim/scenes/SC-06.json",
+ "description_sha256": "f3b3b967ce84cda3f02efdfe06214d461be53e292e7b092155f94507a6c6d0c4",
+ "clip_texts": [
+  "SC-06 Unprotected left turn across oncoming traffic",
+  "Left turn on a permissive green or at an uncontrolled junction, with an oncoming lane hidden by a turning vehicle, or a\nmotorcycle approaching fast",
+  "One concrete scenario (seeded sample of the logical\nscenario)",
+  "ODD-20 Ego speed: 38.8 km/h (range 0 to 48 km/h)",
+  "ODD-04 Junctions: t-junction",
+  "ODD-16 Traffic participants: motorcycle",
+  "ODD-12 Illumination: dusk",
+  "Speed and acceleration of the oncoming vehicle: Bound stated by\nFSR-06.01, not yet fixed; the motion drawn is choreography",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033);\nchoreography, not Autoware's planned braking",
+  "Safety goals at stake",
+  "SG-02 (ASIL D): Decelerate at least as much as needed to avoid a\ncollision the planned trajectory avoids",
+  "SG-06 (ASIL D): Do not enter an intersection, roundabout or\ncrosswalk against right of way",
+  "Pass criterion",
+  "The vehicle starts the turn only with a gap that lets the oncoming\nroad user pass at its assumed speed and acceleration, and stops\nbefore the conflict area otherwise (FSR-06.01, FSR-06.02,\nFSR-06.03, FSR-02.02, FSR-03.01, FM-07, AC-02)",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Meant to do: turns only with a safe gap",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: HE-06.2 Turns left in front of an oncoming vehicle",
+  "Amber, ringed: the road user the scenario is about",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "texts": [
+  "SC-06 Unprotected left turn across oncoming traffic",
+  "SG-02 ASIL D",
+  "SG-06 ASIL D",
+  "Motion",
+  "choreography (qualitative)",
+  "Condition",
+  "ODD-12 dusk",
+  "Ego speed (sample)",
+  "38.8 km/h",
+  "Methods (WP-V-03)",
+  "Simulation, Track",
+  "Scenario (WP-V-03)",
+  "Left turn on a permissive green or at an uncontrolled junction, with an oncoming lane hidden by a turning vehicle, or a motorcycle approaching fast",
+  "Hazardous events (WP-C-03)",
+  "HE-06.2 Turns left in front of an oncoming vehicle",
+  "Triggering conditions (WP-C-06)",
+  "TC-12 Unprotected left turn with a turning vehicle hiding an oncoming lane",
+  "TC-20 Motorcycles, and vehicles accelerating hard, approaching from far away",
+  "Situations: OS-04",
+  "Loss scenarios (WP-A-05): LS-02",
+  "One concrete scenario (seeded sample)",
+  "ODD-20 Ego speed: 38.8 km/h (range 0 to 48 km/h)",
+  "ODD-04 Junctions: t-junction",
+  "ODD-16 Traffic participants: motorcycle",
+  "ODD-12 Illumination: dusk",
+  "Speed and acceleration of the oncoming vehicle: Bound stated by FSR-06.01, not yet fixed; the motion drawn is choreography",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "Ego robotaxi (choreography)",
+  "Motorcycle (qualitative)",
+  "Meant to do: turns only with a safe gap",
+  "Pass criterion: The vehicle starts the turn only with a gap that lets the oncoming road user pass at its assumed speed and acceleration, and stops before the conflict area otherwise (FSR-06.01, FSR-06.02, FSR-06.03, FSR-02.02, FSR-03.01, FM-07, AC-02)",
+  "start",
+  "vehicle starts to slow",
+  "the moment in the main view",
+  "vehicle stands still",
+  "Forward view",
+  "Top view: planned path, envelope, hazard",
+  "Safety goals at stake",
+  "SG-02 (ASIL D): Decelerate at least as much as needed to avoid a collision the planned trajectory avoids",
+  "SG-06 (ASIL D): Do not enter an intersection, roundabout or crosswalk against right of way",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: HE-06.2 Turns left in front of an oncoming vehicle",
+  "Amber, ringed: the road user the scenario is about",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "tags": [
+  "Ego robotaxi (choreography)",
+  "Motorcycle (qualitative)"
+ ],
+ "moments": [
+  "start",
+  "vehicle starts to slow",
+  "the moment in the main view",
+  "vehicle stands still"
+ ],
+ "dashboard": "SC-06.jpg",
+ "dashboard_sha256": "04de6b657f7bf1ce6b784637bd67291c4f5fc04774e964c31aae1aa0c2834e2a"
+}

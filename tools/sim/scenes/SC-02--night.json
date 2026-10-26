@@ -1,0 +1,275 @@
+{
+ "version": 1,
+ "generator": "tools/sim/scene.py",
+ "key": "SC-02--night",
+ "variant": {
+  "of": "SC-02",
+  "label": "ODD-12 night"
+ },
+ "stamp": "qualitative illustration · not a simulation result · draft for engineering review",
+ "scenario": {
+  "id": "SC-02",
+  "name": "Pedestrian emerging from behind a parked vehicle",
+  "description": "A pedestrian, child or cyclist steps out from behind a parked van or bus away from a crossing, where pedestrians are dense",
+  "situations": [
+   "OS-02",
+   "OS-01"
+  ],
+  "events": [
+   {
+    "id": "HE-04.3",
+    "description": "Steers onto the sidewalk at low speed"
+   }
+  ],
+  "triggers": [
+   {
+    "id": "TC-10",
+    "condition": "Parked vans, buses, hedges or walls hiding a crossing or a corner"
+   },
+   {
+    "id": "TC-17",
+    "condition": "People crossing away from crossings, or at the kerb looking at a phone"
+   }
+  ],
+  "goals": [
+   {
+    "id": "SG-02",
+    "asil": "D",
+    "statement": "Decelerate at least as much as needed to avoid a collision the planned trajectory avoids"
+   },
+   {
+    "id": "SG-04",
+    "asil": "D",
+    "statement": "Avoid unintended lateral motion out of the planned path"
+   },
+   {
+    "id": "SG-06",
+    "asil": "D",
+    "statement": "Do not enter an intersection, roundabout or crosswalk against right of way"
+   }
+  ],
+  "monitors": [],
+  "misuse": [
+   "MU-10"
+  ],
+  "losses": [
+   "LS-01",
+   "LS-02"
+  ],
+  "methods": [
+   "Simulation",
+   "Track"
+  ],
+  "meant": "slow enough to stop for anyone emerging",
+  "pass": "The vehicle's speed near the occlusion lets it stop for a road user emerging at the assumed speed; no contact, and no swerve out of the drivable area to avoid one",
+  "pass_refs": [
+   "FSR-06.02",
+   "FSR-02.02",
+   "FSR-04.01",
+   "FSR-04.05",
+   "FSR-03.01",
+   "AC-02"
+  ],
+  "source": "assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ },
+ "sample": {
+  "salt": "tools/sim sample 1",
+  "parameters": [
+   {
+    "parameter": "ODD-20",
+    "range": "0 to 48 km/h",
+    "value": 42.7,
+    "unit": "km/h",
+    "crosses": false,
+    "label": "ODD-20 Ego speed: 42.7 km/h (range 0 to 48 km/h)"
+   },
+   {
+    "parameter": "ODD-05",
+    "range": "mid-block",
+    "value": "mid-block",
+    "chosen": "seeded",
+    "outside": false,
+    "label": "ODD-05 Crossings: mid-block"
+   },
+   {
+    "parameter": "ODD-16",
+    "range": "pedestrian, child, bicycle, e-scooter",
+    "value": "child",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-16 Traffic participants: child"
+   },
+   {
+    "parameter": "ODD-12",
+    "range": "day, night, unlit",
+    "value": "night",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-12 Illumination: night"
+   },
+   {
+    "parameter": "ODD-02",
+    "range": "urban-street, lanes-1-2",
+    "value": "lanes-1-2",
+    "chosen": "seeded",
+    "outside": false,
+    "label": "ODD-02 Road type: lanes-1-2"
+   },
+   {
+    "parameter": "Speed of the road user emerging from the occlusion",
+    "range": "Bound stated by FSR-06.02, not yet fixed",
+    "value": null,
+    "label": "Speed of the road user emerging from the occlusion: Bound stated by FSR-06.02, not yet fixed; the motion drawn is choreography"
+   }
+  ]
+ },
+ "condition_label": "ODD-12 night",
+ "conditions": {
+  "light": "night",
+  "surface": "dry",
+  "rain": null,
+  "visibility": null,
+  "beyond": null
+ },
+ "legend": {
+  "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "meant": "Meant to do: slow enough to stop for anyone emerging",
+  "meant_mark": "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "hazard": "Where the hazard lies: HE-04.3 Steers onto the sidewalk at low speed",
+  "key": "Amber, ringed: the road user the scenario is about",
+  "occlusion": "Grey area: what the parked vehicle hides from the ego"
+ },
+ "road": {
+  "length": [
+   -40,
+   110
+  ],
+  "lane": 3.5,
+  "parking": 2.5,
+  "sidewalk": 3.0
+ },
+ "features": [],
+ "ego": {
+  "path": [
+   [
+    1.75,
+    -10.45
+   ],
+   [
+    1.75,
+    21.0
+   ]
+  ],
+  "stops": true,
+  "speed_kmh": 42.7,
+  "decel": 3.0,
+  "motion_label": "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking"
+ },
+ "plan": [
+  [
+   1.75,
+   0.0
+  ],
+  [
+   1.75,
+   100.0
+  ]
+ ],
+ "occlusion": [
+  [
+   3.6,
+   21.6
+  ],
+  [
+   3.6,
+   26.4
+  ],
+  [
+   7.5,
+   32.0
+  ],
+  [
+   7.5,
+   21.6
+  ]
+ ],
+ "hazard": [
+  0.0,
+  25.0,
+  9.0,
+  30.0
+ ],
+ "actors": [
+  {
+   "role": "parked",
+   "class": "van",
+   "drawn_as": "minivan",
+   "label": "van",
+   "path": [
+    [
+     4.75,
+     24.0
+    ]
+   ],
+   "move": [
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "role": "key",
+   "class": "child",
+   "drawn_as": "person:child",
+   "label": "child",
+   "path": [
+    [
+     5.6,
+     27.6
+    ],
+    [
+     0.6,
+     27.6
+    ]
+   ],
+   "move": [
+    0.35,
+    1.0
+   ]
+  },
+  {
+   "role": "other",
+   "class": "car",
+   "drawn_as": "sedan",
+   "label": "car",
+   "path": [
+    [
+     4.75,
+     46.0
+    ]
+   ],
+   "move": [
+    0.0,
+    0.0
+   ]
+  }
+ ],
+ "props": [],
+ "signal": null,
+ "queue": [],
+ "still": 0.6,
+ "camera": {
+  "pos": [
+   -1.5,
+   -8.0,
+   5.0
+  ],
+  "look": [
+   2.5,
+   26.0,
+   0.0
+  ],
+  "lens": 28
+ },
+ "credits": "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md)"
+}

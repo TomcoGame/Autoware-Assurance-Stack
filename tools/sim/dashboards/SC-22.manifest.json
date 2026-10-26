@@ -1,0 +1,191 @@
+{
+ "scenario": "SC-22",
+ "scene": "SC-22",
+ "blender": "5.2.3 LTS",
+ "render": {
+  "engine": "CYCLES",
+  "samples": 32,
+  "size": [
+   1600,
+   900
+  ],
+  "still_frame": 32,
+  "frames": 71,
+  "fps": 12,
+  "dashboard_samples": {
+   "chase": 32,
+   "dashboard": 16
+  },
+  "supersample": 1.5
+ },
+ "objects": {
+  "ego": [
+   1.93,
+   34.06
+  ],
+  "actor0-van": [
+   5.25,
+   44.0
+  ],
+  "actor1-car": [
+   1.75,
+   19.71
+  ]
+ },
+ "drawn": {
+  "light": "day",
+  "wet": false,
+  "rain": false,
+  "fog": false,
+  "beyond": [],
+  "features": [],
+  "stop_line": false,
+  "speed_sign": false,
+  "occlusion": false,
+  "props": [],
+  "signal": null,
+  "ego_lights": "left",
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
+  "overlay_top_m": 0.05
+ },
+ "look": {
+  "assets": [
+   {
+    "slot": "asphalt",
+    "id": "asphalt_02",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "bin",
+    "id": "metal_trash_can",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "concrete",
+    "id": "Concrete034",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_a",
+    "id": "Facade018A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_b",
+    "id": "Facade019A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_c",
+    "id": "Facade020A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "grass",
+    "id": "Grass004",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "hdri_day",
+    "id": "kloofendal_48d_partly_cloudy_puresky",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "hydrant",
+    "id": "fire_hydrant",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "tree",
+    "id": "tree_small_02",
+    "source": "polyhaven"
+   }
+  ],
+  "furniture": {
+   "tree": 12,
+   "bin": 7,
+   "hydrant": 5
+  },
+  "pedestrians": "primitives"
+ },
+ "description": "tools/sim/scenes/SC-22.json",
+ "description_sha256": "399bc3c4b0b0bc96269f8beaa32b19d9b75d99df7e534a927ecc7e1fcc313eb4",
+ "clip_texts": [
+  "SC-22 Turn indicator during a turn or lane change",
+  "The vehicle changes lane to pass a stopped vehicle, or turns at a junction, with other road users relying on its\nindicator",
+  "One concrete scenario (seeded sample of the logical\nscenario)",
+  "ODD-20 Ego speed: 46 km/h (range 0 to 48 km/h)",
+  "ODD-02 Road type: lanes-1-2",
+  "ODD-16 Traffic participants: car",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033);\nchoreography, not Autoware's planned braking",
+  "Safety goals at stake",
+  "SG-09 (ASIL C): Avoid signalling a manoeuvre other than the one\nperformed",
+  "Pass criterion",
+  "The indicator always matches the commanded and achieved steering\ndirection; on a mismatch hazard lights come on (FSR-09.01,\nFSR-04.01)",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Meant to do: its indicator matches the turn",
+  "Dashed green: the path the pass criterion asks of the vehicle",
+  "Where the hazard lies: HE-09.1 Indicates the wrong direction before a turn or lane change",
+  "Amber, ringed: the road user the scenario is about",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "texts": [
+  "SC-22 Turn indicator during a turn or lane change",
+  "SG-09 ASIL C",
+  "Motion",
+  "choreography (qualitative)",
+  "Condition",
+  "not set by the scenario",
+  "Ego speed (sample)",
+  "46 km/h",
+  "Methods (WP-V-03)",
+  "Simulation, In the loop",
+  "Scenario (WP-V-03)",
+  "The vehicle changes lane to pass a stopped vehicle, or turns at a junction, with other road users relying on its indicator",
+  "Hazardous events (WP-C-03)",
+  "HE-09.1 Indicates the wrong direction before a turn or lane change",
+  "Situations: OS-01",
+  "Loss scenarios (WP-A-05): LS-17",
+  "One concrete scenario (seeded sample)",
+  "ODD-20 Ego speed: 46 km/h (range 0 to 48 km/h)",
+  "ODD-02 Road type: lanes-1-2",
+  "ODD-16 Traffic participants: car",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "Car (qualitative)",
+  "Ego robotaxi (choreography)",
+  "Parked van (qualitative)",
+  "Meant to do: its indicator matches the turn",
+  "Pass criterion: The indicator always matches the commanded and achieved steering direction; on a mismatch hazard lights come on (FSR-09.01, FSR-04.01)",
+  "start",
+  "the moment in the main view",
+  "end",
+  "Forward view",
+  "Top view: planned path, envelope, hazard",
+  "Safety goals at stake",
+  "SG-09 (ASIL C): Avoid signalling a manoeuvre other than the one performed",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle",
+  "Where the hazard lies: HE-09.1 Indicates the wrong direction before a turn or lane change",
+  "Amber, ringed: the road user the scenario is about",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "tags": [
+  "Ego robotaxi (choreography)",
+  "Parked van (qualitative)",
+  "Car (qualitative)"
+ ],
+ "moments": [
+  "start",
+  "the moment in the main view",
+  "end"
+ ],
+ "dashboard": "SC-22.jpg",
+ "dashboard_sha256": "f211269ccbb277c5abfcc0a7f44dc4bfb34c328150cbc6881da54984c1d8673e"
+}

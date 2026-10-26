@@ -1,0 +1,194 @@
+{
+ "scenario": "SC-11",
+ "scene": "SC-11",
+ "blender": "5.2.3 LTS",
+ "render": {
+  "engine": "CYCLES",
+  "samples": 32,
+  "size": [
+   1600,
+   900
+  ],
+  "still_frame": 38,
+  "frames": 52,
+  "fps": 12,
+  "dashboard_samples": {
+   "chase": 32,
+   "dashboard": 16
+  },
+  "supersample": 1.5
+ },
+ "objects": {
+  "ego": [
+   1.75,
+   32.79
+  ],
+  "actor0-directing": [
+   0.6,
+   40.0
+  ]
+ },
+ "drawn": {
+  "light": "day",
+  "wet": false,
+  "rain": false,
+  "fog": false,
+  "beyond": [],
+  "features": [
+   "signals"
+  ],
+  "stop_line": true,
+  "speed_sign": false,
+  "occlusion": false,
+  "props": [
+   "paddle"
+  ],
+  "signal": "green",
+  "ego_lights": null,
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
+  "overlay_top_m": 0.05
+ },
+ "look": {
+  "assets": [
+   {
+    "slot": "asphalt",
+    "id": "asphalt_02",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "bin",
+    "id": "metal_trash_can",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "concrete",
+    "id": "Concrete034",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_a",
+    "id": "Facade018A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_b",
+    "id": "Facade019A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_c",
+    "id": "Facade020A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "grass",
+    "id": "Grass004",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "hdri_day",
+    "id": "kloofendal_48d_partly_cloudy_puresky",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "hydrant",
+    "id": "fire_hydrant",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "tree",
+    "id": "tree_small_02",
+    "source": "polyhaven"
+   }
+  ],
+  "furniture": {
+   "tree": 10,
+   "bin": 6,
+   "hydrant": 1
+  },
+  "pedestrians": "Quaternius (CC0)"
+ },
+ "description": "tools/sim/scenes/SC-11.json",
+ "description_sha256": "57a899e6f82fb5c299155861075ec542123e3c3223c0b99065ba2b91169d96d8",
+ "clip_texts": [
+  "SC-11 Person directing traffic",
+  "A police officer, flagger or first responder directs traffic at a junction or a scene",
+  "One concrete scenario (seeded sample of the logical\nscenario)",
+  "ODD-20 Ego speed: 20.3 km/h (range 0 to 48 km/h)",
+  "ODD-19 Traffic direction by people: directing",
+  "ODD-04 Junctions: signalised",
+  "ODD-12 Illumination: day",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033);\nchoreography, not Autoware's planned braking",
+  "Safety goals at stake",
+  "SG-06 (ASIL D): Do not enter an intersection, roundabout or\ncrosswalk against right of way",
+  "MON-02 Map–world divergence",
+  "Pass criterion",
+  "The vehicle detects the person directing traffic, stops safely and\nasks for remote assistance; it does not move on the signal alone,\nand responders can stop or hold it (MON-02, FSR-07.05, FSR-06.01,\nFSR-02.02, FM-16, HR-08, AC-02)",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Meant to do: stops, does not move on the signal",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: Person directing traffic",
+  "Amber, ringed: the road user the scenario is about",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "texts": [
+  "SC-11 Person directing traffic",
+  "SG-06 ASIL D",
+  "Motion",
+  "choreography (qualitative)",
+  "Condition",
+  "ODD-12 day",
+  "Ego speed (sample)",
+  "20.3 km/h",
+  "Methods (WP-V-03)",
+  "Simulation, Track, Drill",
+  "Scenario (WP-V-03)",
+  "A police officer, flagger or first responder directs traffic at a junction or a scene",
+  "Triggering conditions (WP-C-06)",
+  "TC-22 A police officer or flagger directing traffic",
+  "Situations: OS-03",
+  "Misuse (WP-C-08): MU-20",
+  "One concrete scenario (seeded sample)",
+  "ODD-20 Ego speed: 20.3 km/h (range 0 to 48 km/h)",
+  "ODD-19 Traffic direction by people: directing",
+  "ODD-04 Junctions: signalised",
+  "ODD-12 Illumination: day",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "Ego robotaxi (choreography)",
+  "Directing (qualitative)",
+  "Meant to do: stops, does not move on the signal",
+  "Pass criterion: The vehicle detects the person directing traffic, stops safely and asks for remote assistance; it does not move on the signal alone, and responders can stop or hold it (MON-02, FSR-07.05, FSR-06.01, FSR-02.02, FM-16, HR-08, AC-02)",
+  "start",
+  "vehicle starts to slow",
+  "vehicle stands still; main view",
+  "Forward view",
+  "Top view: planned path, envelope, hazard",
+  "Safety goals at stake",
+  "SG-06 (ASIL D): Do not enter an intersection, roundabout or crosswalk against right of way",
+  "ODD monitors the pass criterion cites (WP-C-02 §4)",
+  "MON-02 Map–world divergence",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: Person directing traffic",
+  "Amber, ringed: the road user the scenario is about",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven; pedestrians: Quaternius (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "tags": [
+  "Ego robotaxi (choreography)",
+  "Directing (qualitative)"
+ ],
+ "moments": [
+  "start",
+  "vehicle starts to slow",
+  "vehicle stands still; main view"
+ ],
+ "dashboard": "SC-11.jpg",
+ "dashboard_sha256": "cf026341936694dd8e65be4e9dbeec319d674e0f044664714c7aa230cde8a807"
+}

@@ -1,0 +1,208 @@
+{
+ "version": 1,
+ "generator": "tools/sim/scene.py",
+ "key": "SC-11",
+ "variant": null,
+ "stamp": "qualitative illustration · not a simulation result · draft for engineering review",
+ "scenario": {
+  "id": "SC-11",
+  "name": "Person directing traffic",
+  "description": "A police officer, flagger or first responder directs traffic at a junction or a scene",
+  "situations": [
+   "OS-03"
+  ],
+  "events": [],
+  "triggers": [
+   {
+    "id": "TC-22",
+    "condition": "A police officer or flagger directing traffic"
+   }
+  ],
+  "goals": [
+   {
+    "id": "SG-06",
+    "asil": "D",
+    "statement": "Do not enter an intersection, roundabout or crosswalk against right of way"
+   }
+  ],
+  "monitors": [
+   {
+    "id": "MON-02",
+    "name": "Map–world divergence"
+   }
+  ],
+  "misuse": [
+   "MU-20"
+  ],
+  "losses": [],
+  "methods": [
+   "Simulation",
+   "Track",
+   "Drill"
+  ],
+  "meant": "stops, does not move on the signal",
+  "pass": "The vehicle detects the person directing traffic, stops safely and asks for remote assistance; it does not move on the signal alone, and responders can stop or hold it",
+  "pass_refs": [
+   "MON-02",
+   "FSR-07.05",
+   "FSR-06.01",
+   "FSR-02.02",
+   "FM-16",
+   "HR-08",
+   "AC-02"
+  ],
+  "source": "assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ },
+ "sample": {
+  "salt": "tools/sim sample 1",
+  "parameters": [
+   {
+    "parameter": "ODD-20",
+    "range": "0 to 48 km/h",
+    "value": 20.3,
+    "unit": "km/h",
+    "crosses": false,
+    "label": "ODD-20 Ego speed: 20.3 km/h (range 0 to 48 km/h)"
+   },
+   {
+    "parameter": "ODD-19",
+    "range": "directing (outside)",
+    "value": "directing",
+    "chosen": "seeded",
+    "outside": true,
+    "label": "ODD-19 Traffic direction by people: directing"
+   },
+   {
+    "parameter": "ODD-04",
+    "range": "signalised, stop-controlled",
+    "value": "signalised",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-04 Junctions: signalised"
+   },
+   {
+    "parameter": "ODD-12",
+    "range": "day, night",
+    "value": "day",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-12 Illumination: day"
+   }
+  ]
+ },
+ "condition_label": "ODD-12 day",
+ "conditions": {
+  "light": "day",
+  "surface": "dry",
+  "rain": null,
+  "visibility": null,
+  "beyond": null
+ },
+ "legend": {
+  "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "meant": "Meant to do: stops, does not move on the signal",
+  "meant_mark": "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "hazard": "Where the hazard lies: Person directing traffic",
+  "key": "Amber, ringed: the road user the scenario is about"
+ },
+ "road": {
+  "length": [
+   -40,
+   120
+  ],
+  "lane": 3.5,
+  "parking": 0,
+  "sidewalk": 3.0,
+  "stop_line": 35.5,
+  "cross": {
+   "y": 40.0,
+   "width": 7.0,
+   "sides": [
+    "left",
+    "right"
+   ]
+  }
+ },
+ "features": [
+  "signals"
+ ],
+ "ego": {
+  "path": [
+   [
+    1.75,
+    19.5
+   ],
+   [
+    1.75,
+    32.8
+   ]
+  ],
+  "stops": true,
+  "speed_kmh": 20.3,
+  "decel": 3.0,
+  "motion_label": "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking"
+ },
+ "plan": [
+  [
+   1.75,
+   0.0
+  ],
+  [
+   1.75,
+   110.0
+  ]
+ ],
+ "occlusion": [],
+ "hazard": [
+  -3.5,
+  36.5,
+  3.5,
+  43.5
+ ],
+ "actors": [
+  {
+   "role": "key",
+   "class": "directing",
+   "drawn_as": "person:adult",
+   "label": "directing",
+   "path": [
+    [
+     0.6,
+     40.0
+    ]
+   ],
+   "move": [
+    0.0,
+    0.0
+   ],
+   "face": 180.0
+  }
+ ],
+ "props": [
+  {
+   "kind": "paddle",
+   "at": [
+    1.0,
+    39.9
+   ]
+  }
+ ],
+ "signal": "green",
+ "queue": [],
+ "still": 0.75,
+ "camera": {
+  "pos": [
+   -1.5,
+   -8.0,
+   5.5
+  ],
+  "look": [
+   1.0,
+   38.0,
+   0.0
+  ],
+  "lens": 28
+ },
+ "credits": "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md)"
+}

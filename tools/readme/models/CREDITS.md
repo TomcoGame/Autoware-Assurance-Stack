@@ -21,4 +21,26 @@ otherwise unchanged; the textures of the downloads are not used and not kept.
 - the meshes are simplified (vertices clustered on a grid), so fine detail is lost;
 - the ego vehicle carries a roof sensor that is not part of the model.
 
+## Changes made in the Blender scenes
+
+[`tools/sim/build_blend.py`](../../sim/build_blend.py) uses the models, through `mesh.py`, in qualitative scenes of the
+known scenarios:
+
+- the same parts are left out and kept as above, and the models are normalised the same way;
+- the meshes are used at full resolution, not simplified;
+- textures are not used: each part class has one material, and the body colours are ours (amber for the road user a
+  scenario is about, grey for the others, white for the ego vehicle);
+- the ego vehicle carries a roof sensor that is not part of the model;
+- the SUV of the pack stands in for an emergency vehicle and the minivan for a van.
+
+Every render names both models, their authors and the licence on its face.
+
+The scenes also use CC0 1.0 assets, which need no credit; the dashboards name their sources all the same:
+
+- skies (HDRIs), road, sidewalk, verge and facade textures, street trees, bins and hydrants from
+  [Poly Haven](https://polyhaven.com) and [ambientCG](https://ambientcg.com), fetched by
+  [`tools/sim/fetch_assets.py`](../../sim/fetch_assets.py) and recorded with their SHA-256 in
+  [`tools/sim/assets.lock.json`](../../sim/assets.lock.json) (the files themselves are not committed);
+- two pedestrian figures by Quaternius, in [`tools/sim/models/people/`](../../sim/models/people/README.md).
+
 Their use here does not mean that either author endorses this project or its figures.

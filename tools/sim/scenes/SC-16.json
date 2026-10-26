@@ -1,0 +1,226 @@
+{
+ "version": 1,
+ "generator": "tools/sim/scene.py",
+ "key": "SC-16",
+ "variant": null,
+ "stamp": "qualitative illustration · not a simulation result · draft for engineering review",
+ "scenario": {
+  "id": "SC-16",
+  "name": "Stopped at a red light with pedestrians crossing in front",
+  "description": "The vehicle waits at a red light or in a queue on a gradient while pedestrians cross in front of it",
+  "situations": [
+   "OS-06"
+  ],
+  "events": [
+   {
+    "id": "HE-01.1",
+    "description": "Pulls away from standstill into the pedestrians crossing in front"
+   },
+   {
+    "id": "HE-05.2",
+    "description": "Creeps or rolls into the crosswalk while stopped at a red light"
+   }
+  ],
+  "triggers": [],
+  "goals": [
+   {
+    "id": "SG-01",
+    "asil": "D",
+    "statement": "Avoid unintended acceleration"
+   },
+   {
+    "id": "SG-05",
+    "asil": "D",
+    "statement": "Avoid unintended motion from standstill, forward or backward"
+   }
+  ],
+  "monitors": [],
+  "misuse": [],
+  "losses": [
+   "LS-20",
+   "LS-21"
+  ],
+  "methods": [
+   "In the loop",
+   "Bench",
+   "Track"
+  ],
+  "meant": "stays held until it may go",
+  "pass": "The vehicle stays held until every release condition holds; motion while holding is detected and the park brake applied; no acceleration toward a detected road user",
+  "pass_refs": [
+   "FSR-05.01",
+   "FSR-05.02",
+   "FSR-05.04",
+   "FSR-01.01",
+   "FSR-01.02"
+  ],
+  "source": "assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ },
+ "sample": {
+  "salt": "tools/sim sample 1",
+  "parameters": [
+   {
+    "parameter": "ODD-04",
+    "range": "signalised",
+    "value": "signalised",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-04 Junctions: signalised"
+   },
+   {
+    "parameter": "ODD-05",
+    "range": "marked-crosswalk, signalised-crosswalk",
+    "value": "signalised-crosswalk",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-05 Crossings: signalised-crosswalk"
+   },
+   {
+    "parameter": "ODD-06",
+    "range": "0 to 8 %",
+    "value": 1.1,
+    "unit": "%",
+    "crosses": false,
+    "label": "ODD-06 Road surface and geometry: 1.1 % (range 0 to 8 %)"
+   },
+   {
+    "parameter": "ODD-16",
+    "range": "pedestrian, child, wheelchair",
+    "value": "child",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-16 Traffic participants: child"
+   },
+   {
+    "parameter": "ODD-13",
+    "range": "dry, wet",
+    "value": "dry",
+    "chosen": "seeded",
+    "outside": false,
+    "label": "ODD-13 Road surface condition: dry"
+   }
+  ]
+ },
+ "condition_label": "ODD-13 dry",
+ "conditions": {
+  "light": "day",
+  "surface": "dry",
+  "rain": null,
+  "visibility": null,
+  "beyond": null
+ },
+ "legend": {
+  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "meant": "Meant to do: stays held until it may go",
+  "meant_mark": "Green ring: where the pass criterion holds the vehicle",
+  "hazard": "Where the hazard lies: HE-01.1 Pulls away from standstill into the pedestrians crossing in front; HE-05.2 Creeps or rolls into the crosswalk while stopped at a red light",
+  "key": "Amber, ringed: the road user the scenario is about"
+ },
+ "road": {
+  "length": [
+   -40,
+   120
+  ],
+  "lane": 3.5,
+  "parking": 0,
+  "sidewalk": 3.0,
+  "crosswalk": [
+   34.0,
+   37.0
+  ],
+  "stop_line": 32.0,
+  "cross": {
+   "y": 44.0,
+   "width": 7.0,
+   "sides": [
+    "left",
+    "right"
+   ]
+  }
+ },
+ "features": [
+  "ped_signals",
+  "signals"
+ ],
+ "ego": {
+  "path": [
+   [
+    1.75,
+    29.4
+   ]
+  ],
+  "stops": true,
+  "speed_kmh": null,
+  "decel": 3.0,
+  "motion_label": "Ego stands still throughout; choreography",
+  "hold_s": 9.0
+ },
+ "plan": [],
+ "occlusion": [],
+ "hazard": [
+  0.0,
+  34.0,
+  3.5,
+  37.0
+ ],
+ "actors": [
+  {
+   "role": "key",
+   "class": "child",
+   "drawn_as": "person:child",
+   "label": "child",
+   "path": [
+    [
+     5.6,
+     34.8
+    ],
+    [
+     -5.0,
+     35.2
+    ]
+   ],
+   "move": [
+    0.05,
+    0.95
+   ]
+  },
+  {
+   "role": "other",
+   "class": "pedestrian",
+   "drawn_as": "person:adult",
+   "label": "pedestrian",
+   "path": [
+    [
+     -5.2,
+     36.6
+    ],
+    [
+     5.6,
+     36.3
+    ]
+   ],
+   "move": [
+    0.15,
+    1.0
+   ]
+  }
+ ],
+ "props": [],
+ "signal": "red",
+ "queue": [],
+ "still": 0.45,
+ "camera": {
+  "pos": [
+   -1.5,
+   18.0,
+   5.0
+  ],
+  "look": [
+   1.0,
+   36.0,
+   0.0
+  ],
+  "lens": 28
+ },
+ "credits": "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md)"
+}

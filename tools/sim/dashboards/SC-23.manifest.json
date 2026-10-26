@@ -1,0 +1,190 @@
+{
+ "scenario": "SC-23",
+ "scene": "SC-23",
+ "blender": "5.2.3 LTS",
+ "render": {
+  "engine": "CYCLES",
+  "samples": 32,
+  "size": [
+   1600,
+   900
+  ],
+  "still_frame": 40,
+  "frames": 66,
+  "fps": 12,
+  "dashboard_samples": {
+   "chase": 32,
+   "dashboard": 16
+  },
+  "supersample": 1.5
+ },
+ "objects": {
+  "ego": [
+   1.75,
+   32.78
+  ],
+  "actor0-car": [
+   -0.39,
+   41.75
+  ]
+ },
+ "drawn": {
+  "light": "day",
+  "wet": false,
+  "rain": false,
+  "fog": false,
+  "beyond": [],
+  "features": [
+   "stop_sign"
+  ],
+  "stop_line": true,
+  "speed_sign": false,
+  "occlusion": false,
+  "props": [],
+  "signal": null,
+  "ego_lights": null,
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
+  "overlay_top_m": 0.05
+ },
+ "look": {
+  "assets": [
+   {
+    "slot": "asphalt",
+    "id": "asphalt_02",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "bin",
+    "id": "metal_trash_can",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "concrete",
+    "id": "Concrete034",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_a",
+    "id": "Facade018A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_b",
+    "id": "Facade019A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_c",
+    "id": "Facade020A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "grass",
+    "id": "Grass004",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "hdri_day",
+    "id": "kloofendal_48d_partly_cloudy_puresky",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "hydrant",
+    "id": "fire_hydrant",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "tree",
+    "id": "tree_small_02",
+    "source": "polyhaven"
+   }
+  ],
+  "furniture": {
+   "tree": 16,
+   "bin": 7,
+   "hydrant": 2
+  },
+  "pedestrians": "primitives"
+ },
+ "description": "tools/sim/scenes/SC-23.json",
+ "description_sha256": "51c08081f397e417d6d386458199ec35cb96b5ea583d2798ec6eccc22b7965ab",
+ "clip_texts": [
+  "SC-23 Give and take with other drivers",
+  "Four-way stops, merging and letting another vehicle out, where other drivers expect the vehicle to negotiate",
+  "One concrete scenario (seeded sample of the logical\nscenario)",
+  "ODD-20 Ego speed: 11.9 km/h (range 0 to 48 km/h)",
+  "ODD-04 Junctions: stop-controlled",
+  "ODD-17 Traffic density: congested",
+  "ODD-16 Traffic participants: car",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033);\nchoreography, not Autoware's planned braking",
+  "Safety goals at stake",
+  "SG-03 (ASIL C): Avoid unintended hard deceleration",
+  "Pass criterion",
+  "The vehicle takes its turn as the rules give it and shows when it\nyields and when it is about to move; its hesitations and stops\ncount against the SOTIF acceptance criteria (FSR-06.01, FSR-06.03,\nFSR-03.02, FM-17, HR-06, AC-02)",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Meant to do: takes its turn and shows it",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: Give and take with other drivers",
+  "Amber, ringed: the road user the scenario is about",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "texts": [
+  "SC-23 Give and take with other drivers",
+  "SG-03 ASIL C",
+  "Motion",
+  "choreography (qualitative)",
+  "Condition",
+  "not set by the scenario",
+  "Ego speed (sample)",
+  "11.9 km/h",
+  "Methods (WP-V-03)",
+  "Simulation, Road",
+  "Scenario (WP-V-03)",
+  "Four-way stops, merging and letting another vehicle out, where other drivers expect the vehicle to negotiate",
+  "Triggering conditions (WP-C-06)",
+  "TC-23 Drivers who expect give and take (four-way stops, merging, letting someone out)",
+  "Situations: OS-03, OS-08",
+  "One concrete scenario (seeded sample)",
+  "ODD-20 Ego speed: 11.9 km/h (range 0 to 48 km/h)",
+  "ODD-04 Junctions: stop-controlled",
+  "ODD-17 Traffic density: congested",
+  "ODD-16 Traffic participants: car",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "Ego robotaxi (choreography)",
+  "Car (qualitative)",
+  "Meant to do: takes its turn and shows it",
+  "Pass criterion: The vehicle takes its turn as the rules give it and shows when it yields and when it is about to move; its hesitations and stops count against the SOTIF acceptance criteria (FSR-06.01, FSR-06.03, FSR-03.02, FM-17, HR-06, AC-02)",
+  "start",
+  "car starts to move",
+  "vehicle starts to slow",
+  "vehicle stands still; main view",
+  "Forward view",
+  "Top view: planned path, envelope, hazard",
+  "Safety goals at stake",
+  "SG-03 (ASIL C): Avoid unintended hard deceleration",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: Give and take with other drivers",
+  "Amber, ringed: the road user the scenario is about",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "tags": [
+  "Ego robotaxi (choreography)",
+  "Car (qualitative)"
+ ],
+ "moments": [
+  "start",
+  "car starts to move",
+  "vehicle starts to slow",
+  "vehicle stands still; main view"
+ ],
+ "dashboard": "SC-23.jpg",
+ "dashboard_sha256": "c090f728359bd27d097d8e497ca867533588168cb383e5f3a5c5053d4f7cc486"
+}

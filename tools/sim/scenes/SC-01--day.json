@@ -1,0 +1,284 @@
+{
+ "version": 1,
+ "generator": "tools/sim/scene.py",
+ "key": "SC-01--day",
+ "variant": {
+  "of": "SC-01",
+  "label": "ODD-12 day"
+ },
+ "stamp": "qualitative illustration · not a simulation result · draft for engineering review",
+ "scenario": {
+  "id": "SC-01",
+  "name": "Pedestrian on or stepping onto a marked crosswalk",
+  "description": "The vehicle approaches a marked crosswalk in lane while a pedestrian is on it or steps onto it",
+  "situations": [
+   "OS-09"
+  ],
+  "events": [
+   {
+    "id": "HE-02.1",
+    "description": "Does not slow down for a pedestrian on the crosswalk"
+   },
+   {
+    "id": "HE-06.4",
+    "description": "Does not yield to a pedestrian on the crosswalk"
+   }
+  ],
+  "triggers": [
+   {
+    "id": "TC-02",
+    "condition": "Night or unlit streets, with road users in dark clothing"
+   },
+   {
+    "id": "TC-03",
+    "condition": "Light rain, spray thrown up by other vehicles, reflections from the wet road"
+   },
+   {
+    "id": "TC-15",
+    "condition": "People of unusual shape or posture (wheelchairs, children, people carrying large objects or pushing strollers)"
+   }
+  ],
+  "goals": [
+   {
+    "id": "SG-02",
+    "asil": "D",
+    "statement": "Decelerate at least as much as needed to avoid a collision the planned trajectory avoids"
+   },
+   {
+    "id": "SG-03",
+    "asil": "C",
+    "statement": "Avoid unintended hard deceleration"
+   },
+   {
+    "id": "SG-06",
+    "asil": "D",
+    "statement": "Do not enter an intersection, roundabout or crosswalk against right of way"
+   }
+  ],
+  "monitors": [],
+  "misuse": [
+   "MU-11"
+  ],
+  "losses": [
+   "LS-01",
+   "LS-02"
+  ],
+  "methods": [
+   "Simulation",
+   "Track",
+   "Road"
+  ],
+  "meant": "yields before the crosswalk",
+  "pass": "No contact with the pedestrian; the vehicle yields as the traffic rules require, and the monitor commands the deceleration that restores the safe distance whenever Autoware does not; unjustified hard braking counts against the SOTIF acceptance criteria",
+  "pass_refs": [
+   "FSR-02.01",
+   "FSR-02.02",
+   "FSR-02.05",
+   "FSR-03.01",
+   "FSR-06.01",
+   "FSR-06.03",
+   "AC-02"
+  ],
+  "source": "assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ },
+ "sample": {
+  "salt": "tools/sim sample 1",
+  "parameters": [
+   {
+    "parameter": "ODD-20",
+    "range": "0 to 48 km/h",
+    "value": 47.9,
+    "unit": "km/h",
+    "crosses": false,
+    "label": "ODD-20 Ego speed: 47.9 km/h (range 0 to 48 km/h)"
+   },
+   {
+    "parameter": "ODD-03",
+    "range": "up to 30 mph",
+    "value": 30,
+    "unit": "mph",
+    "crosses": false,
+    "label": "ODD-03 Posted speed limit: 30 mph (the stated bound)"
+   },
+   {
+    "parameter": "ODD-05",
+    "range": "marked-crosswalk, signalised-crosswalk",
+    "value": "marked-crosswalk",
+    "chosen": "seeded",
+    "outside": false,
+    "label": "ODD-05 Crossings: marked-crosswalk"
+   },
+   {
+    "parameter": "ODD-16",
+    "range": "pedestrian, child, wheelchair",
+    "value": "pedestrian",
+    "chosen": "seeded",
+    "outside": false,
+    "label": "ODD-16 Traffic participants: pedestrian"
+   },
+   {
+    "parameter": "ODD-12",
+    "range": "day, dusk, night, unlit",
+    "value": "day",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-12 Illumination: day"
+   },
+   {
+    "parameter": "ODD-10",
+    "range": "0 to 2.5 mm/h",
+    "value": 0.6,
+    "unit": "mm/h",
+    "crosses": false,
+    "label": "ODD-10 Precipitation: 0.6 mm/h (range 0 to 2.5 mm/h)"
+   },
+   {
+    "parameter": "ODD-13",
+    "range": "dry, wet",
+    "value": "wet",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-13 Road surface condition: wet"
+   },
+   {
+    "parameter": "Pedestrian walking speed and start time",
+    "range": "Bound stated by FSR-06.01, not yet fixed",
+    "value": null,
+    "label": "Pedestrian walking speed and start time: Bound stated by FSR-06.01, not yet fixed; the motion drawn is choreography"
+   }
+  ]
+ },
+ "condition_label": "ODD-12 day · ODD-13 wet · ODD-10 0.6 mm/h",
+ "conditions": {
+  "light": "day",
+  "surface": "wet",
+  "rain": 0.6,
+  "visibility": null,
+  "beyond": null,
+  "rain_limit": 2.5
+ },
+ "legend": {
+  "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "meant": "Meant to do: yields before the crosswalk",
+  "meant_mark": "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "hazard": "Where the hazard lies: HE-02.1 Does not slow down for a pedestrian on the crosswalk; HE-06.4 Does not yield to a pedestrian on the crosswalk",
+  "key": "Amber, ringed: the road user the scenario is about"
+ },
+ "road": {
+  "length": [
+   -40,
+   110
+  ],
+  "lane": 3.5,
+  "parking": 0,
+  "sidewalk": 3.5,
+  "crosswalk": [
+   30.0,
+   34.0
+  ],
+  "stop_line": 28.0,
+  "speed_sign": {
+   "at": [
+    4.4,
+    8.0
+   ],
+   "value": 30,
+   "unit": "mph"
+  }
+ },
+ "features": [],
+ "ego": {
+  "path": [
+   [
+    1.75,
+    -12.31
+   ],
+   [
+    1.75,
+    25.2
+   ]
+  ],
+  "stops": true,
+  "speed_kmh": 47.9,
+  "decel": 3.0,
+  "motion_label": "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking"
+ },
+ "plan": [
+  [
+   1.75,
+   0.0
+  ],
+  [
+   1.75,
+   100.0
+  ]
+ ],
+ "occlusion": [],
+ "hazard": [
+  0.0,
+  30.0,
+  3.5,
+  34.0
+ ],
+ "actors": [
+  {
+   "role": "key",
+   "class": "pedestrian",
+   "drawn_as": "person:adult",
+   "label": "pedestrian",
+   "path": [
+    [
+     5.8,
+     31.6
+    ],
+    [
+     -4.5,
+     32.4
+    ]
+   ],
+   "move": [
+    0.15,
+    1.0
+   ]
+  },
+  {
+   "role": "other",
+   "class": "car",
+   "drawn_as": "sedan",
+   "label": "car",
+   "path": [
+    [
+     -1.75,
+     70.0
+    ],
+    [
+     -1.75,
+     40.0
+    ]
+   ],
+   "move": [
+    0,
+    0.5
+   ]
+  }
+ ],
+ "props": [],
+ "signal": null,
+ "queue": [],
+ "still": 0.55,
+ "camera": {
+  "pos": [
+   -1.5,
+   -9.0,
+   5.5
+  ],
+  "look": [
+   1.0,
+   30.0,
+   0.0
+  ],
+  "lens": 28
+ },
+ "credits": "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md)"
+}

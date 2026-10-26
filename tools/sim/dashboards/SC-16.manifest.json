@@ -1,0 +1,202 @@
+{
+ "scenario": "SC-16",
+ "scene": "SC-16",
+ "blender": "5.2.3 LTS",
+ "render": {
+  "engine": "CYCLES",
+  "samples": 32,
+  "size": [
+   1600,
+   900
+  ],
+  "still_frame": 48,
+  "frames": 108,
+  "fps": 12,
+  "dashboard_samples": {
+   "chase": 32,
+   "dashboard": 16
+  },
+  "supersample": 1.5
+ },
+ "objects": {
+  "ego": [
+   1.75,
+   29.4
+  ],
+  "actor0-child": [
+   0.91,
+   34.98
+  ],
+  "actor1-pedestrian": [
+   -1.41,
+   36.49
+  ]
+ },
+ "drawn": {
+  "light": "day",
+  "wet": false,
+  "rain": false,
+  "fog": false,
+  "beyond": [],
+  "features": [
+   "ped_signals",
+   "signals"
+  ],
+  "stop_line": true,
+  "speed_sign": false,
+  "occlusion": false,
+  "props": [],
+  "signal": "red",
+  "ego_lights": null,
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
+  "overlay_top_m": 0.05
+ },
+ "look": {
+  "assets": [
+   {
+    "slot": "asphalt",
+    "id": "asphalt_02",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "bin",
+    "id": "metal_trash_can",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "concrete",
+    "id": "Concrete034",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_a",
+    "id": "Facade018A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_b",
+    "id": "Facade019A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_c",
+    "id": "Facade020A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "grass",
+    "id": "Grass004",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "hdri_day",
+    "id": "kloofendal_48d_partly_cloudy_puresky",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "hydrant",
+    "id": "fire_hydrant",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "tree",
+    "id": "tree_small_02",
+    "source": "polyhaven"
+   }
+  ],
+  "furniture": {
+   "tree": 12,
+   "bin": 5,
+   "hydrant": 2
+  },
+  "pedestrians": "Quaternius (CC0)"
+ },
+ "description": "tools/sim/scenes/SC-16.json",
+ "description_sha256": "21f0199448b8cedf2a136db2c04d05098ad6d54625b3c8d3cc995729e96ba95e",
+ "clip_texts": [
+  "SC-16 Stopped at a red light with pedestrians crossing in front",
+  "The vehicle waits at a red light or in a queue on a gradient while pedestrians cross in front of it",
+  "One concrete scenario (seeded sample of the logical\nscenario)",
+  "ODD-04 Junctions: signalised",
+  "ODD-05 Crossings: signalised-crosswalk",
+  "ODD-06 Road surface and geometry: 1.1 % (range 0 to 8 %)",
+  "ODD-16 Traffic participants: child",
+  "ODD-13 Road surface condition: dry",
+  "Ego stands still throughout; choreography",
+  "Safety goals at stake",
+  "SG-01 (ASIL D): Avoid unintended acceleration",
+  "SG-05 (ASIL D): Avoid unintended motion from standstill, forward\nor backward",
+  "Pass criterion",
+  "The vehicle stays held until every release condition holds; motion\nwhile holding is detected and the park brake applied; no\nacceleration toward a detected road user (FSR-05.01, FSR-05.02,\nFSR-05.04, FSR-01.01, FSR-01.02)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Meant to do: stays held until it may go",
+  "Green ring: where the pass criterion holds the vehicle",
+  "Where the hazard lies: HE-01.1 Pulls away from standstill into the pedestrians crossing in front; HE-05.2 Creeps or rolls into the crosswalk while\nstopped at a red light",
+  "Amber, ringed: the road user the scenario is about",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "texts": [
+  "SC-16 Stopped at a red light with pedestrians crossing in front",
+  "SG-01 ASIL D",
+  "SG-05 ASIL D",
+  "Motion",
+  "choreography (qualitative)",
+  "Condition",
+  "ODD-13 dry",
+  "Ego speed (sample)",
+  "—",
+  "Methods (WP-V-03)",
+  "In the loop, Bench, Track",
+  "Scenario (WP-V-03)",
+  "The vehicle waits at a red light or in a queue on a gradient while pedestrians cross in front of it",
+  "Hazardous events (WP-C-03)",
+  "HE-01.1 Pulls away from standstill into the pedestrians crossing in front",
+  "HE-05.2 Creeps or rolls into the crosswalk while stopped at a red light",
+  "Situations: OS-06",
+  "Loss scenarios (WP-A-05): LS-20, LS-21",
+  "One concrete scenario (seeded sample)",
+  "ODD-04 Junctions: signalised",
+  "ODD-05 Crossings: signalised-crosswalk",
+  "ODD-06 Road surface and geometry: 1.1 % (range 0 to 8 %)",
+  "ODD-16 Traffic participants: child",
+  "ODD-13 Road surface condition: dry",
+  "Ego stands still throughout; choreography",
+  "Ego robotaxi (choreography)",
+  "Child (qualitative)",
+  "Pedestrian (qualitative)",
+  "Meant to do: stays held until it may go",
+  "Pass criterion: The vehicle stays held until every release condition holds; motion while holding is detected and the park brake applied; no acceleration toward a detected road user (FSR-05.01, FSR-05.02, FSR-05.04, FSR-01.01, FSR-01.02)",
+  "start",
+  "child starts to move",
+  "the moment in the main view",
+  "end; the vehicle stood throughout",
+  "Forward view",
+  "Top view: planned path, envelope, hazard",
+  "Safety goals at stake",
+  "SG-01 (ASIL D): Avoid unintended acceleration",
+  "SG-05 (ASIL D): Avoid unintended motion from standstill, forward or backward",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Green ring: where the pass criterion holds the vehicle",
+  "Where the hazard lies: HE-01.1 Pulls away from standstill into the pedestrians crossing in front; HE-05.2 Creeps or rolls into the crosswalk while stopped at a red light",
+  "Amber, ringed: the road user the scenario is about",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven; pedestrians: Quaternius (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "tags": [
+  "Ego robotaxi (choreography)",
+  "Child (qualitative)",
+  "Pedestrian (qualitative)"
+ ],
+ "moments": [
+  "start",
+  "child starts to move",
+  "the moment in the main view",
+  "end; the vehicle stood throughout"
+ ],
+ "dashboard": "SC-16.jpg",
+ "dashboard_sha256": "1a03d7501689d262473d83369d66177c1e1a5f5974847798371ac53a00db455d"
+}

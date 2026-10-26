@@ -1,0 +1,38 @@
+name: sim
+
+# The scenario scene descriptions (tools/sim/scenes/*.json) are generated from the scenario records by
+# tools/sim/scene.py. This runs on every pull request, whatever it touches: a change to a record a scene reads (a
+# scenario, a safety goal, an ODD attribute, a rating) must regenerate the descriptions in the same pull request.
+# Read-only. The Blender renders are made by sim-render.yaml and are never committed (tools/sim/README.md).
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'push' && github.run_id || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Scenario scene descriptions are current
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Install PyYAML
+        run: python3 -m pip install --quiet --user --break-system-packages -r assurance/requirements.txt
+
+      - name: Unit tests of the scene tools
+        run: python3 -m unittest discover -s tools/sim -p 'test_*.py' -v
+
+      - name: Every scene description is current
+        run: python3 tools/sim/scene.py --check

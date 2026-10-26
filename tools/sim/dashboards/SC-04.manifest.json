@@ -1,0 +1,208 @@
+{
+ "scenario": "SC-04",
+ "scene": "SC-04",
+ "blender": "5.2.3 LTS",
+ "render": {
+  "engine": "CYCLES",
+  "samples": 32,
+  "size": [
+   1600,
+   900
+  ],
+  "still_frame": 72,
+  "frames": 172,
+  "fps": 12,
+  "dashboard_samples": {
+   "chase": 32,
+   "dashboard": 16
+  },
+  "supersample": 1.5
+ },
+ "objects": {
+  "ego": [
+   1.75,
+   25.26
+  ],
+  "actor0-car": [
+   1.75,
+   15.26
+  ],
+  "actor1-car": [
+   -1.75,
+   47.89
+  ]
+ },
+ "drawn": {
+  "light": "day",
+  "wet": true,
+  "rain": true,
+  "fog": true,
+  "beyond": [],
+  "features": [],
+  "stop_line": false,
+  "speed_sign": false,
+  "occlusion": false,
+  "props": [
+   "steam"
+  ],
+  "signal": null,
+  "ego_lights": null,
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
+  "overlay_top_m": 0.05
+ },
+ "look": {
+  "assets": [
+   {
+    "slot": "asphalt",
+    "id": "asphalt_02",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "bin",
+    "id": "metal_trash_can",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "concrete",
+    "id": "Concrete034",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_a",
+    "id": "Facade018A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_b",
+    "id": "Facade019A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_c",
+    "id": "Facade020A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "grass",
+    "id": "Grass004",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "hdri_overcast",
+    "id": "overcast_soil_puresky",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "hydrant",
+    "id": "fire_hydrant",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "tree",
+    "id": "tree_small_02",
+    "source": "polyhaven"
+   }
+  ],
+  "furniture": {
+   "tree": 6,
+   "bin": 4,
+   "hydrant": 2
+  },
+  "pedestrians": "primitives"
+ },
+ "description": "tools/sim/scenes/SC-04.json",
+ "description_sha256": "ccb98035964b35dfe7b246d2143a69a95ee02bde4405b727a6cdd76b4eafbc5e",
+ "clip_texts": [
+  "SC-04 Spurious obstacle with a road user following",
+  "Spray, steam, blowing debris or a soiled sensor produces a false obstacle in the path while a car or motorcycle follows\nclosely, possibly with an unbelted passenger",
+  "One concrete scenario (seeded sample of the logical\nscenario)",
+  "ODD-20 Ego speed: 15.1 km/h (range 0 to 48 km/h)",
+  "ODD-10 Precipitation: 0.5 mm/h (range 0 to 2.5 mm/h)",
+  "ODD-11 Visibility: 200 m (the stated bound)",
+  "ODD-13 Road surface condition: wet",
+  "ODD-16 Traffic participants: car",
+  "Gap of the following road user: Bound stated by FSR-06.01, not yet\nfixed; the motion drawn is choreography",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033);\nchoreography, not Autoware's planned braking",
+  "Safety goals at stake",
+  "SG-02 (ASIL D): Decelerate at least as much as needed to avoid a\ncollision the planned trajectory avoids",
+  "SG-03 (ASIL C): Avoid unintended hard deceleration",
+  "Pass criterion",
+  "Braking that the safety channel does not confirm stays at or below\nthe firm level; emergency braking happens only when a road user is\nconfirmed; a blocked safety sensor is detected and Autoware stops\ncomfortably; the belt warning acts (FSR-03.01, FSR-03.02,\nFSR-03.03, FSR-02.01, FSR-07.08, FM-10, HR-03, AC-02)",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Meant to do: no hard brake for an unconfirmed object",
+  "Dashed green: the path the pass criterion asks of the vehicle",
+  "Where the hazard lies: HE-03.1 Brakes hard for no reason with a vehicle or motorcycle following; HE-03.2 Brakes hard for no reason while a passenger is\nunbelted (foreseeable misuse)",
+  "Amber, ringed: the road user the scenario is about",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "texts": [
+  "SC-04 Spurious obstacle with a road user following",
+  "SG-02 ASIL D",
+  "SG-03 ASIL C",
+  "Motion",
+  "choreography (qualitative)",
+  "Condition",
+  "ODD-13 wet · ODD-10 0.5 mm/h · ODD-11 200 m",
+  "Ego speed (sample)",
+  "15.1 km/h",
+  "Methods (WP-V-03)",
+  "Simulation, Track",
+  "Scenario (WP-V-03)",
+  "Spray, steam, blowing debris or a soiled sensor produces a false obstacle in the path while a car or motorcycle follows closely, possibly with an unbelted passenger",
+  "Hazardous events (WP-C-03)",
+  "HE-03.1 Brakes hard for no reason with a vehicle or motorcycle following",
+  "HE-03.2 Brakes hard for no reason while a passenger is unbelted (foreseeable misuse)",
+  "Triggering conditions (WP-C-06)",
+  "TC-03 Light rain, spray thrown up by other vehicles, reflections from the wet road",
+  "TC-04 Steam from vents, exhaust plumes, blowing dust or leaves",
+  "TC-24 Sensors soiled or blocked by dirt, insects or water drops",
+  "Situations: OS-01",
+  "Misuse (WP-C-08): MU-04, MU-07",
+  "Loss scenarios (WP-A-05): LS-08, LS-19",
+  "One concrete scenario (seeded sample)",
+  "ODD-20 Ego speed: 15.1 km/h (range 0 to 48 km/h)",
+  "ODD-10 Precipitation: 0.5 mm/h (range 0 to 2.5 mm/h)",
+  "ODD-11 Visibility: 200 m (the stated bound)",
+  "ODD-13 Road surface condition: wet",
+  "ODD-16 Traffic participants: car",
+  "Gap of the following road user: Bound stated by FSR-06.01, not yet fixed; the motion drawn is choreography",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "Car (qualitative)",
+  "Ego robotaxi (choreography)",
+  "Car (qualitative)",
+  "Meant to do: no hard brake for an unconfirmed object",
+  "Pass criterion: Braking that the safety channel does not confirm stays at or below the firm level; emergency braking happens only when a road user is confirmed; a blocked safety sensor is detected and Autoware stops comfortably; the belt warning acts (FSR-03.01, FSR-03.02, FSR-03.03, FSR-02.01, FSR-07.08, FM-10, HR-03, AC-02)",
+  "start",
+  "the moment in the main view",
+  "end",
+  "Forward view",
+  "Top view: planned path, envelope, hazard",
+  "Safety goals at stake",
+  "SG-02 (ASIL D): Decelerate at least as much as needed to avoid a collision the planned trajectory avoids",
+  "SG-03 (ASIL C): Avoid unintended hard deceleration",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle",
+  "Where the hazard lies: HE-03.1 Brakes hard for no reason with a vehicle or motorcycle following; HE-03.2 Brakes hard for no reason while a passenger is unbelted (foreseeable misuse)",
+  "Amber, ringed: the road user the scenario is about",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "tags": [
+  "Ego robotaxi (choreography)",
+  "Car (qualitative)",
+  "Car (qualitative)"
+ ],
+ "moments": [
+  "start",
+  "the moment in the main view",
+  "end"
+ ],
+ "dashboard": "SC-04.jpg",
+ "dashboard_sha256": "81b2e9c346814292b28a07be10096adbb2780812c51ef276e241a7e3e134db68"
+}

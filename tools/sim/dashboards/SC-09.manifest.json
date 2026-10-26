@@ -1,0 +1,213 @@
+{
+ "scenario": "SC-09",
+ "scene": "SC-09",
+ "blender": "5.2.3 LTS",
+ "render": {
+  "engine": "CYCLES",
+  "samples": 32,
+  "size": [
+   1600,
+   900
+  ],
+  "still_frame": 201,
+  "frames": 403,
+  "fps": 12,
+  "dashboard_samples": {
+   "chase": 32,
+   "dashboard": 16
+  },
+  "supersample": 1.5
+ },
+ "objects": {
+  "ego": [
+   1.75,
+   35.0
+  ],
+  "actor0-truck": [
+   -1.75,
+   45.0
+  ],
+  "actor1-car": [
+   -1.75,
+   78.89
+  ]
+ },
+ "drawn": {
+  "light": "day",
+  "wet": false,
+  "rain": false,
+  "fog": false,
+  "beyond": [],
+  "features": [
+   "no_markings"
+  ],
+  "stop_line": false,
+  "speed_sign": true,
+  "occlusion": false,
+  "props": [],
+  "signal": null,
+  "ego_lights": null,
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
+  "overlay_top_m": 0.05
+ },
+ "look": {
+  "assets": [
+   {
+    "slot": "asphalt",
+    "id": "asphalt_02",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "bin",
+    "id": "metal_trash_can",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "concrete",
+    "id": "Concrete034",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_a",
+    "id": "Facade018A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_b",
+    "id": "Facade019A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_c",
+    "id": "Facade020A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "grass",
+    "id": "Grass004",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "hdri_day",
+    "id": "kloofendal_48d_partly_cloudy_puresky",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "hydrant",
+    "id": "fire_hydrant",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "tree",
+    "id": "tree_small_02",
+    "source": "polyhaven"
+   }
+  ],
+  "furniture": {
+   "tree": 4,
+   "bin": 6,
+   "hydrant": 4
+  },
+  "pedestrians": "primitives"
+ },
+ "description": "tools/sim/scenes/SC-09.json",
+ "description_sha256": "51bee2498c0931aff7433d4c1d404c033fd1fdf253a46f5a6dba329e7d6e6120",
+ "clip_texts": [
+  "SC-09 Lane keeping where localisation is degraded",
+  "Driving in lane beside oncoming traffic or the sidewalk on a street with few features, many moved objects, or large\nvehicles blocking the view",
+  "One concrete scenario (seeded sample of the logical\nscenario)",
+  "ODD-20 Ego speed: 7.5 km/h (range 0 to 48 km/h)",
+  "ODD-01 Area: geofence",
+  "ODD-02 Road type: centre-line",
+  "ODD-03 Posted speed limit: 30 mph (the stated bound)",
+  "ODD-07 Lane markings: markings-absent",
+  "ODD-08 Temporary changes: none",
+  "ODD-15 Connectivity: gnss-lost",
+  "ODD-17 Traffic density: free-flow",
+  "ODD-06 Road surface and geometry: 5.3 % (range 0 to 8 %)",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033);\nchoreography, not Autoware's planned braking",
+  "Safety goals at stake",
+  "SG-02 (ASIL D): Decelerate at least as much as needed to avoid a\ncollision the planned trajectory avoids",
+  "SG-04 (ASIL D): Avoid unintended lateral motion out of the planned\npath",
+  "SG-06 (ASIL D): Do not enter an intersection, roundabout or\ncrosswalk against right of way",
+  "Pass criterion",
+  "The vehicle stays in its lane and drivable area; a steering\ncommand toward a detected road user or kerb is rejected and the\nvehicle stops in lane; a degraded pose is detected (FSR-04.01,\nFSR-04.02, FSR-04.03, FSR-04.05, FSR-02.02, FSR-03.01, FSR-06.01,\nFM-09, AC-02)",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Meant to do: keeps its lane, or stops in it",
+  "Dashed green: the path the pass criterion asks of the vehicle",
+  "Where the hazard lies: HE-04.1 Steers into the oncoming lane; HE-04.3 Steers onto the sidewalk at low speed",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "texts": [
+  "SC-09 Lane keeping where localisation is degraded",
+  "SG-02 ASIL D",
+  "SG-04 ASIL D",
+  "SG-06 ASIL D",
+  "Motion",
+  "choreography (qualitative)",
+  "Condition",
+  "not set by the scenario",
+  "Ego speed (sample)",
+  "7.5 km/h",
+  "Methods (WP-V-03)",
+  "Simulation, Road",
+  "Scenario (WP-V-03)",
+  "Driving in lane beside oncoming traffic or the sidewalk on a street with few features, many moved objects, or large vehicles blocking the view",
+  "Hazardous events (WP-C-03)",
+  "HE-04.1 Steers into the oncoming lane",
+  "HE-04.3 Steers onto the sidewalk at low speed",
+  "Triggering conditions (WP-C-06)",
+  "TC-08 Streets with few features, or with many objects moved since the point cloud map was made",
+  "TC-11 Large vehicles alongside, blocking the LiDAR's view of the surroundings",
+  "Situations: OS-01, OS-02",
+  "Loss scenarios (WP-A-05): LS-05",
+  "One concrete scenario (seeded sample)",
+  "ODD-20 Ego speed: 7.5 km/h (range 0 to 48 km/h)",
+  "ODD-01 Area: geofence",
+  "ODD-02 Road type: centre-line",
+  "ODD-03 Posted speed limit: 30 mph (the stated bound)",
+  "ODD-07 Lane markings: markings-absent",
+  "ODD-08 Temporary changes: none",
+  "ODD-15 Connectivity: gnss-lost",
+  "ODD-17 Traffic density: free-flow",
+  "ODD-06 Road surface and geometry: 5.3 % (range 0 to 8 %)",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "Ego robotaxi (choreography)",
+  "Truck (qualitative)",
+  "Car (qualitative)",
+  "Meant to do: keeps its lane, or stops in it",
+  "Pass criterion: The vehicle stays in its lane and drivable area; a steering command toward a detected road user or kerb is rejected and the vehicle stops in lane; a degraded pose is detected (FSR-04.01, FSR-04.02, FSR-04.03, FSR-04.05, FSR-02.02, FSR-03.01, FSR-06.01, FM-09, AC-02)",
+  "start",
+  "the moment in the main view",
+  "end",
+  "Forward view",
+  "Top view: planned path, envelope, hazard",
+  "Safety goals at stake",
+  "SG-02 (ASIL D): Decelerate at least as much as needed to avoid a collision the planned trajectory avoids",
+  "SG-04 (ASIL D): Avoid unintended lateral motion out of the planned path",
+  "SG-06 (ASIL D): Do not enter an intersection, roundabout or crosswalk against right of way",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle",
+  "Where the hazard lies: HE-04.1 Steers into the oncoming lane; HE-04.3 Steers onto the sidewalk at low speed",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "tags": [
+  "Ego robotaxi (choreography)",
+  "Truck (qualitative)",
+  "Car (qualitative)"
+ ],
+ "moments": [
+  "start",
+  "the moment in the main view",
+  "end"
+ ],
+ "dashboard": "SC-09.jpg",
+ "dashboard_sha256": "5bef9392f5226aad0d92dff133a32547f3d799bfee74addf5ff10102327d606c"
+}

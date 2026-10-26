@@ -1,0 +1,282 @@
+{
+ "version": 1,
+ "generator": "tools/sim/scene.py",
+ "key": "SC-09--markings-visible",
+ "variant": {
+  "of": "SC-09",
+  "label": "ODD-07 markings-visible"
+ },
+ "stamp": "qualitative illustration · not a simulation result · draft for engineering review",
+ "scenario": {
+  "id": "SC-09",
+  "name": "Lane keeping where localisation is degraded",
+  "description": "Driving in lane beside oncoming traffic or the sidewalk on a street with few features, many moved objects, or large vehicles blocking the view",
+  "situations": [
+   "OS-01",
+   "OS-02"
+  ],
+  "events": [
+   {
+    "id": "HE-04.1",
+    "description": "Steers into the oncoming lane"
+   },
+   {
+    "id": "HE-04.3",
+    "description": "Steers onto the sidewalk at low speed"
+   }
+  ],
+  "triggers": [
+   {
+    "id": "TC-08",
+    "condition": "Streets with few features, or with many objects moved since the point cloud map was made"
+   },
+   {
+    "id": "TC-11",
+    "condition": "Large vehicles alongside, blocking the LiDAR's view of the surroundings"
+   }
+  ],
+  "goals": [
+   {
+    "id": "SG-02",
+    "asil": "D",
+    "statement": "Decelerate at least as much as needed to avoid a collision the planned trajectory avoids"
+   },
+   {
+    "id": "SG-04",
+    "asil": "D",
+    "statement": "Avoid unintended lateral motion out of the planned path"
+   },
+   {
+    "id": "SG-06",
+    "asil": "D",
+    "statement": "Do not enter an intersection, roundabout or crosswalk against right of way"
+   }
+  ],
+  "monitors": [],
+  "misuse": [],
+  "losses": [
+   "LS-05"
+  ],
+  "methods": [
+   "Simulation",
+   "Road"
+  ],
+  "meant": "keeps its lane, or stops in it",
+  "pass": "The vehicle stays in its lane and drivable area; a steering command toward a detected road user or kerb is rejected and the vehicle stops in lane; a degraded pose is detected",
+  "pass_refs": [
+   "FSR-04.01",
+   "FSR-04.02",
+   "FSR-04.03",
+   "FSR-04.05",
+   "FSR-02.02",
+   "FSR-03.01",
+   "FSR-06.01",
+   "FM-09",
+   "AC-02"
+  ],
+  "source": "assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ },
+ "sample": {
+  "salt": "tools/sim sample 1",
+  "parameters": [
+   {
+    "parameter": "ODD-20",
+    "range": "0 to 48 km/h",
+    "value": 7.5,
+    "unit": "km/h",
+    "crosses": false,
+    "label": "ODD-20 Ego speed: 7.5 km/h (range 0 to 48 km/h)"
+   },
+   {
+    "parameter": "ODD-01",
+    "range": "geofence",
+    "value": "geofence",
+    "chosen": "seeded",
+    "outside": false,
+    "label": "ODD-01 Area: geofence"
+   },
+   {
+    "parameter": "ODD-02",
+    "range": "urban-street, collector, centre-line",
+    "value": "centre-line",
+    "chosen": "seeded",
+    "outside": false,
+    "label": "ODD-02 Road type: centre-line"
+   },
+   {
+    "parameter": "ODD-03",
+    "range": "up to 30 mph",
+    "value": 30,
+    "unit": "mph",
+    "crosses": false,
+    "label": "ODD-03 Posted speed limit: 30 mph (the stated bound)"
+   },
+   {
+    "parameter": "ODD-07",
+    "range": "markings-visible, markings-absent",
+    "value": "markings-visible",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-07 Lane markings: markings-visible"
+   },
+   {
+    "parameter": "ODD-08",
+    "range": "none, captured",
+    "value": "none",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-08 Temporary changes: none"
+   },
+   {
+    "parameter": "ODD-15",
+    "range": "gnss-lost",
+    "value": "gnss-lost",
+    "chosen": "seeded",
+    "outside": false,
+    "label": "ODD-15 Connectivity: gnss-lost"
+   },
+   {
+    "parameter": "ODD-17",
+    "range": "free-flow, congested",
+    "value": "free-flow",
+    "chosen": "layout",
+    "outside": false,
+    "label": "ODD-17 Traffic density: free-flow"
+   },
+   {
+    "parameter": "ODD-06",
+    "range": "0 to 8 %",
+    "value": 5.3,
+    "unit": "%",
+    "crosses": false,
+    "label": "ODD-06 Road surface and geometry: 5.3 % (range 0 to 8 %)"
+   }
+  ]
+ },
+ "condition_label": "not set by the scenario",
+ "conditions": {
+  "light": "day",
+  "surface": "dry",
+  "rain": null,
+  "visibility": null,
+  "beyond": null
+ },
+ "legend": {
+  "plan": "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "envelope": "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "meant": "Meant to do: keeps its lane, or stops in it",
+  "meant_mark": "Dashed green: the path the pass criterion asks of the vehicle",
+  "hazard": "Where the hazard lies: HE-04.1 Steers into the oncoming lane; HE-04.3 Steers onto the sidewalk at low speed"
+ },
+ "road": {
+  "length": [
+   -40,
+   120
+  ],
+  "lane": 3.5,
+  "parking": 0,
+  "sidewalk": 3.0,
+  "speed_sign": {
+   "at": [
+    4.4,
+    8.0
+   ],
+   "value": 30,
+   "unit": "mph"
+  }
+ },
+ "features": [],
+ "ego": {
+  "path": [
+   [
+    1.75,
+    0.0
+   ],
+   [
+    1.75,
+    70.0
+   ]
+  ],
+  "stops": false,
+  "speed_kmh": 7.5,
+  "decel": 3.0,
+  "motion_label": "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking"
+ },
+ "plan": [
+  [
+   1.75,
+   0.0
+  ],
+  [
+   1.75,
+   110.0
+  ]
+ ],
+ "occlusion": [],
+ "hazard": [
+  -0.4,
+  20.0,
+  0.4,
+  60.0
+ ],
+ "actors": [
+  {
+   "role": "other",
+   "class": "truck",
+   "drawn_as": "box:truck",
+   "label": "truck",
+   "path": [
+    [
+     -1.75,
+     100.0
+    ],
+    [
+     -1.75,
+     -10.0
+    ]
+   ],
+   "move": [
+    0.0,
+    1.0
+   ]
+  },
+  {
+   "role": "other",
+   "class": "car",
+   "drawn_as": "sedan",
+   "label": "car",
+   "path": [
+    [
+     -1.75,
+     118.0
+    ],
+    [
+     -1.75,
+     30.0
+    ]
+   ],
+   "move": [
+    0.1,
+    1.0
+   ]
+  }
+ ],
+ "props": [],
+ "signal": null,
+ "queue": [],
+ "still": 0.5,
+ "camera": {
+  "pos": [
+   -1.5,
+   -9.0,
+   5.0
+  ],
+  "look": [
+   1.0,
+   30.0,
+   0.0
+  ],
+  "lens": 28
+ },
+ "credits": "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md)"
+}

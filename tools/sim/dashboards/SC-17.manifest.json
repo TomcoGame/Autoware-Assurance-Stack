@@ -1,0 +1,188 @@
+{
+ "scenario": "SC-17",
+ "scene": "SC-17",
+ "blender": "5.2.3 LTS",
+ "render": {
+  "engine": "CYCLES",
+  "samples": 32,
+  "size": [
+   1600,
+   900
+  ],
+  "still_frame": 87,
+  "frames": 141,
+  "fps": 12,
+  "dashboard_samples": {
+   "chase": 32,
+   "dashboard": 16
+  },
+  "supersample": 1.5
+ },
+ "objects": {
+  "ego": [
+   1.75,
+   40.0
+  ],
+  "actor0-car": [
+   -1.75,
+   37.96
+  ]
+ },
+ "drawn": {
+  "light": "day",
+  "wet": false,
+  "rain": false,
+  "fog": false,
+  "beyond": [],
+  "features": [],
+  "stop_line": false,
+  "speed_sign": false,
+  "occlusion": false,
+  "props": [],
+  "signal": null,
+  "ego_lights": "hazard",
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
+  "overlay_top_m": 0.05
+ },
+ "look": {
+  "assets": [
+   {
+    "slot": "asphalt",
+    "id": "asphalt_02",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "bin",
+    "id": "metal_trash_can",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "concrete",
+    "id": "Concrete034",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_a",
+    "id": "Facade018A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_b",
+    "id": "Facade019A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_c",
+    "id": "Facade020A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "grass",
+    "id": "Grass004",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "hdri_day",
+    "id": "kloofendal_48d_partly_cloudy_puresky",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "hydrant",
+    "id": "fire_hydrant",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "tree",
+    "id": "tree_small_02",
+    "source": "polyhaven"
+   }
+  ],
+  "furniture": {
+   "tree": 8,
+   "bin": 3,
+   "hydrant": 7
+  },
+  "pedestrians": "primitives"
+ },
+ "description": "tools/sim/scenes/SC-17.json",
+ "description_sha256": "0021f33506bbcc012a6fc0cabb13ea056d9795ae143769d7eee31ea675ce2dce",
+ "clip_texts": [
+  "SC-17 Loss of Autoware while driving",
+  "Autoware's commands stop, freeze or become implausible while driving in lane; other road users then pass the vehicle\nstopped in lane",
+  "One concrete scenario (seeded sample of the logical\nscenario)",
+  "ODD-20 Ego speed: 30 km/h (range 0 to 48 km/h; picked, not seeded)",
+  "ODD-17 Traffic density: free-flow",
+  "ODD-02 Road type: urban-street",
+  "ODD-12 Illumination: day",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033);\nchoreography, not Autoware's planned braking",
+  "Safety goals at stake",
+  "SG-07 (ASIL D): Reach a minimal risk condition whenever the item\ncan no longer drive safely",
+  "Pass criterion",
+  "The monitor detects the loss within its detection budget and stops\nthe vehicle in lane with hazard lights on, without Autoware; a\nfault of the monitor itself leads to the vehicle's own stop, never\nto the park brake while moving (FSR-07.01, FSR-07.02, FSR-07.06,\nFSR-07.07, FSR-01.01, FSR-02.02, FSR-04.01, TR-01, SR-01, SR-04)",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Meant to do: the monitor stops it in lane",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: HE-07.1 After a fault in planning or control, keeps driving without control instead of stopping",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "texts": [
+  "SC-17 Loss of Autoware while driving",
+  "SG-07 ASIL D",
+  "Motion",
+  "choreography (qualitative)",
+  "Condition",
+  "ODD-12 day",
+  "Ego speed (sample)",
+  "30 km/h",
+  "Methods (WP-V-03)",
+  "In the loop, Track",
+  "Scenario (WP-V-03)",
+  "Autoware's commands stop, freeze or become implausible while driving in lane; other road users then pass the vehicle stopped in lane",
+  "Hazardous events (WP-C-03)",
+  "HE-07.1 After a fault in planning or control, keeps driving without control instead of stopping",
+  "Situations: OS-01",
+  "Misuse (WP-C-08): MU-15",
+  "Loss scenarios (WP-A-05): LS-03, LS-06, LS-18, LS-22",
+  "One concrete scenario (seeded sample)",
+  "ODD-20 Ego speed: 30 km/h (range 0 to 48 km/h; picked, not seeded)",
+  "ODD-17 Traffic density: free-flow",
+  "ODD-02 Road type: urban-street",
+  "ODD-12 Illumination: day",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "Car (qualitative)",
+  "Ego robotaxi (choreography)",
+  "Meant to do: the monitor stops it in lane",
+  "Pass criterion: The monitor detects the loss within its detection budget and stops the vehicle in lane with hazard lights on, without Autoware; a fault of the monitor itself leads to the vehicle's own stop, never to the park brake while moving (FSR-07.01, FSR-07.02, FSR-07.06, FSR-07.07, FSR-01.01, FSR-02.02, FSR-04.01, TR-01, SR-01, SR-04)",
+  "start",
+  "vehicle starts to slow",
+  "vehicle stands still",
+  "the moment in the main view",
+  "Forward view",
+  "Top view: planned path, envelope, hazard",
+  "Safety goals at stake",
+  "SG-07 (ASIL D): Reach a minimal risk condition whenever the item can no longer drive safely",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: HE-07.1 After a fault in planning or control, keeps driving without control instead of stopping",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "tags": [
+  "Ego robotaxi (choreography)",
+  "Car (qualitative)"
+ ],
+ "moments": [
+  "start",
+  "vehicle starts to slow",
+  "vehicle stands still",
+  "the moment in the main view"
+ ],
+ "dashboard": "SC-17.jpg",
+ "dashboard_sha256": "ed885b1c98f696170ea6c57c51c6e1b5a6d129ad529370acc3abffa4d8c72e8e"
+}

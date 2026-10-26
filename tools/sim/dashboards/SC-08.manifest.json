@@ -1,0 +1,208 @@
+{
+ "scenario": "SC-08",
+ "scene": "SC-08",
+ "blender": "5.2.3 LTS",
+ "render": {
+  "engine": "CYCLES",
+  "samples": 32,
+  "size": [
+   1600,
+   900
+  ],
+  "still_frame": 49,
+  "frames": 99,
+  "fps": 12,
+  "dashboard_samples": {
+   "chase": 32,
+   "dashboard": 16
+  },
+  "supersample": 1.5
+ },
+ "objects": {
+  "ego": [
+   1.75,
+   32.8
+  ],
+  "actor0-bicycle": [
+   4.25,
+   35.0
+  ],
+  "actor1-car": [
+   -1.75,
+   45.0
+  ]
+ },
+ "drawn": {
+  "light": "day",
+  "wet": false,
+  "rain": false,
+  "fog": false,
+  "beyond": [],
+  "features": [
+   "stop_sign"
+  ],
+  "stop_line": true,
+  "speed_sign": false,
+  "occlusion": false,
+  "props": [],
+  "signal": null,
+  "ego_lights": null,
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": true,
+  "lying": [],
+  "overlay_top_m": 0.05
+ },
+ "look": {
+  "assets": [
+   {
+    "slot": "asphalt",
+    "id": "asphalt_02",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "bin",
+    "id": "metal_trash_can",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "concrete",
+    "id": "Concrete034",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_a",
+    "id": "Facade018A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_b",
+    "id": "Facade019A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_c",
+    "id": "Facade020A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "grass",
+    "id": "Grass004",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "hdri_day",
+    "id": "kloofendal_48d_partly_cloudy_puresky",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "hydrant",
+    "id": "fire_hydrant",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "tree",
+    "id": "tree_small_02",
+    "source": "polyhaven"
+   }
+  ],
+  "furniture": {
+   "tree": 7,
+   "bin": 8,
+   "hydrant": 2
+  },
+  "pedestrians": "primitives"
+ },
+ "description": "tools/sim/scenes/SC-08.json",
+ "description_sha256": "3fc971e0f953e14c04d6d8eb1164f4d12c4abfd6c3f164b05b93d76e250f3479",
+ "clip_texts": [
+  "SC-08 Cyclist alongside on the inside of a turn",
+  "A cyclist or scooter rider rides up on the inside as the vehicle turns, or swerves between lanes round an obstacle",
+  "One concrete scenario (seeded sample of the logical\nscenario)",
+  "ODD-20 Ego speed: 20 km/h (range 0 to 48 km/h; picked, not seeded)",
+  "ODD-05 Crossings: cycle-lane",
+  "ODD-16 Traffic participants: bicycle",
+  "ODD-04 Junctions: stop-controlled",
+  "Cyclist speed and lateral motion: Bound stated by FSR-06.01, not\nyet fixed; the motion drawn is choreography",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033);\nchoreography, not Autoware's planned braking",
+  "Safety goals at stake",
+  "SG-02 (ASIL D): Decelerate at least as much as needed to avoid a\ncollision the planned trajectory avoids",
+  "SG-04 (ASIL D): Avoid unintended lateral motion out of the planned\npath",
+  "SG-06 (ASIL D): Do not enter an intersection, roundabout or\ncrosswalk against right of way",
+  "Pass criterion",
+  "No steering command whose swept path comes within the safe lateral\ndistance of the cyclist is executed; the vehicle waits or stops in\nlane (FSR-04.01, FSR-04.05, FSR-06.01, FSR-02.02, FSR-03.01,\nFM-06, AC-02)",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Meant to do: waits for the cyclist",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: HE-04.2 Steers into a cyclist in or beside the lane",
+  "Amber, ringed: the road user the scenario is about",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "texts": [
+  "SC-08 Cyclist alongside on the inside of a turn",
+  "SG-02 ASIL D",
+  "SG-04 ASIL D",
+  "SG-06 ASIL D",
+  "Motion",
+  "choreography (qualitative)",
+  "Condition",
+  "not set by the scenario",
+  "Ego speed (sample)",
+  "20 km/h",
+  "Methods (WP-V-03)",
+  "Simulation, Track",
+  "Scenario (WP-V-03)",
+  "A cyclist or scooter rider rides up on the inside as the vehicle turns, or swerves between lanes round an obstacle",
+  "Hazardous events (WP-C-03)",
+  "HE-04.2 Steers into a cyclist in or beside the lane",
+  "Triggering conditions (WP-C-06)",
+  "TC-18 Cyclists riding between lanes or swerving round obstacles",
+  "Situations: OS-01, OS-03",
+  "Misuse (WP-C-08): MU-13",
+  "Loss scenarios (WP-A-05): LS-02",
+  "One concrete scenario (seeded sample)",
+  "ODD-20 Ego speed: 20 km/h (range 0 to 48 km/h; picked, not seeded)",
+  "ODD-05 Crossings: cycle-lane",
+  "ODD-16 Traffic participants: bicycle",
+  "ODD-04 Junctions: stop-controlled",
+  "Cyclist speed and lateral motion: Bound stated by FSR-06.01, not yet fixed; the motion drawn is choreography",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "Ego robotaxi (choreography)",
+  "Bicycle (qualitative)",
+  "Car (qualitative)",
+  "Meant to do: waits for the cyclist",
+  "Pass criterion: No steering command whose swept path comes within the safe lateral distance of the cyclist is executed; the vehicle waits or stops in lane (FSR-04.01, FSR-04.05, FSR-06.01, FSR-02.02, FSR-03.01, FM-06, AC-02)",
+  "start",
+  "vehicle starts to slow",
+  "vehicle stands still",
+  "the moment in the main view",
+  "Forward view",
+  "Top view: planned path, envelope, hazard",
+  "Safety goals at stake",
+  "SG-02 (ASIL D): Decelerate at least as much as needed to avoid a collision the planned trajectory avoids",
+  "SG-04 (ASIL D): Avoid unintended lateral motion out of the planned path",
+  "SG-06 (ASIL D): Do not enter an intersection, roundabout or crosswalk against right of way",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: HE-04.2 Steers into a cyclist in or beside the lane",
+  "Amber, ringed: the road user the scenario is about",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "tags": [
+  "Ego robotaxi (choreography)",
+  "Bicycle (qualitative)",
+  "Car (qualitative)"
+ ],
+ "moments": [
+  "start",
+  "vehicle starts to slow",
+  "vehicle stands still",
+  "the moment in the main view"
+ ],
+ "dashboard": "SC-08.jpg",
+ "dashboard_sha256": "c320a55bf744bfcac7b3b9eed3a7384c3c16823465ffa8036ada0d5923327112"
+}
