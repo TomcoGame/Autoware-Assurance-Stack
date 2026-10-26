@@ -777,8 +777,10 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         made["roundabout"] = True
 
     def runs(a, b, side):
-        """Stretches of [a, b] along y not cut by a cross street on that side."""
-        cuts = [g for g in gaps if side in sides]
+        """Stretches of [a, b] along y not cut by a cross street on that side. At a junction the
+        sidewalk runs to the cross street's edge and the cross street's sidewalks abut it: boxes that
+        overlap, top faces coplanar, render black."""
+        cuts = [g if rb else (g[0] + 1.5, g[1] - 1.5) for g in gaps if side in sides]
         out, s = [], a
         for g0, g1 in sorted(cuts):
             out.append((s, g0))
@@ -794,7 +796,9 @@ def build(desc: dict, args) -> dict:  # pragma: no cover - needs Blender
         clear = rb["r"] + 1.5 if rb else 0.0  # the cross streets' sidewalks end at the roundabout
         for side in sides:
             xa, xb = (
-                (-80, min(left - 1.5, -clear)) if side == "left" else (max(right + 1.5, clear), 80)
+                (-80, min(left - walk, -clear))
+                if side == "left"
+                else (max(right + walk, clear), 80)
             )
             box(f"cross-walk-{side}-a", xa, cy - cw / 2 - walk, 0.0, xb, cy - cw / 2, 0.15, paving)
             box(f"cross-walk-{side}-b", xa, cy + cw / 2, 0.0, xb, cy + cw / 2 + walk, 0.15, paving)
