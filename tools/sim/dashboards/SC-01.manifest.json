@@ -1,5 +1,6 @@
 {
  "scenario": "SC-01",
+ "scene": "SC-01",
  "blender": "5.2.3 LTS",
  "render": {
   "engine": "CYCLES",
@@ -41,6 +42,13 @@
   "stop_line": true,
   "speed_sign": true,
   "occlusion": false,
+  "props": [],
+  "signal": null,
+  "ego_lights": null,
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
   "overlay_top_m": 0.05
  },
  "look": {
@@ -104,7 +112,7 @@
   "pedestrians": "Quaternius (CC0)"
  },
  "description": "tools/sim/scenes/SC-01.json",
- "description_sha256": "9cf0ade7f807e37297424eacf63bd556106dd3d1bde586800456daeb9c4fa1ee",
+ "description_sha256": "5ab02917eab783206874c14d5405603bf554f03250c4182d86e0f52cef2e7b2a",
  "clip_texts": [
   "SC-01 Pedestrian on or stepping onto a marked crosswalk",
   "The vehicle approaches a marked crosswalk in lane while a pedestrian is on it or steps onto it",
@@ -205,5 +213,5 @@
   "vehicle stands still"
  ],
  "dashboard": "SC-01.jpg",
- "dashboard_sha256": "6993edc60e5682dc921e3647b09e9fb136e3c48ae6f4320a73452fe4176d7329"
+ "dashboard_sha256": "f3423d76ad5022e93bdba563aa475f0693b07b694e27079e88663ade4cca757b"
 }

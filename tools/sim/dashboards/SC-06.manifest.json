@@ -1,5 +1,6 @@
 {
  "scenario": "SC-06",
+ "scene": "SC-06",
  "blender": "5.2.3 LTS",
  "render": {
   "engine": "CYCLES",
@@ -40,6 +41,13 @@
   "stop_line": false,
   "speed_sign": false,
   "occlusion": false,
+  "props": [],
+  "signal": null,
+  "ego_lights": null,
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
   "overlay_top_m": 0.05
  },
  "look": {
@@ -103,7 +111,7 @@
   "pedestrians": "primitives"
  },
  "description": "tools/sim/scenes/SC-06.json",
- "description_sha256": "5a75561a5a24f94bad3bbfa2cbed4374859a90adec7eced813a08bc1a5806aaf",
+ "description_sha256": "f3b3b967ce84cda3f02efdfe06214d461be53e292e7b092155f94507a6c6d0c4",
  "clip_texts": [
   "SC-06 Unprotected left turn across oncoming traffic",
   "Left turn on a permissive green or at an uncontrolled junction, with an oncoming lane hidden by a turning vehicle, or a\nmotorcycle approaching fast",
@@ -188,5 +196,5 @@
   "vehicle stands still"
  ],
  "dashboard": "SC-06.jpg",
- "dashboard_sha256": "97ab2afa04d232b0b0f0e2ee17d4557ae3950fd5d891b1ffd10a3e5a382eae87"
+ "dashboard_sha256": "04de6b657f7bf1ce6b784637bd67291c4f5fc04774e964c31aae1aa0c2834e2a"
 }

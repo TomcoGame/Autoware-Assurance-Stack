@@ -1,5 +1,6 @@
 {
  "scenario": "SC-02",
+ "scene": "SC-02",
  "blender": "5.2.3 LTS",
  "render": {
   "engine": "CYCLES",
@@ -45,6 +46,13 @@
   "stop_line": false,
   "speed_sign": false,
   "occlusion": true,
+  "props": [],
+  "signal": null,
+  "ego_lights": null,
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
   "overlay_top_m": 0.2
  },
  "look": {
@@ -108,7 +116,7 @@
   "pedestrians": "Quaternius (CC0)"
  },
  "description": "tools/sim/scenes/SC-02.json",
- "description_sha256": "0408ea15ee387908bffe9f79880f4b260522c6a773735c252724dc5b1f22a896",
+ "description_sha256": "435721f12f9189df592874592692218f88f963666731894ed2aaee78d667779f",
  "clip_texts": [
   "SC-02 Pedestrian emerging from behind a parked vehicle",
   "A pedestrian, child or cyclist steps out from behind a parked van or bus away from a crossing, where pedestrians are\ndense",
@@ -207,5 +215,5 @@
   "vehicle stands still"
  ],
  "dashboard": "SC-02.jpg",
- "dashboard_sha256": "fa17d1ebcae6a839f1fa032042377b661be24fad931731fcbbf87120bfba3f32"
+ "dashboard_sha256": "ad981ce189c8b579bd829dc8f617ba35ce37451431527159af6972be97a79b2e"
 }
