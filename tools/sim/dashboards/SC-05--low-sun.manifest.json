@@ -1,0 +1,206 @@
+{
+ "scenario": "SC-05",
+ "scene": "SC-05--low-sun",
+ "blender": "5.2.3 LTS",
+ "render": {
+  "engine": "CYCLES",
+  "samples": 32,
+  "size": [
+   1600,
+   900
+  ],
+  "still_frame": 37,
+  "frames": 62,
+  "fps": 12,
+  "dashboard_samples": {
+   "chase": 32,
+   "dashboard": 16
+  },
+  "supersample": 1.5
+ },
+ "objects": {
+  "ego": [
+   1.75,
+   31.26
+  ],
+  "actor0-car": [
+   -3.14,
+   41.75
+  ]
+ },
+ "drawn": {
+  "light": "low-sun",
+  "wet": false,
+  "rain": false,
+  "fog": false,
+  "beyond": [],
+  "features": [
+   "queue",
+   "signals"
+  ],
+  "stop_line": true,
+  "speed_sign": false,
+  "occlusion": false,
+  "props": [],
+  "signal": "green",
+  "ego_lights": null,
+  "queue": 2,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
+  "overlay_top_m": 0.05
+ },
+ "look": {
+  "assets": [
+   {
+    "slot": "asphalt",
+    "id": "asphalt_02",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "bin",
+    "id": "metal_trash_can",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "concrete",
+    "id": "Concrete034",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_a",
+    "id": "Facade018A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_b",
+    "id": "Facade019A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_c",
+    "id": "Facade020A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "grass",
+    "id": "Grass004",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "hdri_low_sun",
+    "id": "spruit_sunrise",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "hydrant",
+    "id": "fire_hydrant",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "tree",
+    "id": "tree_small_02",
+    "source": "polyhaven"
+   }
+  ],
+  "furniture": {
+   "tree": 8,
+   "bin": 3,
+   "hydrant": 3
+  },
+  "pedestrians": "primitives"
+ },
+ "description": "tools/sim/scenes/SC-05--low-sun.json",
+ "description_sha256": "dd331f2c3906abfe06449c2684defc6a18441b9a1fc7eee3ba5d2dad3de2f49d",
+ "clip_texts": [
+  "SC-05 Signalised intersection with cross traffic",
+  "The vehicle approaches a signalised intersection; the signal is hard to read, dark or meant for another lane, or a\ncrossing vehicle runs its red",
+  "One concrete scenario (seeded sample of the logical\nscenario)",
+  "ODD-20 Ego speed: 8.4 km/h (range 0 to 48 km/h)",
+  "ODD-04 Junctions: signalised",
+  "ODD-12 Illumination: low-sun",
+  "ODD-16 Traffic participants: car",
+  "ODD-17 Traffic density: congested",
+  "Speed of the crossing vehicle running the red: Bound stated by\nFSR-06.01, not yet fixed; the motion drawn is choreography",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033);\nchoreography, not Autoware's planned braking",
+  "Safety goals at stake",
+  "SG-02 (ASIL D): Decelerate at least as much as needed to avoid a\ncollision the planned trajectory avoids",
+  "SG-06 (ASIL D): Do not enter an intersection, roundabout or\ncrosswalk against right of way",
+  "Pass criterion",
+  "The vehicle enters only on a recognised green and treats an\nunknown signal as red; whatever the signal, it does not enter when\nits swept path crosses that of a detected road user before it\ncould stop or clear (FSR-06.01, FSR-06.03, FSR-02.01, FSR-02.02,\nFSR-03.01, FM-05, AC-02)",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Meant to do: waits while its path is crossed",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: HE-06.1 Enters the intersection on red into crossing traffic",
+  "Amber, ringed: the road user the scenario is about",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "texts": [
+  "SC-05 Signalised intersection with cross traffic",
+  "SG-02 ASIL D",
+  "SG-06 ASIL D",
+  "Motion",
+  "choreography (qualitative)",
+  "Condition (variant)",
+  "ODD-12 low-sun",
+  "Ego speed (sample)",
+  "8.4 km/h",
+  "Methods (WP-V-03)",
+  "Simulation, Track, Road",
+  "Scenario (WP-V-03)",
+  "The vehicle approaches a signalised intersection; the signal is hard to read, dark or meant for another lane, or a crossing vehicle runs its red",
+  "Hazardous events (WP-C-03)",
+  "HE-06.1 Enters the intersection on red into crossing traffic",
+  "Triggering conditions (WP-C-06)",
+  "TC-01 Low sun or oncoming headlights in a camera's view",
+  "TC-06 LED signal heads that flicker against the camera's exposure",
+  "TC-07 Signal heads that are hidden, damaged, temporary, dark in a power outage, or meant for another lane",
+  "TC-19 A vehicle running a red light or not stopping at its stop line",
+  "Situations: OS-03",
+  "Loss scenarios (WP-A-05): LS-01, LS-02",
+  "One concrete scenario (seeded sample)",
+  "ODD-20 Ego speed: 8.4 km/h (range 0 to 48 km/h)",
+  "ODD-04 Junctions: signalised",
+  "ODD-12 Illumination: low-sun",
+  "ODD-16 Traffic participants: car",
+  "ODD-17 Traffic density: congested",
+  "Speed of the crossing vehicle running the red: Bound stated by FSR-06.01, not yet fixed; the motion drawn is choreography",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "Ego robotaxi (choreography)",
+  "Car (qualitative)",
+  "Meant to do: waits while its path is crossed",
+  "Pass criterion: The vehicle enters only on a recognised green and treats an unknown signal as red; whatever the signal, it does not enter when its swept path crosses that of a detected road user before it could stop or clear (FSR-06.01, FSR-06.03, FSR-02.01, FSR-02.02, FSR-03.01, FM-05, AC-02)",
+  "start",
+  "car starts to move",
+  "the moment in the main view",
+  "vehicle starts to slow",
+  "vehicle stands still",
+  "Forward view",
+  "Top view: planned path, envelope, hazard",
+  "Safety goals at stake",
+  "SG-02 (ASIL D): Decelerate at least as much as needed to avoid a collision the planned trajectory avoids",
+  "SG-06 (ASIL D): Do not enter an intersection, roundabout or crosswalk against right of way",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: HE-06.1 Enters the intersection on red into crossing traffic",
+  "Amber, ringed: the road user the scenario is about",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "tags": [
+  "Ego robotaxi (choreography)",
+  "Car (qualitative)"
+ ],
+ "moments": [
+  "start",
+  "car starts to move",
+  "the moment in the main view",
+  "vehicle starts to slow",
+  "vehicle stands still"
+ ],
+ "dashboard": "SC-05--low-sun.jpg",
+ "dashboard_sha256": "1a715af3be0f93f22302d9f2f7ab4a14976594c6a6a8adf9fcc271d693a3c613"
+}

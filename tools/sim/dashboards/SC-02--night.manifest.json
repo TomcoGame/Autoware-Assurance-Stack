@@ -1,0 +1,219 @@
+{
+ "scenario": "SC-02",
+ "scene": "SC-02--night",
+ "blender": "5.2.3 LTS",
+ "render": {
+  "engine": "CYCLES",
+  "samples": 32,
+  "size": [
+   1600,
+   900
+  ],
+  "still_frame": 40,
+  "frames": 68,
+  "fps": 12,
+  "dashboard_samples": {
+   "chase": 32,
+   "dashboard": 16
+  },
+  "supersample": 1.5
+ },
+ "objects": {
+  "ego": [
+   1.75,
+   18.59
+  ],
+  "actor0-van": [
+   4.75,
+   24.0
+  ],
+  "actor1-child": [
+   3.7,
+   27.6
+  ],
+  "actor2-car": [
+   4.75,
+   46.0
+  ]
+ },
+ "drawn": {
+  "light": "night",
+  "wet": false,
+  "rain": false,
+  "fog": false,
+  "beyond": [],
+  "features": [],
+  "stop_line": false,
+  "speed_sign": false,
+  "occlusion": true,
+  "props": [],
+  "signal": null,
+  "ego_lights": null,
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
+  "overlay_top_m": 0.2
+ },
+ "look": {
+  "assets": [
+   {
+    "slot": "asphalt",
+    "id": "asphalt_02",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "bin",
+    "id": "metal_trash_can",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "concrete",
+    "id": "Concrete034",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_a",
+    "id": "Facade018A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_b",
+    "id": "Facade019A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "facade_c",
+    "id": "Facade020A",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "grass",
+    "id": "Grass004",
+    "source": "ambientcg"
+   },
+   {
+    "slot": "hdri_night",
+    "id": "dikhololo_night",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "hydrant",
+    "id": "fire_hydrant",
+    "source": "polyhaven"
+   },
+   {
+    "slot": "tree",
+    "id": "tree_small_02",
+    "source": "polyhaven"
+   }
+  ],
+  "furniture": {
+   "tree": 12,
+   "bin": 7,
+   "hydrant": 4
+  },
+  "pedestrians": "Quaternius (CC0)"
+ },
+ "description": "tools/sim/scenes/SC-02--night.json",
+ "description_sha256": "d29ff694a57377263cde31d667dfe6417f26743e3e9a8b2f04602063f2f2a94d",
+ "clip_texts": [
+  "SC-02 Pedestrian emerging from behind a parked vehicle",
+  "A pedestrian, child or cyclist steps out from behind a parked van or bus away from a crossing, where pedestrians are\ndense",
+  "One concrete scenario (seeded sample of the logical\nscenario)",
+  "ODD-20 Ego speed: 42.7 km/h (range 0 to 48 km/h)",
+  "ODD-05 Crossings: mid-block",
+  "ODD-16 Traffic participants: child",
+  "ODD-12 Illumination: night",
+  "ODD-02 Road type: lanes-1-2",
+  "Speed of the road user emerging from the occlusion: Bound stated\nby FSR-06.02, not yet fixed; the motion drawn is choreography",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033);\nchoreography, not Autoware's planned braking",
+  "Safety goals at stake",
+  "SG-02 (ASIL D): Decelerate at least as much as needed to avoid a\ncollision the planned trajectory avoids",
+  "SG-04 (ASIL D): Avoid unintended lateral motion out of the planned\npath",
+  "SG-06 (ASIL D): Do not enter an intersection, roundabout or\ncrosswalk against right of way",
+  "Pass criterion",
+  "The vehicle's speed near the occlusion lets it stop for a road\nuser emerging at the assumed speed; no contact, and no swerve out\nof the drivable area to avoid one (FSR-06.02, FSR-02.02,\nFSR-04.01, FSR-04.05, FSR-03.01, AC-02)",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Meant to do: slow enough to stop for anyone emerging",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: HE-04.3 Steers onto the sidewalk at low speed",
+  "Amber, ringed: the road user the scenario is about",
+  "Grey area: what the parked vehicle hides from the ego",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "texts": [
+  "SC-02 Pedestrian emerging from behind a parked vehicle",
+  "SG-02 ASIL D",
+  "SG-04 ASIL D",
+  "SG-06 ASIL D",
+  "Motion",
+  "choreography (qualitative)",
+  "Condition (variant)",
+  "ODD-12 night",
+  "Ego speed (sample)",
+  "42.7 km/h",
+  "Methods (WP-V-03)",
+  "Simulation, Track",
+  "Scenario (WP-V-03)",
+  "A pedestrian, child or cyclist steps out from behind a parked van or bus away from a crossing, where pedestrians are dense",
+  "Hazardous events (WP-C-03)",
+  "HE-04.3 Steers onto the sidewalk at low speed",
+  "Triggering conditions (WP-C-06)",
+  "TC-10 Parked vans, buses, hedges or walls hiding a crossing or a corner",
+  "TC-17 People crossing away from crossings, or at the kerb looking at a phone",
+  "Situations: OS-02, OS-01",
+  "Misuse (WP-C-08): MU-10",
+  "Loss scenarios (WP-A-05): LS-01, LS-02",
+  "One concrete scenario (seeded sample)",
+  "ODD-20 Ego speed: 42.7 km/h (range 0 to 48 km/h)",
+  "ODD-05 Crossings: mid-block",
+  "ODD-16 Traffic participants: child",
+  "ODD-12 Illumination: night",
+  "ODD-02 Road type: lanes-1-2",
+  "Speed of the road user emerging from the occlusion: Bound stated by FSR-06.02, not yet fixed; the motion drawn is choreography",
+  "Ego slows at 3 m/s², the firm level of FSR-03.02 (DQ-019, DQ-033); choreography, not Autoware's planned braking",
+  "Ego robotaxi (choreography)",
+  "Parked van (qualitative)",
+  "Child (qualitative)",
+  "Car (qualitative)",
+  "Meant to do: slow enough to stop for anyone emerging",
+  "Pass criterion: The vehicle's speed near the occlusion lets it stop for a road user emerging at the assumed speed; no contact, and no swerve out of the drivable area to avoid one (FSR-06.02, FSR-02.02, FSR-04.01, FSR-04.05, FSR-03.01, AC-02)",
+  "start",
+  "vehicle starts to slow",
+  "child starts to move",
+  "the moment in the main view",
+  "vehicle stands still",
+  "Forward view",
+  "Top view: planned path, envelope, hazard",
+  "Safety goals at stake",
+  "SG-02 (ASIL D): Decelerate at least as much as needed to avoid a collision the planned trajectory avoids",
+  "SG-04 (ASIL D): Avoid unintended lateral motion out of the planned path",
+  "SG-06 (ASIL D): Do not enter an intersection, roundabout or crosswalk against right of way",
+  "QUALITATIVE ILLUSTRATION · NOT A SIMULATION RESULT · DRAFT FOR ENGINEERING REVIEW",
+  "Autoware's planned path (EL-01 Autoware computer, rated QM)",
+  "Safety monitor's envelope (EL-02, ASIL D); length not computed: the vehicle is not chosen yet (DQ-008)",
+  "Dashed green: the path the pass criterion asks of the vehicle; green ring: where it is judged",
+  "Where the hazard lies: HE-04.3 Steers onto the sidewalk at low speed",
+  "Amber, ringed: the road user the scenario is about",
+  "Grey area: what the parked vehicle hides from the ego",
+  "Vehicle models: Kiri '10 by Daniel Zhabotinsky; Generic passenger car pack by Comrade1280; both CC BY 4.0, changed (tools/readme/models/CREDITS.md) · sky, textures and street furniture: ambientCG, Poly Haven; pedestrians: Quaternius (CC0) · assurance/06-validation/scenarios/scenarios.yaml (WP-V-03)"
+ ],
+ "tags": [
+  "Ego robotaxi (choreography)",
+  "Parked van (qualitative)",
+  "Child (qualitative)",
+  "Car (qualitative)"
+ ],
+ "moments": [
+  "start",
+  "vehicle starts to slow",
+  "child starts to move",
+  "the moment in the main view",
+  "vehicle stands still"
+ ],
+ "dashboard": "SC-02--night.jpg",
+ "dashboard_sha256": "8ed1853bf294b81027bac92af663225b8b98ef040e55aba92da481efbdc51007"
+}

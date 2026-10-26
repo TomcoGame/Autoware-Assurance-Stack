@@ -10,14 +10,14 @@ One review dashboard per scene of [`../scenes/`](../scenes/), rendered in Blende
 | Dashboard | Scenario | Safety goals at stake | Events and triggering conditions | Condition (sample) | Render |
 |---|---|---|---|---|---|
 | [SC-01](SC-01.jpg) | Pedestrian on or stepping onto a marked crosswalk | SG-02 (D), SG-03 (C), SG-06 (D) | HE-02.1, HE-06.4, TC-02, TC-03, TC-15 | ODD-12 night · ODD-13 wet · ODD-10 0.6 mm/h | current; Blender 5.2.3 LTS, CC0 assets |
-| SC-01--day | Pedestrian on or stepping onto a marked crosswalk | SG-02 (D), SG-03 (C), SG-06 (D) | HE-02.1, HE-06.4, TC-02, TC-03, TC-15 | ODD-12 day · ODD-13 wet · ODD-10 0.6 mm/h (condition variant) | not rendered |
+| [SC-01--day](SC-01--day.jpg) | Pedestrian on or stepping onto a marked crosswalk | SG-02 (D), SG-03 (C), SG-06 (D) | HE-02.1, HE-06.4, TC-02, TC-03, TC-15 | ODD-12 day · ODD-13 wet · ODD-10 0.6 mm/h (condition variant) | current; Blender 5.2.3 LTS, CC0 assets |
 | [SC-02](SC-02.jpg) | Pedestrian emerging from behind a parked vehicle | SG-02 (D), SG-04 (D), SG-06 (D) | HE-04.3, TC-10, TC-17 | ODD-12 day | current; Blender 5.2.3 LTS, CC0 assets |
-| SC-02--night | Pedestrian emerging from behind a parked vehicle | SG-02 (D), SG-04 (D), SG-06 (D) | HE-04.3, TC-10, TC-17 | ODD-12 night (condition variant) | not rendered |
+| [SC-02--night](SC-02--night.jpg) | Pedestrian emerging from behind a parked vehicle | SG-02 (D), SG-04 (D), SG-06 (D) | HE-04.3, TC-10, TC-17 | ODD-12 night (condition variant) | current; Blender 5.2.3 LTS, CC0 assets |
 | [SC-03](SC-03.jpg) | Vehicle ahead braking or stopping in congested traffic | SG-01 (D), SG-02 (D), SG-04 (D), SG-06 (D) | HE-01.2, HE-02.2, TC-11, TC-25 | ODD-13 wet · ODD-10 1.5 mm/h | current; Blender 5.2.3 LTS, CC0 assets |
 | [SC-04](SC-04.jpg) | Spurious obstacle with a road user following | SG-02 (D), SG-03 (C) | HE-03.1, HE-03.2, TC-03, TC-04, TC-24 | ODD-13 wet · ODD-10 0.5 mm/h · ODD-11 200 m | current; Blender 5.2.3 LTS, CC0 assets |
 | [SC-05](SC-05.jpg) | Signalised intersection with cross traffic | SG-02 (D), SG-06 (D) | HE-06.1, TC-01, TC-06, TC-07, TC-19 | ODD-12 day | current; Blender 5.2.3 LTS, CC0 assets |
 | SC-05--night | Signalised intersection with cross traffic | SG-02 (D), SG-06 (D) | HE-06.1, TC-01, TC-06, TC-07, TC-19 | ODD-12 night (condition variant) | not rendered |
-| SC-05--low-sun | Signalised intersection with cross traffic | SG-02 (D), SG-06 (D) | HE-06.1, TC-01, TC-06, TC-07, TC-19 | ODD-12 low-sun (condition variant) | not rendered |
+| [SC-05--low-sun](SC-05--low-sun.jpg) | Signalised intersection with cross traffic | SG-02 (D), SG-06 (D) | HE-06.1, TC-01, TC-06, TC-07, TC-19 | ODD-12 low-sun (condition variant) | current; Blender 5.2.3 LTS, CC0 assets |
 | [SC-06](SC-06.jpg) | Unprotected left turn across oncoming traffic | SG-02 (D), SG-06 (D) | HE-06.2, TC-12, TC-20 | ODD-12 dusk | current; Blender 5.2.3 LTS, CC0 assets |
 | SC-06--night | Unprotected left turn across oncoming traffic | SG-02 (D), SG-06 (D) | HE-06.2, TC-12, TC-20 | ODD-12 night (condition variant) | not rendered |
 | [SC-07](SC-07.jpg) | Entry to a roundabout with traffic circulating | SG-02 (D), SG-06 (D) | HE-06.3, TC-13 | not set by the scenario | current; Blender 5.2.3 LTS, CC0 assets |
@@ -32,7 +32,7 @@ One review dashboard per scene of [`../scenes/`](../scenes/), rendered in Blende
 | [SC-13](SC-13.jpg) | Rare object or debris in the lane | SG-02 (D), SG-03 (C) | TC-15, TC-16 | ODD-12 day · ODD-13 dry | current; Blender 5.2.3 LTS, CC0 assets |
 | SC-13--night | Rare object or debris in the lane | SG-02 (D), SG-03 (C) | TC-15, TC-16 | ODD-12 night · ODD-13 dry (condition variant) | not rendered |
 | SC-13--unlit | Rare object or debris in the lane | SG-02 (D), SG-03 (C) | TC-15, TC-16 | ODD-12 unlit · ODD-13 dry (condition variant) | not rendered |
-| [SC-14](SC-14.jpg) | Weather changing toward the ODD limits during a trip | SG-02 (D), SG-03 (C), SG-06 (D), SG-07 (D) | TC-05, TC-28 | ODD-12 dusk · ODD-13 wet · ODD-10 across the limit · ODD-11 across the limit | **stale**: the description changed since the render; Blender 5.2.3 LTS, CC0 assets |
+| [SC-14](SC-14.jpg) | Weather changing toward the ODD limits during a trip | SG-02 (D), SG-03 (C), SG-06 (D), SG-07 (D) | TC-05, TC-28 | ODD-12 dusk · ODD-13 wet · ODD-10 across the limit · ODD-11 across the limit | current; Blender 5.2.3 LTS, CC0 assets |
 | SC-14--night | Weather changing toward the ODD limits during a trip | SG-02 (D), SG-03 (C), SG-06 (D), SG-07 (D) | TC-05, TC-28 | ODD-12 night · ODD-13 wet · ODD-10 across the limit · ODD-11 across the limit (condition variant) | not rendered |
 | [SC-15](SC-15.jpg) | Kerbside stop while passengers board or alight | SG-05 (D) | HE-05.1, HE-10.1 | not set by the scenario | current; Blender 5.2.3 LTS, CC0 assets |
 | [SC-16](SC-16.jpg) | Stopped at a red light with pedestrians crossing in front | SG-01 (D), SG-05 (D) | HE-01.1, HE-05.2 | ODD-13 dry | current; Blender 5.2.3 LTS, CC0 assets |

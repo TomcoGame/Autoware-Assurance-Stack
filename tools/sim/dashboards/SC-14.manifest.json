@@ -1,5 +1,6 @@
 {
  "scenario": "SC-14",
+ "scene": "SC-14",
  "blender": "5.2.3 LTS",
  "render": {
   "engine": "CYCLES",
@@ -40,6 +41,13 @@
   "stop_line": false,
   "speed_sign": false,
   "occlusion": false,
+  "props": [],
+  "signal": null,
+  "ego_lights": null,
+  "queue": 0,
+  "roundabout": false,
+  "cycle_lane": false,
+  "lying": [],
   "overlay_top_m": 0.05
  },
  "look": {
@@ -103,7 +111,7 @@
   "pedestrians": "primitives"
  },
  "description": "tools/sim/scenes/SC-14.json",
- "description_sha256": "80f37424ca74c9476847e7d6154c43409e69485d636596eadd4d4671c0d3ede1",
+ "description_sha256": "3ef5612ae40920a9afb2f0676a26d41d61c2713e1a44db435e63ea3295816759",
  "clip_texts": [
   "SC-14 Weather changing toward the ODD limits during a trip",
   "Rain grows heavier or visibility falls during a trip, up to and past the limits of the ODD",
@@ -196,5 +204,5 @@
   "vehicle stands still"
  ],
  "dashboard": "SC-14.jpg",
- "dashboard_sha256": "c43c873c59b97c3ee6e2c709910785096419a2b74ac76d3036eeb2f6a11833b3"
+ "dashboard_sha256": "c0b54c504ccf3aeaea688984e8eeb6e1542afa1a249014317a5cead02538067d"
 }
